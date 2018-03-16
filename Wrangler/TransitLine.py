@@ -136,6 +136,13 @@ class TransitLine(object):
         """
         Return the frequencies for this line as a list of 5 strings representing AM,MD,PM,EV,EA.
         """
+        if 'HEADWAY[1]' in self.attr:
+            return [self.attr['HEADWAY[1]'],
+                    self.attr['HEADWAY[2]'],
+                    self.attr['HEADWAY[3]'],
+                    self.attr['HEADWAY[4]'],
+                    self.attr['HEADWAY[5]']]
+
         return [self.attr['FREQ[1]'],
                 self.attr['FREQ[2]'],
                 self.attr['FREQ[3]'],

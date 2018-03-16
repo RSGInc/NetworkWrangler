@@ -27,7 +27,7 @@ line              := whitespace?, smcw?, c"LINE", whitespace, lin_attr*, lin_nod
 lin_attr          := ( lin_attr_name, whitespace?, "=", whitespace?, attr_value, whitespace?,
                        comma, whitespace?, semicolon_comment* )
 lin_nodeattr      := ( lin_nodeattr_name, whitespace?, "=", whitespace?, attr_value, whitespace?, comma?, whitespace?, semicolon_comment* )
-lin_attr_name     := c"allstops" / c"color" / (c"freq",'[',[1-5],']') / c"mode" / c"name" / c"oneway" / c"owner" / c"runtime" / c"timefac" / c"xyspeed" / c"longname"
+lin_attr_name     := c"allstops" / c"color" / (c"freq",'[',[1-5],']') / c"mode" / c"name" / c"oneway" / c"owner" / c"runtime" / c"timefac" / c"xyspeed" / c"longname" / c"shortname" / (c"usera",[1-5]) / (c"headway",'[',[1-5],']') 
 lin_nodeattr_name := c"access_c" / c"access" / c"delay" /  c"xyspeed" / c"timefac" 
 lin_node          := lin_nodestart?, whitespace?, nodenum, spaces*, comma?, spaces*, semicolon_comment?, whitespace?, lin_nodeattr*
 lin_nodestart     := (whitespace?, "N", whitespace?, "=")
@@ -222,6 +222,10 @@ class TransitFileProcessor(DispatchProcessor):
 
 class TransitParser(Parser):
 
+    # line files are one of these
+    PROGRAM_PT       = "PT"
+    PROGRAM_TRNBUILD = "TRNBUILD"
+
     def __init__(self, filedef=transit_file_def, verbosity=1):
         Parser.__init__(self, filedef)
         self.verbosity=verbosity
@@ -232,8 +236,9 @@ class TransitParser(Parser):
 
     def convertLineData(self):
         """ Convert the parsed tree of data into a usable python list of transit lines
-            returns list of comments and transit line objects
+            returns (PROGRAM_PT or PROGRAM_TRNBUILD, list of comments and transit line objects)
         """
+        program = TransitParser.PROGRAM_TRNBUILD  # default
         rows = []
         currentRoute = None
 
@@ -243,7 +248,11 @@ class TransitParser(Parser):
             # Add comments as simple strings
             if line[0] == 'smcw':
                 cmt = line[1].strip()
-                if not cmt==';;<<Trnbuild>>;;':
+                if cmt==';;<<Trnbuild>>;;':
+                    program = TransitParser.PROGRAM_TRNBUILD
+                elif cmt==";;<<PT>><<LINE>>;;":
+                    program = TransitParser.PROGRAM_PT
+                else:
                     rows.append(cmt)
                 continue
 
@@ -296,7 +305,7 @@ class TransitParser(Parser):
 
         # End of tree; store final route and return
         if currentRoute: rows.append(currentRoute)
-        return rows
+        return (program, rows)
 
     def convertLinkData(self):
         """ Convert the parsed tree of data into a usable python list of transit lines

@@ -29,6 +29,7 @@ class TransitNetwork(Network):
                   "xfer.fare",
                   "farelinks.fare"]
 
+
     # Static reference to a TransitCapacity instance
     capacity = None
 
@@ -40,6 +41,7 @@ class TransitNetwork(Network):
         """
         Network.__init__(self, champVersion, networkBaseDir, networkProjectSubdir, networkSeedSubdir,
                          networkPlanSubdir, networkName)
+        self.program = TransitParser.PROGRAM_TRNBUILD # will be one of PROGRAM_PT or PROGRAM_TRNBUILD
         self.lines = []
         self.links = []
         self.pnrs   = []
@@ -508,7 +510,10 @@ class TransitNetwork(Network):
         if len(self.lines)>0 or writeEmptyFiles:
             logstr += " lines"
             f = open(os.path.join(path,name+".lin"), 'w');
-            f.write(";;<<Trnbuild>>;;\n")
+            if self.program == TransitParser.PROGRAM_TRNBUILD:
+                f.write(";;<<Trnbuild>>;;\n")
+            elif self.program == TransitParser.PROGRAM_PT:
+                f.write(";;<<PT>><<LINE>>;;\n")
             for line in self.lines:
                 if isinstance(line,str): f.write(line)
                 else: f.write(repr(line)+"\n")
@@ -582,7 +587,7 @@ class TransitNetwork(Network):
             raise NetworkException(errorstr)
 
         # Convert from parser-tree format to in-memory transit data structures:
-        convertedLines = self.parser.convertLineData()
+        (self.program, convertedLines) = self.parser.convertLineData()
         convertedLinks = self.parser.convertLinkData()
         convertedPNR   = self.parser.convertPNRData()
         convertedZAC   = self.parser.convertZACData()
