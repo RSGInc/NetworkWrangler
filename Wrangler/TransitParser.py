@@ -28,7 +28,7 @@ lin_attr          := ( lin_attr_name, whitespace?, "=", whitespace?, attr_value,
                        comma, whitespace?, semicolon_comment* )
 lin_nodeattr      := ( lin_nodeattr_name, whitespace?, "=", whitespace?, attr_value, whitespace?, comma?, whitespace?, semicolon_comment* )
 lin_attr_name     := c"allstops" / c"color" / (c"freq",'[',[1-5],']') / c"mode" / c"name" / c"oneway" / c"owner" / c"runtime" / c"timefac" / c"xyspeed" / c"longname" / c"shortname" / (c"usera",[1-5]) / (c"headway",'[',[1-5],']') 
-lin_nodeattr_name := c"access_c" / c"access" / c"delay" /  c"xyspeed" / c"timefac" 
+lin_nodeattr_name := c"access_c" / c"access" / c"delay" /  c"xyspeed" / c"timefac" / c"nntime"
 lin_node          := lin_nodestart?, whitespace?, nodenum, spaces*, comma?, spaces*, semicolon_comment?, whitespace?, lin_nodeattr*
 lin_nodestart     := (whitespace?, "N", whitespace?, "=")
 
