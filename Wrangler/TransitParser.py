@@ -248,9 +248,9 @@ class TransitParser(Parser):
             # Add comments as simple strings
             if line[0] == 'smcw':
                 cmt = line[1].strip()
-                if cmt==';;<<Trnbuild>>;;':
+                if cmt.startswith(';;<<Trnbuild>>;;'):
                     program = TransitParser.PROGRAM_TRNBUILD
-                elif cmt==";;<<PT>><<LINE>>;;":
+                elif cmt.startswith(";;<<PT>><<LINE>>;;"):
                     program = TransitParser.PROGRAM_PT
                 else:
                     rows.append(cmt)
