@@ -310,10 +310,20 @@ class Network(object):
         WranglerLogger.debug("Checking out networkdir %s into tempdir %s %s" %
                              (networkdir, joinedTempDir,"for "+projectsubdir if projectsubdir else ""))
 
+        # if on windows and joinedBaseDir is on a mapped network drive, it needs to be prefaced with "file://"
+        # https://stackoverflow.com/questions/37422428/git-internal-error-refs-remotes-origin-master-is-not-a-valid-packed-reference
+        if os.name=='nt':
+            import win32file
+            (drive,tail) = os.path.splitdrive(joinedBaseDir)
+            WranglerLogger.debug("Checking if windows drive [%s] is remote" % drive)
+            if win32file.GetDriveType(drive)==win32file.DRIVE_REMOTE:
+                joinedBaseDir = "file://" + joinedBaseDir
+            WranglerLogger.debug("Using base dir [%s]" % joinedBaseDir)
+
         if os.path.exists(os.path.join(joinedBaseDir,networkdir,'.git')):
-            cmd = r"git clone -b master --quiet %s %s" % (os.path.join(joinedBaseDir, networkdir), networkdir)
+            cmd = r'git clone -b master --quiet "%s" "%s"' % (os.path.join(joinedBaseDir, networkdir), networkdir)
         else:
-            cmd = r"git clone -b master --quiet %s" % os.path.join(joinedBaseDir, networkdir)
+            cmd = r'git clone -b master --quiet "%s"' % os.path.join(joinedBaseDir, networkdir)
         (retcode, retstdout, retstderr) = self._runAndLog(cmd, joinedTempDir)
 
         if retcode != 0:
@@ -326,11 +336,11 @@ class Network(object):
             if not os.path.exists(newtempdir):
                 os.makedirs(newtempdir)
 
-            cmd = r"git clone  -b master --quiet %s" % os.path.join(joinedBaseDir, networkdir, projectsubdir)
+            cmd = r'git clone  -b master --quiet "%s"' % os.path.join(joinedBaseDir, networkdir, projectsubdir)
             (retcode, retstdout, retstderr) = self._runAndLog(cmd, newtempdir)
 
         if tag != None:
-            cmd = r"git checkout %s" % tag
+            cmd = r'git checkout "%s"' % tag
             (retcode, retstdout, retstderr) = self._runAndLog(cmd, gitdir)
             if retcode != 0:
                 raise NetworkException("Git checkout failed; see log file")
