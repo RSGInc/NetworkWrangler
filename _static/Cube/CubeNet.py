@@ -8,7 +8,7 @@
 
 """
 import copy, os
-from socket import gethostname
+from socket import gethostname, getfqdn
 
 CUBE_COMPUTER = "vanness"
 
@@ -17,6 +17,11 @@ def getCubeHostnames():
     Cube hostnames in Y:\COMMPATH\HostnamesWithCube.txt
     """
     hostnames = []
+    fqdn = getfqdn().lower() # fully qualified domain name
+
+    # at mtc, assume cube license is available
+    if fqdn.endswith("mtc.ca.gov"): return [ gethostname().lower() ]
+
     f = open(r"Y:\COMMPATH\HostnamesWithCube.txt")
     for line in f:
         if line[0] == "#": continue

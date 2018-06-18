@@ -1,5 +1,5 @@
 import os, re, shutil, subprocess
-from socket         import gethostname
+from socket         import gethostname, getfqdn
 
 from .HwySpecsRTP import HwySpecsRTP
 from .Logger import WranglerLogger
@@ -21,7 +21,14 @@ class HighwayNetwork(Network):
         """
         # got them already
         if HighwayNetwork.cube_hostnames: return HighwayNetwork.cube_hostnames
-        
+
+        fqdn = getfqdn().lower() # fully qualified domain name
+
+        # at mtc, assume cube license is available
+        if fqdn.endswith("mtc.ca.gov"):
+            HighwayNetwork.cube_hostnames = [ gethostname().lower() ]
+            return HighwayNetwork.cube_hostnames
+
         # read them
         HighwayNetwork.cube_hostnames = []
         f = open(r"Y:\COMMPATH\HostnamesWithCube.txt")
