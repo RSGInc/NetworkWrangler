@@ -10,7 +10,7 @@ from .Logger import WranglerLogger
 from .NetworkException import NetworkException
 from collections import defaultdict
 
-print "Importing ", __file__
+print("Importing ", __file__)
 
 __all__ = ['TransitAssignmentData', 'TransitAssignmentDataException']
 
@@ -118,7 +118,7 @@ class TransitAssignmentData:
         try:
             workbook       = xlrd.open_workbook(filename=mapfile,encoding_override='ascii')
         except:
-            print "couldn't find that workbook %s, yo!  No Groupings used!" % (mapfile)
+            print("couldn't find that workbook %s, yo!  No Groupings used!".format(mapefile))
             return lineToGroup
         sheet    = workbook.sheet_by_name("Lookup")
         row = 1
@@ -163,7 +163,7 @@ class TransitAssignmentData:
                                 "OWNER",
                                 "AB_VOL","AB_BRDA","AB_XITA","AB_BRDB","AB_XITB",
                                 "BA_VOL","BA_BRDA","BA_XITA","BA_BRDB","BA_XITB"]
-        print "csvColnames = %s" % str(self.csvColnames)
+        print("csvColnames = %s".format(str(self.csvColnames)))
             
         self.colnameToCsvIndex = dict((self.csvColnames[idx],idx) for idx in range(len(self.csvColnames)))
         
@@ -769,7 +769,7 @@ if __name__ == '__main__':
         tad1 = TransitAssignmentData(directory=r"X:\Projects\GHGReductionCE\2035",
                                      timeperiod="AM",
                                      tpfactor="constant")
-        print "Test1: vol for MUNKO, 13401-13402, 1) is " , tad1.linkVolume("MUNKO", 13401, 13402, 1)
+        print("Test1: vol for MUNKO, 13401-13402, 1) is ", tad1.linkVolume("MUNKO", 13401, 13402, 1))
         tad1.writeDbfs(asgnFileName=r"X:\lmz\AM_asgn.dbf", aggregateFileName=r"X:\lmz\AM_agg.dbf")
         tad1 = False
 
@@ -777,7 +777,7 @@ if __name__ == '__main__':
         tad2 = TransitAssignmentData(directory=r"X:\Projects\GHGReductionCE\2035",
                                     timeperiod="AM",
                                     tpfactor="constant")
-        print "Test2: vol for MUNKO, 13401-13402, 1) is " , tad2.linkVolume("MUNKO", 13401, 13402, 1)
+        print("Test2: vol for MUNKO, 13401-13402, 1) is ", tad2.linkVolume("MUNKO", 13401, 13402, 1))
         tad2.writeDbfs(asgnFileName=r"X:\lmz\AM_asgnF.dbf", aggregateFileName=r"X:\lmz\AM_aggF.dbf")
         tad2 = False
 
@@ -786,7 +786,7 @@ if __name__ == '__main__':
                                      tpfactor="constant",
                                      lineLevelAggregateFilename=r"X:\lmz\AM_asgn.dbf",
                                      linkLevelAggregateFilename=r"X:\lmz\AM_agg.dbf")
-        print "Test3: vol for MUNKO, 13401-13402, 1) is " , tad3.linkVolume("MUNKO", 13401, 13402, 1)
+        print("Test3: vol for MUNKO, 13401-13402, 1) is ", tad3.linkVolume("MUNKO", 13401, 13402, 1))
         tad3 = False
 
     if True:
@@ -794,5 +794,5 @@ if __name__ == '__main__':
                                      tpfactor="constant",
                                      lineLevelAggregateFilename=r"X:\lmz\AM_asgnF.dbf",
                                      linkLevelAggregateFilename=r"X:\lmz\AM_aggF.dbf")
-        print "Test4: vol for MUNKO, 13401-13402, 1) is " , tad4.linkVolume("MUNKO", 13401, 13402, 1)
+        print("Test4: vol for MUNKO, 13401-13402, 1) is ", tad4.linkVolume("MUNKO", 13401, 13402, 1))
         tad4 = False

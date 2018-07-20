@@ -114,7 +114,7 @@ class TransitLine(object):
             except TypeError:   # only single time period, not list, passed
                 num_timepers = 1
                 timepers = [timepers]
-            if num_freqs <> num_timepers: raise NetworkException('Specified ' + num_freqs + ' frequencies for ' + num_timepers + ' time periods')
+            if num_freqs != num_timepers: raise NetworkException('Specified ' + num_freqs + ' frequencies for ' + num_timepers + ' time periods')
         for i in range(num_timepers):
             timeper = timepers[i]
             try:

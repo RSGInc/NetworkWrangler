@@ -15,10 +15,12 @@ class Supplink(dict):
              5:"TRANSIT_TRANSFER",
              6:"DRIVE_FUNNEL",
              7:"WALK_FUNNEL"}
-    MODES_INV = dict((v,k) for k,v in MODES.iteritems())
     
     def __init__(self):
         dict.__init__(self)
+
+        MODES_INV = dict((v,k) for k,v in Supplink.MODES.iteritems())
+
         self.id=''  # string, e.g. "1-7719"
         self.comment=None
         

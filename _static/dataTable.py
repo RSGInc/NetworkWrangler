@@ -1,4 +1,4 @@
-from itertools import izip, count, tee
+from itertools import count, tee
 from collections import defaultdict
 from odict import OrderedDict
 import numpy as np
@@ -6,7 +6,7 @@ import csv, decimal, datetime
 
 from struct import unpack, pack, calcsize 
 
-print "Importing ", __file__
+print("Importing ", __file__)
 
 class DataTableError(Exception):
     pass
@@ -91,7 +91,7 @@ class DataTable(object):
             self.fields[self._index[key]] = value
         except KeyError:
             raise DataTableKeyError("Key %s does not exist" % str(key))
-        except ValueError, e:
+        except ValueError as e:
             raise DataTableValueError(str(e))
         return self
 
@@ -377,7 +377,7 @@ class DbfDictReader(object):
                 elif typ == 'L':
                     value = (value in 'YyTt' and 'T') or (value in 'NnFf' and 'F') or '?'
             except:
-                print "Exception caught with name %s type %s value %s" % (name, typ, str(value))
+                print("Exception caught with name %s type %s value %s".format(name, typ, str(value)))
                 raise
             
             finalValues.append(value)
@@ -406,7 +406,7 @@ def dbfTableReader(fileName):
             dt[index] = tuple(record.values())
             index += 1
     except:
-        print "Failed reading dbf table; index=%d" % index
+        print("Failed reading dbf table; index=%d".format(index))
         raise
     return dt
 
@@ -478,7 +478,7 @@ class DbfDictWriter(object):
                 value = str(value)[0].upper()
             else:
                 value = str(value)[:size].ljust(size, ' ')
-            if len(value) != size: print "Mismatch for "+name+"; "+str(len(value))+" != "+str(size)+"; val="+str(value)
+            if len(value) != size: print("Mismatch for {}; {} != {}; val={}".format(name, len(value), size, str(value)))
             assert len(value) == size
 
             self._bfstream.write(value)

@@ -121,7 +121,7 @@ class HighwayNetwork(Network):
         # dispatch it, cube license
         hostname = gethostname().lower()
         if hostname not in HighwayNetwork.getCubeHostnames():
-            print "Dispatching cube script to taraval from %s" % hostname 
+            print("Dispatching cube script to taraval from %s".format(hostname))
             f = open(os.path.join(applyDir,'runtpp_dispatch.tmp'), 'w')
             f.write("runtpp " + applyScript + "\n")
             f.close()
@@ -274,7 +274,7 @@ class HighwayNetwork(Network):
                     
                     if new_th != None:
                         #outfile.write('file,old_from,old_through,old_to,on_street,at_street,new_from,new_through,new_to,note\n')
-                        print file_name,fr_node,th_node,to_node,from_street,to_street,new_fr,new_th,new_to
+                        print(file_name,fr_node,th_node,to_node,from_street,to_street,new_fr,new_th,new_to)
                         outfile.write('%s,%d,%d,%d,%s,%s,%d,%d,%d,note\n' % (file_name,fr_node,th_node,to_node,from_street,to_street,new_fr if new_fr else -1,new_th,new_to if new_to else -1))
                 
     def write(self, path='.', name='FREEFLOW.NET', writeEmptyFiles=True, suppressQuery=False, suppressValidation=False):
@@ -285,7 +285,7 @@ class HighwayNetwork(Network):
         else:
             netfile = os.path.join(path,"FREEFLOW.net")
             if os.path.exists(netfile) and not suppressQuery:
-                print "File [%s] exists already.  Overwrite contents? (y/n/s) " % netfile
+                print("File [%s] exists already.  Overwrite contents? (y/n/s) ".format(netfile))
                 response = raw_input("")
                 WranglerLogger.debug("response = [%s]" % response)
                 if response == "s" or response == "S":

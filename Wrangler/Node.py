@@ -116,10 +116,10 @@ class Node(object):
             
             # print "Read descriptions: " + str(Node.descriptions)
         except ImportError: 
-            print "Could not import xlrd module, Node descriptions unknown"
+            print("Could not import xlrd module, Node descriptions unknown")
         except:
-            print "Unexpected error reading Nodes.xls:", sys.exc_info()[0]
-            print sys.exc_info()
+            print("Unexpected error reading Nodes.xls:", sys.exc_info()[0])
+            print(sys.exc_info())
             
         Node.descriptions_read = True
                 

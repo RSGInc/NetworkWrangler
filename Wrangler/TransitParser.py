@@ -107,10 +107,11 @@ class TransitFileProcessor(DispatchProcessor):
 
         return (tag,text,b)
 
-    def line(self, (tag,start,stop,subtags), buffer):
+    def line(self, tup, buffer):
+        (tag,start,stop,subtags) = tup
         # this is the whole line
         if self.verbosity>=1:
-            print tag, start, stop
+            print(tag,start,stop)
 
         # Append list items for this line
         for leaf in subtags:
@@ -120,15 +121,17 @@ class TransitFileProcessor(DispatchProcessor):
         if self.verbosity==2:
             # lines are composed of smcw (semicolon-comment / whitespace), line_attr and lin_node
             for linepart in subtags:
-                print "  ",linepart[0], " -> [ ",
+                print("  ",linepart[0], " -> [ "),
                 for partpart in linepart[3]:
-                    print partpart[0], "(", buffer[partpart[1]:partpart[2]],")",
-                print " ]"
+                    print(partpart[0], "(", buffer[partpart[1]:partpart[2]],")"),
+                print(" ]")
 
-    def link(self, (tag,start,stop,subtags), buffer):
+    def link(self, tup, buffer):
+        (tag,start,stop,subtags) = tup
+
         # this is the whole link
         if self.verbosity>=1:
-            print tag, start, stop
+            print(tag, start, stop)
 
         # Append list items for this link
         for leaf in subtags:
@@ -138,14 +141,16 @@ class TransitFileProcessor(DispatchProcessor):
         if self.verbosity==2:
             # links are composed of smcw and link_attr
             for linkpart in subtags:
-                print "  ",linkpart[0], " -> [ ",
+                print("  ",linkpart[0], " -> [ "),
                 for partpart in linkpart[3]:
-                    print partpart[0], "(", buffer[partpart[1]:partpart[2]], ")",
-                print " ]"
+                    print(partpart[0], "(", buffer[partpart[1]:partpart[2]], ")"),
+                print(" ]")
 
-    def pnr(self, (tag,start,stop,subtags), buffer):
+    def pnr(self, tup, buffer):
+        (tag,start,stop,subtags) = tup
+
         if self.verbosity>=1:
-            print tag, start, stop
+            print(tag, start, stop)
 
         # Append list items for this link
         for leaf in subtags:
@@ -155,39 +160,43 @@ class TransitFileProcessor(DispatchProcessor):
         if self.verbosity==2:
             # pnrs are composed of smcw and pnr_attr
             for pnrpart in subtags:
-                print " ",pnrpart[0], " -> [ ",
+                print(" ",pnrpart[0], " -> [ "),
                 for partpart in pnrpart[3]:
-                    print partpart[0], "(", buffer[partpart[1]:partpart[2]], ")",
-                print " ]"
+                    print(partpart[0], "(", buffer[partpart[1]:partpart[2]], ")"),
+                print(" ]")
 
-    def zac(self, (tag,start,stop,subtags), buffer):
+    def zac(self, tup, buffer):
+        (tag,start,stop,subtags) = tup
+
         if self.verbosity>=1:
-            print tag, start, stop
+            print(tag, start, stop)
 
         if self.verbosity==2:
             # zacs are composed of smcw and zac_attr
             for zacpart in subtags:
-                print " ",zacpart[0], " -> [ ",
+                print(" ",zacpart[0], " -> [ "),
                 for partpart in zacpart[3]:
-                    print partpart[0], "(", buffer[partpart[1]:partpart[2]], ")",
-                print " ]"
+                    print(partpart[0], "(", buffer[partpart[1]:partpart[2]], ")"),
+                print(" ]")
 
         # Append list items for this link
         for leaf in subtags:
             xxx = self.crackTags(leaf,buffer)
             self.zacs.append(xxx)
 
-    def supplink(self, (tag,start,stop,subtags), buffer):
+    def supplink(self, tup, buffer):
+        (tag,start,stop,subtags) = tup
+
         if self.verbosity>=1:
-            print tag, start, stop
+            print(tag, start, stop)
 
         if self.verbosity==2:
             # supplinks are composed of smcw and zac_attr
             for supplinkpart in subtags:
-                print " ",supplinkpart[0], " -> [ ",
+                print(" ",supplinkpart[0], " -> [ "),
                 for partpart in supplinkpart[3]:
-                    print partpart[0], "(", buffer[partpart[1]:partpart[2]], ")",
-                print " ]"
+                    print(partpart[0], "(", buffer[partpart[1]:partpart[2]], ")"),
+                print(" ]")
         
         # Append list items for this link
         # TODO: make the others more like this -- let the list separate the parse structures!
@@ -197,19 +206,23 @@ class TransitFileProcessor(DispatchProcessor):
             supplink.append(xxx)
         self.supplinks.append(supplink)
          
-    def smcw(self, (tag,start,stop,subtags), buffer):
+    def smcw(self, tup, buffer):
         """ Semicolon comment whitespace
         """
+        (tag,start,stop,subtags) = tup
+
         if self.verbosity>=1:
-            print tag, start, stop
+            print(tag, start, stop)
         
         for leaf in subtags:
             xxx = self.crackTags(leaf,buffer)
             self.endcomments.append(xxx)
             
-    def accessli(self, (tag,start,stop,subtags), buffer):
+    def accessli(self, tup, buffer):
+        (tag,start,stop,subtags) = tup
+
         if self.verbosity>=1:
-            print tag, start, stop
+            print(tag, start, stop)
         
         for leaf in subtags:
             xxx = self.crackTags(leaf,buffer)

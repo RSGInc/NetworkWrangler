@@ -495,7 +495,7 @@ class TransitNetwork(Network):
         else:
             trnfile = os.path.join(path,name+".lin")
             if os.path.exists(trnfile) and not suppressQuery:
-                print "File [%s] exists already.  Overwrite contents? (y/n/s) " % trnfile
+                print("File [%s] exists already.  Overwrite contents? (y/n/s) ".format(trnfile))
                 response = raw_input("")
                 WranglerLogger.debug("response = [%s]" % response)
                 if response == "s" or response == "S":
@@ -970,7 +970,7 @@ class TransitNetwork(Network):
                             (delc,delpb,delpa) = TransitNetwork.capacity.getComplexDwells(linename, timeperiod)
 
                     except NetworkException as e:
-                        print e
+                        print(e)
                         failures += 1
         return (failures == 0)
     
@@ -1051,7 +1051,7 @@ class TransitNetwork(Network):
         try:
             exec(evalstr)
         except:
-            print "Failed to exec [%s]" % evalstr
+            print("Failed to exec [%s]".format(evalstr))
             raise
                
         evalstr = "dir(%s)" % projectname
