@@ -86,7 +86,7 @@ class TransitNetwork(Network):
         self.currentLineIdx = 0
         return self
 
-    def next(self):
+    def __next__(self):
         """
         Method for iterator.  Iterator usage::
 
@@ -108,6 +108,9 @@ class TransitNetwork(Network):
 
         self.currentLineIdx += 1
         return self.lines[self.currentLineIdx-1]
+
+    # python 2 backwards compat
+    next = __next__
 
     def __repr__(self):
         return "TransitNetwork: %s lines, %s links, %s PNRs, %s ZACs" % (len(self.lines),len(self.links),len(self.pnrs),len(self.zacs))

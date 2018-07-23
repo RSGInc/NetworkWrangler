@@ -73,7 +73,7 @@ class TransitLine(object):
         self.currentStopIdx = 0
         return self
 
-    def next(self):
+    def __next__(self):
         """
         Method for iterator.  Iterator usage::
 
@@ -86,6 +86,9 @@ class TransitLine(object):
 
         self.currentStopIdx += 1
         return int(self.n[self.currentStopIdx-1].num)
+
+    # python 2 backwards compat
+    next = __next__
 
     def setFreqs(self, freqs, timepers=None, allowDowngrades=True):
         '''Set some or all five headways (AM,MD,PM,EV,EA)
