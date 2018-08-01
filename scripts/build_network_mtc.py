@@ -82,7 +82,6 @@ TEST_PROJECTS = None
 TRN_MODES = ['trn']
 NET_MODES = ['hwy'] + TRN_MODES
 
-CHAMPVERSION = 5.0
 CHAMP_NODE_NAMES = r'Y:\champ\util\nodes.xls'
 ###############################################################################
 
@@ -332,11 +331,8 @@ if __name__ == '__main__':
     if not os.path.exists(SCRATCH_SUBDIR): os.mkdir(SCRATCH_SUBDIR)
     os.chdir(SCRATCH_SUBDIR)
 
-    # Initialize networks
-    CHAMPVERSION = 4.3
-
     networks = {
-        'hwy' :Wrangler.HighwayNetwork(champVersion=CHAMPVERSION,
+        'hwy' :Wrangler.HighwayNetwork(modelType=Wrangler.Network.MODEL_TYPE_TM2, modelVersion=1.0,
                                        basenetworkpath=os.path.join(PIVOT_DIR,"hwy") if PIVOT_DIR else "Roads2010",
                                        networkBaseDir=NETWORK_BASE_DIR,
                                        networkProjectSubdir=NETWORK_PROJECT_SUBDIR,
@@ -348,7 +344,7 @@ if __name__ == '__main__':
                                        hwyspecs=NONSF_PLANBAYAREA_SPECS,
                                        tempdir=TEMP_SUBDIR,
                                        networkName="hwy"),
-        'trn':Wrangler.TransitNetwork( champVersion=CHAMPVERSION,
+        'trn':Wrangler.TransitNetwork( modelType=Wrangler.Network.MODEL_TYPE_TM2, modelVersion=1.0,
                                        basenetworkpath=os.path.join(PIVOT_DIR,"trn") if PIVOT_DIR else None,
                                        networkBaseDir=NETWORK_BASE_DIR,
                                        networkProjectSubdir=NETWORK_PROJECT_SUBDIR,
@@ -408,7 +404,7 @@ if __name__ == '__main__':
             if projType=='plan':
                 #Open specs file and get list of projects
                 specFile = os.path.join(TEMP_SUBDIR,NETWORK_PLAN_SUBDIR,'planSpecs.csv')
-                PLAN_SPECS = Wrangler.PlanSpecs.PlanSpecs(champVersion=CHAMPVERSION,basedir=Wrangler.Network.NETWORK_BASE_DIR,
+                PLAN_SPECS = Wrangler.PlanSpecs.PlanSpecs(modelType=Wrangler.Network.MODEL_TYPE_TM2, modelVersion=1.0, basedir=Wrangler.Network.NETWORK_BASE_DIR,
                                                           networkdir=project_name,
                                                           plansubdir=Wrangler.Network.NETWORK_PLAN_SUBDIR,
                                                           projectsubdir=Wrangler.Network.NETWORK_PROJECT_SUBDIR,
@@ -575,6 +571,7 @@ if __name__ == '__main__':
         else:
             networks[netmode].write(path=trnpath, 
                                     name=netmode,
+                                    writeEmptyFiles = False,
                                     suppressQuery = True if BUILD_MODE=="test" else False,
                                     suppressValidation = True,  # until validation is updated for MTC networks
                                     cubeNetFileForValidation = os.path.join(hwypath, HWY_OUTFILE))

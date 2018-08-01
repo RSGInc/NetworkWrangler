@@ -7,7 +7,7 @@ class PlanSpecs:
     """ Simple class to read in the plan specifications from a CSV file.
     """
     
-    def __init__(self,champVersion,basedir,networkdir,plansubdir,projectsubdir=None,tag=None,tempdir=None, **kwargs):
+    def __init__(self,modelType,modelVersion,basedir,networkdir,plansubdir,projectsubdir=None,tag=None,tempdir=None, **kwargs):
         """
         Read specs file, check out projects and check the network type and project year
         """
@@ -15,7 +15,8 @@ class PlanSpecs:
         self.projects           = [] # list of projects included in the plan
         self.projectdict        = {} # plan name => dictionary of attributes
         #network is necessary to check out projects
-        self.network            = Network(champVersion=champVersion,
+        self.network            = Network(modelType=modelType,
+                                          modelVersion=modelVersion,
                                           networkBaseDir=basedir,
                                           networkPlanSubdir=plansubdir,
                                           networkProjectSubdir=projectsubdir)

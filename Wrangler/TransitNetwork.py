@@ -1,5 +1,6 @@
 import copy, glob, inspect, math, os, re, sys, xlrd
 from collections import defaultdict
+from .Faresystem import Faresystem
 from .Linki import Linki
 from .Logger import WranglerLogger
 from .Network import Network
@@ -19,37 +20,37 @@ class TransitNetwork(Network):
     """
     Full Cube representation of a transit network (all components)
     """
-    FARE_FILES = ["caltrain.fare",
-                  "smart.fare",
-                  "ebart.fare",
-                  "amtrak.fare",
-                  "hsr.fare",
-                  "ferry.fare",
-                  "bart.fare",
-                  "xfer.fare",
-                  "farelinks.fare"]
+    FARE_FILES = {
+        Network.MODEL_TYPE_CHAMP:
+           ["caltrain.fare", "smart.fare", "ebart.fare",
+            "amtrak.fare",   "hsr.fare",   "ferry.fare",
+            "bart.fare",     "xfer.fare",  "farelinks.fare"],
+        Network.MODEL_TYPE_TM2:
+           ["fares.far" ] # ,     "fareMatrix.txt"]
+    }
 
 
     # Static reference to a TransitCapacity instance
     capacity = None
 
-    def __init__(self, champVersion, basenetworkpath=None, networkBaseDir=None, networkProjectSubdir=None,
+    def __init__(self, modelType, modelVersion, basenetworkpath=None, networkBaseDir=None, networkProjectSubdir=None,
                  networkSeedSubdir=None, networkPlanSubdir=None, isTiered=False, networkName=None):
         """
         If *basenetworkpath* is passed and *isTiered* is True, then start by reading the files
         named *networkName*.* in the *basenetworkpath*
         """
-        Network.__init__(self, champVersion, networkBaseDir, networkProjectSubdir, networkSeedSubdir,
+        Network.__init__(self, modelType, modelVersion, networkBaseDir, networkProjectSubdir, networkSeedSubdir,
                          networkPlanSubdir, networkName)
-        self.program = TransitParser.PROGRAM_TRNBUILD # will be one of PROGRAM_PT or PROGRAM_TRNBUILD
-        self.lines = []
-        self.links = []
-        self.pnrs   = []
-        self.zacs   = []
-        self.accessli = []
-        self.xferli   = []
+        self.program      = TransitParser.PROGRAM_TRNBUILD # will be one of PROGRAM_PT or PROGRAM_TRNBUILD
+        self.lines        = []
+        self.links        = []
+        self.pnrs         = []
+        self.zacs         = []
+        self.accessli     = []
+        self.xferli       = []
+        self.faresystems  = []
         self.farefiles = {} # farefile name -> [ lines in farefile ]
-        for farefile in TransitNetwork.FARE_FILES:
+        for farefile in TransitNetwork.FARE_FILES[self.modelType]:
             self.farefiles[farefile] = []
 
         self.DELAY_VALUES = None
@@ -65,19 +66,25 @@ class TransitNetwork(Network):
                     self.parseFile(filename)
 
             # fares
-            for farefile in TransitNetwork.FARE_FILES:
+            for farefile in TransitNetwork.FARE_FILES[self.modelType]:
                 fullfarefile = os.path.join(basenetworkpath, farefile)
-                linecount = 0
-                # WranglerLogger.debug("cwd=%s  farefile %s exists? %d" % (os.getcwd(), fullfarefile, os.path.exists(fullfarefile)))
-                
-                if os.path.exists(fullfarefile):
-                    infile = open(fullfarefile, 'r')
-                    lines = infile.readlines()
-                    self.farefiles[farefile].extend(lines)
-                    linecount = len(lines)
-                    infile.close()
+
+                if modelType==Network.MODEL_TYPE_TM2:
+                    # parse TM2 fare files
+                    self.parseFile(fullfarefile)
+                    WranglerLogger.info("Read {}".format(fullfarefile))
+
+                else:
+                    linecount = 0
+                    # WranglerLogger.debug("cwd=%s  farefile %s exists? %d" % (os.getcwd(), fullfarefile, os.path.exists(fullfarefile)))
+
+                    if os.path.exists(fullfarefile):
+                        infile = open(fullfarefile, 'r')
+                        lines = infile.readlines()
+                        self.farefiles[farefile].extend(lines)
+                        linecount = len(lines)
+                        infile.close()
                     WranglerLogger.debug("Read %5d lines from fare file %s" % (linecount, fullfarefile))
-                                    
 
     def __iter__(self):
         """
@@ -558,20 +565,29 @@ class TransitNetwork(Network):
             f.close()
             
         # fares
-        for farefile in TransitNetwork.FARE_FILES:
-            # don't write an empty one unless there isn't anything there
-            if len(self.farefiles[farefile]) == 0:
-                if writeEmptyFiles and not os.path.exists(os.path.join(path,farefile)):
+        if self.modelType == Network.MODEL_TYPE_CHAMP:
+
+            for farefile in TransitNetwork.FARE_FILES[self.modelType]:
+                # don't write an empty one unless there isn't anything there
+                if len(self.farefiles[farefile]) == 0:
+                    if writeEmptyFiles and not os.path.exists(os.path.join(path,farefile)):
+                        logstr += " " + farefile
+                        f = open(os.path.join(path,farefile), 'w')
+                        f.write("; no fares known\n")
+                        f.close()
+    
+                else:
                     logstr += " " + farefile
                     f = open(os.path.join(path,farefile), 'w')
-                    f.write("; no fares known\n")
+                    for line in self.farefiles[farefile]:
+                        f.write(line)
                     f.close()
-
-            else:
-                logstr += " " + farefile
-                f = open(os.path.join(path,farefile), 'w')
-                for line in self.farefiles[farefile]:
-                    f.write(line)
+        else:
+            if len(self.faresystems) > 0 or writeEmptyFiles:
+                logstr += " faresystem"
+                f = open(os.path.join(path,name+".far"), 'w')
+                for faresys in self.faresystems:
+                    f.write(str(faresys)+"\n")
                 f.close()
 
         logstr += "... done."
@@ -596,9 +612,10 @@ class TransitNetwork(Network):
         convertedZAC   = self.parser.convertZACData()
         convertedAccessLinki = self.parser.convertLinkiData("access")
         convertedXferLinki   = self.parser.convertLinkiData("xfer")
+        convertedFaresystems = self.parser.convertFaresystemData()
 
         return convertedLines, convertedLinks, convertedPNR, convertedZAC, \
-            convertedAccessLinki, convertedXferLinki
+            convertedAccessLinki, convertedXferLinki, convertedFaresystems
 
     def parseFile(self, fullfile, insert_replace=True):
         """
@@ -617,12 +634,12 @@ class TransitNetwork(Network):
         self.parser.tfp.liType = suffix
         logstr = "   Reading %s as %s" % (fullfile, suffix)
         f = open(fullfile, 'r');
-        lines,links,pnr,zac,accessli,xferli = self.parseAndPrintTransitFile(f.read(), verbosity=0)
+        lines,links,pnr,zac,accessli,xferli,faresys = self.parseAndPrintTransitFile(f.read(), verbosity=0)
         f.close()
-        logstr += self.doMerge(fullfile,lines,links,pnr,zac,accessli,xferli,insert_replace)
+        logstr += self.doMerge(fullfile,lines,links,pnr,zac,accessli,xferli,faresys,insert_replace)
         WranglerLogger.debug(logstr)
             
-    def doMerge(self,path,lines,links,pnrs,zacs,accessli,xferli,insert_replace=False):
+    def doMerge(self,path,lines,links,pnrs,zacs,accessli,xferli,faresys,insert_replace=False):
         """
         Merge a set of transit lines & support links with this network's transit representation.
         """
@@ -672,6 +689,10 @@ class TransitNetwork(Network):
             self.xferli.extend( ["\n;######################### From: "+path+"\n"])
             self.xferli.extend(xferli)
 
+        if len(faresys)>0:
+            logstr += " %d faresystems" % len(faresys)
+            self.faresystems.extend( ["\n;######################### From: "+path+"\n"])
+            self.faresystems.extend(faresys)
 
         logstr += "...done."
         return logstr
@@ -693,9 +714,9 @@ class TransitNetwork(Network):
                 fullfile = os.path.join(path,filename)
                 logstr = "   Reading %s" % filename
                 f = open(fullfile, 'r');
-                lines,links,pnr,zac,accessli,xferli = self.parseAndPrintTransitFile(f.read(), verbosity=0)
+                lines,links,pnr,zac,accessli,xferli,faresys = self.parseAndPrintTransitFile(f.read(), verbosity=0)
                 f.close()
-                logstr += self.doMerge(fullfile,lines,links,pnr,zac,accessli,xferli,insert_replace)
+                logstr += self.doMerge(fullfile,lines,links,pnr,zac,accessli,xferli,faresys,insert_replace)
                 WranglerLogger.debug(logstr)
 
     @staticmethod
@@ -771,10 +792,10 @@ class TransitNetwork(Network):
         logstr = "addDelay: Size of linkset = %d" % (len(linkSet))
 
         if additionalLinkFile:
-            linknet = TransitNetwork(self.champVersion)
+            linknet = TransitNetwork(self.modelType, self.modelVersion)
             linknet.parser = TransitParser(transit_file_def, verbosity=0)
             f = open(additionalLinkFile, 'r');
-            junk,additionallinks,junk,junk,junk,junk = \
+            junk,additionallinks,junk,junk,junk,junk,junk = \
                 linknet.parseAndPrintTransitFile(f.read(), verbosity=0)
             f.close()
             for link in additionallinks:
@@ -1068,7 +1089,7 @@ class TransitNetwork(Network):
         # print "pdesc=" + str(pdesc)
         
         # fares
-        for farefile in TransitNetwork.FARE_FILES:
+        for farefile in TransitNetwork.FARE_FILES[self.modelType]:
             fullfarefile = os.path.join(gitdir, farefile)
             linecount = 0
             # WranglerLogger.debug("cwd=%s  farefile %s exists? %d" % (os.getcwd(), fullfarefile, os.path.exists(fullfarefile)))

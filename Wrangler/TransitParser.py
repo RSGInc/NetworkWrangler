@@ -4,8 +4,10 @@ from simpleparse.parser import Parser
 from simpleparse.dispatchprocessor import *
 import re
 
+from .Faresystem import Faresystem
 from .Linki import Linki
 from .Logger import WranglerLogger
+from .NetworkException import NetworkException
 from .Node import Node
 from .PNRLink import PNRLink
 from .Supplink import Supplink
@@ -21,7 +23,7 @@ WRANGLER_FILE_SUFFICES = [ "lin", "link", "pnr", "zac", "access", "xfer" ]
 # NOTE: even though XYSPEED and TIMEFAC are node attributes here, I'm not sure that's really ok --
 # Cube documentation implies TF and XYSPD are node attributes...
 transit_file_def=r'''
-transit_file      := ( accessli / line / link / pnr / zac / supplink )+, smcw*, whitespace*
+transit_file      := ( accessli / line / link / pnr / zac / supplink / faresystem )+, smcw*, whitespace*
 
 line              := whitespace?, smcw?, c"LINE", whitespace, lin_attr*, lin_node*, whitespace?
 lin_attr          := ( lin_attr_name, whitespace?, "=", whitespace?, attr_value, whitespace?,
@@ -57,7 +59,14 @@ supplink_attr     := (( (supplink_attr_name, whitespace?, "=", whitespace?, attr
                         (c"n", whitespace?, "=", whitespace?, nodepair )),
                        whitespace?, comma?, whitespace?)
 supplink_attr_name:= c"mode" / c"dist" / c"speed" / c"oneway" / c"time"
-                       
+
+faresystem        := whitespace?, smcw?, c"FARESYSTEM", whitespace, faresystem_attr*, whitespace?, semicolon_comment*
+faresystem_attr   := (( (faresystem_attr_name, whitespace?, "=", whitespace?, attr_value) /
+                        (faresystem_fff, whitespace?, "=", whitespace?, floatseq )),
+                      whitespace?, comma?, whitespace? )
+faresystem_attr_name := c"number" / c"name" / c"longname" / c"structure" / c"same" / c"iboardfare" / c"farematrix" / c"farezones"
+faresystem_fff    := c"farefromfs"
+
 accessli          := whitespace?, smcw?, nodenumA, spaces?, nodenumB, spaces?, accesstag?, spaces?, (float/int)?, spaces?, semicolon_comment?
 accesstag         := c"wnr" / c"pnr"
  
@@ -66,6 +75,8 @@ word_node         := c"node"
 word_modes        := c"modes"
 word_zones        := c"zones"
 numseq            := int, (spaces?, ("-" / ","), spaces?, int)*
+floatseq          := floatnum, (spaces?, ("-" / ","), spaces?, floatnum)*
+floatnum          := [-]?, [0-9]+, [\.]?, [0-9]*
 nodepair          := nodenum, spaces?, ("-" / ","), spaces?, nodenum
 nodenumA          := nodenum
 nodenumB          := nodenum
@@ -91,6 +102,7 @@ class TransitFileProcessor(DispatchProcessor):
         self.xferlis   = []
         self.liType    = ''
         self.supplinks = []
+        self.faresystems = []
         
         self.endcomments = []
 
@@ -205,7 +217,26 @@ class TransitFileProcessor(DispatchProcessor):
             xxx = self.crackTags(leaf,buffer)
             supplink.append(xxx)
         self.supplinks.append(supplink)
-         
+
+    def faresystem(self, tup, buffer):
+        (tag,start,stop,subtags) = tup
+
+        if self.verbosity>=1:
+            print(tag, start, stop)
+        if self.verbosity==2:
+            for faresystempart in subtags:
+                print(" ",faresystempart[0], " -> [ "),
+                for partpart in faresystempart[3]:
+                    print(partpart[0], "(", buffer[partpart[1]:partpart[2]], ")"),
+                print(" ]")
+
+        # Append list items for this faresystem
+        fs = []
+        for leaf in subtags:
+            xxx = self.crackTags(leaf,buffer)
+            fs.append(xxx)
+        self.faresystems.append(fs)
+
     def smcw(self, tup, buffer):
         """ Semicolon comment whitespace
         """
@@ -551,4 +582,40 @@ class TransitParser(Parser):
  
         # Save last link too
         if currentSupplink: rows.append(currentSupplink)
+        return rows
+
+    def convertFaresystemData(self):
+        """ Convert the parsed tree of data into a usable python list of Faresystem objects
+            returns list of strings and Faresystem objects
+        """
+        rows = []
+        currentFaresystem = None
+
+        for faresystem in self.tfp.faresystems:
+
+            # faresystem records are lists
+            if currentFaresystem: rows.append(currentFaresystem)
+            currentFaresystem = Faresystem()
+
+            for fs_attr in faresystem:
+                if fs_attr[0] == 'faresystem_attr':
+                    if fs_attr[2][0][0]=='faresystem_attr_name':
+                        currentFaresystem[fs_attr[2][0][1]] = fs_attr[2][1][1]
+
+                    # for now, save this as FAREFROMFS => "0,0,1.0,0," etc
+                    elif fs_attr[2][0][0]=='faresystem_fff':
+                        # fs_attr[2] = [('faresystem_fff', 'FAREFROMFS', []),
+                        #               ('floatseq', '0,0,0,0,..,0,0', [('floatnum', '0', []), ('floatnum', '0', []), .. 
+                        currentFaresystem[fs_attr[2][0][1]] = fs_attr[2][1][1]
+
+                elif fs_attr[0] == "semicolon_comment":
+                    currentFaresystem.comment = fs_attr[1].strip()
+                elif fs_attr[0] == 'smcw':
+                    currentFaresystem.comment = fs_attr[1].strip()
+                else:
+                    WranglerLogger.critical("** SHOULD NOT BE HERE: %s".format(fs_attr))
+                    raise
+
+        # save last faresystem too
+        if currentFaresystem: rows.append(currentFaresystem)
         return rows

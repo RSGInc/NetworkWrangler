@@ -38,12 +38,12 @@ class HighwayNetwork(Network):
         f.close()
         return HighwayNetwork.cube_hostnames
 
-    def __init__(self, champVersion, basenetworkpath, networkBaseDir=None, networkProjectSubdir=None,
+    def __init__(self, modelType, modelVersion, basenetworkpath, networkBaseDir=None, networkProjectSubdir=None,
                  networkSeedSubdir=None, networkPlanSubdir=None, isTiered=False, tag=None,
                  hwyspecsdir=None, hwyspecs=None, tempdir=None, networkName=None, tierNetworkName=None):
         """
         *basenetworkpath* should be a starting point for this network, and include a ``FREEFLOW.net``,
-        as well as ``turns[am,pm,op].pen`` files.  
+        as well as ``turns[am,pm,op].pen`` files.
         Also a shapefile export: FREEFLOW.[dbf,prj,shp] and FREEFLOW_nodes.[dbf,prj,shp]
 
         *isTiered*: when False, checks out the *basenetworkpath* from Y:\networks.  When True,
@@ -55,7 +55,7 @@ class HighwayNetwork(Network):
         *hwyspecs*, if passed in, should be an instance of :py:class:`HwySpecsRTP`.  It
         is only used for logging.
         """
-        Network.__init__(self, champVersion, networkBaseDir, networkProjectSubdir, networkSeedSubdir,
+        Network.__init__(self, modelType, modelVersion, networkBaseDir, networkProjectSubdir, networkSeedSubdir,
                          networkPlanSubdir, networkName)
         
         if isTiered:

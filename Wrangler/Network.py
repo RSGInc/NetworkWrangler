@@ -7,6 +7,9 @@ __all__ = ['Network']
 
 class Network(object):
 
+    MODEL_TYPE_CHAMP        = "CHAMP"           # SFCTA travel model
+    MODEL_TYPE_TM2          = "TravelModelTwo"  # MTC/ABAG travel model
+
     WRANGLER_VERSION        = 2.0
     NETWORK_BASE_DIR        = r"Y:\networks"
     NETWORK_PROJECT_SUBDIR	= ""
@@ -15,17 +18,22 @@ class Network(object):
     # static variable
     allNetworks = {}
 
-    def __init__(self, champVersion, networkBaseDir=None, networkProjectSubdir=None,
+    def __init__(self, modelType, modelVersion, networkBaseDir=None, networkProjectSubdir=None,
                  networkSeedSubdir=None, networkPlanSubdir=None, networkName=None):
         """
-        *champVersion* argument is for compatibility check.
-        Currently this should be 4.3 or newer.
+        *modelType* should be MODEL_TYPE_CHAMP or MODEL_TYPE_TM2
+        *modelVersion* should be numeric and is used for compatibility checks.
+
+        Currently this should be 4.3 or newer for CHAMP.
         Pass *networkName* to be added to the Networks dictionary
         """
-        if type(champVersion) != type(0.0):
-            raise NetworkException("Do not understand champVersion %s")
+        if modelType not in [Network.MODEL_TYPE_CHAMP, Network.MODEL_TYPE_TM2]:
+            raise NetworkException("Do not understand modelType {}".format(modelType))
+        if type(modelVersion) != type(0.0):
+            raise NetworkException("Do not understand modelVersion {}".format(modelVersion))
 
-        self.champVersion = champVersion
+        self.modelType = modelType
+        self.modelVersion = modelVersion
         self.wranglerVersion = self.WRANGLER_VERSION
         self.appliedProjects = {}
         if networkBaseDir: Network.NETWORK_BASE_DIR = networkBaseDir
@@ -114,7 +122,7 @@ class Network(object):
         projectsubdir: the subdir if it exists, None otherwise
         """
 
-        if attr_name not in ['year', 'desc', 'champVersion', 'wranglerVersion', 'prereqs', 'coreqs', 'conflicts', 'networks']:
+        if attr_name not in ['year', 'desc', 'modelType', 'modelVersion', 'wranglerVersion', 'prereqs', 'coreqs', 'conflicts', 'networks']:
             WranglerLogger.fatal('%s is not a valid attribute type for a network project' % (attr_name))
             return
         
@@ -137,15 +145,16 @@ class Network(object):
         projectdir = eval(evalstr)
 
         attr_value = (eval("%s.%s()" % ((projectname if not s_projectname else s_projectname),attr_name)))
-        return attr_value        
-    
-    def getChampVersion(self, parentdir, networkdir, gitdir, projectsubdir=None):
-        """        
-        Returns champVersion range for this project
+        # todo: if try champVersion if modelType is CHAMP and modelVersion is sought
+        return attr_value
+
+    def getModelVersion(self, parentdir, networkdir, gitdir, projectsubdir=None):
+        """
+        Returns modelVersion range for this project
 
         See :py:meth:`Wrangler.Network.applyProject` for argument details.
         """
-        return getAttr('champVersion',parentdir, networkdir,gitdir, projectsubdir)
+        return getAttr('modelVersion',parentdir, networkdir,gitdir, projectsubdir)
 
     def getWranglerVersion(self, parentdir, networkdir, gitdir, projectsubdir=None):
         """        
@@ -157,15 +166,27 @@ class Network(object):
     
     def checkVersion(self, version, parentdir, networkdir, gitdir, projectsubdir=None):
         """
-        Verifies that this project is compatible with the champVersion or wranglerVersion, raises an exception
+        Verifies that this project is compatible with the modelVersion or wranglerVersion, raises an exception
           if not
 
         See :py:meth:`Wrangler.Network.applyProject` for argument details.
         """
-        if version not in ['champVersion','wranglerVersion']:
-            Wrangler.WranglerLogger.fatal("%s is not a valid version.  Must be 'champVersion' or 'wranglerVersion'" % str(version))
+        if version not in ['modelVersion','wranglerVersion']:
+            Wrangler.WranglerLogger.fatal("%s is not a valid version.  Must be 'modelVersion' or 'wranglerVersion'" % str(version))
 
-        versions = {'champVersion':self.champVersion, 'wranglerVersion':self.wranglerVersion}        
+        versions = {'modelVersion':self.modelVersion, 'wranglerVersion':self.wranglerVersion}
+
+        # if we're checking model version, check model type as well
+        if version == "modelVersion":
+            # legacy: assume CHAMP
+            project_model_type = Network.MODEL_TYPE_CHAMP
+            try:
+                project_model_type = self.getAttr("modelType", parentdir=parentdir, networkdir=networkdir, gitdir=gitdir, projectsubdir=projectsubdir)
+            except:
+                pass
+            if project_model_type != self.modelType:
+                raise NetworkException("Project model type ({}) not compatible with this model type {}".format(project_model_type, self.modelType))
+
         projVersion = self.getAttr(version, parentdir=parentdir, networkdir=networkdir,
                                    gitdir=gitdir, projectsubdir=projectsubdir)
         WranglerLogger.debug("Checking %s compatibility of project (%s) with requirement (%s)" % 
@@ -279,7 +300,7 @@ class Network(object):
                     # TODO: just checkout to the new tag
                     raise NetworkException("Conflicting tag requirements - FIXME!")
 
-                self.checkVersion(version='champVersion',parentdir=joinedTempDir, networkdir=networkdir,
+                self.checkVersion(version='modelVersion',parentdir=joinedTempDir, networkdir=networkdir,
                                   gitdir=gitdir, projectsubdir=projectsubdir)
                 self.checkVersion(version='wranglerVersion',parentdir=joinedTempDir, networkdir=networkdir,
                                   gitdir=gitdir, projectsubdir=projectsubdir)
@@ -291,7 +312,7 @@ class Network(object):
                 WranglerLogger.debug("Skipping checkout of %s, %s already exists" % 
                                      (networkdir, os.path.join(joinedTempDir,networkdir)))
 
-                self.checkVersion(version='champVersion',parentdir=joinedTempDir, networkdir=networkdir,
+                self.checkVersion(version='modelVersion',parentdir=joinedTempDir, networkdir=networkdir,
                                   gitdir=gitdir, projectsubdir=projectsubdir)
                 self.checkVersion(version='wranglerVersion',parentdir=joinedTempDir, networkdir=networkdir,
                                   gitdir=gitdir, projectsubdir=projectsubdir)
@@ -345,7 +366,7 @@ class Network(object):
             if retcode != 0:
                 raise NetworkException("Git checkout failed; see log file")
 
-        self.checkVersion(version='champVersion',parentdir=joinedTempDir, networkdir=networkdir,
+        self.checkVersion(version='modelVersion',parentdir=joinedTempDir, networkdir=networkdir,
                           gitdir=gitdir, projectsubdir=projectsubdir)
         self.checkVersion(version='wranglerVersion',parentdir=joinedTempDir, networkdir=networkdir,
                           gitdir=gitdir, projectsubdir=projectsubdir)

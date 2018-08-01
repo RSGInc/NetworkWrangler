@@ -382,7 +382,7 @@ if __name__ == '__main__':
     os.chdir(SCRATCH_SUBDIR)
     
     # Initialize networks
-    networks = {'hwy' :Wrangler.HighwayNetwork(champVersion=CHAMPVERSION,
+    networks = {'hwy' :Wrangler.HighwayNetwork(modelType=Wrangler.Network.MODEL_TYPE_CHAMP, modelVersion=CHAMPVERSION,
                                                basenetworkpath=os.path.join(PIVOT_DIR,"hwy") if PIVOT_DIR else "Roads2010",
                                                networkBaseDir=NETWORK_BASE_DIR,
                                                networkProjectSubdir=NETWORK_PROJECT_SUBDIR,
@@ -394,7 +394,7 @@ if __name__ == '__main__':
                                                hwyspecs=NONSF_PLANBAYAREA_SPECS,
                                                tempdir=TEMP_SUBDIR,
                                                networkName="hwy"),
-                'muni':Wrangler.TransitNetwork(champVersion=CHAMPVERSION,
+                'muni':Wrangler.TransitNetwork(modelType=Wrangler.Network.MODEL_TYPE_CHAMP, modelVersion=CHAMPVERSION,
                                                basenetworkpath=os.path.join(PIVOT_DIR,"trn") if PIVOT_DIR else None,
                                                networkBaseDir=NETWORK_BASE_DIR,
                                                networkProjectSubdir=NETWORK_PROJECT_SUBDIR,
@@ -402,7 +402,7 @@ if __name__ == '__main__':
                                                networkPlanSubdir=NETWORK_PLAN_SUBDIR,
                                                isTiered=True if PIVOT_DIR else False,
                                                networkName="muni"),
-                'rail':Wrangler.TransitNetwork(champVersion=CHAMPVERSION,
+                'rail':Wrangler.TransitNetwork(modelType=Wrangler.Network.MODEL_TYPE_CHAMP, modelVersion=CHAMPVERSION,
                                                basenetworkpath=os.path.join(PIVOT_DIR,"trn") if PIVOT_DIR else None,
                                                networkBaseDir=NETWORK_BASE_DIR,
                                                networkProjectSubdir=NETWORK_PROJECT_SUBDIR,
@@ -410,7 +410,7 @@ if __name__ == '__main__':
                                                networkPlanSubdir=NETWORK_PLAN_SUBDIR,
                                                isTiered=True if PIVOT_DIR else False,
                                                networkName="rail"),
-                'bus' :Wrangler.TransitNetwork(champVersion=CHAMPVERSION,
+                'bus' :Wrangler.TransitNetwork(modelType=Wrangler.Network.MODEL_TYPE_CHAMP, modelVersion=CHAMPVERSION,
                                                basenetworkpath=os.path.join(PIVOT_DIR,"trn") if PIVOT_DIR else None,
                                                networkBaseDir=NETWORK_BASE_DIR,
                                                networkProjectSubdir=NETWORK_PROJECT_SUBDIR,
@@ -468,7 +468,8 @@ if __name__ == '__main__':
             if projType=='plan':
                 #Open specs file and get list of projects
                 specFile = os.path.join(TEMP_SUBDIR,NETWORK_PLAN_SUBDIR,'planSpecs.csv')
-                PLAN_SPECS = Wrangler.PlanSpecs.PlanSpecs(champVersion=CHAMPVERSION,basedir=Wrangler.Network.NETWORK_BASE_DIR,
+                PLAN_SPECS = Wrangler.PlanSpecs.PlanSpecs(modelType=Wrangler.Network.MODEL_TYPE_CHAMP, modelVersion=CHAMPVERSION,
+                                                          basedir=Wrangler.Network.NETWORK_BASE_DIR,
                                                           networkdir=project_name,
                                                           plansubdir=Wrangler.Network.NETWORK_PLAN_SUBDIR,
                                                           projectsubdir=Wrangler.Network.NETWORK_PROJECT_SUBDIR,
