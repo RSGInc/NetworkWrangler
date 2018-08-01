@@ -2,7 +2,7 @@ from simpleparse.common import numbers, strings, comments
 from simpleparse import generator
 from simpleparse.parser import Parser
 from simpleparse.dispatchprocessor import *
-import re
+import collections, re
 
 from .Faresystem import Faresystem
 from .Linki import Linki
@@ -10,6 +10,7 @@ from .Logger import WranglerLogger
 from .NetworkException import NetworkException
 from .Node import Node
 from .PNRLink import PNRLink
+from .PTSystem import PTSystem
 from .Supplink import Supplink
 from .TransitLine import TransitLine
 from .TransitLink import TransitLink
@@ -17,13 +18,13 @@ from .ZACLink import ZACLink
 
 __all__ = [ 'TransitParser' ]
 
-WRANGLER_FILE_SUFFICES = [ "lin", "link", "pnr", "zac", "access", "xfer" ]
+WRANGLER_FILE_SUFFICES = [ "lin", "link", "pnr", "zac", "access", "xfer", "pts" ]
 
 # PARSER DEFINITION ------------------------------------------------------------------------------
 # NOTE: even though XYSPEED and TIMEFAC are node attributes here, I'm not sure that's really ok --
 # Cube documentation implies TF and XYSPD are node attributes...
 transit_file_def=r'''
-transit_file      := ( accessli / line / link / pnr / zac / supplink / faresystem )+, smcw*, whitespace*
+transit_file      := smcw*, ( accessli / line / link / pnr / zac / supplink / faresystem / waitcrvdef / crowdcrvdef / operator / mode / vehicletype )+, smcw*, whitespace*
 
 line              := whitespace?, smcw?, c"LINE", whitespace, lin_attr*, lin_node*, whitespace?
 lin_attr          := ( lin_attr_name, whitespace?, "=", whitespace?, attr_value, whitespace?,
@@ -67,13 +68,31 @@ faresystem_attr   := (( (faresystem_attr_name, whitespace?, "=", whitespace?, at
 faresystem_attr_name := c"number" / c"name" / c"longname" / c"structure" / c"same" / c"iboardfare" / c"farematrix" / c"farezones"
 faresystem_fff    := c"farefromfs"
 
+waitcrvdef        := whitespace?, smcw?, c"WAITCRVDEF", whitespace, crv_attr*, whitespace?, semicolon_comment*
+crowdcrvdef       := whitespace?, smcw?, c"CROWDCRVDEF", whitespace, crv_attr*, whitespace?, semicolon_comment*
+crv_attr          := (( (opmode_attr_name, whitespace?, "=", whitespace?, attr_value) /
+                        (word_curve, whitespace?, "=", whitespace?, xyseq )),
+                       whitespace?, comma?, whitespace? )
+
+operator          := whitespace?, smcw?, c"OPERATOR", whitespace, opmode_attr*, whitespace?, semicolon_comment*
+mode              := whitespace?, smcw?, c"MODE", whitespace, opmode_attr*, whitespace?, semicolon_comment*
+opmode_attr       := ( (opmode_attr_name, whitespace?, "=", whitespace?, attr_value), whitespace?, comma?, whitespace? )
+opmode_attr_name  := c"number" / c"name" / c"longname"
+
+vehicletype       := whitespace?, smcw?, c"VEHICLETYPE", whitespace, vehtype_attr*, whitespace?, semicolon_comment*
+vehtype_attr      := ( (vehtype_attr_name, whitespace?, "=", whitespace?, attr_value), whitespace?, comma?, whitespace? )
+vehtype_attr_name := c"number" / (c"crowdcurve",'[',[0-9]+,']') / c"crushcap" / c"loaddistfac" / c"longname" / c"name" / c"seatcap"
 accessli          := whitespace?, smcw?, nodenumA, spaces?, nodenumB, spaces?, accesstag?, spaces?, (float/int)?, spaces?, semicolon_comment?
 accesstag         := c"wnr" / c"pnr"
- 
+
+word_curve        := c"curve"
 word_nodes        := c"nodes"
 word_node         := c"node"
 word_modes        := c"modes"
 word_zones        := c"zones"
+xyseq             := xy, (spaces?, ",", spaces?, xy)*
+xy                := pos_floatnum, spaces?, ("-" / ","), spaces?, pos_floatnum
+pos_floatnum      := [0-9]+, [\.]?, [0-9]*
 numseq            := int, (spaces?, ("-" / ","), spaces?, int)*
 floatseq          := floatnum, (spaces?, ("-" / ","), spaces?, floatnum)*
 floatnum          := [-]?, [0-9]+, [\.]?, [0-9]*
@@ -103,8 +122,14 @@ class TransitFileProcessor(DispatchProcessor):
         self.liType    = ''
         self.supplinks = []
         self.faresystems = []
-        
-        self.endcomments = []
+        # PT System control statements
+        self.waitcrvdefs  = []
+        self.crowdcrvdefs = []
+        self.operators    = []
+        self.modes        = []
+        self.vehicletypes = []
+
+        self.linecomments = []
 
     def crackTags(self, leaf, buffer):
         tag = leaf[0]
@@ -196,46 +221,57 @@ class TransitFileProcessor(DispatchProcessor):
             xxx = self.crackTags(leaf,buffer)
             self.zacs.append(xxx)
 
-    def supplink(self, tup, buffer):
+    def process_line(self, tup, buffer):
+        """
+        Generic version, returns list of pieces.
+        """
         (tag,start,stop,subtags) = tup
 
         if self.verbosity>=1:
             print(tag, start, stop)
 
         if self.verbosity==2:
-            # supplinks are composed of smcw and zac_attr
-            for supplinkpart in subtags:
-                print(" ",supplinkpart[0], " -> [ "),
-                for partpart in supplinkpart[3]:
+            for part in subtags:
+                print(" ",part[0], " -> [ "),
+                for partpart in part[3]:
                     print(partpart[0], "(", buffer[partpart[1]:partpart[2]], ")"),
                 print(" ]")
         
         # Append list items for this link
         # TODO: make the others more like this -- let the list separate the parse structures!
-        supplink = []
+        retlist = []
         for leaf in subtags:
             xxx = self.crackTags(leaf,buffer)
-            supplink.append(xxx)
+            retlist.append(xxx)
+        return retlist
+
+    def supplink(self, tup, buffer):
+        supplink = self.process_line(tup, buffer)
         self.supplinks.append(supplink)
 
     def faresystem(self, tup, buffer):
-        (tag,start,stop,subtags) = tup
-
-        if self.verbosity>=1:
-            print(tag, start, stop)
-        if self.verbosity==2:
-            for faresystempart in subtags:
-                print(" ",faresystempart[0], " -> [ "),
-                for partpart in faresystempart[3]:
-                    print(partpart[0], "(", buffer[partpart[1]:partpart[2]], ")"),
-                print(" ]")
-
-        # Append list items for this faresystem
-        fs = []
-        for leaf in subtags:
-            xxx = self.crackTags(leaf,buffer)
-            fs.append(xxx)
+        fs = self.process_line(tup, buffer)
         self.faresystems.append(fs)
+
+    def waitcrvdef(self, tup, buffer):
+        mycrvedef = self.process_line(tup, buffer)
+        self.waitcrvdefs.append(mycrvedef)
+
+    def crowdcrvdef(self, tup, buffer):
+        mycrvedef = self.process_line(tup, buffer)
+        self.crowdcrvdefs.append(mycrvedef)
+
+    def operator(self, tup, buffer):
+        myopmode = self.process_line(tup, buffer)
+        self.operators.append(myopmode)
+
+    def mode(self, tup, buffer):
+        myopmode = self.process_line(tup, buffer)
+        self.modes.append(myopmode)
+
+    def vehicletype(self, tup, buffer):
+        myvt = self.process_line(tup, buffer)
+        self.vehicletypes.append(myvt)
 
     def smcw(self, tup, buffer):
         """ Semicolon comment whitespace
@@ -247,7 +283,7 @@ class TransitFileProcessor(DispatchProcessor):
         
         for leaf in subtags:
             xxx = self.crackTags(leaf,buffer)
-            self.endcomments.append(xxx)
+            self.linecomments.append(xxx)
             
     def accessli(self, tup, buffer):
         (tag,start,stop,subtags) = tup
@@ -269,11 +305,16 @@ class TransitParser(Parser):
     # line files are one of these
     PROGRAM_PT       = "PT"
     PROGRAM_TRNBUILD = "TRNBUILD"
+    PROGRAM_UNKNOWN  = "unknown"
 
     def __init__(self, filedef=transit_file_def, verbosity=1):
         Parser.__init__(self, filedef)
         self.verbosity=verbosity
         self.tfp = TransitFileProcessor(self.verbosity)
+
+    def setVerbosity(self,verbosity):
+        self.verbosity=verbosity
+        self.tfp.verbosity=verbosity
 
     def buildProcessor(self):
         return self.tfp
@@ -282,22 +323,28 @@ class TransitParser(Parser):
         """ Convert the parsed tree of data into a usable python list of transit lines
             returns (PROGRAM_PT or PROGRAM_TRNBUILD, list of comments and transit line objects)
         """
-        program = TransitParser.PROGRAM_TRNBUILD  # default
+        program = TransitParser.PROGRAM_UNKNOWN  # default
         rows = []
         currentRoute = None
 
+        # try to figure out what type of file this is -- TRNBUILD or PT
+        for comment in self.tfp.linecomments:
+            if comment[0] == "semicolon_comment":
+                cmt = comment[2][0][1]
+                # print("cmt={}".format(cmt))
+                # note the first semicolon is stripped
+                if cmt.startswith(';<<Trnbuild>>;;'):
+                    program = TransitParser.PROGRAM_TRNBUILD
+                elif cmt.startswith(";<<PT>><<LINE>>;;"):
+                    program = TransitParser.PROGRAM_PT
+        WranglerLogger.debug("convertLineData: PROGRAM: {}".format(program))
+
         for line in self.tfp.lines:
-            # Each line is a 3-tuple:  key, value, list-of-children.
 
             # Add comments as simple strings
             if line[0] == 'smcw':
                 cmt = line[1].strip()
-                if cmt.startswith(';;<<Trnbuild>>;;'):
-                    program = TransitParser.PROGRAM_TRNBUILD
-                elif cmt.startswith(";;<<PT>><<LINE>>;;"):
-                    program = TransitParser.PROGRAM_PT
-                else:
-                    rows.append(cmt)
+                rows.append(cmt)
                 continue
 
             # Handle Line attributes
@@ -619,3 +666,77 @@ class TransitParser(Parser):
         # save last faresystem too
         if currentFaresystem: rows.append(currentFaresystem)
         return rows
+
+    def convertPTSystemData(self):
+        """ Convert the parsed tree of data into a PTSystem object
+            returns a PTSystem object
+        """
+        pts = PTSystem()
+
+        for crvdef in self.tfp.waitcrvdefs:
+            curve_num = None
+            curve_dict = collections.OrderedDict()
+            for attr in crvdef:
+                # just handle curve attributes
+                if attr[0] !="crv_attr": continue
+                key = attr[2][0][1]
+                val = attr[2][1][1]
+                if key == "NUMBER": curve_num = int(val)
+                curve_dict[key] = val
+            pts.waitCurveDefs[curve_num] = curve_dict
+
+        for crvdef in self.tfp.crowdcrvdefs:
+            curve_num = None
+            curve_dict = collections.OrderedDict()
+            for attr in crvdef:
+                # just handle curve attributes
+                if attr[0] !="crv_attr": continue
+                key = attr[2][0][1]
+                val = attr[2][1][1]
+                if key == "NUMBER": curve_num = int(val)
+                curve_dict[key] = val
+            pts.crowdCurveDefs[curve_num] = curve_dict
+
+        for operator in self.tfp.operators:
+            op_num  = None
+            op_dict = collections.OrderedDict()
+            for attr in operator:
+                # just handle opmode attributes
+                if attr[0] !="opmode_attr": continue
+
+                key = attr[2][0][1]
+                val = attr[2][1][1]
+                if key == "NUMBER": op_num = int(val)
+                op_dict[key] = val # leave as string
+            pts.operators[op_num] = op_dict
+
+        for mode in self.tfp.modes:
+            mode_num  = None
+            mode_dict = collections.OrderedDict()
+            for attr in mode:
+                # just handle opmode attributes
+                if attr[0] !="opmode_attr": continue
+
+                key = attr[2][0][1]
+                val = attr[2][1][1]
+                if key == "NUMBER": mode_num = int(val)
+                mode_dict[key] = val # leave as string
+            pts.modes[mode_num] = mode_dict
+
+        for vehicletype in self.tfp.vehicletypes:
+            vt_num  = None
+            vt_dict = collections.OrderedDict()
+            for attr in vehicletype:
+                # just handle vehtype attributes
+                if attr[0] != "vehtype_attr": continue
+
+                key = attr[2][0][1]
+                val = attr[2][1][1]
+                if key == "NUMBER": vt_num = int(val)
+                vt_dict[key] = val # leave as string
+            pts.vehicleTypes[vt_num] = vt_dict
+
+        if len(pts.waitCurveDefs) > 0 or len(pts.crowdCurveDefs) > 0 or len(pts.operators) > 0 or len(pts.modes) > 0 or len(pts.vehicleTypes) > 0:
+            return pts
+        return None
+

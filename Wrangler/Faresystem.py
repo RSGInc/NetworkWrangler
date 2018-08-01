@@ -12,6 +12,6 @@ class Faresystem(collections.OrderedDict):
         s = "FARESYSTEM "
 
         fields = ['%s=%s' % (k,v) for k,v in self.items()]
-        s += " ".join(fields)
+        s += ", ".join(fields)
 
         return s

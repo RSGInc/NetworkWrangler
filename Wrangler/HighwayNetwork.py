@@ -285,7 +285,7 @@ class HighwayNetwork(Network):
         else:
             netfile = os.path.join(path,"FREEFLOW.net")
             if os.path.exists(netfile) and not suppressQuery:
-                print("File [%s] exists already.  Overwrite contents? (y/n/s) ".format(netfile))
+                print("File [{}] exists already.  Overwrite contents? (y/n/s) ".format(netfile))
                 response = raw_input("")
                 WranglerLogger.debug("response = [%s]" % response)
                 if response == "s" or response == "S":

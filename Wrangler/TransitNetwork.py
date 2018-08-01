@@ -49,7 +49,9 @@ class TransitNetwork(Network):
         self.accessli     = []
         self.xferli       = []
         self.faresystems  = []
-        self.farefiles = {} # farefile name -> [ lines in farefile ]
+        self.ptsystems    = []
+        self.farefiles    = {} # farefile name -> [ lines in farefile ]
+
         for farefile in TransitNetwork.FARE_FILES[self.modelType]:
             self.farefiles[farefile] = []
 
@@ -63,6 +65,12 @@ class TransitNetwork(Network):
             for filename in glob.glob(os.path.join(basenetworkpath, networkName + ".*")):
                 suffix = filename.rsplit(".")[-1].lower()
                 if suffix in ["lin","link","pnr","zac","access","xfer"]:
+                    self.parseFile(filename)
+
+            # this doesn't have to match the network name
+            for filename in glob.glob(os.path.join(basenetworkpath, "*.*")):
+                suffix = filename.rsplit(".")[-1].lower()
+                if suffix in ["pts"]:
                     self.parseFile(filename)
 
             # fares
@@ -165,6 +173,7 @@ class TransitNetwork(Network):
         del self.zacs[:]
         del self.accessli[:]
         del self.xferli[:]
+        del self.faresystems[:]
 
     def clearLines(self):
         """
@@ -505,7 +514,7 @@ class TransitNetwork(Network):
         else:
             trnfile = os.path.join(path,name+".lin")
             if os.path.exists(trnfile) and not suppressQuery:
-                print("File [%s] exists already.  Overwrite contents? (y/n/s) ".format(trnfile))
+                print("File [{}] exists already.  Overwrite contents? (y/n/s) ".format(trnfile))
                 response = raw_input("")
                 WranglerLogger.debug("response = [%s]" % response)
                 if response == "s" or response == "S":
@@ -590,6 +599,13 @@ class TransitNetwork(Network):
                     f.write(str(faresys)+"\n")
                 f.close()
 
+        if self.modelType == Network.MODEL_TYPE_TM2 and (len(self.ptsystems) > 0 or writeEmptyFiles):
+            logstr += " pts"
+            f = open(os.path.join(path,name+".pts"), 'w')
+            for pts in self.ptsystems:
+                f.write(str(pts)+"\n")
+            f.close()
+
         logstr += "... done."
         WranglerLogger.debug(logstr)
         WranglerLogger.info("")
@@ -599,6 +615,7 @@ class TransitNetwork(Network):
         Verbosity=1: 1 line per line summary
         Verbosity=2: 1 line per node
         """
+        self.parser.setVerbosity(verbosity)
         success, children, nextcharacter = self.parser.parse(trntxt, production="transit_file")
         if not nextcharacter==len(trntxt):
             errorstr  = "\n   Did not successfully read the whole file; got to nextcharacter=%d out of %d total" % (nextcharacter, len(trntxt))
@@ -606,16 +623,17 @@ class TransitNetwork(Network):
             raise NetworkException(errorstr)
 
         # Convert from parser-tree format to in-memory transit data structures:
-        (self.program, convertedLines) = self.parser.convertLineData()
-        convertedLinks = self.parser.convertLinkData()
-        convertedPNR   = self.parser.convertPNRData()
-        convertedZAC   = self.parser.convertZACData()
-        convertedAccessLinki = self.parser.convertLinkiData("access")
-        convertedXferLinki   = self.parser.convertLinkiData("xfer")
-        convertedFaresystems = self.parser.convertFaresystemData()
+        (program, convertedLines) = self.parser.convertLineData()
+        convertedLinks            = self.parser.convertLinkData()
+        convertedPNR              = self.parser.convertPNRData()
+        convertedZAC              = self.parser.convertZACData()
+        convertedAccessLinki      = self.parser.convertLinkiData("access")
+        convertedXferLinki        = self.parser.convertLinkiData("xfer")
+        convertedFaresystems      = self.parser.convertFaresystemData()
+        convertedPTSystem         = self.parser.convertPTSystemData()
 
-        return convertedLines, convertedLinks, convertedPNR, convertedZAC, \
-            convertedAccessLinki, convertedXferLinki, convertedFaresystems
+        return program, convertedLines, convertedLinks, convertedPNR, convertedZAC, \
+            convertedAccessLinki, convertedXferLinki, convertedFaresystems, convertedPTSystem
 
     def parseFile(self, fullfile, insert_replace=True):
         """
@@ -634,12 +652,12 @@ class TransitNetwork(Network):
         self.parser.tfp.liType = suffix
         logstr = "   Reading %s as %s" % (fullfile, suffix)
         f = open(fullfile, 'r');
-        lines,links,pnr,zac,accessli,xferli,faresys = self.parseAndPrintTransitFile(f.read(), verbosity=0)
+        prog,lines,links,pnr,zac,accessli,xferli,faresys,pts = self.parseAndPrintTransitFile(f.read(), verbosity=0)
         f.close()
-        logstr += self.doMerge(fullfile,lines,links,pnr,zac,accessli,xferli,faresys,insert_replace)
+        logstr += self.doMerge(fullfile,prog,lines,links,pnr,zac,accessli,xferli,faresys,pts,insert_replace)
         WranglerLogger.debug(logstr)
             
-    def doMerge(self,path,lines,links,pnrs,zacs,accessli,xferli,faresys,insert_replace=False):
+    def doMerge(self,path,prog,lines,links,pnrs,zacs,accessli,xferli,faresys,pts,insert_replace=False):
         """
         Merge a set of transit lines & support links with this network's transit representation.
         """
@@ -648,6 +666,12 @@ class TransitNetwork(Network):
 
         if len(lines)>0:
             logstr += " %s lines" % len(lines)
+
+            if len(self.lines) == 0:
+                self.program = prog
+            else:
+                # don't mix PT and TRNBUILD
+                assert(prog == self.program)
 
             extendlines = copy.deepcopy(lines)
             for line in lines:
@@ -694,6 +718,11 @@ class TransitNetwork(Network):
             self.faresystems.extend( ["\n;######################### From: "+path+"\n"])
             self.faresystems.extend(faresys)
 
+        if pts:
+            logstr += " 1 PTSystem"
+            self.ptsystems.extend( ["\n;######################### From: "+path+"\n"])
+            self.ptsystems.append(pts)
+
         logstr += "...done."
         return logstr
 
@@ -708,15 +737,15 @@ class TransitNetwork(Network):
 
         for filename in dirlist:
             suffix = filename.rsplit(".")[-1].lower()
-            if suffix in ["lin","link","pnr","zac","access","xfer"]:
+            if suffix in ["lin","link","pnr","zac","access","xfer","pts"]:
                 self.parser = TransitParser(transit_file_def, verbosity=0)
                 self.parser.tfp.liType = suffix
                 fullfile = os.path.join(path,filename)
                 logstr = "   Reading %s" % filename
                 f = open(fullfile, 'r');
-                lines,links,pnr,zac,accessli,xferli,faresys = self.parseAndPrintTransitFile(f.read(), verbosity=0)
+                prog,lines,links,pnr,zac,accessli,xferli,faresys,pts = self.parseAndPrintTransitFile(f.read(), verbosity=0)
                 f.close()
-                logstr += self.doMerge(fullfile,lines,links,pnr,zac,accessli,xferli,faresys,insert_replace)
+                logstr += self.doMerge(fullfile,prog,lines,links,pnr,zac,accessli,xferli,faresys,pts,insert_replace)
                 WranglerLogger.debug(logstr)
 
     @staticmethod
@@ -795,7 +824,7 @@ class TransitNetwork(Network):
             linknet = TransitNetwork(self.modelType, self.modelVersion)
             linknet.parser = TransitParser(transit_file_def, verbosity=0)
             f = open(additionalLinkFile, 'r');
-            junk,additionallinks,junk,junk,junk,junk,junk = \
+            junk,junk,additionallinks,junk,junk,junk,junk,junk,junk = \
                 linknet.parseAndPrintTransitFile(f.read(), verbosity=0)
             f.close()
             for link in additionallinks:
