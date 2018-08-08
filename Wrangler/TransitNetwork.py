@@ -6,6 +6,7 @@ from .Logger import WranglerLogger
 from .Network import Network
 from .NetworkException import NetworkException
 from .PNRLink import PNRLink
+from .PTSystem import PTSystem
 from .Regexes import nodepair_pattern
 from .TransitAssignmentData import TransitAssignmentData, TransitAssignmentDataException
 from .TransitCapacity import TransitCapacity
@@ -49,7 +50,7 @@ class TransitNetwork(Network):
         self.accessli     = []
         self.xferli       = []
         self.faresystems  = []
-        self.ptsystems    = []
+        self.ptsystem     = PTSystem()  # single instance
         self.farefiles    = {} # farefile name -> [ lines in farefile ]
 
         for farefile in TransitNetwork.FARE_FILES[self.modelType]:
@@ -599,11 +600,10 @@ class TransitNetwork(Network):
                     f.write(str(faresys)+"\n")
                 f.close()
 
-        if self.modelType == Network.MODEL_TYPE_TM2 and (len(self.ptsystems) > 0 or writeEmptyFiles):
+        if self.modelType == Network.MODEL_TYPE_TM2 and (self.ptsystem.isEmpty()==False or writeEmptyFiles):
             logstr += " pts"
             f = open(os.path.join(path,name+".pts"), 'w')
-            for pts in self.ptsystems:
-                f.write(str(pts)+"\n")
+            f.write(str(self.ptsystem)+"\n")
             f.close()
 
         logstr += "... done."
@@ -720,8 +720,7 @@ class TransitNetwork(Network):
 
         if pts:
             logstr += " 1 PTSystem"
-            self.ptsystems.extend( ["\n;######################### From: "+path+"\n"])
-            self.ptsystems.append(pts)
+            self.ptsystem.merge(pts)
 
         logstr += "...done."
         return logstr
