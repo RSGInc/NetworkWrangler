@@ -30,7 +30,7 @@ line              := whitespace?, smcw?, c"LINE", whitespace, lin_attr*, lin_nod
 lin_attr          := ( lin_attr_name, whitespace?, "=", whitespace?, attr_value, whitespace?,
                        comma, whitespace?, semicolon_comment* )
 lin_nodeattr      := ( lin_nodeattr_name, whitespace?, "=", whitespace?, attr_value, whitespace?, comma?, whitespace?, semicolon_comment* )
-lin_attr_name     := c"allstops" / c"color" / (c"freq",'[',[1-5],']') / c"mode" / c"name" / c"oneway" / c"owner" / c"runtime" / c"timefac" / c"xyspeed" / c"longname" / c"shortname" / (c"usera",[1-5]) / (c"headway",'[',[1-5],']') / c"vehicletype" / c"operator"
+lin_attr_name     := c"allstops" / c"color" / (c"freq",'[',[1-5],']') / c"mode" / c"name" / c"oneway" / c"owner" / c"runtime" / c"timefac" / c"xyspeed" / c"longname" / c"shortname" / (c"usera",[1-5]) / (c"headway",'[',[1-5],']') / c"vehicletype" / c"operator" / c"faresystem"
 lin_nodeattr_name := c"access_c" / c"access" / c"delay" /  c"xyspeed" / c"timefac" / c"nntime" / c"time"
 lin_node          := lin_nodestart?, whitespace?, nodenum, spaces*, comma?, spaces*, semicolon_comment?, whitespace?, lin_nodeattr*
 lin_nodestart     := (whitespace?, "N", whitespace?, "=")
@@ -121,7 +121,7 @@ class TransitFileProcessor(DispatchProcessor):
         self.xferlis   = []
         self.liType    = ''
         self.supplinks = []
-        self.faresystems = []
+        self.faresystems  = []
         # PT System control statements
         self.waitcrvdefs  = []
         self.crowdcrvdefs = []
@@ -635,13 +635,13 @@ class TransitParser(Parser):
         """ Convert the parsed tree of data into a usable python list of Faresystem objects
             returns list of strings and Faresystem objects
         """
-        rows = []
+        rows = {}
         currentFaresystem = None
 
         for faresystem in self.tfp.faresystems:
 
             # faresystem records are lists
-            if currentFaresystem: rows.append(currentFaresystem)
+            if currentFaresystem: rows[currentFaresystem.getId()] = currentFaresystem
             currentFaresystem = Faresystem()
 
             for fs_attr in faresystem:
@@ -664,7 +664,7 @@ class TransitParser(Parser):
                     raise
 
         # save last faresystem too
-        if currentFaresystem: rows.append(currentFaresystem)
+        if currentFaresystem: rows[currentFaresystem.getId()] = currentFaresystem
         return rows
 
     def convertPTSystemData(self):

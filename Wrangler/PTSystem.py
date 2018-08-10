@@ -11,11 +11,11 @@ class PTSystem:
     """
 
     def __init__(self):
-        self.waitCurveDefs  = collections.OrderedDict()
-        self.crowdCurveDefs = collections.OrderedDict()
-        self.operators      = collections.OrderedDict()  # index is number
-        self.modes          = collections.OrderedDict()
-        self.vehicleTypes   = collections.OrderedDict()
+        self.waitCurveDefs  = collections.OrderedDict()  # key is number, value is also ordered dict
+        self.crowdCurveDefs = collections.OrderedDict()  # key is number, value is also ordered dict
+        self.operators      = collections.OrderedDict()  # key is number, value is also ordered dict
+        self.modes          = collections.OrderedDict()  # key is number, value is also ordered dict
+        self.vehicleTypes   = collections.OrderedDict()  # key is number, value is also ordered dict
 
     def isEmpty(self):
         if len(self.operators   ) > 0: return False

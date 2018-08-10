@@ -27,7 +27,7 @@ class TransitNetwork(Network):
             "amtrak.fare",   "hsr.fare",   "ferry.fare",
             "bart.fare",     "xfer.fare",  "farelinks.fare"],
         Network.MODEL_TYPE_TM2:
-           ["fares.far" ] # ,     "fareMatrix.txt"]
+           ["fares.far",     "fareMatrix.txt"],
     }
 
 
@@ -49,7 +49,7 @@ class TransitNetwork(Network):
         self.zacs         = []
         self.accessli     = []
         self.xferli       = []
-        self.faresystems  = []
+        self.faresystems  = {} # key is Id number
         self.ptsystem     = PTSystem()  # single instance
         self.farefiles    = {} # farefile name -> [ lines in farefile ]
 
@@ -79,9 +79,16 @@ class TransitNetwork(Network):
                 fullfarefile = os.path.join(basenetworkpath, farefile)
 
                 if modelType==Network.MODEL_TYPE_TM2:
-                    # parse TM2 fare files
-                    self.parseFile(fullfarefile)
-                    WranglerLogger.info("Read {}".format(fullfarefile))
+
+                    suffix = farefile.rsplit(".")[-1].lower()
+
+                    if suffix=="far":
+                        # parse TM2 fare files
+                        self.parseFile(fullfarefile)
+                        WranglerLogger.info("Read {}".format(fullfarefile))
+                    else:
+                        # fare zone matrix files are just numbers
+                        Faresystem.readFareZoneMatrixFile(fullfarefile, self.faresystems)
 
                 else:
                     linecount = 0
@@ -595,10 +602,15 @@ class TransitNetwork(Network):
         else:
             if len(self.faresystems) > 0 or writeEmptyFiles:
                 logstr += " faresystem"
-                f = open(os.path.join(path,name+".far"), 'w')
-                for faresys in self.faresystems:
-                    f.write(str(faresys)+"\n")
+                # fare and farematrix files
+                f  = open(os.path.join(path,name+".far"), 'w')
+                f2 = open(os.path.join(path, name+"_farematrix.txt"), 'w')
+                for fare_id in sorted(self.faresystems.keys()):
+                    f.write(str(self.faresystems[fare_id])+"\n")
+                    f2.write(self.faresystems[fare_id].getFareZoneMatrixLines())
                 f.close()
+                f2.close()
+
 
         if self.modelType == Network.MODEL_TYPE_TM2 and (self.ptsystem.isEmpty()==False or writeEmptyFiles):
             logstr += " pts"
@@ -715,8 +727,16 @@ class TransitNetwork(Network):
 
         if len(faresys)>0:
             logstr += " %d faresystems" % len(faresys)
-            self.faresystems.extend( ["\n;######################### From: "+path+"\n"])
-            self.faresystems.extend(faresys)
+
+            # merge the faresystems dictionary
+            for fs_id,fs in faresys.iteritems():
+                if fs_id in self.faresystems:
+                    WranglerLogger.fatal("FARESYSTEM definition collision:")
+                    WranglerLogger.fatal("  existing: " + str(self.faresystems[fs_id]))
+                    WranglerLogger.fatal("       new: " + str(fs))
+                    raise NetworkException("FARESYSTEM definition collision")
+                else:
+                    self.faresystems[fs_id] = fs
 
         if pts:
             logstr += " 1 PTSystem"
