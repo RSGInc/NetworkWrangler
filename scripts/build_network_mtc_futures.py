@@ -448,7 +448,8 @@ def preCheckRequirementsForAllProjects(networks):
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=USAGE, formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.add_argument("--configword", help="optional word for network specification script")
-    parser.add_argument("net_spec", metavar="network_specification.py", nargs=1, help="Script which defines required variables indicating how to build the network")
+    parser.add_argument("net_spec", metavar="network_specification.py", help="Script which defines required variables indicating how to build the network")
+    parser.add_argument("future", choices=["CleanAndGreen", "RisingTides", "BackToTheFuture"], help="Specify which Future Scenario for which to create networks")
     args = parser.parse_args()
 
     NOW         = time.strftime("%Y%b%d.%H%M%S")
@@ -458,15 +459,13 @@ if __name__ == '__main__':
     HWY_OUTFILE = "FREEFLOW.NET"
 
     # Read the configuration
-    NETWORK_CONFIG = args.net_spec[0]
+    NETWORK_CONFIG = args.net_spec
+    SCENARIO       = args.future
     execfile(NETWORK_CONFIG)
 
     # Verify mandatory fields are set
     if PROJECT==None:
         print "PROJECT not set in %s" % NETWORK_CONFIG
-        sys.exit(2)
-    if SCENARIO==None:
-        print "SCENARIO not set in %s" % NETWORK_CONFIG
         sys.exit(2)
     if TAG==None:
         print "TAG not set in %s" % NETWORK_CONFIG
@@ -548,14 +547,14 @@ if __name__ == '__main__':
                 applied_SHA1 = networks[netmode].applyProject(parentdir, networkdir, gitdir, projectsubdir)
                 appliedcount += 1
 
-        if appliedcount == 0:
+        if YEAR > 2015 and appliedcount == 0:
             Wrangler.WranglerLogger.info("No applied projects for this year -- skipping output")
             continue
 
         # Initialize output subdirectories up a level (not in scratch)
-        hwypath=os.path.join("..", OUT_DIR.format(YEAR),HWY_SUBDIR)
+        hwypath=os.path.join("..", SCENARIO, OUT_DIR.format(YEAR),HWY_SUBDIR)
         if not os.path.exists(hwypath): os.makedirs(hwypath)
-        trnpath = os.path.join("..", OUT_DIR.format(YEAR),TRN_SUBDIR)
+        trnpath = os.path.join("..", SCENARIO, OUT_DIR.format(YEAR),TRN_SUBDIR)
         if not os.path.exists(trnpath): os.makedirs(trnpath)
 
         networks['hwy'].write(path=hwypath,name=HWY_OUTFILE,suppressQuery=True,
