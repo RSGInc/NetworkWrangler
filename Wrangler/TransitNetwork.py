@@ -729,7 +729,7 @@ class TransitNetwork(Network):
             logstr += " %d faresystems" % len(faresys)
 
             # merge the faresystems dictionary
-            for fs_id,fs in faresys.iteritems():
+            for (fs_id,fs) in faresys.items():
                 if fs_id in self.faresystems:
                     WranglerLogger.fatal("FARESYSTEM definition collision:")
                     WranglerLogger.fatal("  existing: " + str(self.faresystems[fs_id]))
