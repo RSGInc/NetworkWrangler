@@ -188,21 +188,21 @@ def writeRequirementsToScreen(REQUIREMENTS, req_type='prereq'):
     else:
         return None
 
-    print "Match type 2:   Perfect match    "
-    print "Match type 1:   Possible match   "
-    print "Match type 0:   No match         "
-    print "------------------------------   "
+    print("Match type 2:   Perfect match    ")
+    print("Match type 1:   Possible match   ")
+    print("Match type 0:   No match         ")
+    print("------------------------------   ")
     
     for net in REQUIREMENTS.keys():
         proj_name_max_width = 22
-        print "--------------------------------------------------------------------------------------------"
-        print "%s" % net.upper()
-        print "--------------------------------------------------------------------------------------------"
-        print "                       REQ    NET                          MATCH POSSIBLE               NET "
-        print "PROJECT                TYPE   TYPE  %-23sLEVEL %-23sTYPE" % (print_req.upper(), print_req.upper()+' MATCH')
-        print "---------------------- ------ ----- ---------------------- ----- ---------------------- ----"
+        print("--------------------------------------------------------------------------------------------")
+        print("%s" % net.upper())
+        print("--------------------------------------------------------------------------------------------")
+        print("                       REQ    NET                          MATCH POSSIBLE               NET ")
+        print("PROJECT                TYPE   TYPE  %-23sLEVEL %-23sTYPE" % (print_req.upper(), print_req.upper()+' MATCH'))
+        print("---------------------- ------ ----- ---------------------- ----- ---------------------- ----")
         if REQUIREMENTS[net].keys() == []:
-            print "NO %sS FOUND FOR %s NETWORK TYPE" % (print_req.upper(), net.upper())
+            print("NO %sS FOUND FOR %s NETWORK TYPE" % (print_req.upper(), net.upper()))
             
         for proj in REQUIREMENTS[net].keys():
             for req in REQUIREMENTS[net][proj].keys():
@@ -230,18 +230,18 @@ def writeRequirementsToScreen(REQUIREMENTS, req_type='prereq'):
 
                             left_to_get = max(left_to_get, len(match['name']) - (i+1) * proj_name_max_width)
                             if line_to_print.isspace():
-                                line_to_print = line_to_print + line
+                                line_to_print= line_to_print + line
                             else:
-                                line_to_print = line_to_print + '\n' + line
+                                line_to_print= line_to_print + '\n' + line
                             line = "%-59s" % ""
                     else:
                         if line_to_print.isspace():
-                            line_to_print = line_part_one + "%-6s%-23s%-4s\n" %("NA","MISSING","NA")
+                            line_to_print= line_part_one + "%-6s%-23s%-4s\n" %("NA","MISSING","NA")
                         else:
-                            line_to_print = line_to_print + '\n' + line_part_one + "%-6s%-23s%-4s\n" %("NA","MISSING","NA")
+                            line_to_print= line_to_print + '\n' + line_part_one + "%-6s%-23s%-4s\n" %("NA","MISSING","NA")
                     i += 1
-                print line_to_print
-        print '\n'
+                print(line_to_print)
+        print('\n')
 
 def getProjectAttributes(project):
     # Start with TAG if not build mode, no kwargs
@@ -304,7 +304,7 @@ def preCheckRequirementsForAllProjects(networks):
                 (prereqs, coreqs, conflicts) = networks[netmode].getReqs(networkdir=project_name, projectsubdir=tail, tag=tag,
                                                                          projtype=projType, tempdir=TEMP_SUBDIR)
 
-            print "Checking projType... %s" % projType
+            print("Checking projType... %s" % projType)
             if projType=='plan':
                 #Open specs file and get list of projects
                 specFile = os.path.join(TEMP_SUBDIR,NETWORK_PLAN_SUBDIR,'planSpecs.csv')
@@ -316,7 +316,7 @@ def preCheckRequirementsForAllProjects(networks):
                                                           tempdir=TEMP_SUBDIR, **kwargs)
                 plan_project_list = PLAN_SPECS.listOfProjects(netmode)
                 i = NETWORK_PROJECTS[netmode].index(project) + 1
-                #print "i-value: ", i
+                #print("i-value: ", i)
                 for p in plan_project_list:
                     NETWORK_PROJECTS[netmode].insert(i, p)
                     i+=1
@@ -465,16 +465,16 @@ if __name__ == '__main__':
 
     # Verify mandatory fields are set
     if PROJECT==None:
-        print "PROJECT not set in %s" % NETWORK_CONFIG
+        print("PROJECT not set in %s" % NETWORK_CONFIG)
         sys.exit(2)
     if TAG==None:
-        print "TAG not set in %s" % NETWORK_CONFIG
+        print("TAG not set in %s" % NETWORK_CONFIG)
         sys.exit(2)
     if OUT_DIR==None:
-        print "OUT_DIR not set in %s" % NETWORK_CONFIG
+        print("OUT_DIR not set in %s" % NETWORK_CONFIG)
         sys.exit(2)
     if NETWORK_PROJECTS==None:
-        print "NETWORK_PROJECTS not set in %s" % NETWORK_CONFIG
+        print("NETWORK_PROJECTS not set in %s" % NETWORK_CONFIG)
         sys.exit(2)
 
     LOG_FILENAME = "build%snetwork_%s_%s_%s.info.LOG" % ("TEST" if BUILD_MODE=="test" else "", PROJECT, SCENARIO, NOW)
