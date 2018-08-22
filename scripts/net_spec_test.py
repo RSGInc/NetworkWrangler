@@ -3,11 +3,11 @@ import os
 
 # MANDATORY. Set this to be the Project Name.
 # e.g. "RTP2021", "TIP2021", etc
-PROJECT = "Test"
+PROJECT = "Test_Project"
 
 # MANDATORY. Set this to be the Scenario Name
 # e.g. "Base", "Baseline"
-SCENARIO = "Base"
+SCENARIO = "Test_Scenario"
 
 # MANDATORY. Set this to be the git tag for checking out network projects.
 TAG = "HEAD"
@@ -33,7 +33,8 @@ OUT_DIR = SCENARIO + "_network_{}"  # YEAR
 NETWORK_PROJECTS = collections.OrderedDict([
     (2020, {
         'hwy':['SMART'],
-        'trn':['SMART']
+        'trn':['SMART',
+               'CaltrainModernization_Phase1']
     }),
     (2025, {
         'hwy':[], 'trn':[]
