@@ -169,8 +169,11 @@ class TransitNetwork(Network):
             len(self.links), len(self.pnrs), len(self.zacs), len(self.accessli), len(self.xferli))
         query += "Is this ok? (y/n) "
         WranglerLogger.debug(query)
-        response = raw_input("")
-        
+        try:
+            response = raw_input("") # python 2
+        except:
+            response = input("") # python 3
+
         WranglerLogger.debug("response=[%s]" % response)
         if response != "Y" and response != "y":
             exit(0)
@@ -523,7 +526,10 @@ class TransitNetwork(Network):
             trnfile = os.path.join(path,name+".lin")
             if os.path.exists(trnfile) and not suppressQuery:
                 print("File [{}] exists already.  Overwrite contents? (y/n/s) ".format(trnfile))
-                response = raw_input("")
+                try:
+                    response = raw_input("") # python 2
+                except:
+                    response = input("") # python 3
                 WranglerLogger.debug("response = [%s]" % response)
                 if response == "s" or response == "S":
                     WranglerLogger.debug("Skipping!")
@@ -1013,7 +1019,8 @@ class TransitNetwork(Network):
                                                totalLineDwell[line.name], totalClosedNodes[line.name]))
             # end for each line loop
 
-        for bucketnum, count in dwellBuckets.iteritems():
+        for bucketnum in dwellBuckets.keys():
+            count = dwellBuckets[bucketnum]
             dwellbucketfile.write("%s,%d,%d\n" % (logPrefix, bucketnum, count))
         statsfile.close()
         dwellbucketfile.close()
@@ -1117,7 +1124,8 @@ class TransitNetwork(Network):
             projectname = networkdir
             
         evalstr = "import %s; %s.apply(self" % (projectname, projectname)
-        for key,val in kwargs.iteritems():
+        for key in kwargs.keys():
+            val = kwargs[key]
             evalstr += ", %s=%s" % (key, str(val))
         evalstr += ")"
         try:

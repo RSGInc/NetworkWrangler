@@ -461,7 +461,8 @@ if __name__ == '__main__':
     # Read the configuration
     NETWORK_CONFIG = args.net_spec
     SCENARIO       = args.future
-    execfile(NETWORK_CONFIG)
+    # execfile(NETWORK_CONFIG)
+    exec(open(NETWORK_CONFIG).read())
 
     # Verify mandatory fields are set
     if PROJECT==None:
@@ -520,7 +521,8 @@ if __name__ == '__main__':
     # preCheckRequirementsForAllProjects(networks)
 
     # Network Loop #2: Now that everything has been checked, build the networks.
-    for YEAR, projects_for_year in NETWORK_PROJECTS.iteritems():
+    for YEAR in NETWORK_PROJECTS.keys():
+        projects_for_year = NETWORK_PROJECTS[YEAR]
 
         appliedcount = 0
         for netmode in NET_MODES:

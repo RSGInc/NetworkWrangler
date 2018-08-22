@@ -51,13 +51,13 @@ class Network(object):
         proc = subprocess.Popen( cmd, cwd = run_dir, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True )
         retStdout = []
         for line in proc.stdout:
-            line = line.strip('\r\n')
+            line = line.strip(b'\r\n')
             if logStdoutAndStderr: WranglerLogger.debug("stdout: " + line)
             retStdout.append(line)
 
         retStderr = []
         for line in proc.stderr:
-            line = line.strip('\r\n')
+            line = line.strip(b'\r\n')
             if logStdoutAndStderr: WranglerLogger.debug("stderr: " + line)
             retStderr.append(line)
         retcode  = proc.wait()
@@ -137,10 +137,13 @@ class Network(object):
             s_projectname = None
             evalstr = "import %s" % projectname
             exec(evalstr)
+            WranglerLogger.debug("Successfully imported {}".format(projectname))
         except Exception as e:
             s_projectname = "s"+str(projectname)
             evalstr = "%s = __import__('%s')" % (s_projectname, projectname)
             exec(evalstr)
+            WranglerLogger.debug("Successfully imported {}".format(s_projectname))
+
         evalstr = "dir(%s)" % (projectname if not s_projectname else s_projectname)
         projectdir = eval(evalstr)
 
@@ -182,7 +185,9 @@ class Network(object):
             project_model_type = Network.MODEL_TYPE_CHAMP
             try:
                 project_model_type = self.getAttr("modelType", parentdir=parentdir, networkdir=networkdir, gitdir=gitdir, projectsubdir=projectsubdir)
+                WranglerLogger.debug("Found project_model_type {}".format(project_model_type))
             except:
+                WranglerLogger.debug("Failed to find project model type. Exception: {}".format(sys.exc_info()[0]))
                 pass
             if project_model_type != self.modelType:
                 raise NetworkException("Project model type ({}) not compatible with this model type {}".format(project_model_type, self.modelType))
@@ -399,7 +404,7 @@ class Network(object):
         if len(retstdout)<3:
             raise NetworkException("Git log failed; see log file")
         
-        m = re.match(git_commit_pattern, retstdout[0])
+        m = re.match(git_commit_pattern, retstdout[0].decode("utf-8"))
         if not m:
             raise NetworkException("Didn't understand git log output: [" + retstdout[0] + "]")
 
@@ -432,9 +437,9 @@ class Network(object):
                             (yearstr,
                              tag if tag else "notag",
                              commitstr if commitstr else "",
-                             string.lstrip(projectname) if projectname else "",
-                             string.lstrip(county) if county else "",
-                             string.lstrip(projectdesc) if projectdesc else ""
+                             projectname.lstrip() if projectname else "",
+                             county.lstrip() if county else "",
+                             projectdesc.lstrip() if projectdesc else ""
                              )
                             )
         self.appliedProjects[projectname] = tag if tag else commitstr
