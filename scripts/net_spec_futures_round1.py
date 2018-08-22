@@ -69,6 +69,9 @@ elif SCENARIO=="RisingTides":
     # Sea Level Rise in 2050
     NETWORK_PROJECTS[2050]['hwy'].append("SeaLevelRise_3feet")
     NETWORK_PROJECTS[2050]['trn'].append("SeaLevelRise_3feet")
+elif SCENARIO=="BackToTheFuture":
+    NETWORK_PROJECTS[2035]['hwy'].append("SeaLevelRise_1foot")
+    NETWORK_PROJECTS[2035]['trn'].append("SeaLevelRise_1foot")
 
 # OPTIONAL. The default route network project directory is Y:\networks.  If
 # projects are stored in another directory, then use this variable to specify it.
