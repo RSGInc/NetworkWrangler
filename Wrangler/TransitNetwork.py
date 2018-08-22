@@ -318,7 +318,7 @@ class TransitNetwork(Network):
             if name in self.lines:
                 return self.lines[self.lines.index(name)]
 
-        if str(type(name))=="<type '_sre.SRE_Pattern'>":
+        if str(type(name))==str(type(re.compile("."))):
             toret = []
             for i in range(len(self.lines)):
                 if isinstance(self.lines[i],str): continue
