@@ -40,6 +40,22 @@ class Node(object):
 
         self.num = str(n)
 
+    def getNum(self):
+        """
+        Return the numeric version of the node, as a positive integer
+        """
+        return abs(int(self.num))
+
+    def replaceNum(self, num):
+        """
+        Replace the node number with the given num,
+        maintaining the stop/non-stop status from before.
+        """
+        n = abs(num)
+        if not self.stop:
+            n = -n
+        self.num = str(n)
+
     def isStop(self):
         """
         Returns True if this node is a stop, False if not.
