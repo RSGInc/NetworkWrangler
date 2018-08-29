@@ -504,7 +504,7 @@ class TransitNetwork(Network):
 
 
     def write(self, path='.', name='transit', writeEmptyFiles=True, suppressQuery=False, suppressValidation=False,
-              cubeNetFileForValidation=None):
+              cubeNetFileForValidation=None, line_only=False):
         """
         Write out this full transit network to disk in path specified.
         """
@@ -551,6 +551,12 @@ class TransitNetwork(Network):
                 if isinstance(line,str): f.write(line)
                 else: f.write(repr(line)+"\n")
             f.close()
+
+        if line_only:
+            logstr += "... done."
+            WranglerLogger.debug(logstr)
+            WranglerLogger.info("")
+            return
 
         if len(self.links)>0 or writeEmptyFiles:
             logstr += " links"
