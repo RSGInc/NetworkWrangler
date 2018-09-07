@@ -22,6 +22,15 @@ class Faresystem(collections.OrderedDict):
 
         return s
 
+    def getFareMatrixId(self):
+        """
+        FAREMATRIX=FMI.1.101
+        """
+        if "FAREMATRIX" in self.keys():
+            faremat = self["FAREMATRIX"]
+            return faremat[faremat.rfind(".")+1:]
+        return None
+
     def getId(self):
         """
         Retrieve the ID number.
@@ -62,12 +71,17 @@ class Faresystem(collections.OrderedDict):
 
             row  = re.split("[\s+\,]", line) # split on whitespace or comma
 
-            faresystem    = int(row[0])
+            farematid     = row[0]
             farezone_i    = int(row[1])
             farezone_j    = int(row[2])
             for fare_str in row[3:]:
                 fare_val = float(fare_str)
-                # print("faresystem {}  i={}  j={}  fare={}".format(faresystem, farezone_i, farezone_j, fare_val))
-                faresystems_dict[faresystem].setFarezoneODPair(farezone_i, farezone_j, fare_val)
+                # not efficient but it's ok
+                for faresystem_id in faresystems_dict.keys():
+                    if faresystems_dict[faresystem_id].getFareMatrixId() == farematid:
+                        faresystems_dict[faresystem_id].setFarezoneODPair(farezone_i, farezone_j, fare_val)
+                        # print("faresystem {} farematid {} i={}  j={}  fare={}".format(
+                        #       faresystem_id, farematid, farezone_i, farezone_j, fare_val))
+
                 farezone_j += 1
         f.close()
