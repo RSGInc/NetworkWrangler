@@ -461,7 +461,6 @@ if __name__ == '__main__':
     # Read the configuration
     NETWORK_CONFIG = args.net_spec
     SCENARIO       = args.future
-    # execfile(NETWORK_CONFIG)
     exec(open(NETWORK_CONFIG).read())
 
     # Verify mandatory fields are set
