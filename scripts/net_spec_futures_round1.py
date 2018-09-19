@@ -28,11 +28,11 @@ OUT_DIR = "network_{}"  # YEAR
 #     {'name':"Muni_TEP", 'kwargs':{'servicePlan':"'2012oct'"}}
 NETWORK_PROJECTS = collections.OrderedDict([
     (2015, {
-        'hwy':[], 'trn':[]
+        'hwy':[],'trn':[] # nothing to do here -- 2015 changes are in the base network
     }),
     (2020, {
-        'hwy':['SMART'],
-        'trn':['SMART']
+        'hwy':[],
+        'trn':[]
     }),
     (2025, {
         'hwy':[], 'trn':[]

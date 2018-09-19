@@ -32,9 +32,8 @@ OUT_DIR = SCENARIO + "_network_{}"  # YEAR
 #     {'name':"Muni_TEP", 'kwargs':{'servicePlan':"'2012oct'"}}
 NETWORK_PROJECTS = collections.OrderedDict([
     (2020, {
-        'hwy':['SMART'],
-        'trn':['SMART',
-               'CaltrainModernization_Phase1']
+        'hwy':['SeaLevelRise_1foot'],
+        'trn':['SeaLevelRise_1foot']
     }),
     (2025, {
         'hwy':[], 'trn':[]
