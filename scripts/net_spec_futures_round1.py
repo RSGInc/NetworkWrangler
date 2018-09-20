@@ -1,4 +1,3 @@
-print("Network Specification: {}".format(__file__))
 import os
 
 # MANDATORY. Set this to be the Project Name.
@@ -27,11 +26,9 @@ OUT_DIR = "network_{}"  # YEAR
 # For example:
 #     {'name':"Muni_TEP", 'kwargs':{'servicePlan':"'2012oct'"}}
 NETWORK_PROJECTS = collections.OrderedDict([
-    (2015, {
-        'hwy':[],'trn':[] # nothing to do here -- 2015 changes are in the base network
-    }),
+    (2015, {'hwy':['PROJ_attributes'], 'trn':[]}),  # adds PROJ attributes to NODE and LINK
     (2020, {
-        'hwy':[],
+        'hwy':['ALA050014_SR84_Livermore'],
         'trn':[]
     }),
     (2025, {

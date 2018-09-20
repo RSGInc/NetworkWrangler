@@ -71,7 +71,6 @@ TEST_PROJECTS = None
 TRN_MODES = ['trn']
 NET_MODES = ['hwy'] + TRN_MODES
 
-CHAMP_NODE_NAMES = r'Y:\champ\util\nodes.xls'
 ###############################################################################
 
 ###############################################################################
@@ -456,7 +455,7 @@ if __name__ == '__main__':
     BUILD_MODE  = None # regular
     TRN_SUBDIR  = "trn"
     HWY_SUBDIR  = "hwy"
-    HWY_OUTFILE = "FREEFLOW.NET"
+    HWY_OUTFILE = "mtc_final_network_base.net"
 
     # Read the configuration
     NETWORK_CONFIG = args.net_spec
@@ -497,7 +496,8 @@ if __name__ == '__main__':
                                        isTiered=True if PIVOT_DIR else False,
                                        tag=TAG,
                                        tempdir=TEMP_SUBDIR,
-                                       networkName="hwy"),
+                                       networkName="hwy",
+                                       tierNetworkName="mtc_final_network_base.net"),
         'trn':Wrangler.TransitNetwork( modelType=Wrangler.Network.MODEL_TYPE_TM2, modelVersion=1.0,
                                        basenetworkpath=os.path.join(PIVOT_DIR,"trn") if PIVOT_DIR else None,
                                        networkBaseDir=NETWORK_BASE_DIR,
