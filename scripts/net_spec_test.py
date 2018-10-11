@@ -11,14 +11,6 @@ SCENARIO = "Test_Scenario"
 # MANDATORY. Set this to be the git tag for checking out network projects.
 TAG = "HEAD"
 
-# OPTIONAL. If you are building on top of a previously built network, this
-# should be set to the location of those networks.  This should be a directory
-# which has "hwy" and "trn" subdirectories.
-PIVOT_DIR = os.path.join(os.environ["USERPROFILE"], "Box","Modeling and Surveys","Development","Travel Model Two Development","Model Inputs","2015_revised_mazs")
-
-# OPTIONAL. If PIVOT_DIR is specified, MANDATORY.  Specifies year for PIVOT_DIR.
-PIVOT_YEAR = 2015
-
 # MANDATORY. Set this to the directory in which to write your outputs.
 # "hwy" and "trn" subdirectories will be created here.
 OUT_DIR = SCENARIO + "_network_{}"  # YEAR
@@ -32,7 +24,10 @@ OUT_DIR = SCENARIO + "_network_{}"  # YEAR
 NETWORK_PROJECTS = collections.OrderedDict([
     (2015, {'hwy':['PROJ_attributes'], 'trn':[]}),  # adds PROJ attributes to NODE and LINK
     (2020, {
-        'hwy':['ALA050014_SR84_Livermore'],
+        'hwy':[#'SMART',
+               #'ALA050014_SR84_Livermore',
+               #'CC_170002_680SB_ExpressLane'
+               ],
         'trn':[]
     }),
     (2025, {

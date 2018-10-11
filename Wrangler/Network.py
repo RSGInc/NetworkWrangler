@@ -8,7 +8,8 @@ __all__ = ['Network']
 class Network(object):
 
     MODEL_TYPE_CHAMP        = "CHAMP"           # SFCTA travel model
-    MODEL_TYPE_TM2          = "TravelModelTwo"  # MTC/ABAG travel model
+    MODEL_TYPE_TM1          = "TravelModelOne"  # MTC/ABAG Travel Model One
+    MODEL_TYPE_TM2          = "TravelModelTwo"  # MTC/ABAG Travel Model Two
 
     WRANGLER_VERSION        = 2.0
     NETWORK_BASE_DIR        = r"Y:\networks"
@@ -27,7 +28,7 @@ class Network(object):
         Currently this should be 4.3 or newer for CHAMP.
         Pass *networkName* to be added to the Networks dictionary
         """
-        if modelType not in [Network.MODEL_TYPE_CHAMP, Network.MODEL_TYPE_TM2]:
+        if modelType not in [Network.MODEL_TYPE_CHAMP, Network.MODEL_TYPE_TM1, Network.MODEL_TYPE_TM2]:
             raise NetworkException("Do not understand modelType {}".format(modelType))
         if type(modelVersion) != type(0.0):
             raise NetworkException("Do not understand modelVersion {}".format(modelVersion))

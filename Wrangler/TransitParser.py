@@ -57,8 +57,9 @@ zac_attr_name     := c"mode"
 
 supplink          := whitespace?, smcw?, c"SUPPLINK", whitespace, supplink_attr*, whitespace?, semicolon_comment*
 supplink_attr     := (( (supplink_attr_name, whitespace?, "=", whitespace?, attr_value) /
-                        (c"n", whitespace?, "=", whitespace?, nodepair )),
+                        (npair_attr_name, whitespace?, "=", whitespace?, nodepair )),
                        whitespace?, comma?, whitespace?)
+npair_attr_name    := c"nodes" / c"n"
 supplink_attr_name:= c"mode" / c"dist" / c"speed" / c"oneway" / c"time"
 
 faresystem        := whitespace?, smcw?, c"FARESYSTEM", whitespace, faresystem_attr*, whitespace?, semicolon_comment*
@@ -101,7 +102,7 @@ nodenumA          := nodenum
 nodenumB          := nodenum
 nodenum           := int
 attr_value        := alphanums / string_single_quote / string_double_quote
-alphanums         := [a-zA-Z0-9\.]+
+alphanums         := [a-zA-Z0-9_\.]+
 <comma>           := [,]
 <whitespace>      := [ \t\r\n]+
 <spaces>          := [ \t]+
@@ -119,6 +120,7 @@ class TransitFileProcessor(DispatchProcessor):
         self.zacs   = []
         self.accesslis = []
         self.xferlis   = []
+        self.nodes     = []
         self.liType    = ''
         self.supplinks = []
         self.faresystems  = []
@@ -297,8 +299,10 @@ class TransitFileProcessor(DispatchProcessor):
                 self.accesslis.append(xxx)
             elif self.liType=="xfer":
                 self.xferlis.append(xxx)
+            elif self.liType=="node":
+                self.nodes.append(xxx)
             else:
-                raise NetworkException("Found access or xfer link without classification")
+                raise NetworkException("Found access or xfer link without classification. {}".format(self.liType))
 
 class TransitParser(Parser):
 
@@ -568,6 +572,8 @@ class TransitParser(Parser):
             linkis=self.tfp.accesslis
         elif linktype=="xfer": 
             linkis=self.tfp.xferlis
+        elif linktype=="node":
+            linkis=self.tfp.nodes
         else:
             raise NetworkException("ConvertLinkiData with invalid linktype")
         
@@ -614,8 +620,8 @@ class TransitParser(Parser):
                 if supplink_attr[0] == 'supplink_attr':
                     if supplink_attr[2][0][0]=='supplink_attr_name':
                         currentSupplink[supplink_attr[2][0][1]] = supplink_attr[2][1][1]
-                    elif supplink_attr[2][0][0]=='nodepair':
-                        currentSupplink.setId(supplink_attr[2][0][1])
+                    elif supplink_attr[2][0][0]=='npair_attr_name':
+                        currentSupplink.setId(supplink_attr[2][1][1])
                     else:
                         WranglerLogger.critical("** SHOULD NOT BE HERE: %s (%s)" % (supplink[0], supplink[1]))
                         raise

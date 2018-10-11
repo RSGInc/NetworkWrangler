@@ -26,6 +26,8 @@ class TransitNetwork(Network):
            ["caltrain.fare", "smart.fare", "ebart.fare",
             "amtrak.fare",   "hsr.fare",   "ferry.fare",
             "bart.fare",     "xfer.fare",  "farelinks.fare"],
+        Network.MODEL_TYPE_TM1:
+           [],
         Network.MODEL_TYPE_TM2:
            ["fares.far",     "fareMatrix.txt"],
     }
@@ -49,6 +51,8 @@ class TransitNetwork(Network):
         self.zacs         = []
         self.accessli     = []
         self.xferli       = []
+        self.nodes        = [] # transit node coords
+        self.supps        = [] # Supplinks
         self.faresystems  = {} # key is Id number
         self.ptsystem     = PTSystem()  # single instance
         self.farefiles    = {} # farefile name -> [ lines in farefile ]
@@ -63,16 +67,49 @@ class TransitNetwork(Network):
             if not networkName:
                 raise NetworkException("Cannot initialize tiered TransitNetwork with basenetworkpath %s: no networkName specified" % basenetworkpath)
 
-            for filename in glob.glob(os.path.join(basenetworkpath, networkName + ".*")):
-                suffix = filename.rsplit(".")[-1].lower()
-                if suffix in ["lin","link","pnr","zac","access","xfer"]:
-                    self.parseFile(filename)
+            # for CHAMP and TM2, transit lines are here
+            if self.modelType in [Network.MODEL_TYPE_CHAMP, Network.MODEL_TYPE_TM2]:
+                for filename in glob.glob(os.path.join(basenetworkpath, networkName + ".*")):
+                    suffix = filename.rsplit(".")[-1].lower()
+                    if suffix in ["lin","link","pnr","zac","access","xfer"]:
+                        self.parseFile(filename)
 
-            # this doesn't have to match the network name
-            for filename in glob.glob(os.path.join(basenetworkpath, "*.*")):
-                suffix = filename.rsplit(".")[-1].lower()
-                if suffix in ["pts"]:
-                    self.parseFile(filename)
+                # this doesn't have to match the network name
+                for filename in glob.glob(os.path.join(basenetworkpath, "*.*")):
+                    suffix = filename.rsplit(".")[-1].lower()
+                    if suffix in ["pts"]:
+                        self.parseFile(filename)
+
+            elif self.modelType in [Network.MODEL_TYPE_TM1]:
+                # read the the block file to find the line filenames
+                block_filename = os.path.join(basenetworkpath, "transit_lines", networkName + ".block")
+                line_filenames = []
+                WranglerLogger.info("Reading {}".format(block_filename))
+                file_re = re.compile(r"^\s*read\s+file\s*=\s*trn[\\](\S*)$")
+                block_file = open(block_filename,"r")
+                for line in block_file:
+                    result = re.match(file_re, line)
+                    if result: line_filenames.append(result.group(1))
+                block_file.close()
+                WranglerLogger.debug("Line filenames: {}".format(line_filenames))
+
+                # read those line files
+                for filename in line_filenames:
+                    self.parseFile(os.path.join(basenetworkpath, "transit_lines", filename))
+
+                # now the rest
+                for filename in glob.glob(os.path.join(basenetworkpath, "transit_support", "*.*")):
+                    suffix = filename.rsplit(".")[-1].lower()
+                    if suffix in ["dat", "pnr", "sup", "zac"]:
+                        WranglerLogger.debug("About to read {}".format(filename))
+                        if filename.endswith("_access_links.dat"):
+                            self.parseFileAsSuffix(filename, "access", False)
+                        elif filename.endswith("_xfer_links.dat"):
+                            self.parseFileAsSuffix(filename, "xfer", False)
+                        elif filename.endswith("Transit_Support_Nodes.dat"):
+                            self.parseFileAsSuffix(filename, "node", False)
+                        else:
+                            self.parseFile(filename)
 
             # fares
             for farefile in TransitNetwork.FARE_FILES[self.modelType]:
@@ -592,7 +629,21 @@ class TransitNetwork(Network):
             for xferli in self.xferli:
                 f.write(str(xferli)+"\n")
             f.close()
-            
+
+        if len(self.nodes)>0 or writeEmptyFiles:
+            logstr += " nodes"
+            f = open(os.path.join(path,"Transit_Support_Nodes.dat"), 'w');
+            for nodes in self.nodes:
+                f.write(str(nodes)+"\n")
+            f.close()
+
+        if len(self.supps)>0 or writeEmptyFiles:
+            logstr += " supps"
+            f = open(os.path.join(path,"WALK_access.sup"), 'w');
+            for supplink in self.supps:
+                f.write(str(supplink)+"\n")
+            f.close()
+
         # fares
         if self.modelType == Network.MODEL_TYPE_CHAMP:
 
@@ -653,11 +704,14 @@ class TransitNetwork(Network):
         convertedZAC              = self.parser.convertZACData()
         convertedAccessLinki      = self.parser.convertLinkiData("access")
         convertedXferLinki        = self.parser.convertLinkiData("xfer")
+        convertedNodes            = self.parser.convertLinkiData("node")
+        convertedSupplinks        = self.parser.convertSupplinksData()
         convertedFaresystems      = self.parser.convertFaresystemData()
         convertedPTSystem         = self.parser.convertPTSystemData()
 
         return program, convertedLines, convertedLinks, convertedPNR, convertedZAC, \
-            convertedAccessLinki, convertedXferLinki, convertedFaresystems, convertedPTSystem
+            convertedAccessLinki, convertedXferLinki, convertedNodes, convertedSupplinks, \
+            convertedFaresystems, convertedPTSystem
 
     def parseFile(self, fullfile, insert_replace=True):
         """
@@ -672,16 +726,16 @@ class TransitNetwork(Network):
         This is a little bit of a hack, but it's meant to allow us to do something
         like read an xfer file as an access file...
         """
-        self.parser = TransitParser(transit_file_def, verbosity=0)
+        self.parser = TransitParser(transit_file_def, 0)
         self.parser.tfp.liType = suffix
         logstr = "   Reading %s as %s" % (fullfile, suffix)
         f = open(fullfile, 'r');
-        prog,lines,links,pnr,zac,accessli,xferli,faresys,pts = self.parseAndPrintTransitFile(f.read(), verbosity=0)
+        prog,lines,links,pnr,zac,accessli,xferli,nodes,supps,faresys,pts = self.parseAndPrintTransitFile(f.read(), verbosity=0)
         f.close()
-        logstr += self.doMerge(fullfile,prog,lines,links,pnr,zac,accessli,xferli,faresys,pts,insert_replace)
+        logstr += self.doMerge(fullfile,prog,lines,links,pnr,zac,accessli,xferli,nodes,supps,faresys,pts,insert_replace)
         WranglerLogger.debug(logstr)
             
-    def doMerge(self,path,prog,lines,links,pnrs,zacs,accessli,xferli,faresys,pts,insert_replace=False):
+    def doMerge(self,path,prog,lines,links,pnrs,zacs,accessli,xferli,nodes,supps,faresys,pts,insert_replace=False):
         """
         Merge a set of transit lines & support links with this network's transit representation.
         """
@@ -695,7 +749,7 @@ class TransitNetwork(Network):
                 self.program = prog
             else:
                 # don't mix PT and TRNBUILD
-                assert(prog == self.program)
+                assert((prog == TransitParser.PROGRAM_UNKNOWN) or (prog == self.program))
 
             extendlines = copy.deepcopy(lines)
             for line in lines:
@@ -736,6 +790,16 @@ class TransitNetwork(Network):
             logstr += " %d xferlinks" % len(xferli)
             self.xferli.extend( ["\n;######################### From: "+path+"\n"])
             self.xferli.extend(xferli)
+
+        if len(nodes)>0:
+            logstr += " %d nodes" % len(nodes)
+            self.nodes.extend( ["\n;######################### From: "+path+"\n"])
+            self.nodes.extend(nodes)
+
+        if len(supps)>0:
+            logstr += " %d supps" % len(supps)
+            self.supps.extend( ["\n;######################### From: "+path+"\n"])
+            self.supps.extend(supps)
 
         if len(faresys)>0:
             logstr += " %d faresystems" % len(faresys)

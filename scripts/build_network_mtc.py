@@ -36,7 +36,7 @@ TAG = None
 PIVOT_DIR = None
 
 # OPTIONAL. If PIVOT_DIR is specified, MANDATORY.  Specifies year for PIVOT_DIR.
-PIVOT_YEAR = None
+PIVOT_YEAR = 2015
 
 # MANDATORY. Set this to the directory in which to write your outputs. 
 # "hwy" and "trn" subdirectories will be created here.
@@ -53,10 +53,10 @@ NETWORK_PROJECTS = None
 # OPTIONAL. The default route network project directory is Y:\networks.  If
 # projects are stored in another directory, then use this variable to specify it.
 # For example: Y:\networks\projects
-NETWORK_BASE_DIR = "M:\\Application\\Model Two\\NetworkProjects"
+NETWORK_BASE_DIR       = None
 NETWORK_PROJECT_SUBDIR = None
-NETWORK_SEED_SUBDIR = None
-NETWORK_PLAN_SUBDIR = None
+NETWORK_SEED_SUBDIR    = None
+NETWORK_PLAN_SUBDIR    = None
 
 # OPTIONAL. A list of project names which have been previously applied in the
 # PIVOT_DIR network that projects in this project might rely on.  For example
@@ -447,14 +447,27 @@ def preCheckRequirementsForAllProjects(networks):
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=USAGE, formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.add_argument("--configword", help="optional word for network specification script")
+    parser.add_argument("--model_type", choices=[Wrangler.Network.MODEL_TYPE_TM1, Wrangler.Network.MODEL_TYPE_TM2],
+                        default=Wrangler.Network.MODEL_TYPE_TM1)
     parser.add_argument("net_spec", metavar="network_specification.py", nargs=1, help="Script which defines required variables indicating how to build the network")
     args = parser.parse_args()
 
     NOW         = time.strftime("%Y%b%d.%H%M%S")
     BUILD_MODE  = None # regular
-    TRN_SUBDIR  = "trn"
-    HWY_SUBDIR  = "hwy"
-    HWY_OUTFILE = "mtc_final_network_base.net"
+    if args.model_type == Wrangler.Network.MODEL_TYPE_TM1:
+        PIVOT_DIR        = r"M:\\Application\\Model One\\NetworkProjects\\2015_Base"
+        NETWORK_BASE_DIR = r"M:\\Application\\Model One\\NetworkProjects"
+        TRN_SUBDIR       = "trn"
+        TRN_NET_NAME     = "Transit_Lines"
+        HWY_SUBDIR       = "hwy"
+        HWY_NET_NAME     = "freeflow.net"
+    elif args.model_type == Wrangler.Network.MODEL_TYPE_TM2:
+        PIVOT_DIR        = os.path.join(os.environ["USERPROFILE"], "Box","Modeling and Surveys","Development","Travel Model Two Development","Model Inputs","2015_revised_mazs")
+        NETWORK_BASE_DIR = r"M:\\Application\\Model Two\\NetworkProjects"
+        TRN_SUBDIR       = "trn"
+        TRN_NET_NAME     = "transitLines"
+        HWY_SUBDIR       = "hwy"
+        HWY_NET_NAME     = "mtc_final_network_base.net"
 
     # Read the configuration
     NETWORK_CONFIG = args.net_spec[0]
@@ -488,7 +501,7 @@ if __name__ == '__main__':
     os.chdir(SCRATCH_SUBDIR)
 
     networks = {
-        'hwy' :Wrangler.HighwayNetwork(modelType=Wrangler.Network.MODEL_TYPE_TM2, modelVersion=1.0,
+        'hwy' :Wrangler.HighwayNetwork(modelType=args.model_type, modelVersion=1.0,
                                        basenetworkpath=os.path.join(PIVOT_DIR,"hwy") if PIVOT_DIR else "Roads2010",
                                        networkBaseDir=NETWORK_BASE_DIR,
                                        networkProjectSubdir=NETWORK_PROJECT_SUBDIR,
@@ -498,15 +511,15 @@ if __name__ == '__main__':
                                        tag=TAG,
                                        tempdir=TEMP_SUBDIR,
                                        networkName="hwy",
-                                       tierNetworkName="mtc_final_network_base.net"),
-        'trn':Wrangler.TransitNetwork( modelType=Wrangler.Network.MODEL_TYPE_TM2, modelVersion=1.0,
+                                       tierNetworkName=HWY_NET_NAME),
+        'trn':Wrangler.TransitNetwork( modelType=args.model_type, modelVersion=1.0,
                                        basenetworkpath=os.path.join(PIVOT_DIR,"trn") if PIVOT_DIR else None,
                                        networkBaseDir=NETWORK_BASE_DIR,
                                        networkProjectSubdir=NETWORK_PROJECT_SUBDIR,
                                        networkSeedSubdir=NETWORK_SEED_SUBDIR,
                                        networkPlanSubdir=NETWORK_PLAN_SUBDIR,
                                        isTiered=True if PIVOT_DIR else False,
-                                       networkName="transitLines")
+                                       networkName=TRN_NET_NAME)
     }
 
     # For projects applied in a pivot network (because they won't show up in the current project list)
@@ -559,14 +572,14 @@ if __name__ == '__main__':
         trnpath = os.path.join("..", OUT_DIR.format(YEAR),TRN_SUBDIR)
         if not os.path.exists(trnpath): os.makedirs(trnpath)
 
-        networks['hwy'].write(path=hwypath,name=HWY_OUTFILE,suppressQuery=True,
+        networks['hwy'].write(path=hwypath,name=HWY_NET_NAME,suppressQuery=True,
                               suppressValidation=True) # MTC doesn't have turn penalties
 
         networks['trn'].write(path=trnpath,
                               name="transitLines",
                               writeEmptyFiles = False,
-                              suppressQuery = True if BUILD_MODE=="test" else False,
+                              suppressQuery = True,
                               suppressValidation = True,  # until validation is updated for MTC networks
-                              cubeNetFileForValidation = os.path.join(hwypath, HWY_OUTFILE))
+                              cubeNetFileForValidation = os.path.join(hwypath, HWY_NET_NAME))
 
     Wrangler.WranglerLogger.debug("Successfully completed running %s" % os.path.abspath(__file__))
