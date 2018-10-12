@@ -27,7 +27,9 @@ class TransitNetwork(Network):
             "amtrak.fare",   "hsr.fare",   "ferry.fare",
             "bart.fare",     "xfer.fare",  "farelinks.fare"],
         Network.MODEL_TYPE_TM1:
-           [],
+           ["ACE.far",       "Amtrak.far", "BART.far",
+            "Caltrain.far",  "eBART.far",  "Ferry.far",
+            "SMART.far",     "xfare.far",  "farelinks.far"],
         Network.MODEL_TYPE_TM2:
            ["fares.far",     "fareMatrix.txt"],
     }
@@ -113,6 +115,7 @@ class TransitNetwork(Network):
 
             # fares
             for farefile in TransitNetwork.FARE_FILES[self.modelType]:
+
                 fullfarefile = os.path.join(basenetworkpath, farefile)
 
                 if modelType==Network.MODEL_TYPE_TM2:
@@ -645,7 +648,7 @@ class TransitNetwork(Network):
             f.close()
 
         # fares
-        if self.modelType == Network.MODEL_TYPE_CHAMP:
+        if self.modelType in [Network.MODEL_TYPE_CHAMP, Network.MODEL_TYPE_TM1]:
 
             for farefile in TransitNetwork.FARE_FILES[self.modelType]:
                 # don't write an empty one unless there isn't anything there
