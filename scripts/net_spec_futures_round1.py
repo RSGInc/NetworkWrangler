@@ -7,14 +7,6 @@ PROJECT = "FU1" # Futures Round 1
 # MANDATORY. Set this to be the git tag for checking out network projects.
 TAG = "HEAD"
 
-# OPTIONAL. If you are building on top of a previously built network, this
-# should be set to the location of those networks.  This should be a directory
-# which has "hwy" and "trn" subdirectories.
-PIVOT_DIR = os.path.join(os.environ["USERPROFILE"], "Box","Modeling and Surveys","Development","Travel Model Two Development","Model Inputs","2015_revised_mazs")
-
-# OPTIONAL. If PIVOT_DIR is specified, MANDATORY.  Specifies year for PIVOT_DIR.
-PIVOT_YEAR = 2015
-
 # MANDATORY. Set this to the directory in which to write your outputs.
 # "hwy" and "trn" subdirectories will be created here.
 OUT_DIR = "network_{}"  # YEAR
@@ -28,7 +20,7 @@ OUT_DIR = "network_{}"  # YEAR
 NETWORK_PROJECTS = collections.OrderedDict([
     (2015, {'hwy':['PROJ_attributes'], 'trn':[]}),  # adds PROJ attributes to NODE and LINK
     (2020, {
-        'hwy':['ALA050014_SR84_Livermore'],
+        'hwy':[],
         'trn':[]
     }),
     (2025, {
@@ -52,11 +44,12 @@ NETWORK_PROJECTS = collections.OrderedDict([
 ])
 
 # done at the end in case they need to remove transit project links
-if SCENARIO=="CleanAndGreen":
+# remove "False and" clauses when these are coded
+if False and SCENARIO=="CleanAndGreen":
     # Sea Level Rise in 2045
     NETWORK_PROJECTS[2045]['hwy'].append("SeaLevelRise_1foot")
     NETWORK_PROJECTS[2045]['trn'].append("SeaLevelRise_1foot")
-elif SCENARIO=="RisingTides":
+elif False and SCENARIO=="RisingTides":
     # Sea Level Rise in 2030
     NETWORK_PROJECTS[2030]['hwy'].append("SeaLevelRise_1foot")
     NETWORK_PROJECTS[2030]['trn'].append("SeaLevelRise_1foot")
@@ -66,7 +59,7 @@ elif SCENARIO=="RisingTides":
     # Sea Level Rise in 2050
     NETWORK_PROJECTS[2050]['hwy'].append("SeaLevelRise_3feet")
     NETWORK_PROJECTS[2050]['trn'].append("SeaLevelRise_3feet")
-elif SCENARIO=="BackToTheFuture":
+elif False and  SCENARIO=="BackToTheFuture":
     NETWORK_PROJECTS[2035]['hwy'].append("SeaLevelRise_1foot")
     NETWORK_PROJECTS[2035]['trn'].append("SeaLevelRise_1foot")
 
