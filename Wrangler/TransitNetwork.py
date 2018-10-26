@@ -28,7 +28,7 @@ class TransitNetwork(Network):
             "bart.fare",     "xfer.fare",  "farelinks.fare"],
         Network.MODEL_TYPE_TM1:
            ["ACE.far",       "Amtrak.far", "BART.far",
-            "Caltrain.far",  "eBART.far",  "Ferry.far",
+            "Caltrain.far",  "Ferry.far",
             "SMART.far",     "xfare.far",  "farelinks.far"],
         Network.MODEL_TYPE_TM2:
            ["fares.far",     "fareMatrix.txt"],
@@ -841,9 +841,9 @@ class TransitNetwork(Network):
                 fullfile = os.path.join(path,filename)
                 logstr = "   Reading %s" % filename
                 f = open(fullfile, 'r');
-                prog,lines,links,pnr,zac,accessli,xferli,faresys,pts = self.parseAndPrintTransitFile(f.read(), verbosity=0)
+                prog,lines,links,pnr,zac,accessli,xferli,nodes,supps,faresys,pts = self.parseAndPrintTransitFile(f.read(), verbosity=0)
                 f.close()
-                logstr += self.doMerge(fullfile,prog,lines,links,pnr,zac,accessli,xferli,faresys,pts,insert_replace)
+                logstr += self.doMerge(fullfile,prog,lines,links,pnr,zac,accessli,xferli,nodes,supps,faresys,pts,insert_replace)
                 WranglerLogger.debug(logstr)
 
     @staticmethod
