@@ -21,7 +21,7 @@ NETWORK_PROJECTS = collections.OrderedDict([
     (2015, {'hwy':['PROJ_attributes'], 'trn':[]}),  # adds PROJ attributes to NODE and LINK
     (2020, {
         'hwy':[],
-        'trn':[]
+        'trn':['CC_050025_EBart_to_Antioch']
     }),
     (2025, {
         'hwy':[], 'trn':[]
