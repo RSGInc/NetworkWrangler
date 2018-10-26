@@ -4,3 +4,5 @@ BackToTheFuture
 Test_Scenario_*
 scratch
 *.LOG
+*.PRN
+TPPL*

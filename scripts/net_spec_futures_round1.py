@@ -2,7 +2,7 @@ import os
 
 # MANDATORY. Set this to be the Project Name.
 # e.g. "RTP2021", "TIP2021", etc
-PROJECT = "FU1" # Futures Round 1
+# PROJECT = "FU1" or "PPA", set by build_network_mtc_futures.py based on argument
 
 # MANDATORY. Set this to be the git tag for checking out network projects.
 TAG = "HEAD"
@@ -45,23 +45,38 @@ NETWORK_PROJECTS = collections.OrderedDict([
 
 # done at the end in case they need to remove transit project links
 # remove "False and" clauses when these are coded
-if False and SCENARIO=="CleanAndGreen":
+if SCENARIO=="CleanAndGreen":
+    # NOTE: Earthquake is assumed in Round1 2035 but since the effect doesn't stay; this is handled in build_network_mtc_futures.py
+    if PROJECT == "FU1":
+        # Haywired Earthquake in 2035
+        NETWORK_PROJECTS[2035]['hwy'].append("Earthquake")
+        NETWORK_PROJECTS[2035]['trn'].append("Earthquake")
     # Sea Level Rise in 2045
-    NETWORK_PROJECTS[2045]['hwy'].append("SeaLevelRise_1foot")
-    NETWORK_PROJECTS[2045]['trn'].append("SeaLevelRise_1foot")
-elif False and SCENARIO=="RisingTides":
+    # NETWORK_PROJECTS[2045]['hwy'].append("SeaLevelRise_1foot")
+    # NETWORK_PROJECTS[2045]['trn'].append("SeaLevelRise_1foot")
+    pass
+elif SCENARIO=="RisingTides":
     # Sea Level Rise in 2030
-    NETWORK_PROJECTS[2030]['hwy'].append("SeaLevelRise_1foot")
-    NETWORK_PROJECTS[2030]['trn'].append("SeaLevelRise_1foot")
+    # NETWORK_PROJECTS[2030]['hwy'].append("SeaLevelRise_1foot")
+    # NETWORK_PROJECTS[2030]['trn'].append("SeaLevelRise_1foot")
+    if PROJECT == "FU1":
+        # Haywired Earthquake in 2035
+        NETWORK_PROJECTS[2035]['hwy'].append("Earthquake")
+        NETWORK_PROJECTS[2035]['trn'].append("Earthquake")
     # Sea Level Rise in 2040
-    NETWORK_PROJECTS[2040]['hwy'].append("SeaLevelRise_2feet")
-    NETWORK_PROJECTS[2040]['trn'].append("SeaLevelRise_2feet")
+    # NETWORK_PROJECTS[2040]['hwy'].append("SeaLevelRise_2feet")
+    # NETWORK_PROJECTS[2040]['trn'].append("SeaLevelRise_2feet")
     # Sea Level Rise in 2050
-    NETWORK_PROJECTS[2050]['hwy'].append("SeaLevelRise_3feet")
-    NETWORK_PROJECTS[2050]['trn'].append("SeaLevelRise_3feet")
-elif False and  SCENARIO=="BackToTheFuture":
-    NETWORK_PROJECTS[2035]['hwy'].append("SeaLevelRise_1foot")
-    NETWORK_PROJECTS[2035]['trn'].append("SeaLevelRise_1foot")
+    # NETWORK_PROJECTS[2050]['hwy'].append("SeaLevelRise_3feet")
+    # NETWORK_PROJECTS[2050]['trn'].append("SeaLevelRise_3feet")
+elif SCENARIO=="BackToTheFuture":
+    # NETWORK_PROJECTS[2035]['hwy'].append("SeaLevelRise_1foot")
+    # NETWORK_PROJECTS[2035]['trn'].append("SeaLevelRise_1foot")
+    # NOTE: Earthquake is assumed in Round1 2035 but since the effect doesn't stay; this is handled in build_network_mtc_futures.py
+    if PROJECT == "FU1":
+        # Haywired Earthquake in 2035
+        NETWORK_PROJECTS[2035]['hwy'].append("Earthquake")
+        NETWORK_PROJECTS[2035]['trn'].append("Earthquake")
 
 # OPTIONAL. The default route network project directory is Y:\networks.  If
 # projects are stored in another directory, then use this variable to specify it.

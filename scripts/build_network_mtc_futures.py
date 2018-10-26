@@ -1,4 +1,4 @@
-import argparse,collections,datetime,os,pandas,sys,time
+import argparse,collections,copy,datetime,os,pandas,shutil,sys,time
 import Wrangler
 
 # Based on NetworkWrangler\scripts\build_network.py
@@ -449,6 +449,7 @@ if __name__ == '__main__':
     parser.add_argument("--configword", help="optional word for network specification script")
     parser.add_argument("--model_type", choices=[Wrangler.Network.MODEL_TYPE_TM1, Wrangler.Network.MODEL_TYPE_TM2],
                         default=Wrangler.Network.MODEL_TYPE_TM1)
+    parser.add_argument("--analysis", choices=["Round1","PPA"], help="Specify which set of analysis are relevant for these networks.", default="Round1")
     parser.add_argument("net_spec", metavar="network_specification.py", help="Script which defines required variables indicating how to build the network")
     parser.add_argument("future", choices=["CleanAndGreen", "RisingTides", "BackToTheFuture"], help="Specify which Future Scenario for which to create networks")
     args = parser.parse_args()
@@ -469,6 +470,11 @@ if __name__ == '__main__':
         TRN_NET_NAME     = "transitLines"
         HWY_SUBDIR       = "hwy"
         HWY_NET_NAME     = "mtc_final_network_base.net"
+
+    if args.analysis == "Round1":
+        PROJECT = "FU1"
+    elif args.analysis == "PPA":
+        PROJECT = "PPA"
 
     # Read the configuration
     NETWORK_CONFIG = args.net_spec
@@ -532,6 +538,8 @@ if __name__ == '__main__':
     # For now, let's not do this since we don't have conflicts and so forth yet
     # preCheckRequirementsForAllProjects(networks)
 
+    networks_without_earthquake = {}
+
     # Network Loop #2: Now that everything has been checked, build the networks.
     for YEAR in NETWORK_PROJECTS.keys():
         projects_for_year = NETWORK_PROJECTS[YEAR]
@@ -539,6 +547,18 @@ if __name__ == '__main__':
         appliedcount = 0
         for netmode in NET_MODES:
             Wrangler.WranglerLogger.info("Building {} {} networks".format(YEAR, netmode))
+
+            # restore version without earthquake
+            if netmode in networks_without_earthquake:
+                Wrangler.WranglerLogger.info("Restoring version without earthquake")
+                networks[netmode] = networks_without_earthquake[netmode]
+                appliedcount += 1 # increment to trigger writing this out
+                del networks_without_earthquake[netmode]
+
+                if netmode == "hwy":
+                    shutil.move(os.path.join("FREEFLOW_WITHOUT_EARTHQUAKE.BLD"),
+                                os.path.join("FREEFLOW.BLD"))
+
             for project in projects_for_year[netmode]:
                 (project_name, projType, tag, kwargs) = getProjectAttributes(project)
                 if tag == None: tag = TAG
@@ -548,18 +568,21 @@ if __name__ == '__main__':
                     continue
 
                 applied_SHA1 = None
-                (head,tail) = os.path.split(project_name)
-                if head:
-                    cloned_SHA1 = networks[netmode].cloneProject(networkdir=head, projectsubdir=tail, tag=tag,
-                                                                 projtype=projType, tempdir=TEMP_SUBDIR, **kwargs)
-                    (parentdir, networkdir, gitdir, projectsubdir) = networks[netmode].getClonedProjectArgs(head, tail, projType, TEMP_SUBDIR)
-                else:
-                    cloned_SHA1 = networks[netmode].cloneProject(networkdir=project_name, tag=tag,
-                                                                 projtype=projType, tempdir=TEMP_SUBDIR, **kwargs)
-                    (parentdir, networkdir, gitdir, projectsubdir) = networks[netmode].getClonedProjectArgs(project_name, None, projType, TEMP_SUBDIR)
+                cloned_SHA1 = networks[netmode].cloneProject(networkdir=project_name, tag=tag,
+                                                             projtype=projType, tempdir=TEMP_SUBDIR, **kwargs)
+                (parentdir, networkdir, gitdir, projectsubdir) = networks[netmode].getClonedProjectArgs(project_name, None, projType, TEMP_SUBDIR)
+
+                if args.future in ["CleanAndGreen","BackToTheFuture"] and project_name == "Earthquake":
+                    # Then this "project" is only temporary, so save aside a deepcopy of the network PRIOR
+                    # to the apply to restore after we write it
+                    networks_without_earthquake[netmode] = copy.deepcopy(networks[netmode])
+                    if netmode == "hwy":
+                        shutil.copyfile(os.path.join("FREEFLOW.BLD"),
+                                        os.path.join("FREEFLOW_WITHOUT_EARTHQUAKE.BLD"))
 
                 applied_SHA1 = networks[netmode].applyProject(parentdir, networkdir, gitdir, projectsubdir)
                 appliedcount += 1
+
 
         if appliedcount == 0:
             Wrangler.WranglerLogger.info("No applied projects for this year -- skipping output")
@@ -580,5 +603,6 @@ if __name__ == '__main__':
                               suppressQuery = True if BUILD_MODE=="test" else False,
                               suppressValidation = True,  # until validation is updated for MTC networks
                               cubeNetFileForValidation = os.path.join(hwypath, HWY_NET_NAME))
+
 
     Wrangler.WranglerLogger.debug("Successfully completed running %s" % os.path.abspath(__file__))
