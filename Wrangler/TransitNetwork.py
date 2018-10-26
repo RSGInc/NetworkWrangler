@@ -49,7 +49,7 @@ class TransitNetwork(Network):
         self.program      = TransitParser.PROGRAM_TRNBUILD # will be one of PROGRAM_PT or PROGRAM_TRNBUILD
         self.lines        = []
         self.links        = []
-        self.pnrs         = []
+        self.pnrs         = {} # key is file name since these need to stay separated
         self.zacs         = []
         self.accessli     = []
         self.xferli       = []
@@ -220,7 +220,7 @@ class TransitNetwork(Network):
             
         del self.lines[:]
         del self.links[:]
-        del self.pnrs[:]
+        self.pnrs.clear()
         del self.zacs[:]
         del self.accessli[:]
         del self.xferli[:]
@@ -606,11 +606,12 @@ class TransitNetwork(Network):
             f.close()
 
         if len(self.pnrs)>0 or writeEmptyFiles:
-            logstr += " pnr"
-            f = open(os.path.join(path,name+".pnr"), 'w');
-            for pnr in self.pnrs:
-                f.write(str(pnr)+"\n")
-            f.close()
+            for pnr_file in self.pnrs.keys():
+                logstr += " {}_pnr".format(pnr_file)
+                f = open(os.path.join(path,"{}_{}.pnr".format(name,pnr_file)), 'w');
+                for pnr in self.pnrs[pnr_file]:
+                    f.write(str(pnr)+"\n")
+                f.close()
 
         if len(self.zacs)>0 or writeEmptyFiles:
             logstr += " zac"
@@ -772,17 +773,23 @@ class TransitNetwork(Network):
         if len(links)>0:
             logstr += " %d links" % len(links)
             self.links.extend(["\n;######################### From: "+path+"\n"])
-            self.links.extend(links)  #TODO: Need to replace existing links
+            self.links.extend(links)
 
         if len(pnrs)>0:
-            logstr += " %d PNRs" % len(pnrs)
-            self.pnrs.extend( ["\n;######################### From: "+path+"\n"])
-            self.pnrs.extend(pnrs)  #TODO: Need to replace existing PNRs
+            # if reading X.pnr, use X
+            pnr_basename = os.path.basename(path)
+            (pnr_root, pnr_ext) = os.path.splitext(pnr_basename)
+
+            logstr += " {} {}_PNRs".format(len(pnrs), pnr_root)
+            if pnr_root not in self.pnrs:
+                self.pnrs[pnr_root] = []
+            self.pnrs[pnr_root].extend( ["\n;######################### From: "+path+"\n"])
+            self.pnrs[pnr_root].extend(pnrs)
 
         if len(zacs)>0:
             logstr += " %d ZACs" % len(zacs)
             self.zacs.extend( ["\n;######################### From: "+path+"\n"])
-            self.zacs.extend(zacs)  #TODO: Need to replace existing PNRs
+            self.zacs.extend(zacs)
 
         if len(accessli)>0:
             logstr += " %d accesslinks" % len(accessli)
