@@ -1,4 +1,4 @@
-from itertools import count, tee
+from itertools import count, izip, tee
 from collections import defaultdict
 from odict import OrderedDict
 import numpy as np

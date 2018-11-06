@@ -22,7 +22,7 @@ class Network(object):
     def __init__(self, modelType, modelVersion, networkBaseDir=None, networkProjectSubdir=None,
                  networkSeedSubdir=None, networkPlanSubdir=None, networkName=None):
         """
-        *modelType* should be MODEL_TYPE_CHAMP or MODEL_TYPE_TM2
+        *modelType* should be MODEL_TYPE_CHAMP, MODEL_TYPE_TM1, or MODEL_TYPE_TM2
         *modelVersion* should be numeric and is used for compatibility checks.
 
         Currently this should be 4.3 or newer for CHAMP.

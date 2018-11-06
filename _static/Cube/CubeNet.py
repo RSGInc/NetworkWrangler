@@ -125,7 +125,7 @@ def import_cube_nodes_links_from_csvs(cubeNetFile,
     
     Nodes_dict maps node numbers to [X, Y, vars given by *extra_node_vars*]
     
-    Links_dict maps (a,b) to [DISTANCE, STREETNAME, *extra_link_vars*]
+    Links_dict maps (a,b) to [DISTANCE, *extra_link_vars*]
     """
 
     if not links_csv:
@@ -165,10 +165,9 @@ def import_cube_nodes_links_from_csvs(cubeNetFile,
         a=int(r[0])
         b=int(r[1])
         dist=float(r[2])
-        streetname=str(r[3])
 
         #add additional fields        
-        link_array = [dist, streetname]
+        link_array = [dist]
         link_array.extend(r[4:])
         
         links_dict[(a,b)] = link_array

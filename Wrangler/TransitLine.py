@@ -1,4 +1,5 @@
 import copy
+from .Network import Network
 from .NetworkException import NetworkException
 from .Node import Node
 from .Logger import WranglerLogger
@@ -15,44 +16,83 @@ class TransitLine(object):
 
     """
     
-    HOURS_PER_TIMEPERIOD = {"AM":3.0, #what about 4-6a?
-                            "MD":6.5,
-                            "PM":3.0,
-                            "EV":8.5,
-                            "EA":3.0
-                            }
-    MODETYPE_TO_MODES = {"Local":[11,12,16,17,18,19],
-                         "BRT":[13,20],
-                         "LRT":[14,15,21],
-                         "Premium":[22,23,24,25,26,27,28,29,30],
-                         "Ferry":[31],
-                         "BART":[32]
-                         }
+    HOURS_PER_TIMEPERIOD = {
+        Network.MODEL_TYPE_CHAMP:{
+            "AM":3.0, #what about 4-6a?
+            "MD":6.5,
+            "PM":3.0,
+            "EV":8.5,
+            "EA":3.0
+        },
+        Network.MODEL_TYPE_TM1:{
+        # https://github.com/BayAreaMetro/modeling-website/wiki/TimePeriods
+            "EA":3.0,
+            "AM":4.0,
+            "MD":5.0,
+            "PM":4.0,
+            "EV":8.0
+        }
+    }
+    MODETYPE_TO_MODES = {
+        Network.MODEL_TYPE_CHAMP:{
+            "Local"  :[11,12,16,17,18,19],
+            "BRT"    :[13,20],
+            "LRT"    :[14,15,21],
+            "Premium":[22,23,24,25,26,27,28,29,30],
+            "Ferry"  :[31],
+            "BART"   :[32]
+        }
+    }
     
     # Do these modes have offstreet stops?
-    MODENUM_TO_OFFSTREET = {11:False, # muni bus
-                            12:False, # muni Express bus
-                            13:False, # mun BRT
-                            14:False, # cable car -- These are special because they don't have explicity WNR nodes
-                            15:False, # LRT       -- and are just implemented by reading the muni.xfer line as muni.access
-                            16:False, # Shuttles
-                            17:False, # SamTrans bus
-                            18:False, # AC bus
-                            19:False, # other local bus
-                            20:False, # Regional BRT
-                            21:True,  # Santa Clara LRT
-                            22:False, # AC premium bus
-                            23:False, # GG premium bus
-                            24:False, # SamTrans premium bus
-                            25:False, # Other premium bus
-                            26:True,  # Caltrain
-                            27:True,  # SMART
-                            28:True,  # eBART
-                            29:True,  # Regional Rail/ACE/Amtrak
-                            30:True,  # HSR
-                            31:True,  # Ferry
-                            32:True   # BART
-                            }
+    MODENUM_TO_OFFSTREET = {
+        Network.MODEL_TYPE_CHAMP:{
+            11:False, # muni bus
+            12:False, # muni Express bus
+            13:False, # mun BRT
+            14:False, # cable car -- These are special because they don't have explicit WNR nodes
+            15:False, # LRT       -- and are just implemented by reading the muni.xfer line as muni.access
+            16:False, # Shuttles
+            17:False, # SamTrans bus
+            18:False, # AC bus
+            19:False, # other local bus
+            20:False, # Regional BRT
+            21:True,  # Santa Clara LRT
+            22:False, # AC premium bus
+            23:False, # GG premium bus
+            24:False, # SamTrans premium bus
+            25:False, # Other premium bus
+            26:True,  # Caltrain
+            27:True,  # SMART
+            28:True,  # eBART
+            29:True,  # Regional Rail/ACE/Amtrak
+            30:True,  # HSR
+            31:True,  # Ferry
+            32:True   # BART
+        },
+        Network.MODEL_TYPE_TM1:{ 
+        # https://github.com/BayAreaMetro/modeling-website/wiki/TransitModes
+            20 :True, # Muni Cable Car
+            100:True, # Eastt Bay Ferry
+            101:True, # Golden Gate Ferry
+            102:True, # Golden Gate Ferry
+            103:True, # Tiburon Ferry
+            104:True, # Vallejo Baylink Ferry
+            105:True, # South City Ferry
+            110:True, # Muni Metro
+            111:True, # Santa Clara VTA LRT
+            120:True, # BART
+            121:True, # Oakland Airport Connector
+            130:True, # Caltrain
+            131:True, # Amtrak Capitol Corridor
+            132:True, # Amtrak San Joaquin
+            133:True, # ACE
+            134:True, # Dumbarton Rail
+            135:True, # SMART
+            136:True, # EBART
+            137:True  # High speed rail
+        }
+    }
     
     def __init__(self, name=None, template=None):
         self.attr = {}
@@ -137,7 +177,8 @@ class TransitLine(object):
         
     def getFreqs(self):
         """
-        Return the frequencies for this line as a list of 5 strings representing AM,MD,PM,EV,EA.
+        Return the frequencies for this line as a list of 5 strings
+        (representing AM,MD,PM,EV,EA for CHAMP, or EA,AM,MD,PM,EV for TM1)
         """
         if 'HEADWAY[1]' in self.attr:
             return [self.attr['HEADWAY[1]'],
@@ -152,22 +193,36 @@ class TransitLine(object):
                 self.attr['FREQ[4]'],
                 self.attr['FREQ[5]']]
 
-    def getFreq(self, timeperiod):
+    def getFreq(self, timeperiod, modeltype):
         """
         Returns a float version of the frequency for the given *timeperiod*, which should be one
         of ``AM``, ``MD``, ``PM``, ``EV`` or ``EA``
         """
-        if timeperiod=="AM":
-            return float(self.attr["FREQ[1]"])
-        elif timeperiod=="MD":
-            return float(self.attr["FREQ[2]"])
-        elif timeperiod=="PM":
-            return float(self.attr["FREQ[3]"])
-        elif timeperiod=="EV":
-            return float(self.attr["FREQ[4]"])
-        elif timeperiod=="EA":
-            return float(self.attr["FREQ[5]"])
-        raise NetworkException("getFreq() received invalid timeperiod "+str(timeperiod))
+        if modeltype==Network.MODEL_TYPE_CHAMP:
+            if timeperiod=="AM":
+                return float(self.attr["FREQ[1]"])
+            elif timeperiod=="MD":
+                return float(self.attr["FREQ[2]"])
+            elif timeperiod=="PM":
+                return float(self.attr["FREQ[3]"])
+            elif timeperiod=="EV":
+                return float(self.attr["FREQ[4]"])
+            elif timeperiod=="EA":
+                return float(self.attr["FREQ[5]"])
+
+        if modeltype==Network.MODEL_TYPE_TM1:
+            if timeperiod=="EA":
+                return float(self.attr["FREQ[1]"])
+            elif timeperiod=="AM":
+                return float(self.attr["FREQ[2]"])
+            elif timeperiod=="MD":
+                return float(self.attr["FREQ[3]"])
+            elif timeperiod=="PM":
+                return float(self.attr["FREQ[4]"])
+            elif timeperiod=="EV":
+                return float(self.attr["FREQ[5]"])
+
+        raise NetworkException("getFreq() received invalid timeperiod {} or modeltype {}".format(timeperiod, modeltype))
 
     def hasService(self):
         """
@@ -201,6 +256,10 @@ class TransitLine(object):
         """
         Returns a bool indicating if the line is oneway
         """
+        if "ONEWAY" not in self.attr:
+            WranglerLogger.debug("line [{}] lacks ONEWAY attribute; assuming true".format(self.name))
+            return True
+
         oneway = self.attr["ONEWAY"]
         if oneway.upper() in ["N", "F"]:
             return False
@@ -213,24 +272,28 @@ class TransitLine(object):
         """
         self.attr["ONEWAY"] = "T"
         
-    def hasOffstreetNodes(self):
+    def hasOffstreetNodes(self, modeltype):
         """
         Returns True if the line has offstreet nodes
         """
         modenum = int(self.attr['MODE'])
-        return TransitLine.MODENUM_TO_OFFSTREET[modenum]
+        if modenum in TransitLine.MODENUM_TO_OFFSTREET[modeltype]:
+            return TransitLine.MODENUM_TO_OFFSTREET[modeltype][modenum]
 
-    def vehiclesPerPeriod(self, timeperiod):
+        # default to false
+        return False
+
+    def vehiclesPerPeriod(self, timeperiod, modeltype):
         """
         Returns the number of vehicles (as a float) that will run for the given time period.
         E.g. for 10 minute frequencies in the AM, 3*6 = 18
         """
-        freq = self.getFreq(timeperiod)
+        freq = self.getFreq(timeperiod, modeltype)
         if freq < 0.01:
             return 0.0
         
         # minutes per time period divided by frequency
-        return 60.0*self.HOURS_PER_TIMEPERIOD[timeperiod]/freq
+        return 60.0*self.HOURS_PER_TIMEPERIOD[modeltype][timeperiod]/freq
               
     def hasNode(self,nodeNumber):
         """

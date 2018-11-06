@@ -2,11 +2,12 @@
 # Original revision: Lisa Zorn 2010-8-5
 # based on old "combineTransitDBFs.py"
 #
-import csv,os,logging,string,sys,xlrd
+import csv,os,logging,string,sys,traceback,xlrd
 from dataTable import DataTable, dbfTableReader, FieldType
 from .TransitCapacity import TransitCapacity
 from .TransitLine import TransitLine
 from .Logger import WranglerLogger
+from .Network import Network
 from .NetworkException import NetworkException
 from collections import defaultdict
 
@@ -21,13 +22,15 @@ class TransitAssignmentData:
     TIMEPERIOD_TO_VEHTYPIDX = { "AM":2, "MD": 4, "PM":3, "EV":4, "EA":4 }
 
     
-    def __init__(self, directory=".", timeperiod="AM", champtype="champ4", muniTEP=True, ignoreModes=[], 
+    def __init__(self, directory=".", timeperiod="AM", modelType=Network.MODEL_TYPE_CHAMP, 
+                 champtype="champ4", muniTEP=True, ignoreModes=[], 
                  system=[], profileNode=False,tpfactor="quickboards",grouping=None,
                  transitCapacity=None,
                  lineLevelAggregateFilename=None, linkLevelAggregateFilename=None):
         """
 
            * *directory* is the location of the transit assignment files
+           * *modelType* should be MODEL_TYPE_CHAMP, MODEL_TYPE_TM1, or MODEL_TYPE_TM2
            * *timeperiod* is a string in ["AM", "MD", "PM", "EV", "EA" ]
            * *champtype* is a string in ["champ4", "champ3", "champ3-sfonly"]
            * *muniTEP* is only important for Muni files, but it matters because vehicle type is different
@@ -50,18 +53,18 @@ class TransitAssignmentData:
         elif tpfactor=="constant":
             self.TIMEPERIOD_FACTOR ={}
             for tp in ["AM", "MD", "PM", "EV", "EA"]:
-                self.TIMEPERIOD_FACTOR[tp] = 1.0/TransitLine.HOURS_PER_TIMEPERIOD[tp]
+                self.TIMEPERIOD_FACTOR[tp] = 1.0/TransitLine.HOURS_PER_TIMEPERIOD[modelType][tp]
         elif tpfactor=="constant_with_peaked_muni":
             # defaults
             self.TIMEPERIOD_FACTOR ={}
             for tp in ["AM", "MD", "PM", "EV", "EA"]:
-                self.TIMEPERIOD_FACTOR[tp] = 1.0/TransitLine.HOURS_PER_TIMEPERIOD[tp]
+                self.TIMEPERIOD_FACTOR[tp] = 1.0/TransitLine.HOURS_PER_TIMEPERIOD[modelType][tp]
             # muni peaking
             self.TIMEPERIOD_FACTOR[11] = {"AM":0.45, # 0.39 / 0.85 (Muni peaking factor from 2010 APC / Muni's capacity ratio)
-                                          "MD":1/TransitLine.HOURS_PER_TIMEPERIOD["MD"],
+                                          "MD":1/TransitLine.HOURS_PER_TIMEPERIOD[modelType]["MD"],
                                           "PM":0.45,
                                           "EV":0.2,
-                                          "EA":1/TransitLine.HOURS_PER_TIMEPERIOD["EA"]}
+                                          "EA":1/TransitLine.HOURS_PER_TIMEPERIOD[modelType]["EA"]}
             self.TIMEPERIOD_FACTOR[12] = self.TIMEPERIOD_FACTOR[11]
             self.TIMEPERIOD_FACTOR[13] = self.TIMEPERIOD_FACTOR[11]
             self.TIMEPERIOD_FACTOR[14] = self.TIMEPERIOD_FACTOR[11]
@@ -71,6 +74,7 @@ class TransitAssignmentData:
 
         self.assigndir  = directory
         self.timeperiod = timeperiod
+        self.modelType  = modelType
         self.champtype  = champtype
         self.ignoreModes= ignoreModes
         self.system     = system
@@ -163,7 +167,7 @@ class TransitAssignmentData:
                                 "OWNER",
                                 "AB_VOL","AB_BRDA","AB_XITA","AB_BRDB","AB_XITB",
                                 "BA_VOL","BA_BRDA","BA_XITA","BA_BRDB","BA_XITB"]
-        print("csvColnames = %s".format(str(self.csvColnames)))
+        print("csvColnames = {}".format(self.csvColnames))
             
         self.colnameToCsvIndex = dict((self.csvColnames[idx],idx) for idx in range(len(self.csvColnames)))
         
@@ -235,12 +239,15 @@ class TransitAssignmentData:
                 
         # open the input assignment files
         for mode in self.MODES:
-            if mode == "WMWVIS":
-                filename = os.path.join(self.assigndir, "VISWMW" + self.timeperiod + ".csv")
-            elif mode[1]=="T":
-                filename = os.path.join(self.assigndir, "NS" + mode + self.timeperiod + ".csv")
-            else:
-                filename = os.path.join(self.assigndir, "SF" + mode + self.timeperiod + ".csv")
+            if self.modelType == Network.MODEL_TYPE_CHAMP:
+                if mode == "WMWVIS":
+                    filename = os.path.join(self.assigndir, "VISWMW" + self.timeperiod + ".csv")
+                elif mode[1]=="T":
+                    filename = os.path.join(self.assigndir, "NS" + mode + self.timeperiod + ".csv")
+                else:
+                    filename = os.path.join(self.assigndir, "SF" + mode + self.timeperiod + ".csv")
+            elif self.modelType == Network.MODEL_TYPE_TM1:
+                filename = os.path.join(self.assigndir, "trnlink{}_{}.csv".format(self.timeperiod.lower(), mode))
                 
             # Read the DBF file into datatable
             WranglerLogger.info("Reading "+filename)
@@ -283,7 +290,7 @@ class TransitAssignmentData:
                                               fieldNames=self.trnAsgnFields.keys(),
                                               numpyFieldTypes=self.trnAsgnFields.values())
                 ABNameSeqSet = set()
-            
+                WranglerLogger.debug("Created dataTable")
             
             # Go through the records
             newrownum = 0  # row number in the trnAsgnTable,ABNameSeq_List -- rows we're keeping
@@ -293,7 +300,10 @@ class TransitAssignmentData:
             
             # for the first csv only, also read the dbf for the freq and seq fields
             if mode == self.MODES[0]:
-                indbf = dbfTableReader(os.path.join(self.assigndir, "SFWBW" + self.timeperiod + ".dbf"))
+                if self.modelType == Network.MODEL_TYPE_CHAMP:
+                    indbf = dbfTableReader(os.path.join(self.assigndir, "SFWBW" + self.timeperiod + ".dbf"))
+                elif self.modelType == Network.MODEL_TYPE_TM1:
+                    indbf = dbfTableReader(os.path.join(self.assigndir, "trnlink{}_{}.dbf".format(self.timeperiod.lower(), mode)))
             else:
                 indbf = None
             
@@ -348,10 +358,12 @@ class TransitAssignmentData:
                                 self.trnAsgnTable[newrownum][field] = row[self.colnameToCsvIndex[field]]
                         
                         except:
-                            WranglerLogger.fatal("Error intepreting field %s: [%s]" % (field, str(self.colnameToCsvIndex[field])))
+                            WranglerLogger.fatal("Error interpreting field %s: [%s]" % (field, str(self.colnameToCsvIndex[field])))
                             WranglerLogger.fatal("row=%s" % str(row))
                             WranglerLogger.fatal(sys.exc_info()[0])
-                            WranglerLogger.fatal(sys.exc_info()[1])                        
+                            WranglerLogger.fatal(sys.exc_info()[1])
+                            WranglerLogger.fatal(traceback.format_exc())
+                            print("Error interpreting field %s: [%s]" % (field, str(self.colnameToCsvIndex[field])))
                             sys.exit(2)  
                     # ------------ these fields come from the dbf because they're missing in the csv (sigh)
                     dbfRow = indbf.__getitem__(oldrownum)
@@ -423,15 +435,18 @@ class TransitAssignmentData:
                             self.trnAsgnTable[newrownum][field] = 0.0
                         else:
                             self.trnAsgnTable[newrownum][field] = float(row[self.colnameToCsvIndex[field]])
-                        
-                # end initial table fill
+
+                    # end initial table fill
                 
                 # Add in the subsequent assignment files
                 else:
                      
                     # print oldrownum, newrownum, ABNameSeq_List[newrownum]
                     # print row[self.colnameToCsvIndex["NAME"]], ABNameSeq_List[oldrownum][2]
-                             
+                    if ((int(row[self.colnameToCsvIndex["A"]]) != ABNameSeq_List[newrownum][0]) or
+                        (int(row[self.colnameToCsvIndex["B"]]) != ABNameSeq_List[newrownum][1])):
+                        WranglerLogger.debug(row)
+                        WranglerLogger.debug(ABNameSeq_List[newrownum])
                     assert(int(row[self.colnameToCsvIndex["A"]]) == ABNameSeq_List[newrownum][0])
                     assert(int(row[self.colnameToCsvIndex["B"]]) == ABNameSeq_List[newrownum][1])
                     # these don't nec match, can be *32 in ferry skim rather than the bart vehicle name, for example
@@ -466,7 +481,7 @@ class TransitAssignmentData:
                     ABNameSeqList.sort()
                     for idx in range(len(ABNameSeqList)-1):
                         if ABNameSeqList[idx]==ABNameSeqList[idx+1]:
-                            WranglerLogger.warn("Duplicate ABNAMESEQ at idx %d : [%s]" % (idx,ABNameSeqList[idx]))
+                            WranglerLogger.fatal("Duplicate ABNAMESEQ at idx %d : [%s]" % (idx,ABNameSeqList[idx]))
                     exit(1)
 
         # ok the table is all filled in -- fill in the LOAD
@@ -684,6 +699,7 @@ class TransitAssignmentData:
              FieldType("BA_XITB",   addtype, addlen, addnumdec)
              )
         self.aggregateTable.writeAsDbf(aggregateFileName)
+        WranglerLogger.info("Wrote aggregate table as {}".format(aggregateFileName))
     
     def numBoards(self, linename, nodenum, nodenum_next, seq):
         """ linename is something like MUN30I; it includes the direction.

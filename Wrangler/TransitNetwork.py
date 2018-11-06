@@ -259,7 +259,7 @@ class TransitNetwork(Network):
                 setToOffstreet[lineset] = False
             if line.getModeType() not in setToModeType[lineset]:
                 setToModeType[lineset].append(line.getModeType())
-                setToOffstreet[lineset] = (setToOffstreet[lineset] or line.hasOffstreetNodes())
+                setToOffstreet[lineset] = (setToOffstreet[lineset] or line.hasOffstreetNodes(self.modelType))
             
             # for each stop
             for stopIdx in range(len(line.n)):
@@ -317,14 +317,15 @@ class TransitNetwork(Network):
                             (line.getModeType(), lineset, stopNodeStr, link.A, link.B, str(nodeInfo[lineset][stopNodeStr].keys()), str(wnrNodes), str(pnrNodes))
                         WranglerLogger.warning(errorstr)
                         # raise NetworkException(errorstr)
-                        
-        book = xlrd.open_workbook(os.environ["CHAMP_node_names"])
-        sh = book.sheet_by_index(0)
+        
         nodeNames = {}
-        for rx in range(0,sh.nrows): # skip header
-            therow = sh.row(rx)
-            nodeNames[int(therow[0].value)] = therow[1].value
-        # WranglerLogger.info(str(nodeNames))
+        if "CHAMP_node_names" in os.environ:
+            book = xlrd.open_workbook(os.environ["CHAMP_node_names"])
+            sh = book.sheet_by_index(0)
+            for rx in range(0,sh.nrows): # skip header
+                therow = sh.row(rx)
+                nodeNames[int(therow[0].value)] = therow[1].value
+            # WranglerLogger.info(str(nodeNames))
         
         # print it all out
         for lineset in nodeInfo.keys():
@@ -467,15 +468,15 @@ class TransitNetwork(Network):
         except:
             raise NetworkException('Unknown Route!  %s' % (shortLine))       
 
-        [amLong,mdLong,pmLong,evLong,eaLong] = longLineInst.getFreqs()
-        [amComb,mdComb,pmComb,evComb,eaComb] = combFreqs
-        [amShort,mdShort,pmShort,evShort,eaShort] = [0,0,0,0,0]
-        if (amLong-amComb)>0: amShort=amComb*amLong/(amLong-amComb)
-        if (mdLong-mdComb)>0: mdShort=mdComb*mdLong/(mdLong-mdComb)
-        if (pmLong-pmComb)>0: pmShort=pmComb*pmLong/(pmLong-pmComb)
-        if (evLong-evComb)>0: evShort=evComb*evLong/(evLong-evComb)
-        if (eaLong-eaComb)>0: eaShort=eaComb*eaLong/(eaLong-eaComb)
-        shortLineInst.setFreqs([amShort,mdShort,pmShort,evShort,eaShort])
+        [tp1Long, tp2Long, tp3Long, tp4Long, tp5Long] = longLineInst.getFreqs()
+        [tp1Comb, tp2Comb, tp3Comb, tp4Comb, tp5Comb] = combFreqs
+        [tp1Short,tp2Short,tp3Short,tp4Short,tp5Short] = [0,0,0,0,0]
+        if (tp1Long-tp1Comb)>0: tp1Short=tp1Comb*tp1Long/(tp1Long-tp1Comb)
+        if (tp2Long-tp2Comb)>0: tp2Short=tp2Comb*tp2Long/(tp2Long-tp2Comb)
+        if (tp3Long-tp3Comb)>0: tp3Short=tp3Comb*tp3Long/(tp3Long-tp3Comb)
+        if (tp4Long-tp4Comb)>0: tp4Short=tp4Comb*tp4Long/(tp4Long-tp4Comb)
+        if (tp5Long-tp5Comb)>0: tp5Short=tp5Comb*tp5Long/(tp5Long-tp5Comb)
+        shortLineInst.setFreqs([tp1Short,tp2Short,tp3Short,tp4Short,tp5Short])
     
     
     def getCombinedFreq(self, names, coverage_set=False):
@@ -929,7 +930,7 @@ class TransitNetwork(Network):
             linknet = TransitNetwork(self.modelType, self.modelVersion)
             linknet.parser = TransitParser(transit_file_def, verbosity=0)
             f = open(additionalLinkFile, 'r');
-            junk,junk,additionallinks,junk,junk,junk,junk,junk,junk = \
+            junk,junk,additionallinks,junk,junk,junk,junk,junk,junk,junk,junk = \
                 linknet.parseAndPrintTransitFile(f.read(), verbosity=0)
             f.close()
             for link in additionallinks:
@@ -995,7 +996,7 @@ class TransitNetwork(Network):
                     del line.attr["TIMEFAC"]
             
             # Passing on all the lines that do not have service during the specific time of day
-            if timeperiod in TransitLine.HOURS_PER_TIMEPERIOD and line.getFreq(timeperiod) == 0.0: continue
+            if timeperiod in TransitLine.HOURS_PER_TIMEPERIOD[self.modelType] and line.getFreq(timeperiod, self.modelType) == 0.0: continue
                    
                 
             simpleDwellDelay = self.findSimpleDwellDelay(line)
@@ -1043,7 +1044,7 @@ class TransitNetwork(Network):
                              
                 # Complex Delay
                 # =======================================================================================
-                vehiclesPerPeriod = line.vehiclesPerPeriod(timeperiod)
+                vehiclesPerPeriod = line.vehiclesPerPeriod(timeperiod, self.modelType)
                 try:
                     boards = transitAssignmentData.numBoards(line.name,
                                                              abs(int(line.n[nodeIdx].num)),
@@ -1121,7 +1122,7 @@ class TransitNetwork(Network):
             if mode in complexDelayModes or mode in complexAccessModes:
             
                 for timeperiod in ["AM", "MD", "PM", "EV", "EA"]:
-                    if line.getFreq(timeperiod) == 0: continue
+                    if line.getFreq(timeperiod, self.modelType) == 0: continue
 
                     try:
                         (vehicletype, cap) = TransitNetwork.capacity.getVehicleTypeAndCapacity(linename, timeperiod)
@@ -1140,9 +1141,14 @@ class TransitNetwork(Network):
         """
         import Cube
     
+        extra_link_vars = []
+        if self.modelType == Network.MODEL_TYPE_CHAMP:
+            extra_link_vars=['STREETNAME',
+                             'LANE_AM', 'LANE_OP','LANE_PM',
+                             'BUSLANE_AM', 'BUSLANE_OP', 'BUSLANE_PM']
+
         (nodes_dict, links_dict) = Cube.import_cube_nodes_links_from_csvs(cubeNetFile,
-                                        extra_link_vars=['LANE_AM', 'LANE_OP','LANE_PM',
-                                                         'BUSLANE_AM', 'BUSLANE_OP', 'BUSLANE_PM'],
+                                        extra_link_vars=extra_link_vars,
                                         extra_node_vars=[],
                                         links_csv=os.path.join(os.getcwd(),"cubenet_validate_links.csv"),
                                         nodes_csv=os.path.join(os.getcwd(),"cubenet_validate_nodes.csv"),

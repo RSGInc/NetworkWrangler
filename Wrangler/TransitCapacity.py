@@ -1,4 +1,5 @@
 import copy,csv,os,re,string
+from .Logger import WranglerLogger
 from .NetworkException import NetworkException
 
 __all__ = ['TransitCapacity']
