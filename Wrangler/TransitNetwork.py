@@ -257,8 +257,8 @@ class TransitNetwork(Network):
                 nodeInfo[lineset]       = {}
                 setToModeType[lineset]  = []
                 setToOffstreet[lineset] = False
-            if line.getModeType() not in setToModeType[lineset]:
-                setToModeType[lineset].append(line.getModeType())
+            if line.getModeType(self.modelType) not in setToModeType[lineset]:
+                setToModeType[lineset].append(line.getModeType(self.modelType))
                 setToOffstreet[lineset] = (setToOffstreet[lineset] or line.hasOffstreetNodes(self.modelType))
             
             # for each stop
@@ -289,14 +289,15 @@ class TransitNetwork(Network):
                     m = re.match(nodepair_pattern, zac.id)
                     if m.group(1)==stopNodeStr: wnrNodes.add(int(m.group(2)))
                     if m.group(2)==stopNodeStr: wnrNodes.add(int(m.group(1)))
-                    
+
                 #print "Check for PNR"
-                for pnr in self.pnrs:
-                    if not isinstance(pnr, PNRLink): continue
-                    pnr.parseID()
-                    if pnr.station==stopNodeStr and pnr.pnr!=PNRLink.UNNUMBERED:
-                        pnrNodes.add(int(pnr.pnr))
-                        
+                for pnr_filename in self.pnrs.keys():
+                    for pnr in self.pnrs[pnr_filename]:
+                        if not isinstance(pnr, PNRLink): continue
+                        pnr.parseID()
+                        if pnr.station==stopNodeStr and pnr.pnr!=PNRLink.UNNUMBERED:
+                            pnrNodes.add(int(pnr.pnr))
+
                 #print "Check that our access links go from an onstreet xfer to a pnr or to a wnr"
                 for link in self.accessli:
                     if not isinstance(link,Linki): continue
@@ -314,7 +315,7 @@ class TransitNetwork(Network):
                         if not setToOffstreet[lineset]: continue
                         
                         errorstr = "Invalid access link found in %s lineset %s (incl offstreet) stopNode %s -- Missing xfer?  A=%s B=%s, xfernodes=%s wnrNodes=%s pnrNodes=%s" % \
-                            (line.getModeType(), lineset, stopNodeStr, link.A, link.B, str(nodeInfo[lineset][stopNodeStr].keys()), str(wnrNodes), str(pnrNodes))
+                            (line.getModeType(self.modelType), lineset, stopNodeStr, link.A, link.B, str(nodeInfo[lineset][stopNodeStr].keys()), str(wnrNodes), str(pnrNodes))
                         WranglerLogger.warning(errorstr)
                         # raise NetworkException(errorstr)
         
@@ -335,13 +336,13 @@ class TransitNetwork(Network):
               
             WranglerLogger.debug("--------------- Line set %s %s -- hasOffstreet? %s------------------" % 
                                  (lineset, str(setToModeType[lineset]), str(setToOffstreet[lineset])))
-            WranglerLogger.debug("%-30s %10s %10s %10s %10s" % ("stopname", "stop", "xfer", "wnr", "pnr"))
+            WranglerLogger.debug("%-40s %10s %10s %10s %10s" % ("stopname", "stop", "xfer", "wnr", "pnr"))
             for stopNodeStr in stops:
                 numWnrs = 0
                 stopname = "Unknown stop name"
                 if int(stopNodeStr) in nodeNames: stopname = nodeNames[int(stopNodeStr)]
                 for xfernode in nodeInfo[lineset][stopNodeStr].keys():
-                    WranglerLogger.debug("%-30s %10s %10s %10s %10s" % 
+                    WranglerLogger.debug("%-40s %10s %10s %10s %10s" % 
                                  (stopname, stopNodeStr, xfernode, 
                                   nodeInfo[lineset][stopNodeStr][xfernode][0],
                                   nodeInfo[lineset][stopNodeStr][xfernode][1]))

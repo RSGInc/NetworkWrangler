@@ -449,13 +449,14 @@ if __name__ == '__main__':
     parser.add_argument("--configword", help="optional word for network specification script")
     parser.add_argument("--model_type", choices=[Wrangler.Network.MODEL_TYPE_TM1, Wrangler.Network.MODEL_TYPE_TM2],
                         default=Wrangler.Network.MODEL_TYPE_TM1)
-    parser.add_argument("net_spec", metavar="network_specification.py", nargs=1, help="Script which defines required variables indicating how to build the network")
+    parser.add_argument("net_spec", metavar="network_specification.py", help="Script which defines required variables indicating how to build the network")
     args = parser.parse_args()
 
     NOW         = time.strftime("%Y%b%d.%H%M%S")
     BUILD_MODE  = None # regular
     if args.model_type == Wrangler.Network.MODEL_TYPE_TM1:
         PIVOT_DIR        = r"M:\\Application\\Model One\\Networks\\TM1_2015_Base_Network"
+        TRANSIT_CAPACITY_DIR = os.path.join(PIVOT_DIR, "trn")
         NETWORK_BASE_DIR = r"M:\\Application\\Model One\\NetworkProjects"
         TRN_SUBDIR       = "trn"
         TRN_NET_NAME     = "Transit_Lines"
@@ -463,6 +464,7 @@ if __name__ == '__main__':
         HWY_NET_NAME     = "freeflow.net"
     elif args.model_type == Wrangler.Network.MODEL_TYPE_TM2:
         PIVOT_DIR        = os.path.join(os.environ["USERPROFILE"], "Box","Modeling and Surveys","Development","Travel Model Two Development","Model Inputs","2015_revised_mazs")
+        TRANSIT_CAPACITY_DIR = None
         NETWORK_BASE_DIR = r"M:\\Application\\Model Two\\NetworkProjects"
         TRN_SUBDIR       = "trn"
         TRN_NET_NAME     = "transitLines"
@@ -470,7 +472,7 @@ if __name__ == '__main__':
         HWY_NET_NAME     = "mtc_final_network_base.net"
 
     # Read the configuration
-    NETWORK_CONFIG = args.net_spec[0]
+    NETWORK_CONFIG = args.net_spec
     exec(open(NETWORK_CONFIG).read())
 
     # Verify mandatory fields are set
@@ -492,7 +494,8 @@ if __name__ == '__main__':
 
     LOG_FILENAME = "build%snetwork_%s_%s_%s.info.LOG" % ("TEST" if BUILD_MODE=="test" else "", PROJECT, SCENARIO, NOW)
     Wrangler.setupLogging(LOG_FILENAME, LOG_FILENAME.replace("info", "debug"))
-    # Wrangler.TransitNetwork.capacity = Wrangler.TransitCapacity(directory=TRANSIT_CAPACITY_DIR)
+    if TRANSIT_CAPACITY_DIR:
+        Wrangler.TransitNetwork.capacity = Wrangler.TransitCapacity(directory=TRANSIT_CAPACITY_DIR)
 
     # Create a scratch directory to check out project repos into
     SCRATCH_SUBDIR = "scratch"
@@ -549,15 +552,9 @@ if __name__ == '__main__':
                     continue
 
                 applied_SHA1 = None
-                (head,tail) = os.path.split(project_name)
-                if head:
-                    cloned_SHA1 = networks[netmode].cloneProject(networkdir=head, projectsubdir=tail, tag=tag,
-                                                                 projtype=projType, tempdir=TEMP_SUBDIR, **kwargs)
-                    (parentdir, networkdir, gitdir, projectsubdir) = networks[netmode].getClonedProjectArgs(head, tail, projType, TEMP_SUBDIR)
-                else:
-                    cloned_SHA1 = networks[netmode].cloneProject(networkdir=project_name, tag=tag,
-                                                                 projtype=projType, tempdir=TEMP_SUBDIR, **kwargs)
-                    (parentdir, networkdir, gitdir, projectsubdir) = networks[netmode].getClonedProjectArgs(project_name, None, projType, TEMP_SUBDIR)
+                cloned_SHA1 = networks[netmode].cloneProject(networkdir=project_name, tag=tag,
+                                                             projtype=projType, tempdir=TEMP_SUBDIR, **kwargs)
+                (parentdir, networkdir, gitdir, projectsubdir) = networks[netmode].getClonedProjectArgs(project_name, None, projType, TEMP_SUBDIR)
 
                 applied_SHA1 = networks[netmode].applyProject(parentdir, networkdir, gitdir, projectsubdir)
                 appliedcount += 1
@@ -573,13 +570,20 @@ if __name__ == '__main__':
         if not os.path.exists(trnpath): os.makedirs(trnpath)
 
         networks['hwy'].write(path=hwypath,name=HWY_NET_NAME,suppressQuery=True,
-                              suppressValidation=True) # MTC doesn't have turn penalties
+                              suppressValidation=True) # MTC TM1 doesn't have turn penalties
 
+        os.environ["CHAMP_node_names"] = os.path.join(PIVOT_DIR,"trn","transit_support","Node Description.xls")
+        hwy_abs_path = os.path.abspath( os.path.join(hwypath, HWY_NET_NAME) )
         networks['trn'].write(path=trnpath,
                               name="transitLines",
                               writeEmptyFiles = False,
                               suppressQuery = True,
-                              suppressValidation = True,  # until validation is updated for MTC networks
-                              cubeNetFileForValidation = os.path.join(hwypath, HWY_NET_NAME))
+                              suppressValidation = False,
+                              cubeNetFileForValidation = hwy_abs_path)
+
+        # Write the transit capacity configuration
+        Wrangler.TransitNetwork.capacity.writeTransitVehicleToCapacity(directory = trnpath)
+        Wrangler.TransitNetwork.capacity.writeTransitLineToVehicle(directory = trnpath)
+        Wrangler.TransitNetwork.capacity.writeTransitPrefixToVehicle(directory = trnpath)
 
     Wrangler.WranglerLogger.debug("Successfully completed running %s" % os.path.abspath(__file__))
