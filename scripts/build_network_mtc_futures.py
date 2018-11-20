@@ -458,6 +458,7 @@ if __name__ == '__main__':
     BUILD_MODE  = None # regular
     if args.model_type == Wrangler.Network.MODEL_TYPE_TM1:
         PIVOT_DIR        = r"M:\\Application\\Model One\\Networks\\TM1_2015_Base_Network"
+        TRANSIT_CAPACITY_DIR = os.path.join(PIVOT_DIR, "trn")
         NETWORK_BASE_DIR = r"M:\\Application\\Model One\\NetworkProjects"
         TRN_SUBDIR       = "trn"
         TRN_NET_NAME     = "Transit_Lines"
@@ -465,6 +466,7 @@ if __name__ == '__main__':
         HWY_NET_NAME     = "freeflow.net"
     elif args.model_type == Wrangler.Network.MODEL_TYPE_TM2:
         PIVOT_DIR        = os.path.join(os.environ["USERPROFILE"], "Box","Modeling and Surveys","Development","Travel Model Two Development","Model Inputs","2015_revised_mazs")
+        TRANSIT_CAPACITY_DIR = None
         NETWORK_BASE_DIR = r"M:\\Application\\Model Two\\NetworkProjects"
         TRN_SUBDIR       = "trn"
         TRN_NET_NAME     = "transitLines"
@@ -497,7 +499,8 @@ if __name__ == '__main__':
 
     LOG_FILENAME = "build%snetwork_%s_%s_%s.info.LOG" % ("TEST" if BUILD_MODE=="test" else "", PROJECT, SCENARIO, NOW)
     Wrangler.setupLogging(LOG_FILENAME, LOG_FILENAME.replace("info", "debug"))
-    # Wrangler.TransitNetwork.capacity = Wrangler.TransitCapacity(directory=TRANSIT_CAPACITY_DIR)
+    if TRANSIT_CAPACITY_DIR:
+        Wrangler.TransitNetwork.capacity = Wrangler.TransitCapacity(directory=TRANSIT_CAPACITY_DIR)
 
     # Create a scratch directory to check out project repos into
     SCRATCH_SUBDIR = "scratch"
@@ -583,7 +586,6 @@ if __name__ == '__main__':
                 applied_SHA1 = networks[netmode].applyProject(parentdir, networkdir, gitdir, projectsubdir)
                 appliedcount += 1
 
-
         if appliedcount == 0:
             Wrangler.WranglerLogger.info("No applied projects for this year -- skipping output")
             continue
@@ -604,5 +606,10 @@ if __name__ == '__main__':
                               suppressValidation = True,  # until validation is updated for MTC networks
                               cubeNetFileForValidation = os.path.join(hwypath, HWY_NET_NAME))
 
+
+        # Write the transit capacity configuration
+        Wrangler.TransitNetwork.capacity.writeTransitVehicleToCapacity(directory = trnpath)
+        Wrangler.TransitNetwork.capacity.writeTransitLineToVehicle(directory = trnpath)
+        Wrangler.TransitNetwork.capacity.writeTransitPrefixToVehicle(directory = trnpath)
 
     Wrangler.WranglerLogger.debug("Successfully completed running %s" % os.path.abspath(__file__))

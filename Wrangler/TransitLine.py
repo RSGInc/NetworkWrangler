@@ -41,9 +41,17 @@ class TransitLine(object):
             "Premium":[22,23,24,25,26,27,28,29,30],
             "Ferry"  :[31],
             "BART"   :[32]
+        },
+        Network.MODEL_TYPE_TM1:{
+            "Local"        :range( 10, 80),
+            "Express Bus"  :range( 80,100),
+            "Ferry"        :range(100,110),
+            "Light Rail"   :range(110,120),
+            "Heavy Rail"   :range(120,130),
+            "Commuter Rail":range(130,140)
         }
     }
-    
+
     # Do these modes have offstreet stops?
     MODENUM_TO_OFFSTREET = {
         Network.MODEL_TYPE_CHAMP:{
@@ -72,14 +80,14 @@ class TransitLine(object):
         },
         Network.MODEL_TYPE_TM1:{ 
         # https://github.com/BayAreaMetro/modeling-website/wiki/TransitModes
-            20 :True, # Muni Cable Car
-            100:True, # Eastt Bay Ferry
+            20 :False, # Muni Cable Car
+            100:True, # East Bay Ferry
             101:True, # Golden Gate Ferry
             102:True, # Golden Gate Ferry
             103:True, # Tiburon Ferry
             104:True, # Vallejo Baylink Ferry
             105:True, # South City Ferry
-            110:True, # Muni Metro
+            110:False, # Muni Metro
             111:True, # Santa Clara VTA LRT
             120:True, # BART
             121:True, # Oakland Airport Connector
@@ -241,13 +249,13 @@ class TransitLine(object):
         """
         self.attr["OWNER"] = str(newOwner)
 
-    def getModeType(self):
+    def getModeType(self, modeltype):
         """
         Returns on of the keys in MODETYPE_TO_MODES 
         (e.g. one of "Local", "BRT", "LRT", "Premium", "Ferry" or "BART")
         """
         modenum = int(self.attr['MODE'])
-        for modetype,modelist in TransitLine.MODETYPE_TO_MODES.iteritems():
+        for modetype,modelist in TransitLine.MODETYPE_TO_MODES[modeltype].iteritems():
             if modenum in modelist:
                 return modetype
         return None
