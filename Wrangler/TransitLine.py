@@ -49,9 +49,9 @@ class TransitLine(object):
         Network.MODEL_TYPE_CHAMP:{
             11:False, # muni bus
             12:False, # muni Express bus
-            13:False, # mun BRT
-            14:False, # cable car -- These are special because they don't have explicit WNR nodes
-            15:False, # LRT       -- and are just implemented by reading the muni.xfer line as muni.access
+            13:False, # muni BRT
+            14:False, # muni cable car -- These are special because they don't have explicit WNR nodes
+            15:False, # muni LRT       -- and are just implemented by reading the muni.xfer line as muni.access
             16:False, # Shuttles
             17:False, # SamTrans bus
             18:False, # AC bus

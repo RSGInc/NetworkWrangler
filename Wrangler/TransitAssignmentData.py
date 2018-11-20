@@ -60,15 +60,21 @@ class TransitAssignmentData:
             for tp in ["AM", "MD", "PM", "EV", "EA"]:
                 self.TIMEPERIOD_FACTOR[tp] = 1.0/TransitLine.HOURS_PER_TIMEPERIOD[modelType][tp]
             # muni peaking
-            self.TIMEPERIOD_FACTOR[11] = {"AM":0.45, # 0.39 / 0.85 (Muni peaking factor from 2010 APC / Muni's capacity ratio)
-                                          "MD":1/TransitLine.HOURS_PER_TIMEPERIOD[modelType]["MD"],
-                                          "PM":0.45,
-                                          "EV":0.2,
-                                          "EA":1/TransitLine.HOURS_PER_TIMEPERIOD[modelType]["EA"]}
-            self.TIMEPERIOD_FACTOR[12] = self.TIMEPERIOD_FACTOR[11]
-            self.TIMEPERIOD_FACTOR[13] = self.TIMEPERIOD_FACTOR[11]
-            self.TIMEPERIOD_FACTOR[14] = self.TIMEPERIOD_FACTOR[11]
-            self.TIMEPERIOD_FACTOR[15] = self.TIMEPERIOD_FACTOR[11]
+            muni_peaking = {"AM":0.45, # 0.39 / 0.85 (Muni peaking factor from 2010 APC / Muni's capacity ratio)
+                            "MD":1/TransitLine.HOURS_PER_TIMEPERIOD[modelType]["MD"],
+                            "PM":0.45,
+                            "EV":0.2,
+                            "EA":1/TransitLine.HOURS_PER_TIMEPERIOD[modelType]["EA"]}
+            if modelType == Network.MODEL_TYPE_CHAMP:
+                self.TIMEPERIOD_FACTOR[11] = muni_peaking # muni bus
+                self.TIMEPERIOD_FACTOR[12] = muni_peaking # muni express bus
+                self.TIMEPERIOD_FACTOR[13] = muni_peaking # muni BRT
+                self.TIMEPERIOD_FACTOR[14] = muni_peaking # muni cable car
+                self.TIMEPERIOD_FACTOR[15] = muni_peaking # muni LRT
+            elif modelType == Network.MODEL_TYPE_TM1:
+                self.TIMEPERIOD_FACTOR[20]  = muni_peaking # muni cable car
+                self.TIMEPERIOD_FACTOR[21]  = muni_peaking # muni local bus
+                self.TIMEPERIOD_FACTOR[110] = muni_peaking # muni LRT
         else:
             raise TransitAssignmentDataException("Invalid time period factor "+str(tpfactor))
 
@@ -413,7 +419,7 @@ class TransitAssignmentData:
                        (vtype, vehcap) = self.capacity.getVehicleTypeAndCapacity(linename, self.timeperiod)
 
                        self.trnAsgnTable[newrownum]["VEHCAP"] = vehcap
-                       self.trnAsgnTable[newrownum]["PERIODCAP"] = TransitLine.HOURS_PER_TIMEPERIOD[self.timeperiod] * 60.0 * vehcap/self.trnAsgnTable[newrownum]["FREQ"]
+                       self.trnAsgnTable[newrownum]["PERIODCAP"] = TransitLine.HOURS_PER_TIMEPERIOD[self.modelType][self.timeperiod] * 60.0 * vehcap/self.trnAsgnTable[newrownum]["FREQ"]
                     except:
                        self.trnAsgnTable[newrownum]["VEHCAP"] = 0
                        self.trnAsgnTable[newrownum]["PERIODCAP"] = 0
@@ -562,7 +568,7 @@ class TransitAssignmentData:
             indexstr = record["SYSTEM"] + "," + record["VEHTYPE"]
             
             # number of vehicles = duration * 60 min/hour / freq
-            numveh = TransitLine.HOURS_PER_TIMEPERIOD[self.timeperiod] * 60.0 / record["FREQ"]
+            numveh = TransitLine.HOURS_PER_TIMEPERIOD[self.modelType][self.timeperiod] * 60.0 / record["FREQ"]
             # vehicle hours = (# of vehicles) x time per link, or TIME * 1 hour/6000 hundredths of min
             self.vehicleHours[indexstr] += numveh*(record["TIME"]/6000.0)
             # vehicle miles = (# of vehicles) x dist per link, or DIST * 1 mile/100 hundredths of mile
