@@ -20,14 +20,25 @@ OUT_DIR = "network_{}"  # YEAR
 NETWORK_PROJECTS = collections.OrderedDict([
     (2015, {'hwy':['PROJ_attributes'], 'trn':[]}),  # adds PROJ attributes to NODE and LINK
     (2020, {
-        'hwy':[],
-        'trn':['CC_050025_EBart_to_Antioch']
+        'hwy':['MRN150009_San_Rafael_Bridge_Improvements',
+               'SOL110001_SOL110002_I80_HOT_Lanes',
+               'ALA170006_I880_HOTLanes_Dixon_Hegenberger',
+               'ALA130034_I680_NB_HOTLane',
+               'CC_050028_I680_SB_HOV_Completion',
+               'CC_130001_BaileyRd_SR4',
+               'CC_130046_I680_SR4_Int_Rec',
+               'SM150017_US101_HOTLanes',
+               'SCL130001_237_101_MAT_Int_Mod',
+               'REG090003_SCLARA_FIP'],
+        'trn':[]
     }),
     (2025, {
-        'hwy':[], 'trn':[]
+        'hwy':['ALA150001_I680_SR84_Int_Wid',
+               'CC_170002_I680_NorthernSegment_SB_HOTLane'],
+        'trn':[]
     }),
     (2030, {
-        'hwy':[], 'trn':[]
+        'hwy':['ALA170009_I680_HOT_Alcosta_SR84'], 'trn':[]
     }),
     (2035, {
         'hwy':[], 'trn':[]
