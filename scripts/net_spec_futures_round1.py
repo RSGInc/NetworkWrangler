@@ -29,12 +29,25 @@ NETWORK_PROJECTS = collections.OrderedDict([
                'CC_130046_I680_SR4_Int_Rec',
                'SM150017_US101_HOTLanes',
                'SCL130001_237_101_MAT_Int_Mod',
-               'REG090003_SCLARA_FIP'],
+               'REG090003_SCLARA_FIP',
+               'ALA130005_Dougherty_road_widening',
+               'ALA130006_Dublin_Blvd_widening',
+               'ALA130014_7th_St_road_diet',
+               'ALA130026_Shattuck_Complete_Streets',
+               'ALA170049_Central_AVE_Safety_Improvements',
+               'ALA170052_Fruitvale_Ave_ped_improvements',
+               'CC_070011_Brentwood_Blvd_Widening',
+               'CC_070075_Kirker_Pass_Truck_Lane',
+               'CC_090019_Bollinger_Canyon_Widening',
+               'CC_130006_Concord_BART_road_diets',
+               'CC_170001_SanRamonValleyBlvd_Lane_Addition',
+               'SF_130011_2ndSt_Road_Diet'],
         'trn':[]
     }),
     (2025, {
         'hwy':['ALA150001_I680_SR84_Int_Wid',
-               'CC_170002_I680_NorthernSegment_SB_HOTLane'],
+               'CC_170002_I680_NorthernSegment_SB_HOTLane',
+               'ALA150043_Claremont_road_diet'],
         'trn':[]
     }),
     (2030, {
