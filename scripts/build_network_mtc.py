@@ -572,7 +572,7 @@ if __name__ == '__main__':
         networks['hwy'].write(path=hwypath,name=HWY_NET_NAME,suppressQuery=True,
                               suppressValidation=True) # MTC TM1 doesn't have turn penalties
 
-        os.environ["CHAMP_node_names"] = os.path.join(PIVOT_DIR,"trn","transit_support","Node Description.xls")
+        os.environ["CHAMP_node_names"] = os.path.join(PIVOT_DIR,"Node Description.xls")
         hwy_abs_path = os.path.abspath( os.path.join(hwypath, HWY_NET_NAME) )
         networks['trn'].write(path=trnpath,
                               name="transitLines",
