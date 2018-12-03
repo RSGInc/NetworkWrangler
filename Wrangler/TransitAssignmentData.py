@@ -173,7 +173,7 @@ class TransitAssignmentData:
                                 "OWNER",
                                 "AB_VOL","AB_BRDA","AB_XITA","AB_BRDB","AB_XITB",
                                 "BA_VOL","BA_BRDA","BA_XITA","BA_BRDB","BA_XITB"]
-        print("csvColnames = {}".format(self.csvColnames))
+        # print("csvColnames = {}".format(self.csvColnames))
             
         self.colnameToCsvIndex = dict((self.csvColnames[idx],idx) for idx in range(len(self.csvColnames)))
         
