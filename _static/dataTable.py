@@ -1,14 +1,22 @@
-from itertools import count, izip, tee
+from itertools import count, tee
+try:
+    from itertools import izip
+except ImportError: # will be 3.x series
+    izip = zip
+
 from collections import defaultdict
 from odict import OrderedDict
 import numpy as np
-import csv, decimal, datetime
+import csv, decimal, datetime, sys
 
 from struct import unpack, pack, calcsize 
 
 print("Importing ", __file__)
 
 class DataTableError(Exception):
+    pass
+
+class FieldTypeError(DataTableError):
     pass
 
 class DataTableKeyError(DataTableError):
@@ -21,7 +29,7 @@ class DataTable(object):
     """A DataTable wrapper around a numpy array class"""
 
     def __init__(self, numRecords, header=None, fieldNames=None, numpyFieldTypes=None):
-        """Constuct a new DataTable. 
+        """Construct a new DataTable. 
         Inputs: numRecords : a positive integer
                 dtype : a dictionary containing the names and
                         types of the fields
@@ -39,7 +47,7 @@ class DataTable(object):
                              "data table")
             
         self.fields = np.zeros((numRecords,), npDtype)
-        self._index = dict(izip(range(self.fields.size), range(self.fields.size)))
+        self._index = dict(zip(range(self.fields.size), range(self.fields.size)))
         self._hasIndex = False
         self._indexFunction = None
 #        self._updateAttributes()
@@ -59,6 +67,10 @@ class DataTable(object):
             if fieldname in returnlist:
                 raise DataTableKeyError("Two fields are both called %s - unsupported." % fieldname)
             
+            # python3: convert bytestring to string
+            if type(fieldname) != type("string"):
+                fieldname = fieldname.decode()
+
             returnlist.append(fieldname)
             
         # print "fixFieldNames: fieldNames=(%d) %s returnlist=(%d) %s" % (len(fieldNames), str(fieldNames), len(returnlist), str(returnlist))
@@ -88,6 +100,9 @@ class DataTable(object):
         would use if the datatable was a dictionary"""
 #        raise DataTableError("There is a bug here")
         try:
+            # print("key=[{}] type={}".format(key, type(key)))
+            # print("value=[{}] type={}".format(value, type(value)))
+            # print(str(self._index)[:40])
             self.fields[self._index[key]] = value
         except KeyError:
             raise DataTableKeyError("Key %s does not exist" % str(key))
@@ -245,10 +260,10 @@ class DataTable(object):
 
 class FieldType(object):
     """Contains information about the data type of each field"""
-    TYPE_INT = "N"
-    TYPE_DECIMAL = "N"
-    TYPE_STRING = "C"
-    TYPE_FLOAT = "F"
+    TYPE_INT     = b"N"
+    TYPE_DECIMAL = b"N"
+    TYPE_STRING  = b"C"
+    TYPE_FLOAT   = b"F"
 
     TYPES = [TYPE_INT, TYPE_DECIMAL, TYPE_STRING, TYPE_FLOAT]
 
@@ -264,7 +279,7 @@ class FieldType(object):
         self.name = name
 
         if _type not in FieldType.TYPES:
-            raise FieldTypeError('Unknown field type %s' % _type)
+            raise FieldTypeError('Unknown field type {}'.format(_type))
 
         self.type = _type
         self.length = length
@@ -282,7 +297,7 @@ def dbfToNumpyDataType(fieldType):
     """Accept a field type object and return the name and the type(format)
     of the corresponding numpy data type"""
     # truncate field names to 10
-    if fieldType.name > 10: fieldType.name = fieldType.name[:10]
+    if len(fieldType.name) > 10: fieldType.name = fieldType.name[:10]
     
     if fieldType.type == FieldType.TYPE_INT or \
             fieldType.type == fieldType.TYPE_DECIMAL:
@@ -309,7 +324,14 @@ def convertDbfToNumpyDataTypes(fieldTypes):
         names.append(name)
         formats.append(format)
     return names, formats
-    
+
+
+# xrange() is not in python3; use iter(range())
+if sys.version_info >= (3, 0):
+    def xrange(*args, **kwargs):
+        return iter(range(*args, **kwargs))
+
+
 class DbfDictReader(object):
     """Iterator over the records of a DBF III file
     for each record in the file an OrderedDict is returned 
@@ -327,22 +349,22 @@ class DbfDictReader(object):
 
         # remove the "\0" from the field Names
         for fieldInfo in header:
-            fieldInfo[0] = fieldInfo[0].replace('\0', '')       # eliminate NULs from string   
+            fieldInfo[0] = fieldInfo[0].replace(b'\0', b'')       # eliminate NULs from string   
 
         self.header = tuple([FieldType(*fieldInfo) for fieldInfo in header])
         self.fieldNames = tuple([fType.name for fType in self.header])
         self.recNo = 0
 
         terminator = self.bfstream.read(1)
-        assert terminator == '\r'
+        assert terminator == b'\r'
 
     def __iter__(self):
         return self
 
-    def next(self):
+    def __next__(self):
         
         header = [fType.toTuple() for fType in self.header]
-        header.insert(0, ('DeletionFlag', 'C', 1, 0))
+        header.insert(0, (b'DeletionFlag', b'C', 1, 0))
 
         # read the string as a bunch of characters eg. 2s4s5s 
         fmt = ''.join(['%ds' % fieldinfo[2] for fieldinfo in header])
@@ -352,36 +374,40 @@ class DbfDictReader(object):
             raise StopIteration
 
         fieldValues = unpack(fmt, self.bfstream.read(calcsize(fmt))) # the field values are stores as an array
-        if fieldValues[0] != ' ': # deleted record
+        # print("header={}".format(header))
+        # print("fieldValues={}".format(fieldValues))
+        if fieldValues[0] != b' ': # deleted record
             return {}
 
         finalValues = []
         for (name, typ, size, deci), value in izip(header, fieldValues):
 
-            if name == 'DeletionFlag':
+            if name == b'DeletionFlag':
                 continue
             try:
-                if typ == "N" or typ == "F":
-                    value = value.replace('\0', '').lstrip()
-                    if value == '':
+                if typ == b"N" or typ == b"F":
+                    value = value.replace(b'\0', b'').lstrip()
+                    if value == b'':
                         value = 0
                     elif deci:
-                        value = decimal.Decimal(value)
-                    elif value=='*'*size:
+                        value = decimal.Decimal(value.decode())
+                    elif value==b'*'*size:
                         value = 0 # unknown!!
                     else:
                         value = int(value)
-                elif typ == 'D':
+                elif typ == b'D':
                     y, m, d = int(value[:4]), int(value[4:6]), int(value[6:8])
                     value = datetime.date(y, m, d)
-                elif typ == 'L':
-                    value = (value in 'YyTt' and 'T') or (value in 'NnFf' and 'F') or '?'
+                elif typ == b'L':
+                    value = (value in b'YyTt' and b'T') or (value in b'NnFf' and b'F') or b'?'
             except:
-                print("Exception caught with name %s type %s value %s".format(name, typ, str(value)))
+                print("Exception caught with name {} type {} value {}".format(name, typ, str(value)))
                 raise
             
             finalValues.append(value)
         return OrderedDict(izip(self.fieldNames, finalValues))   
+
+    next = __next__  # Python 2
 
 def dbfTableReader(fileName):
     """Read a dbf table and return a DataTable"""
@@ -406,7 +432,7 @@ def dbfTableReader(fileName):
             dt[index] = tuple(record.values())
             index += 1
     except:
-        print("Failed reading dbf table; index=%d".format(index))
+        print("Failed reading dbf table {}; index={}".format(fileName, index))
         raise
     return dt
 

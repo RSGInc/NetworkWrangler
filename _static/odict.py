@@ -33,7 +33,13 @@ INTP_VER = sys.version_info[:2]
 if INTP_VER < (2, 2):
     raise RuntimeError("Python v.2.2 or later required")
 
-import types, warnings
+import warnings
+
+# SliceType is not in python 3: https://stackoverflow.com/questions/28395625/importerror-cannot-import-name-slicetype
+try:
+    from types import SliceType
+except ImportError:
+    SliceType = slice
 
 class OrderedDict(dict):
     """
@@ -143,7 +149,7 @@ class OrderedDict(dict):
         >>> d
         OrderedDict([(2, 1), (3, 2)])
         """
-        if isinstance(key, types.SliceType):
+        if isinstance(key, SliceType):
             # FIXME: efficiency?
             keys = self._sequence[key]
             for entry in keys:
@@ -355,7 +361,7 @@ class OrderedDict(dict):
         >>> d
         OrderedDict([(9, 8), (1, 2), (2, 3), (3, 4)])
         """
-        if isinstance(key, types.SliceType):
+        if isinstance(key, SliceType):
             if not isinstance(val, OrderedDict):
                 # FIXME: allow a list of tuples?
                 raise TypeError('slice assignment requires an OrderedDict')
@@ -415,7 +421,7 @@ class OrderedDict(dict):
         >>> type(b[2:4])
         <class '__main__.OrderedDict'>
         """
-        if isinstance(key, types.SliceType):
+        if isinstance(key, SliceType):
             # FIXME: does this raise the error we want?
             keys = self._sequence[key]
             # FIXME: efficiency?
@@ -899,7 +905,7 @@ class Keys(object):
         You can only do slice assignment if the new set of keys is a reordering
         of the original set.
         """
-        if isinstance(index, types.SliceType):
+        if isinstance(index, SliceType):
             # FIXME: efficiency?
             # check length is the same
             indexes = range(len(self._main._sequence))[index]
@@ -979,7 +985,7 @@ class Items(object):
 
     def __getitem__(self, index):
         """Fetch the item at position i."""
-        if isinstance(index, types.SliceType):
+        if isinstance(index, SliceType):
             # fetching a slice returns an OrderedDict
             return self._main[index].items()
         key = self._main._sequence[index]
@@ -987,7 +993,7 @@ class Items(object):
 
     def __setitem__(self, index, item):
         """Set item at position i to item."""
-        if isinstance(index, types.SliceType):
+        if isinstance(index, SliceType):
             # NOTE: item must be an iterable (list of tuples)
             self._main[index] = OrderedDict(item)
         else:
@@ -1004,7 +1010,7 @@ class Items(object):
     def __delitem__(self, i):
         """Delete the item at position i."""
         key = self._main._sequence[i]
-        if isinstance(i, types.SliceType):
+        if isinstance(i, SliceType):
             for k in key:
                 # FIXME: efficiency?
                 del self._main[k]
@@ -1089,7 +1095,7 @@ class Values(object):
 
     def __getitem__(self, index):
         """Fetch the value at position i."""
-        if isinstance(index, types.SliceType):
+        if isinstance(index, SliceType):
             return [self._main[key] for key in self._main._sequence[index]]
         else:
             return self._main[self._main._sequence[index]]
@@ -1101,7 +1107,7 @@ class Values(object):
         You can only do slice assignment to values if you supply a sequence of
         equal length to the slice you are replacing.
         """
-        if isinstance(index, types.SliceType):
+        if isinstance(index, SliceType):
             keys = self._main._sequence[index]
             if len(keys) != len(value):
                 raise ValueError('attempt to assign sequence of size %s '
