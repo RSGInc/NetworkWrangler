@@ -395,6 +395,37 @@ class TransitNetwork(Network):
             del self.links[del_idx]
         
         return len(del_idxs)
+
+    def numPNRLinks(self):
+        """
+        Returns number of pnr links.
+        """
+        num_pnr_links = 0
+        for pnr_file in self.pnrs.keys():
+            for pnr_link in self.pnrs[pnr_file]:
+                if not isinstance(pnr_link, PNRLink): continue
+                num_pnr_links += 1
+        return num_pnr_links
+
+
+    def deletePNRLinkForId(self, pnr_id):
+        """
+        Delete the PNRLink with the given id.
+        """
+        for pnr_file in self.pnrs.keys():
+            del_idxs = []
+            # find pnr links to delete
+            for idx in range(len(self.pnrs[pnr_file])-1,-1,-1):  # go backwards
+                if not isinstance(self.pnrs[pnr_file][idx], PNRLink): continue
+                if self.pnrs[pnr_file][idx].id == pnr_id:
+                    del_idxs.append(idx)
+
+            # delete them
+            for del_idx in del_idxs:
+                WranglerLogger.debug("Removing PNR link {} from {}".format(self.pnrs[pnr_file][del_idx], pnr_file))
+                del self.pnrs[pnr_file][del_idx]
+
+
     
     def deleteAccessXferLinkForNode(self, nodenum, access_links=True, xfer_links=True):
         """
