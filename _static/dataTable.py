@@ -395,6 +395,8 @@ class DbfDictReader(object):
                         value = 0 # unknown!!
                     else:
                         value = int(value)
+                elif typ == b'C':
+                    value = value.rstrip()  # strip white space from right
                 elif typ == b'D':
                     y, m, d = int(value[:4]), int(value[4:6]), int(value[6:8])
                     value = datetime.date(y, m, d)
