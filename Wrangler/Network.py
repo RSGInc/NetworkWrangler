@@ -135,20 +135,30 @@ class Network(object):
             sys.path.append(os.path.join(os.getcwd(), parentdir))
 
         try:
-            s_projectname = None
             evalstr = "import %s" % projectname
             exec(evalstr)
             WranglerLogger.debug("Successfully imported {}".format(projectname))
         except Exception as e:
-            s_projectname = "s"+str(projectname)
-            evalstr = "%s = __import__('%s')" % (s_projectname, projectname)
-            exec(evalstr)
-            WranglerLogger.debug("Successfully imported {}".format(s_projectname))
+            WranglerLogger.fatal("Failed to import {}:".format(projectname))
+            WranglerLogger.fatal(e)
+            raise ImportError
 
-        evalstr = "dir(%s)" % (projectname if not s_projectname else s_projectname)
+        # note: I removed the bit here that feel back to the following code when there's an exception:
+        #
+        # s_projectname = "s"+str(projectname)
+        # evalstr = "%s = __import__('%s')" % (s_projectname, projectname)
+        # exec(evalstr)
+        # WranglerLogger.debug("Successfully imported {}".format(s_projectname))
+        #
+        # The problem being that it would successfully import a bad project without giving any information
+        # about the problem...  For now, a failed import is a hard fail.
+        # I'm not sure about the use case with the  __import__ call.
+
+        evalstr = "dir(%s)" % projectname
         projectdir = eval(evalstr)
+        # WranglerLogger.debug("projectdir = {}".format(projectdir))
 
-        attr_value = (eval("%s.%s()" % ((projectname if not s_projectname else s_projectname),attr_name)))
+        attr_value = (eval("%s.%s()" % (projectname ,attr_name)))
         # todo: if try champVersion if modelType is CHAMP and modelVersion is sought
         return attr_value
 
@@ -187,6 +197,9 @@ class Network(object):
             try:
                 project_model_type = self.getAttr("modelType", parentdir=parentdir, networkdir=networkdir, gitdir=gitdir, projectsubdir=projectsubdir)
                 WranglerLogger.debug("Found project_model_type {}".format(project_model_type))
+            except ImportError as ie:
+                # consider this fatal
+                sys.exit(2)
             except:
                 WranglerLogger.debug("Failed to find project model type. Exception: {}".format(sys.exc_info()[0]))
                 pass
