@@ -24,11 +24,8 @@ OUT_DIR = SCENARIO + "_network_{}"  # YEAR
 NETWORK_PROJECTS = collections.OrderedDict([
     (2015, {'hwy':['PROJ_attributes'], 'trn':[]}),  # adds PROJ attributes to NODE and LINK
     (2020, {
-        'hwy':[#'SMART',
-               #'ALA050014_SR84_Livermore',
-               #'CC_170002_680SB_ExpressLane'
-               ],
-        'trn':[]
+        'hwy':[],
+        'trn':['ALA050015_BART_to_WarmSprings', 'SCL110005_BART_to_Berryessa']
     }),
     (2025, {
         'hwy':[], 'trn':[]

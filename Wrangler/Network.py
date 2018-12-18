@@ -72,8 +72,8 @@ class Network(object):
         See :py:meth:`Wrangler.Network.applyProject` for argument details.
         """
         (parentdir, networkdir, gitdir, projectsubdir) = self.getClonedProjectArgs(networkdir, projectsubdir, projtype, tempdir)
-        prereqs     = self.getAttr('prereqs',parentdir, networkdir, gitdir, projectsubdir)
-        coreqs      = self.getAttr('coreqs',parentdir, networkdir, gitdir, projectsubdir)
+        prereqs     = self.getAttr('prereqs',  parentdir, networkdir, gitdir, projectsubdir)
+        coreqs      = self.getAttr('coreqs',   parentdir, networkdir, gitdir, projectsubdir)
         conflicts   = self.getAttr('conflicts',parentdir, networkdir, gitdir, projectsubdir)
         return (prereqs, coreqs, conflicts)
 

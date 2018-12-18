@@ -11,7 +11,7 @@ TAG = "HEAD"
 # "hwy" and "trn" subdirectories will be created here.
 OUT_DIR = "network_{}"  # YEAR
 
-# MANDATORY.  Should be a dictionary with keys "hwy", "muni", "rail", "bus"
+# MANDATORY.  Should be a dictionary with keys "hwy", "trn"
 # to a list of projects.  A project can either be a simple string, or it can be
 # a dictionary with with keys 'name', 'tag' (optional), and 'kwargs' (optional)
 # to specify a special tag or special keyword args for the projects apply() call.
@@ -20,14 +20,13 @@ OUT_DIR = "network_{}"  # YEAR
 NETWORK_PROJECTS = collections.OrderedDict([
     (2015, {'hwy':['PROJ_attributes'], 'trn':[]}),  # adds PROJ attributes to NODE and LINK
     (2020, {
-        'hwy':['MRN150009_San_Rafael_Bridge_Improvements',
-               'SOL110001_SOL110002_I80_HOT_Lanes',
-               'ALA170006_I880_HOTLanes_Dixon_Hegenberger',
-               'ALA130034_I680_NB_HOTLane',
-               'CC_050028_I680_SB_HOV_Completion',
+        'hwy':['EXP_SOL110001_SOL110002_I80_HOT_Lanes',
+               'EXP_ALA170006_I880_HOTLanes_Dixon_Hegenberger',
+               'EXP_ALA130034_I680_NB_HOTLane',
+               'EXP_CC_050028_I680_SB_HOV_Completion',
+               'EXP_SM150017_US101_HOTLanes',
                'CC_130001_BaileyRd_SR4',
                'CC_130046_I680_SR4_Int_Rec',
-               'SM150017_US101_HOTLanes',
                'SCL130001_237_101_MAT_Int_Mod',
                'REG090003_SCLARA_FIP',
                'ALA130005_Dougherty_road_widening',
@@ -41,17 +40,19 @@ NETWORK_PROJECTS = collections.OrderedDict([
                'CC_090019_Bollinger_Canyon_Widening',
                'CC_130006_Concord_BART_road_diets',
                'CC_170001_SanRamonValleyBlvd_Lane_Addition',
+               'MRN150009_San_Rafael_Bridge_Improvements',
                'SF_130011_2ndSt_Road_Diet'],
-        'trn':[]
+        'trn':['ALA050015_BART_to_WarmSprings',
+               'SCL110005_BART_to_Berryessa'],
     }),
     (2025, {
         'hwy':['ALA150001_I680_SR84_Int_Wid',
-               'CC_170002_I680_NorthernSegment_SB_HOTLane',
+               'EXP_CC_170002_I680_NorthernSegment_SB_HOTLane',
                'ALA150043_Claremont_road_diet'],
-        'trn':[]
+        'trn':['BRT030001_BART_to_SanJose']
     }),
     (2030, {
-        'hwy':['ALA170009_I680_HOT_Alcosta_SR84'], 'trn':[]
+        'hwy':['EXP_ALA170009_I680_HOT_Alcosta_SR84'], 'trn':[]
     }),
     (2035, {
         'hwy':[], 'trn':[]
