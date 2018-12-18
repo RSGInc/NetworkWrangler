@@ -1,4 +1,4 @@
-import argparse,collections,datetime,os,pandas,sys,time
+import argparse,collections,datetime,os,pandas,shutil,sys,time
 import Wrangler
 
 # Based on NetworkWrangler\scripts\build_network.py
@@ -70,6 +70,7 @@ TEST_PROJECTS = None
 
 TRN_MODES = ['trn']
 NET_MODES = ['hwy'] + TRN_MODES
+THIS_FILE = os.path.realpath(__file__)
 
 ###############################################################################
 
@@ -438,6 +439,13 @@ if __name__ == '__main__':
     # Wrangler.WranglerLogger.debug("NETWORK_PROJECTS=%s NET_MODES=%s" % (str(NETWORK_PROJECTS), str(NET_MODES)))
     preCheckRequirementsForAllProjects(networks)
 
+    # create the subdir for SET_CAPCLASS with set_capclass.job as apply.s
+    SET_CAPCLASS     = "set_capclass"
+    SET_CAPCLASS_DIR = os.path.join(TEMP_SUBDIR, SET_CAPCLASS)
+    os.mkdir(SET_CAPCLASS_DIR)
+    source_file      = os.path.join(os.path.dirname(THIS_FILE), "set_capclass.job")
+    shutil.copyfile( source_file, os.path.join(SET_CAPCLASS_DIR, "apply.s"))
+
     # Network Loop #2: Now that everything has been checked, build the networks.
     for YEAR in NETWORK_PROJECTS.keys():
         projects_for_year = NETWORK_PROJECTS[YEAR]
@@ -460,6 +468,11 @@ if __name__ == '__main__':
 
                 applied_SHA1 = networks[netmode].applyProject(parentdir, networkdir, gitdir, projectsubdir)
                 appliedcount += 1
+
+            # apply set_capclass before writing any hwy network
+            if netmode == "hwy" and appliedcount > 0:
+                applied_SHA1 = networks[netmode].applyProject(parentdir=TEMP_SUBDIR, networkdir=SET_CAPCLASS,
+                                                              gitdir=os.path.join(TEMP_SUBDIR, SET_CAPCLASS))
 
         if appliedcount == 0:
             Wrangler.WranglerLogger.info("No applied projects for this year -- skipping output")
