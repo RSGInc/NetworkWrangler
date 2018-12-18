@@ -307,15 +307,16 @@ def preCheckRequirementsForAllProjects(networks):
 
     # Check prereqs
     (PRE_REQS, allPrereqsFound) = checkRequirements(PRE_REQS, NETWORK_PROJECTS, req_type='prereq')
-    writeRequirements(PRE_REQS, NETWORK_PROJECTS, req_type='prereq')
-    if allPrereqsFound:
-        Wrangler.WranglerLogger.debug('All PRE-REQUISITES were found. Are the PRE-REQUISITES matches correct? (y/n)')
-    else:
-        Wrangler.WranglerLogger.debug('!!!WARNING!!! Some PRE-REQUISITES were not found or ordered correctly.  Continue anyway? (y/n)')
-    response = raw_input("")
-    Wrangler.WranglerLogger.debug("  response = [%s]" % response)
-    if response.strip().lower() not in ["y", "yes"]:
-        sys.exit(2)
+    if len(PRE_REQS['trn'])>0 or len(PRE_REQS['hwy'])>0:
+        writeRequirements(PRE_REQS, NETWORK_PROJECTS, req_type='prereq')
+        if allPrereqsFound:
+            Wrangler.WranglerLogger.debug('All PRE-REQUISITES were found. Are the PRE-REQUISITES matches correct? (y/n)')
+        else:
+            Wrangler.WranglerLogger.debug('!!!WARNING!!! Some PRE-REQUISITES were not found or ordered correctly.  Continue anyway? (y/n)')
+        response = raw_input("")
+        Wrangler.WranglerLogger.debug("  response = [%s]" % response)
+        if response.strip().lower() not in ["y", "yes"]:
+            sys.exit(2)
 
     # Check coreqs
     (CO_REQS, allCoreqsFound) = checkRequirements(CO_REQS, NETWORK_PROJECTS, req_type='coreq')
