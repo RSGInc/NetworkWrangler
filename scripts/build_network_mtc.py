@@ -410,7 +410,7 @@ if __name__ == '__main__':
 
     networks = {
         'hwy' :Wrangler.HighwayNetwork(modelType=args.model_type, modelVersion=1.0,
-                                       basenetworkpath=os.path.join(PIVOT_DIR,"hwy") if PIVOT_DIR else "Roads2010",
+                                       basenetworkpath=os.path.join(PIVOT_DIR,"hwy"),
                                        networkBaseDir=NETWORK_BASE_DIR,
                                        networkProjectSubdir=NETWORK_PROJECT_SUBDIR,
                                        networkSeedSubdir=NETWORK_SEED_SUBDIR,
@@ -421,7 +421,7 @@ if __name__ == '__main__':
                                        networkName="hwy",
                                        tierNetworkName=HWY_NET_NAME),
         'trn':Wrangler.TransitNetwork( modelType=args.model_type, modelVersion=1.0,
-                                       basenetworkpath=os.path.join(PIVOT_DIR,"trn") if PIVOT_DIR else None,
+                                       basenetworkpath=os.path.join(PIVOT_DIR,"trn"),
                                        networkBaseDir=NETWORK_BASE_DIR,
                                        networkProjectSubdir=NETWORK_PROJECT_SUBDIR,
                                        networkSeedSubdir=NETWORK_SEED_SUBDIR,

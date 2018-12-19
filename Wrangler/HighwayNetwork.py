@@ -75,7 +75,7 @@ class HighwayNetwork(Network):
         tierNetwork = os.path.join(parentdir,networkdir,tierNetworkName if tierNetworkName else "FREEFLOW.net")
         WranglerLogger.debug("Using tier network %s" % tierNetwork)
         shutil.copyfile(tierNetwork,"FREEFLOW.BLD")
-        for filename in ["turnsam.pen",         "turnspm.pen",          "turnsop.pen"]:
+        for filename in ["turnsam.pen",         "turnspm.pen",          "turnsop.pen",    "tolls.csv"]:
             shutil.copyfile(os.path.join(parentdir,networkdir,filename), filename)
 
         # done
@@ -98,15 +98,17 @@ class HighwayNetwork(Network):
             return
         
         if projectsubdir:
-            applyDir = os.path.join(parentdir, networkdir, projectsubdir)
-            applyScript = "apply.s"
-            descfilename = os.path.join(parentdir, networkdir, projectsubdir,"desc.txt")
+            applyDir      = os.path.join(parentdir, networkdir, projectsubdir)
+            applyScript   = "apply.s"
+            descfilename  = os.path.join(parentdir, networkdir, projectsubdir, "desc.txt")
             turnsfilename = os.path.join(parentdir, networkdir, projectsubdir, "turns.pen")
+            tollsfilename = os.path.join(parentdir, networkdir, projectsubdir, "tolls.csv")
         else:
-            applyDir = os.path.join(parentdir, networkdir)
-            applyScript = "apply.s"
-            descfilename = os.path.join(parentdir, networkdir,'desc.txt')
+            applyDir      = os.path.join(parentdir, networkdir)
+            applyScript   = "apply.s"
+            descfilename  = os.path.join(parentdir, networkdir, "desc.txt")
             turnsfilename = os.path.join(parentdir, networkdir, "turns.pen")
+            tollsfilename = os.path.join(parentdir, networkdir, "tolls.csv")
 
         # read the description
         desc = None
@@ -153,6 +155,10 @@ class HighwayNetwork(Network):
                 turnfile.write(newturnpens)
                 turnfile.close()
                 WranglerLogger.debug("Appending turn penalties from "+turnsfilename)
+
+        # merge tolls.csv
+        if os.path.exists(tollsfilename):
+            raise NotImplementedError("Merging tolls.csv from a project is not implemented yet")
 
         WranglerLogger.debug("")
         WranglerLogger.debug("")
@@ -299,7 +305,7 @@ class HighwayNetwork(Network):
         WranglerLogger.info("Writing into %s\\%s" % (path, name))
         WranglerLogger.info("")
 
-        for filename in ["turnsam.pen",         "turnspm.pen",          "turnsop.pen"]:
+        for filename in ["turnsam.pen",         "turnspm.pen",          "turnsop.pen", "tolls.csv"]:
             shutil.copyfile(filename, os.path.join(path, filename))
             
         if not suppressValidation: self.validateTurnPens(netfile,'turnPenValidations.csv')
