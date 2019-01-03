@@ -36,6 +36,7 @@ NETWORK_PROJECTS = collections.OrderedDict([
                'ALA130026_Shattuck_Complete_Streets',
                'ALA170049_Central_AVE_Safety_Improvements',
                'ALA170052_Fruitvale_Ave_ped_improvements',
+               'ALA150004_EastBay_BRT',
                'CC_070011_Brentwood_Blvd_Widening',
                'CC_070075_Kirker_Pass_Truck_Lane',
                'CC_090019_Bollinger_Canyon_Widening',
@@ -43,6 +44,7 @@ NETWORK_PROJECTS = collections.OrderedDict([
                'CC_170001_SanRamonValleyBlvd_Lane_Addition',
                'MRN150009_San_Rafael_Bridge_Improvements',
                'SF_130011_2ndSt_Road_Diet',
+               'SOL070020_I80_I680_SR12_Int_1_2A',
                'SOL110005_Jepson_Van_to_Com',
                'SON070004_101_MarinSonNarrows_Phase1'],
         'trn':['ALA050015_BART_to_WarmSprings',
@@ -56,8 +58,12 @@ NETWORK_PROJECTS = collections.OrderedDict([
         'hwy':['ALA150001_I680_SR84_Int_Wid',
                'EXP_CC_170002_I680_NorthernSegment_SB_HOTLane',
                'ALA150043_Claremont_road_diet',
-               'MRN050034_101_MarinSonNarrows_Phase2'],
-        'trn':['BRT030001_BART_to_SanJose']
+               'MRN050034_101_MarinSonNarrows_Phase2',
+               'SON070004_101_MarinSonNarrows_Phase2',
+               'SOL070020_I80_I680_SR12_Int_2B_7',
+               'SOL110006_Jepson_1B_1C'],
+        'trn':['BRT030001_BART_to_SanJose',
+               'SON090002_SMART_to_Windsor']
     }),
     (2030, {
         'hwy':['EXP_ALA170009_I680_HOT_Alcosta_SR84',
