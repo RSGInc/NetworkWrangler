@@ -27,6 +27,7 @@ NETWORK_PROJECTS = collections.OrderedDict([
                'EXP_SM150017_US101_HOTLanes',
                'CC_130001_BaileyRd_SR4',
                'CC_130046_I680_SR4_Int_Rec',
+               'CC_070035_I80_SPDamRd_Int_Phase1',
                'SCL130001_237_101_MAT_Int_Mod',
                'REG090003_SCLARA_FIP',
                'ALA130005_Dougherty_road_widening',
@@ -43,6 +44,7 @@ NETWORK_PROJECTS = collections.OrderedDict([
                'MRN150009_San_Rafael_Bridge_Improvements',
                'SF_130011_2ndSt_Road_Diet'],
         'trn':['ALA050015_BART_to_WarmSprings',
+               'ACGo',
                'SCL110005_BART_to_Berryessa',
                'SON090002_SMART'],
     }),
@@ -83,21 +85,21 @@ if SCENARIO=="CleanAndGreen":
     pass
 elif SCENARIO=="RisingTides":
     # Sea Level Rise in 2030
-    # NETWORK_PROJECTS[2030]['hwy'].append("SeaLevelRise_1foot")
-    # NETWORK_PROJECTS[2030]['trn'].append("SeaLevelRise_1foot")
+    NETWORK_PROJECTS[2030]['hwy'].append("SeaLevelRise_1foot")
+    NETWORK_PROJECTS[2030]['trn'].append("SeaLevelRise_1foot")
     if PROJECT == "FU1":
         # Haywired Earthquake in 2035
         NETWORK_PROJECTS[2035]['hwy'].append("Earthquake")
         NETWORK_PROJECTS[2035]['trn'].append("Earthquake")
     # Sea Level Rise in 2040
-    # NETWORK_PROJECTS[2040]['hwy'].append("SeaLevelRise_2feet")
-    # NETWORK_PROJECTS[2040]['trn'].append("SeaLevelRise_2feet")
+    NETWORK_PROJECTS[2040]['hwy'].append("SeaLevelRise_2feet")
+    NETWORK_PROJECTS[2040]['trn'].append("SeaLevelRise_2feet")
     # Sea Level Rise in 2050
-    # NETWORK_PROJECTS[2050]['hwy'].append("SeaLevelRise_3feet")
-    # NETWORK_PROJECTS[2050]['trn'].append("SeaLevelRise_3feet")
+    NETWORK_PROJECTS[2050]['hwy'].append("SeaLevelRise_3feet")
+    NETWORK_PROJECTS[2050]['trn'].append("SeaLevelRise_3feet")
 elif SCENARIO=="BackToTheFuture":
-    # NETWORK_PROJECTS[2035]['hwy'].append("SeaLevelRise_1foot")
-    # NETWORK_PROJECTS[2035]['trn'].append("SeaLevelRise_1foot")
+    NETWORK_PROJECTS[2035]['hwy'].append("SeaLevelRise_1foot")
+    NETWORK_PROJECTS[2035]['trn'].append("SeaLevelRise_1foot")
     # NOTE: Earthquake is assumed in Round1 2035 but since the effect doesn't stay; this is handled in build_network_mtc_futures.py
     if PROJECT == "FU1":
         # Haywired Earthquake in 2035
