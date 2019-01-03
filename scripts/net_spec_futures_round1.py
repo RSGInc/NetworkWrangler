@@ -42,20 +42,27 @@ NETWORK_PROJECTS = collections.OrderedDict([
                'CC_130006_Concord_BART_road_diets',
                'CC_170001_SanRamonValleyBlvd_Lane_Addition',
                'MRN150009_San_Rafael_Bridge_Improvements',
-               'SF_130011_2ndSt_Road_Diet'],
+               'SF_130011_2ndSt_Road_Diet',
+               'SOL110005_Jepson_Van_to_Com',
+               'SON070004_101_MarinSonNarrows_Phase1'],
         'trn':['ALA050015_BART_to_WarmSprings',
                'ACGo',
                'SCL110005_BART_to_Berryessa',
-               'SON090002_SMART'],
+               'SOL030002_FairfieldVacaville_Stn',
+               'SON090002_SMART',
+               'SON090002_SMART_to_Larkspur'],
     }),
     (2025, {
         'hwy':['ALA150001_I680_SR84_Int_Wid',
                'EXP_CC_170002_I680_NorthernSegment_SB_HOTLane',
-               'ALA150043_Claremont_road_diet'],
+               'ALA150043_Claremont_road_diet',
+               'MRN050034_101_MarinSonNarrows_Phase2'],
         'trn':['BRT030001_BART_to_SanJose']
     }),
     (2030, {
-        'hwy':['EXP_ALA170009_I680_HOT_Alcosta_SR84'], 'trn':[]
+        'hwy':['EXP_ALA170009_I680_HOT_Alcosta_SR84',
+               'MRN050034_101_MarinSonNarrows_Phase2Post_2030'], 
+        'trn':[]
     }),
     (2035, {
         'hwy':[], 'trn':[]
