@@ -31,7 +31,7 @@ NETWORK_PROJECTS = collections.OrderedDict([
                'REG090003_SCLARA_FIP',
                'ALA130005_Dougherty_road_widening',
                'ALA130006_Dublin_Blvd_widening',
-               'ALA130014_7th_St_road_diet',
+               # 'ALA130014_7th_St_road_diet',
                'ALA130026_Shattuck_Complete_Streets',
                'ALA170049_Central_AVE_Safety_Improvements',
                'ALA170052_Fruitvale_Ave_ped_improvements',
@@ -43,7 +43,8 @@ NETWORK_PROJECTS = collections.OrderedDict([
                'MRN150009_San_Rafael_Bridge_Improvements',
                'SF_130011_2ndSt_Road_Diet'],
         'trn':['ALA050015_BART_to_WarmSprings',
-               'SCL110005_BART_to_Berryessa'],
+               'SCL110005_BART_to_Berryessa',
+               'SON090002_SMART'],
     }),
     (2025, {
         'hwy':['ALA150001_I680_SR84_Int_Wid',
@@ -77,8 +78,8 @@ if SCENARIO=="CleanAndGreen":
         NETWORK_PROJECTS[2035]['hwy'].append("Earthquake")
         NETWORK_PROJECTS[2035]['trn'].append("Earthquake")
     # Sea Level Rise in 2045
-    # NETWORK_PROJECTS[2045]['hwy'].append("SeaLevelRise_1foot")
-    # NETWORK_PROJECTS[2045]['trn'].append("SeaLevelRise_1foot")
+    NETWORK_PROJECTS[2045]['hwy'].append("SeaLevelRise_1foot")
+    NETWORK_PROJECTS[2045]['trn'].append("SeaLevelRise_1foot")
     pass
 elif SCENARIO=="RisingTides":
     # Sea Level Rise in 2030
