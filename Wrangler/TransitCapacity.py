@@ -99,7 +99,7 @@ class TransitCapacity:
     def readTransitLineToVehicle(self, directory=".", filename="transitLineToVehicle.csv"):
         """
         Populate self.linenameToAttributes from *filename*:
-           linename -> [ system, full name, AM vehicletype, PM vehiceltype, OP vehicle type ]
+           linename -> [ system, full name, AM vehicletype, PM vehicletype, OP vehicle type ]
            e.g. "MUNTI" -> [ "SF MUNI", "T - THIRD STREET", "LRV2", "LRV2", "LRV2" ]
         Also self.linenameToSimple, but it's currently unused...
            linename -> [ stripped, simplename ]
@@ -215,6 +215,8 @@ class TransitCapacity:
         Self explanatory
         """
         self.vehicleTypeToCapacity[newVehicleType] = newVehicleCapacity
+        if newVehicleType not in self.vehicleTypeToDelays:
+            self.vehicleTypeToDelays[newVehicleType] = [0, 0, 0, 0]
 
     def addLinenameFromTemplate(self, newLine, templateLine):
         """
