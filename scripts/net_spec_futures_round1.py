@@ -20,12 +20,11 @@ OUT_DIR = "network_{}"  # YEAR
 NETWORK_PROJECTS = collections.OrderedDict([
     (2015, {'hwy':['PROJ_attributes'], 'trn':[]}),  # adds PROJ attributes to NODE and LINK
     (2020, {
-        'hwy':['EXP_SOL110001_SOL110002_I80_HOT_Lanes',
-               'EXP_ALA170006_I880_HOTLanes_Dixon_Hegenberger',
+        'hwy':[#'EXP_SOL110001_SOL110002_I80_HOT_Lanes',
+               #'EXP_ALA170006_I880_HOTLanes_Dixon_Hegenberger',
                'EXP_ALA130034_I680_NB_HOTLane',
                'EXP_CC_050028_I680_SB_HOV_Completion',
                'EXP_SM150017_US101_HOTLanes',
-
                'SCL130001_237_101_MAT_Int_Mod',
                'REG090003_SCLARA_FIP',
                'ALA130005_Dougherty_road_widening',
@@ -45,6 +44,8 @@ NETWORK_PROJECTS = collections.OrderedDict([
                'CC_170001_SanRamonValleyBlvd_Lane_Addition',
                'CC_170061_Bus_On_Shoulder_680BRT',
                'MRN150009_San_Rafael_Bridge_Improvements',
+               'SF_070027_Yerba_Buena_Ramp_Imp',
+               'SF_070005_VanNess_BRT',
                'SF_130011_2ndSt_Road_Diet',
                'SOL070020_I80_I680_SR12_Int_1_2A',
                'SOL110005_Jepson_Van_to_Com',
@@ -53,6 +54,7 @@ NETWORK_PROJECTS = collections.OrderedDict([
                'ACGo',
                'CC_050025_EBart_to_Antioch',
                'SCL110005_BART_to_Berryessa',
+               'SF_010015_Transbay_Terminal',
                'SF_010037_Muni_Central_Subway',
                'SOL030002_FairfieldVacaville_Stn',
                'SON090002_SMART',
@@ -60,9 +62,10 @@ NETWORK_PROJECTS = collections.OrderedDict([
     }),
     (2025, {
         'hwy':['ALA150001_I680_SR84_Int_Wid',
-               'EXP_CC_170002_I680_NorthernSegment_SB_HOTLane',
+               #'EXP_CC_170002_I680_NorthernSegment_SB_HOTLane',
                'ALA150043_Claremont_road_diet',
                'CC_070009_Slatten_Ranch_Rd_Extension',
+               'SF_070004_Geary_BRT_Phase1',
                'MRN050034_101_MarinSonNarrows_Phase2',
                'SON070004_101_MarinSonNarrows_Phase2',
                'SOL070020_I80_I680_SR12_Int_2B_7',
@@ -71,7 +74,7 @@ NETWORK_PROJECTS = collections.OrderedDict([
                'SON090002_SMART_to_Windsor']
     }),
     (2030, {
-        'hwy':['EXP_ALA170009_I680_HOT_Alcosta_SR84',
+        'hwy':[#'EXP_ALA170009_I680_HOT_Alcosta_SR84',
                'MRN050034_101_MarinSonNarrows_Phase2Post_2030'], 
         'trn':[]
     }),
