@@ -61,6 +61,7 @@ NETWORK_PROJECTS = collections.OrderedDict([
                'SF_010015_Transbay_Terminal',
                'SF_010037_Muni_Central_Subway',
                'SF_070027_Yerba_Buena_Ramp_Imp',
+               'SOL070020_I80_I680_SR12_Int_1_2A',
                'SOL030002_FairfieldVacaville_Stn',
                'SON090002_SMART',
                'SON090002_SMART_to_Larkspur'],
