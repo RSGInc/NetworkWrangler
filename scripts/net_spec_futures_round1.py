@@ -24,7 +24,7 @@ NETWORK_PROJECTS = collections.OrderedDict([
                #'EXP_ALA170006_I880_HOTLanes_Dixon_Hegenberger',
                #'EXP_ALA130034_I680_NB_HOTLane',
                #'EXP_CC_050028_I680_SB_HOV_Completion',
-               'EXP_SM150017_US101_HOTLanes',
+               #'EXP_SM150017_US101_HOTLanes',
                'SCL130001_237_101_MAT_Int_Mod',
                'SCL050009_VTA_Eastridge_Extension',
                'REG090003_SCLARA_FIP',
@@ -57,8 +57,10 @@ NETWORK_PROJECTS = collections.OrderedDict([
                'CC_050025_EBart_to_Antioch',
                'SCL050009_VTA_Eastridge_Extension',
                'SCL110005_BART_to_Berryessa',
+               'SCL130001_237_101_MAT_Int_Mod',
                'SF_010015_Transbay_Terminal',
                'SF_010037_Muni_Central_Subway',
+               'SF_070027_Yerba_Buena_Ramp_Imp',
                'SOL030002_FairfieldVacaville_Stn',
                'SON090002_SMART',
                'SON090002_SMART_to_Larkspur'],
@@ -74,6 +76,7 @@ NETWORK_PROJECTS = collections.OrderedDict([
                'SOL070020_I80_I680_SR12_Int_2B_7',
                'SOL110006_Jepson_1B_1C'],
         'trn':['BRT030001_BART_to_SanJose',
+               'SOL070020_I80_I680_SR12_Int_2B_7',
                'SON090002_SMART_to_Windsor']
     }),
     (2030, {
