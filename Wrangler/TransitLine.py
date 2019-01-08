@@ -466,7 +466,12 @@ class TransitLine(object):
             Newsection can be an array of numbers; this will make nodes.
             preserveStopStatus means if node1 is a stop, make the replacement first node a stop, ditto for node2
         """
-        WranglerLogger.debug("replacing segment " + str(node1) + " "+str(node2)+" with "+str(newsection)+" for "+self.name)
+        # Make a list of ints since newsection might be nodes
+        new_section_ints = copy.deepcopy(newsection)
+        for i in range(len(new_section_ints)):
+            if isinstance(new_section_ints[i],Node): new_section_ints[i] = new_section_ints[i].num
+
+        WranglerLogger.debug("replacing segment " + str(node1) + " "+str(node2)+" with "+str(new_section_ints)+" for "+self.name)
         try:
             ind1 = self.n.index(node1)
             stop1 = True
