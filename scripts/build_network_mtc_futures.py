@@ -447,7 +447,7 @@ if __name__ == '__main__':
     # create the subdir for SET_CAPCLASS with set_capclass.job as apply.s
     SET_CAPCLASS     = "set_capclass"
     SET_CAPCLASS_DIR = os.path.join(TEMP_SUBDIR, SET_CAPCLASS)
-    os.mkdir(SET_CAPCLASS_DIR)
+    os.makedirs(SET_CAPCLASS_DIR)
     source_file      = os.path.join(os.path.dirname(THIS_FILE), "set_capclass.job")
     shutil.copyfile( source_file, os.path.join(SET_CAPCLASS_DIR, "apply.s"))
 
@@ -518,8 +518,8 @@ if __name__ == '__main__':
                               name="transitLines",
                               writeEmptyFiles = False,
                               suppressQuery = True if BUILD_MODE=="test" else False,
-                              suppressValidation = True,  # until validation is updated for MTC networks
-                              cubeNetFileForValidation = os.path.join(hwypath, HWY_NET_NAME))
+                              suppressValidation = False,
+                              cubeNetFileForValidation = os.path.join(os.path.abspath(hwypath), HWY_NET_NAME))
 
 
         # Write the transit capacity configuration
