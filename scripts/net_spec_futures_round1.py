@@ -20,11 +20,11 @@ OUT_DIR = "network_{}"  # YEAR
 NETWORK_PROJECTS = collections.OrderedDict([
     (2015, {'hwy':['PROJ_attributes'], 'trn':[]}),  # adds PROJ attributes to NODE and LINK
     (2020, {
-        'hwy':[#'EXP_SOL110001_SOL110002_I80_HOT_Lanes',
-               #'EXP_ALA170006_I880_HOTLanes_Dixon_Hegenberger',
-               #'EXP_ALA130034_I680_NB_HOTLane',
-               #'EXP_CC_050028_I680_SB_HOV_Completion',
-               #'EXP_SM150017_US101_HOTLanes',
+        'hwy':['EXP_237B',
+               'EXP_580C',
+               'EXP_680D',
+               'EXP_680F',
+               'EXP_880AB',
                'SCL130001_237_101_MAT_Int_Mod',
                'SCL050009_VTA_Eastridge_Extension',
                'REG090003_SCLARA_FIP',
@@ -67,8 +67,12 @@ NETWORK_PROJECTS = collections.OrderedDict([
                'SON090002_SMART_to_Larkspur'],
     }),
     (2025, {
-        'hwy':['ALA150001_I680_SR84_Int_Wid',
-               #'EXP_CC_170002_I680_NorthernSegment_SB_HOTLane',
+        'hwy':['EXP_CC_050028_I680_SB_HOV_Completion',
+               'EXP_80A',
+               'EXP_101B',
+               'EXP_680C',
+               'EXP_680C2',
+               'ALA150001_I680_SR84_Int_Wid',
                'ALA150043_Claremont_road_diet',
                'CC_070009_Slatten_Ranch_Rd_Extension',
                'SF_070004_Geary_BRT_Phase1',
@@ -77,6 +81,7 @@ NETWORK_PROJECTS = collections.OrderedDict([
                'SOL070020_I80_I680_SR12_Int_2B_7',
                'SOL110006_Jepson_1B_1C'],
         'trn':['BRT030001_BART_to_SanJose',
+               'SF_010028_Caltrain_Modernization',
                'SOL070020_I80_I680_SR12_Int_2B_7',
                'SON090002_SMART_to_Windsor']
     }),
@@ -86,7 +91,8 @@ NETWORK_PROJECTS = collections.OrderedDict([
         'trn':[]
     }),
     (2035, {
-        'hwy':[], 'trn':[]
+        'hwy':['EXP_101c'], 
+        'trn':[]
     }),
     (2040, {
         'hwy':[], 'trn':[]
