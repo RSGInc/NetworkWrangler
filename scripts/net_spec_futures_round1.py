@@ -70,7 +70,8 @@ NETWORK_PROJECTS = collections.OrderedDict([
                'SOL070020_I80_I680_SR12_Int_1_2A',
                'SOL030002_FairfieldVacaville_Stn',
                'SON090002_SMART',
-               'SON090002_SMART_to_Larkspur'],
+               'SON090002_SMART_to_Larkspur',
+               'CC_070062_Richmond_Ferry'],
     }),
     (2025, {
         'hwy':['EXP_CC_050028_I680_SB_HOV_Completion',
