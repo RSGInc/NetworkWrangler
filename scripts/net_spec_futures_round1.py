@@ -17,7 +17,10 @@ OUT_DIR = "network_{}"  # YEAR
 # to specify a special tag or special keyword args for the projects apply() call.
 # For example:
 #     {'name':"Muni_TEP", 'kwargs':{'servicePlan':"'2012oct'"}}
-NETWORK_PROJECTS = collections.OrderedDict([
+
+###########################################################
+# For Round 1 and Project Performance Assessment Base both
+COMMITTED_PROJECTS = collections.OrderedDict([
     (2015, {'hwy':['PROJ_attributes'], 'trn':[]}),  # adds PROJ attributes to NODE and LINK
     (2020, {
         'hwy':['EXP_237B',
@@ -104,6 +107,43 @@ NETWORK_PROJECTS = collections.OrderedDict([
         'hwy':[], 'trn':[]
     })
 ])
+
+###########################################################
+# For Round 1 Only
+MAJOR_PROJECTS = collections.OrderedDict([
+    (2015, {'hwy':[],
+            'trn':[]
+    }),
+    (2020, {'hwy':[],
+            'trn':[]
+    }),
+    (2025, {'hwy':[],
+            'trn':[]
+    }),
+    (2030, {'hwy':[],
+            'trn':[]
+    }),
+    (2035, {'hwy':[],
+            'trn':[]
+    }),
+    (2040, {'hwy':[],
+            'trn':[]
+    }),
+    (2045, {'hwy':[],
+            'trn':[]
+    }),
+    (2050, {'hwy':[],
+            'trn':[]
+    })
+])
+
+# Put them together for NETWORK_PROJECTS
+NETWORK_PROJECTS = collections.OrderedDict()
+for YEAR in COMMITTED_PROJECTS.keys():
+  NETWORK_PROJECTS[YEAR] = {
+    'hwy':COMMITTED_PROJECTS[YEAR]['hwy'] + MAJOR_PROJECTS[YEAR]['hwy'],
+    'trn':COMMITTED_PROJECTS[YEAR]['trn'] + MAJOR_PROJECTS[YEAR]['trn']
+  }
 
 # done at the end in case they need to remove transit project links
 # remove "False and" clauses when these are coded
