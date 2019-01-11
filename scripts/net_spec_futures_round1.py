@@ -139,6 +139,8 @@ elif SCENARIO=="BackToTheFuture":
         # Haywired Earthquake in 2035
         NETWORK_PROJECTS[2035]['hwy'].append("Earthquake")
         NETWORK_PROJECTS[2035]['trn'].append("Earthquake")
+    NETWORK_PROJECTS[2050]['hwy'].append("SeaLevelRise_2feet")
+    NETWORK_PROJECTS[2050]['trn'].append("SeaLevelRise_2feet")
 
 # OPTIONAL. The default route network project directory is Y:\networks.  If
 # projects are stored in another directory, then use this variable to specify it.
