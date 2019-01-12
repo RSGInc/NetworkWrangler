@@ -83,20 +83,18 @@ NETWORK_PROJECTS = collections.OrderedDict([
                'ALA150043_Claremont_road_diet',
                'CC_070009_Slatten_Ranch_Rd_Extension',
                'SF_070004_Geary_BRT_Phase1',
-               'MRN050034_101_MarinSonNarrows_Phase2',
                'SON070004_101_MarinSonNarrows_Phase2',
                'SOL070020_I80_I680_SR12_Int_2B_7',
                'SOL110006_Jepson_1B_1C',
                'SCL190008_US101_DLC_Int_Imp'],
-        'trn':['BRT030001_BART_to_SanJose',
-               'SF_010028_Caltrain_Modernization',
+        'trn':['SF_010028_Caltrain_Modernization',
                'SOL070020_I80_I680_SR12_Int_2B_7',
                'SON090002_SMART_to_Windsor',
                'REG090037_New_BART_Trains']
     }),
     (2030, {
         'hwy':[#'EXP_ALA170009_I680_HOT_Alcosta_SR84',
-               'MRN050034_101_MarinSonNarrows_Phase2Post_2030'], 
+               ], 
         'trn':[]
     }),
     (2035, {
