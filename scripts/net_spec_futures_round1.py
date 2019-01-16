@@ -1,30 +1,29 @@
 import os
-
 # MANDATORY. Set this to be the Project Name.
 # e.g. "RTP2021", "TIP2021", etc
 # PROJECT = "FU1" or "PPA", set by build_network_mtc_futures.py based on argument
-
 # MANDATORY. Set this to be the git tag for checking out network projects.
 TAG = "HEAD"
-
 # MANDATORY. Set this to the directory in which to write your outputs.
 # "hwy" and "trn" subdirectories will be created here.
 OUT_DIR = "network_{}"  # YEAR
-
 # MANDATORY.  Should be a dictionary with keys "hwy", "trn"
 # to a list of projects.  A project can either be a simple string, or it can be
 # a dictionary with with keys 'name', 'tag' (optional), and 'kwargs' (optional)
 # to specify a special tag or special keyword args for the projects apply() call.
 # For example:
 #     {'name':"Muni_TEP", 'kwargs':{'servicePlan':"'2012oct'"}}
-NETWORK_PROJECTS = collections.OrderedDict([
-    (2015, {'hwy':['PROJ_attributes'], 'trn':[]}),  # adds PROJ attributes to NODE and LINK
+
+###########################################################
+# For Round 1 and Project Performance Assessment Base both
+COMMITTED_PROJECTS = collections.OrderedDict([
+(2015, {'hwy':['PROJ_attributes'], 'trn':[]}),  # adds PROJ attributes to NODE and LINK
     (2020, {
         'hwy':['EXP_237B',
                'EXP_580C',
                'EXP_680D',
                'EXP_680F',
-               'EXP_880AB',
+               'EXP_880A',
                'SCL130001_237_101_MAT_Int_Mod',
                'SCL050009_VTA_Eastridge_Extension',
                'REG090003_SCLARA_FIP',
@@ -36,6 +35,7 @@ NETWORK_PROJECTS = collections.OrderedDict([
                'ALA170052_Fruitvale_Ave_ped_improvements',
                'ALA150004_EastBay_BRT',
                'CC_130001_BaileyRd_SR4',
+               'CC_130046_I680_SR4_Int_Rec',
                'CC_070035_I80_SPDamRd_Int_Phase1',
                'CC_070011_Brentwood_Blvd_Widening',
                'CC_070075_Kirker_Pass_Truck_Lane',
@@ -70,7 +70,8 @@ NETWORK_PROJECTS = collections.OrderedDict([
                'SOL030002_FairfieldVacaville_Stn',
                'SON090002_SMART',
                'SON090002_SMART_to_Larkspur',
-               'CC_070062_Richmond_Ferry'],
+               'CC_070062_Richmond_Ferry',
+               'MuniForward_Committed'],
     }),
     (2025, {
         'hwy':['EXP_CC_050028_I680_SB_HOV_Completion',
@@ -78,6 +79,8 @@ NETWORK_PROJECTS = collections.OrderedDict([
                'EXP_101B',
                'EXP_680C',
                'EXP_680C2',
+               'EXP_85C',
+               'EXP_101C',
                'ALA150001_I680_SR84_Int_Wid',
                'ALA150043_Claremont_road_diet',
                'CC_070009_Slatten_Ranch_Rd_Extension',
@@ -85,20 +88,19 @@ NETWORK_PROJECTS = collections.OrderedDict([
                'SON070004_101_MarinSonNarrows_Phase2',
                'SOL070020_I80_I680_SR12_Int_2B_7',
                'SOL110006_Jepson_1B_1C',
-               'SCL190008_US101_DLC_Int_Imp',
-               'CC_130046_I680_SR4_Int_Rec'],
-        'trn':['SF_010028_Caltrain_Modernization',
+               'SCL190008_US101_DLC_Int_Imp'],
+        'trn':['BRT030001_BART_to_SanJose',
+               'SF_010028_Caltrain_Modernization',
                'SOL070020_I80_I680_SR12_Int_2B_7',
                'SON090002_SMART_to_Windsor',
                'REG090037_New_BART_Trains']
     }),
     (2030, {
-        'hwy':[#'EXP_ALA170009_I680_HOT_Alcosta_SR84',
-               ], 
+        'hwy':['EXP_880B'], 
         'trn':[]
     }),
     (2035, {
-        'hwy':['EXP_101c'], 
+        'hwy':[], 
         'trn':[]
     }),
     (2040, {
@@ -111,6 +113,62 @@ NETWORK_PROJECTS = collections.OrderedDict([
         'hwy':[], 'trn':[]
     })
 ])
+
+###########################################################
+# For Round 1 Only
+MAJOR_PROJECTS = collections.OrderedDict([
+    (2015, {'hwy':[],
+            'trn':[]
+    }),
+    (2020, {'hwy':[],
+            'trn':['Sonoma_Frequency_Increase']
+    }),
+    (2025, {'hwy':['SF_070004_Geary_BRT_Phase2',
+                   'SF_Congestion_Pricing',
+                   'Bay_Area_Forward_committed'],
+            'trn':['SF_070004_Geary_BRT_Phase2',
+                   'SCL050009_VTA_Eastridge_Extension',
+                   'SF_Congestion_Pricing']
+    }),
+    (2030, {'hwy':['SanPablo_BRT',
+                   'ElCaminoReal_BRT',
+                   'I680_SR4_Int_Widening_Phases_3_5',
+                   'SR4_Operational_Improvements',
+                   'SR4_Widening_BrentwoodToDiscoveryBay',
+                   'Better_Market_St'],
+            'trn':['BRT030001_BART_to_SanJose',
+                   'SF_050002_Caltrain_Ext_TransbayTerminal',
+                   'WETA_Service_Frequency_Increase',
+                   'Alameda_Point_SF_Ferry',
+                   'MissionBay_SF_Ferry',
+                   'RedwoodCity_SF_Ferry',
+                   'MTC050027_Berkeley_Ferry',
+                   'Better_Market_St',
+                   'REG090037_BART_Core_Cap']
+    }),
+    (2035, {'hwy':['Treasure_Island_Congestion_Pricing'],
+            'trn':['MuniForward_Uncommitted',
+                   'Vasona_LRT_Extension',
+                   'Treasure_Island_Congestion_Pricing']
+    }),
+    (2040, {'hwy':[],
+            'trn':[]
+    }),
+    (2045, {'hwy':[],
+            'trn':[]
+    }),
+    (2050, {'hwy':[],
+            'trn':[]
+    })
+])
+
+# Put them together for NETWORK_PROJECTS
+NETWORK_PROJECTS = collections.OrderedDict()
+for YEAR in COMMITTED_PROJECTS.keys():
+  NETWORK_PROJECTS[YEAR] = {
+    'hwy':COMMITTED_PROJECTS[YEAR]['hwy'] + MAJOR_PROJECTS[YEAR]['hwy'],
+    'trn':COMMITTED_PROJECTS[YEAR]['trn'] + MAJOR_PROJECTS[YEAR]['trn']
+  }
 
 # done at the end in case they need to remove transit project links
 # remove "False and" clauses when these are coded
@@ -148,7 +206,6 @@ elif SCENARIO=="BackToTheFuture":
         NETWORK_PROJECTS[2035]['trn'].append("Earthquake")
     NETWORK_PROJECTS[2050]['hwy'].append("SeaLevelRise_2feet")
     NETWORK_PROJECTS[2050]['trn'].append("SeaLevelRise_2feet")
-
 # OPTIONAL. The default route network project directory is Y:\networks.  If
 # projects are stored in another directory, then use this variable to specify it.
 # For example: Y:\networks\projects
@@ -156,13 +213,11 @@ elif SCENARIO=="BackToTheFuture":
 # NETWORK_PROJECT_SUBDIR = None
 # NETWORK_SEED_SUBDIR = None
 # NETWORK_PLAN_SUBDIR = None
-
 # OPTIONAL. A list of project names which have been previously applied in the
 # PIVOT_DIR network that projects in this project might rely on.  For example
 # if DoyleDrive exists, then Muni_TEP gets applied differently so transit lines
 # run on the new Doyle Drive alignment
 APPLIED_PROJECTS = None
-
 # OPTIONAL.  A list of project names.  For test mode, these projects won't use
 # the TAG.  This is meant for developing a network project.
 TEST_PROJECTS = []
