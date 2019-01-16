@@ -17,10 +17,7 @@ OUT_DIR = "network_{}"  # YEAR
 # to specify a special tag or special keyword args for the projects apply() call.
 # For example:
 #     {'name':"Muni_TEP", 'kwargs':{'servicePlan':"'2012oct'"}}
-
-###########################################################
-# For Round 1 and Project Performance Assessment Base both
-COMMITTED_PROJECTS = collections.OrderedDict([
+NETWORK_PROJECTS = collections.OrderedDict([
     (2015, {'hwy':['PROJ_attributes'], 'trn':[]}),  # adds PROJ attributes to NODE and LINK
     (2020, {
         'hwy':['EXP_237B',
@@ -39,7 +36,6 @@ COMMITTED_PROJECTS = collections.OrderedDict([
                'ALA170052_Fruitvale_Ave_ped_improvements',
                'ALA150004_EastBay_BRT',
                'CC_130001_BaileyRd_SR4',
-               'CC_130046_I680_SR4_Int_Rec',
                'CC_070035_I80_SPDamRd_Int_Phase1',
                'CC_070011_Brentwood_Blvd_Widening',
                'CC_070075_Kirker_Pass_Truck_Lane',
@@ -54,7 +50,13 @@ COMMITTED_PROJECTS = collections.OrderedDict([
                'SM_110047_SR92_ElCam_Ramp_Mod',
                'SOL070020_I80_I680_SR12_Int_1_2A',
                'SOL110005_Jepson_Van_to_Com',
-               'SON070004_101_MarinSonNarrows_Phase1'],
+               'SON070004_101_MarinSonNarrows_Phase1',
+               'ALA050014_SR84_Widening',
+               'ALA170011_BayBridge_HOV_Connectors',
+               'ALA150047_TelegraphAve_Complete_Streets',
+               'SM_110047_SR92_ElCam_Ramp_Mod',
+               'SCL190002_280_Foothill_improvement',
+               'SCL190006_101SB_offramp_improvement'],
         'trn':['ALA050015_BART_to_WarmSprings',
                'ACGo',
                'CC_050025_EBart_to_Antioch',
@@ -67,7 +69,8 @@ COMMITTED_PROJECTS = collections.OrderedDict([
                'SOL070020_I80_I680_SR12_Int_1_2A',
                'SOL030002_FairfieldVacaville_Stn',
                'SON090002_SMART',
-               'SON090002_SMART_to_Larkspur'],
+               'SON090002_SMART_to_Larkspur',
+               'CC_070062_Richmond_Ferry'],
     }),
     (2025, {
         'hwy':['EXP_CC_050028_I680_SB_HOV_Completion',
@@ -79,18 +82,19 @@ COMMITTED_PROJECTS = collections.OrderedDict([
                'ALA150043_Claremont_road_diet',
                'CC_070009_Slatten_Ranch_Rd_Extension',
                'SF_070004_Geary_BRT_Phase1',
-               'MRN050034_101_MarinSonNarrows_Phase2',
                'SON070004_101_MarinSonNarrows_Phase2',
                'SOL070020_I80_I680_SR12_Int_2B_7',
-               'SOL110006_Jepson_1B_1C'],
-        'trn':['BRT030001_BART_to_SanJose',
-               'SF_010028_Caltrain_Modernization',
+               'SOL110006_Jepson_1B_1C',
+               'SCL190008_US101_DLC_Int_Imp',
+               'CC_130046_I680_SR4_Int_Rec'],
+        'trn':['SF_010028_Caltrain_Modernization',
                'SOL070020_I80_I680_SR12_Int_2B_7',
-               'SON090002_SMART_to_Windsor']
+               'SON090002_SMART_to_Windsor',
+               'REG090037_New_BART_Trains']
     }),
     (2030, {
         'hwy':[#'EXP_ALA170009_I680_HOT_Alcosta_SR84',
-               'MRN050034_101_MarinSonNarrows_Phase2Post_2030'], 
+               ], 
         'trn':[]
     }),
     (2035, {
@@ -107,43 +111,6 @@ COMMITTED_PROJECTS = collections.OrderedDict([
         'hwy':[], 'trn':[]
     })
 ])
-
-###########################################################
-# For Round 1 Only
-MAJOR_PROJECTS = collections.OrderedDict([
-    (2015, {'hwy':[],
-            'trn':[]
-    }),
-    (2020, {'hwy':[],
-            'trn':[]
-    }),
-    (2025, {'hwy':[],
-            'trn':[]
-    }),
-    (2030, {'hwy':[],
-            'trn':[]
-    }),
-    (2035, {'hwy':[],
-            'trn':[]
-    }),
-    (2040, {'hwy':[],
-            'trn':[]
-    }),
-    (2045, {'hwy':[],
-            'trn':[]
-    }),
-    (2050, {'hwy':[],
-            'trn':[]
-    })
-])
-
-# Put them together for NETWORK_PROJECTS
-NETWORK_PROJECTS = collections.OrderedDict()
-for YEAR in COMMITTED_PROJECTS.keys():
-  NETWORK_PROJECTS[YEAR] = {
-    'hwy':COMMITTED_PROJECTS[YEAR]['hwy'] + MAJOR_PROJECTS[YEAR]['hwy'],
-    'trn':COMMITTED_PROJECTS[YEAR]['trn'] + MAJOR_PROJECTS[YEAR]['trn']
-  }
 
 # done at the end in case they need to remove transit project links
 # remove "False and" clauses when these are coded
