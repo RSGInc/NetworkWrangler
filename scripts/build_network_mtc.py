@@ -466,7 +466,7 @@ if __name__ == '__main__':
                                                              projtype=projType, tempdir=TEMP_SUBDIR, **kwargs)
                 (parentdir, networkdir, gitdir, projectsubdir) = networks[netmode].getClonedProjectArgs(project_name, None, projType, TEMP_SUBDIR)
 
-                applied_SHA1 = networks[netmode].applyProject(parentdir, networkdir, gitdir, projectsubdir)
+                applied_SHA1 = networks[netmode].applyProject(parentdir, networkdir, gitdir, projectsubdir, **kwargs)
                 appliedcount += 1
 
             # apply set_capclass before writing any hwy network

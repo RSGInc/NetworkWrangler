@@ -493,7 +493,7 @@ if __name__ == '__main__':
                         shutil.copyfile(os.path.join("FREEFLOW.BLD"),
                                         os.path.join("FREEFLOW_WITHOUT_EARTHQUAKE.BLD"))
 
-                applied_SHA1 = networks[netmode].applyProject(parentdir, networkdir, gitdir, projectsubdir)
+                applied_SHA1 = networks[netmode].applyProject(parentdir, networkdir, gitdir, projectsubdir, **kwargs)
                 appliedcount += 1
 
             # apply set_capclass before writing any hwy network

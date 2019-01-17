@@ -1,4 +1,4 @@
-import os, re, string, subprocess, sys, tempfile
+import copy, os, re, string, subprocess, sys, tempfile
 from .Logger import WranglerLogger
 from .NetworkException import NetworkException
 from .Regexes import git_commit_pattern
@@ -43,13 +43,19 @@ class Network(object):
         if networkPlanSubdir: Network.NETWORK_PLAN_SUBDIR = networkPlanSubdir
         if networkName: Network.allNetworks[networkName] = self
 
-    def _runAndLog(self, cmd, run_dir=".", logStdoutAndStderr=False):
+    def _runAndLog(self, cmd, run_dir=".", logStdoutAndStderr=False, env=None):
         """
         Runs the given command in the given *run_dir*.  Returns a triple:
          (return code, stdout, stderr)
         where stdout and stderr are lists of strings.
         """
-        proc = subprocess.Popen( cmd, cwd = run_dir, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True )
+        myenv = None
+        if env:
+            myenv = copy.deepcopy(os.environ)
+            myenv.update(env)
+            # ranglerLogger.debug("Using environment {}".format(myenv))
+
+        proc = subprocess.Popen( cmd, cwd = run_dir, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True, env=myenv )
         retStdout = []
         for line in proc.stdout:
             line = line.strip(b'\r\n')

@@ -1,4 +1,4 @@
-import os, re, shutil, subprocess
+import collections, csv, os, re, shutil, subprocess
 from socket         import gethostname, getfqdn
 
 from .HwySpecsRTP import HwySpecsRTP
@@ -120,6 +120,8 @@ class HighwayNetwork(Network):
         # move the FREEFLOW.BLD into place
         shutil.move("FREEFLOW.BLD", os.path.join(applyDir,"FREEFLOW.BLD"))
 
+        # WranglerLogger.debug("HighwayNetwork.applyProject() received kwargs:{}".format(kwargs))
+
         # dispatch it, cube license
         hostname = gethostname().lower()
         if hostname not in HighwayNetwork.getCubeHostnames():
@@ -127,9 +129,9 @@ class HighwayNetwork(Network):
             f = open(os.path.join(applyDir,'runtpp_dispatch.tmp'), 'w')
             f.write("runtpp " + applyScript + "\n")
             f.close()
-            (cuberet, cubeStdout, cubeStderr) = self._runAndLog("Y:/champ/util/bin/dispatch.bat runtpp_dispatch.tmp taraval", run_dir=applyDir, logStdoutAndStderr=True) 
+            (cuberet, cubeStdout, cubeStderr) = self._runAndLog("Y:/champ/util/bin/dispatch.bat runtpp_dispatch.tmp taraval", run_dir=applyDir, logStdoutAndStderr=True, env=kwargs) 
         else:
-            (cuberet, cubeStdout, cubeStderr) = self._runAndLog(cmd="runtpp "+applyScript, run_dir=applyDir)
+            (cuberet, cubeStdout, cubeStderr) = self._runAndLog(cmd="runtpp "+applyScript, run_dir=applyDir, env=kwargs)
             
 
         nodemerge = re.compile("NODEMERGE: \d+")
@@ -158,7 +160,7 @@ class HighwayNetwork(Network):
 
         # merge tolls.csv
         if os.path.exists(tollsfilename):
-            raise NotImplementedError("Merging tolls.csv from a project is not implemented yet")
+            self.mergeTolls("tolls.csv", tollsfilename)
 
         WranglerLogger.debug("")
         WranglerLogger.debug("")
@@ -177,6 +179,44 @@ class HighwayNetwork(Network):
         return self.logProject(gitdir=gitdir,
                                projectname=(networkdir + "\\" + projectsubdir if projectsubdir else networkdir),
                                year=year, projectdesc=desc, county=county)
+
+    def mergeTolls(self, tollsfile, newtollsfile):
+        """
+        Merge the given tolls file with the existing.
+        """
+        WranglerLogger.debug("TODO: merging tolls")     
+
+        # read the original file -- fac_index is the key
+        tolls_config = collections.OrderedDict()
+        tolls        = open(tollsfile, 'r')
+        tolls_reader = csv.reader(tolls, skipinitialspace=True)
+        fieldnames   = next(tolls_reader)
+        # not using csv.DictReader because in python2, it doesn't read an ordered dict :(
+        for row in tolls_reader:
+            row_dict = collections.OrderedDict(zip(fieldnames, row))
+            tolls_config[row_dict["fac_index"]] = row_dict
+        tolls.close()
+
+        # read the new file -- replace if fac_index matches
+        newtolls       = open(newtollsfile, 'r')
+        new_reader     = csv.reader(newtolls, skipinitialspace=True)
+        new_fieldnames = next(new_reader)
+        # they need to match
+        if (fieldnames != new_fieldnames):
+            raise NetworkException("Toll file {} has different fieldnames ({}) than expected ({})".format(newtollsfile, new_fieldnames, fieldnames))
+
+        for row in new_reader:
+            row_dict = collections.OrderedDict(zip(fieldnames, row))
+            tolls_config[row_dict["fac_index"]] = row_dict
+        newtolls.close()
+
+        # write it out
+        tolls = open(tollsfile, mode='wb')
+        tolls_writer = csv.writer(tolls)
+        tolls_writer.writerow(fieldnames)
+        for fac_index, row in tolls_config.items():
+            tolls_writer.writerow(row.values())
+        tolls.close()
 
     def validateTurnPens(self, CubeNetFile, turnPenReportFile=None, suggestCorrectLink=True):
         import Cube

@@ -17,9 +17,12 @@ OUT_DIR = "network_{}"  # YEAR
 ###########################################################
 # For Round 1 and Project Performance Assessment Base both
 COMMITTED_PROJECTS = collections.OrderedDict([
-(2015, {'hwy':['PROJ_attributes'], 'trn':[]}),  # adds PROJ attributes to NODE and LINK
+(2015, {'hwy':['PROJ_attributes',  # adds PROJ attributes to NODE and LINK
+               {'name':'Bridge_Toll_Updates', 'kwargs':{'MODELYEAR':'2015'}}], 
+        'trn':[]}),
     (2020, {
-        'hwy':['EXP_237B',
+        'hwy':[{'name':'Bridge_Toll_Updates', 'kwargs':{'MODELYEAR':'2020'}},
+               'EXP_237B',
                'EXP_580C',
                'EXP_680D',
                'EXP_680F',
@@ -74,7 +77,8 @@ COMMITTED_PROJECTS = collections.OrderedDict([
                'MuniForward_Committed'],
     }),
     (2025, {
-        'hwy':['EXP_CC_050028_I680_SB_HOV_Completion',
+        'hwy':[{'name':'Bridge_Toll_Updates', 'kwargs':{'MODELYEAR':'2025'}},
+               'EXP_CC_050028_I680_SB_HOV_Completion',
                'EXP_80A',
                'EXP_101B',
                'EXP_680C',
@@ -96,21 +100,25 @@ COMMITTED_PROJECTS = collections.OrderedDict([
                'REG090037_New_BART_Trains']
     }),
     (2030, {
-        'hwy':['EXP_880B'], 
+        'hwy':[{'name':'Bridge_Toll_Updates', 'kwargs':{'MODELYEAR':'2030'}},
+               'EXP_880B'], 
         'trn':[]
     }),
     (2035, {
-        'hwy':[], 
+        'hwy':[{'name':'Bridge_Toll_Updates', 'kwargs':{'MODELYEAR':'2035'}}], 
         'trn':[]
     }),
     (2040, {
-        'hwy':[], 'trn':[]
+        'hwy':[{'name':'Bridge_Toll_Updates', 'kwargs':{'MODELYEAR':'2040'}}],
+        'trn':[]
     }),
     (2045, {
-        'hwy':[], 'trn':[]
+        'hwy':[{'name':'Bridge_Toll_Updates', 'kwargs':{'MODELYEAR':'2045'}}],
+        'trn':[]
     }),
     (2050, {
-        'hwy':[], 'trn':[]
+        'hwy':[{'name':'Bridge_Toll_Updates', 'kwargs':{'MODELYEAR':'2050'}}],
+        'trn':[]
     })
 ])
 
