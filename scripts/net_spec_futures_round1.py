@@ -26,7 +26,6 @@ COMMITTED_PROJECTS = collections.OrderedDict([
                'EXP_580C',
                'EXP_680D',
                'EXP_680F',
-               'EXP_880A',
                'SCL130001_237_101_MAT_Int_Mod',
                'SCL050009_VTA_Eastridge_Extension',
                'REG090003_SCLARA_FIP',
@@ -79,10 +78,8 @@ COMMITTED_PROJECTS = collections.OrderedDict([
     (2025, {
         'hwy':[{'name':'Bridge_Toll_Updates', 'kwargs':{'MODELYEAR':'2025'}},
                'EXP_CC_050028_I680_SB_HOV_Completion',
-               'EXP_80A',
                'EXP_101B',
                'EXP_680C',
-               'EXP_680C2',
                'EXP_85C',
                'EXP_101C',
                'ALA150001_I680_SR84_Int_Wid',
