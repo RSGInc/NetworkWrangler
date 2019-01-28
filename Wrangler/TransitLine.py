@@ -571,6 +571,37 @@ class TransitLine(object):
         self.n = copy.deepcopy(template.n)
         self.comment = template.comment
 
+    def hasDuplicateStops(self):
+        """
+        Check if a stop occurs more than once and return True if so.
+        First == last is ok
+        """
+        _stop_to_idx = {}
+        _stop_list   = []
+
+        for node in self.n:
+            if not node.isStop(): continue
+
+            node_num = node.getNum()
+
+            #  { stop num -> [list of stop indices]}, index starts at 0
+            if node_num not in _stop_to_idx: _stop_to_idx[node_num] = []
+            _stop_to_idx[node_num].append(len(_stop_list))
+
+            # list of stops
+            _stop_list.append(node_num)
+
+        # check for dupes
+        for node_num in _stop_to_idx.keys():
+            if len(_stop_to_idx[node_num]) == 1: continue
+            # First == last is ok
+            if _stop_to_idx[node_num] == [0,len(_stop_list)-1]: continue
+
+            WranglerLogger.warn("Duplicate stops for line {}: stop {}".format(self.name, node_num))
+            return True
+
+        return False
+
     # Dictionary methods
     def __getitem__(self,key): return self.attr[key.upper()]
     def __setitem__(self,key,value): self.attr[key.upper()]=value

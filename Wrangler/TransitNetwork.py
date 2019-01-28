@@ -1,4 +1,4 @@
-import copy, glob, inspect, math, os, re, sys, xlrd
+import copy, glob, inspect, math, os, re, sets, sys, xlrd
 from collections import defaultdict
 from .Faresystem import Faresystem
 from .Linki import Linki
@@ -615,6 +615,9 @@ class TransitNetwork(Network):
         WranglerLogger.info("Writing into %s\\%s" % (path, name))
         logstr = ""
         if len(self.lines)>0 or writeEmptyFiles:
+            # for verifying uniqueness of line names
+            line_names = sets.Set()
+
             logstr += " lines"
             f = open(os.path.join(path,name+".lin"), 'w');
             if self.program == TransitParser.PROGRAM_TRNBUILD:
@@ -622,8 +625,21 @@ class TransitNetwork(Network):
             elif self.program == TransitParser.PROGRAM_PT:
                 f.write(";;<<PT>><<LINE>>;;\n")
             for line in self.lines:
-                if isinstance(line,str): f.write(line)
-                else: f.write(repr(line)+"\n")
+                if isinstance(line,str):
+                    f.write(line)
+                else:
+                    # write it first
+                    f.write(repr(line)+"\n")
+
+                    # Cube TRNBUILD documentation for LINE NAME
+                    # It may be up to 12 characters in length, and must be unique.
+                    if line.name.upper() in line_names:
+                        raise NetworkException("Line name {} not unique".format(line.name))
+                    if len(line.name) > 12:
+                        raise NetworkException("Line name {} too long".format(line.name))
+                    if line.hasDuplicateStops():
+                        raise NetworkException("Line {} has a stop that occurs more than once".format(line.name))
+                    line_names.add(line.name.upper())
             f.close()
 
         if line_only:
