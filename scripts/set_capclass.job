@@ -32,6 +32,11 @@ RUN PGM=HWYNET
   FILEO NETO=FREEFLOW_withcapclass.BLDOUT
 
   PHASE=LINKMERGE
+    ; check for FT=0
+    IF (FT=0)
+      PRINT LIST="FT set to 0 for link: ",LI.1.A,"-",LI.1.B,"; PROJ: ",LI.1.PROJ
+      ABORT MSG="FT is zero"
+    ENDIF
 
     ; Code CAPCLASS for Links
     ;-----------------------------------------------------------------------
