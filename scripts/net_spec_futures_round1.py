@@ -60,7 +60,8 @@ COMMITTED_PROJECTS = collections.OrderedDict([
                'SCL190002_280_Foothill_improvement',
                'SCL190006_101SB_offramp_improvement',
                'I80_AdaptiveRampMetering',
-               'VAR170021_Freeway_Performance_I880'],
+               'VAR170021_Freeway_Performance_I880',
+               'VTA_Next'],
         'trn':['ALA050015_BART_to_WarmSprings',
                'ACGo',
                'CC_050025_EBart_to_Antioch',
@@ -182,6 +183,8 @@ for YEAR in COMMITTED_PROJECTS.keys():
 # remove "False and" clauses when these are coded
 if SCENARIO=="CleanAndGreen":
     # NOTE: Earthquake is assumed in Round1 2035 but since the effect doesn't stay; this is handled in build_network_mtc_futures.py
+    # High Speed Rail
+    NETWORK_PROJECTS[2030]['trn'].append("HSR")
     if PROJECT == "FU1":
         # Haywired Earthquake in 2035
         NETWORK_PROJECTS[2035]['hwy'].append("Earthquake")
