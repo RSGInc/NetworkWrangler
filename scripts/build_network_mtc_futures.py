@@ -113,7 +113,7 @@ def getProjectYear(PROJECTS, my_proj, netmode):
     """
     for year in PROJECTS.keys():
         if my_proj in PROJECTS[year][netmode]:
-            return year + (PROJECTS[year][netmode].index(my_proj)+1)*0.01
+            return "{}.{}.{:0>2d}".format(year,netmode,(PROJECTS[year][netmode].index(my_proj)+1))
     return -1
 
 def checkRequirements(REQUIREMENTS, PROJECTS, req_type='prereq'):
@@ -143,8 +143,12 @@ def checkRequirements(REQUIREMENTS, PROJECTS, req_type='prereq'):
 
                     # prereq
                     if req_type=="prereq":
-                        if req_project_year < 0:            is_ok = False  # required project must be found
-                        if req_project_year > project_year: is_ok = False  # and implemented before or at the same time as the project
+                        if req_project_year < 0:
+                            is_ok = False  # required project must be found
+                            Wrangler.WranglerLogger.warn("required project not found")
+                        if req_project_year > project_year:
+                            is_ok = False  # and implemented before or at the same time as the project
+                            Wrangler.WranglerLogger.warn("required project year {} > project year {}".format(req_project_year, project_year))
 
                     # save into proj_years
                     req_proj_years[req_proj] = req_project_year
