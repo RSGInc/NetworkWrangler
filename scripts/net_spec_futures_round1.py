@@ -18,7 +18,7 @@ OUT_DIR = "network_{}"  # YEAR
 # For Round 1 and Project Performance Assessment Base both
 COMMITTED_PROJECTS = collections.OrderedDict([
 (2015, {'hwy':['PROJ_attributes',  # adds PROJ attributes to NODE and LINK
-               {'name':'Bridge_Toll_Updates', 'kwargs':{'MODELYEAR':'2015'}}], 
+               {'name':'Bridge_Toll_Updates', 'kwargs':{'MODELYEAR':'2015'}}],
         'trn':[]}),
     (2020, {
         'hwy':[{'name':'Bridge_Toll_Updates', 'kwargs':{'MODELYEAR':'2020'}},
@@ -66,7 +66,6 @@ COMMITTED_PROJECTS = collections.OrderedDict([
                'CC_050025_EBart_to_Antioch',
                'SCL050009_VTA_Eastridge_Extension',
                'SCL110005_BART_to_Berryessa',
-               'SCL130001_237_101_MAT_Int_Mod',
                'SF_010015_Transbay_Terminal',
                'SF_010037_Muni_Central_Subway',
                'SF_070027_Yerba_Buena_Ramp_Imp',
@@ -76,7 +75,8 @@ COMMITTED_PROJECTS = collections.OrderedDict([
                'SON090002_SMART_to_Larkspur',
                'CC_070062_Richmond_Ferry',
                'MuniForward_Committed',
-               'VTA_Next'],
+               'VTA_Next',
+               'SCL130001_237_101_MAT_Int_Mod'],
     }),
     (2025, {
         'hwy':[{'name':'Bridge_Toll_Updates', 'kwargs':{'MODELYEAR':'2025'}},
@@ -102,11 +102,11 @@ COMMITTED_PROJECTS = collections.OrderedDict([
     }),
     (2030, {
         'hwy':[{'name':'Bridge_Toll_Updates', 'kwargs':{'MODELYEAR':'2030'}},
-               'EXP_880B'], 
+               'EXP_880B'],
         'trn':[]
     }),
     (2035, {
-        'hwy':[{'name':'Bridge_Toll_Updates', 'kwargs':{'MODELYEAR':'2035'}}], 
+        'hwy':[{'name':'Bridge_Toll_Updates', 'kwargs':{'MODELYEAR':'2035'}}],
         'trn':[]
     }),
     (2040, {
