@@ -1,4 +1,4 @@
-import collections, csv, os, re, shutil, subprocess
+import collections, csv, os, re, shutil, subprocess, time
 from socket         import gethostname, getfqdn
 
 from .HwySpecsRTP import HwySpecsRTP
@@ -122,29 +122,52 @@ class HighwayNetwork(Network):
 
         # WranglerLogger.debug("HighwayNetwork.applyProject() received kwargs:{}".format(kwargs))
 
-        # dispatch it, cube license
-        hostname = gethostname().lower()
-        if hostname not in HighwayNetwork.getCubeHostnames():
-            print("Dispatching cube script to taraval from %s".format(hostname))
-            f = open(os.path.join(applyDir,'runtpp_dispatch.tmp'), 'w')
-            f.write("runtpp " + applyScript + "\n")
-            f.close()
-            (cuberet, cubeStdout, cubeStderr) = self._runAndLog("Y:/champ/util/bin/dispatch.bat runtpp_dispatch.tmp taraval", run_dir=applyDir, logStdoutAndStderr=True, env=kwargs) 
-        else:
-            (cuberet, cubeStdout, cubeStderr) = self._runAndLog(cmd="runtpp "+applyScript, run_dir=applyDir, env=kwargs)
+        # retry in case of a license error
+        NUM_RETRIES = 5
+        for attempt in range(1,NUM_RETRIES+1):
+
+            # dispatch it, cube license
+            hostname = gethostname().lower()
+            if hostname not in HighwayNetwork.getCubeHostnames():
+                print("Dispatching cube script to taraval from %s".format(hostname))
+                f = open(os.path.join(applyDir,'runtpp_dispatch.tmp'), 'w')
+                f.write("runtpp " + applyScript + "\n")
+                f.close()
+                (cuberet, cubeStdout, cubeStderr) = self._runAndLog("Y:/champ/util/bin/dispatch.bat runtpp_dispatch.tmp taraval", run_dir=applyDir, logStdoutAndStderr=True, env=kwargs) 
+            else:
+                (cuberet, cubeStdout, cubeStderr) = self._runAndLog(cmd="runtpp "+applyScript, run_dir=applyDir, env=kwargs)
             
 
-        nodemerge = re.compile("NODEMERGE: \d+")
-        linkmerge = re.compile("LINKMERGE: \d+-\d+")
-        for line in cubeStdout:
-            line = line.rstrip()
-            if re.match(nodemerge,line): continue
-            if re.match(linkmerge,line): continue
-            WranglerLogger.debug(line)
-        
-        if cuberet != 0 and cuberet != 1:
-            WranglerLogger.fatal("FAIL! Project: "+applyScript)
-            raise NetworkException("HighwayNetwork applyProject failed; see log file")
+            nodemerge = re.compile("NODEMERGE: \d+")
+            linkmerge = re.compile("LINKMERGE: \d+-\d+")
+            license_error = False
+            for line in cubeStdout:
+                line = line.rstrip()
+                if re.match(nodemerge,line): continue
+                if re.match(linkmerge,line): continue
+                if line=="RUNTPP: Licensing error": license_error = True
+                WranglerLogger.debug(line)
+            
+            # retry on license error
+            if license_error:
+                WranglerLogger.warn("Received license error")
+                if attempt == NUM_RETRIES:
+                    WranglerLogger.fatal("Out of retry attempts")
+                    raise NetworkException("HighwayNetwork applyProject failed from Licensing error")
+
+                # retry
+                WranglerLogger.debug("Retrying {} ...".format(attempt))
+                time.sleep(1)
+                continue
+
+
+            if cuberet != 0 and cuberet != 1:
+                WranglerLogger.fatal("FAIL! Project: "+applyScript)
+                raise NetworkException("HighwayNetwork applyProject failed; see log file")
+
+            else:
+                # success
+                break
 
         # move it back
         shutil.move(os.path.join(applyDir,"FREEFLOW.BLD"), "FREEFLOW.BLD")

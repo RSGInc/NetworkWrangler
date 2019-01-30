@@ -7,7 +7,7 @@
   -Lisa 2012.03.12
 
 """
-import copy, os
+import copy, os, time
 from socket import gethostname, getfqdn
 
 CUBE_COMPUTER = "vanness"
@@ -74,42 +74,63 @@ def export_cubenet_to_csvs(file, extra_link_vars=[], extra_node_vars=[],
     #run it on CUBE_COMPUTER; cube is installed there
     filedir = os.path.dirname(os.path.abspath(file))
     hostname = gethostname().lower()
-    if hostname not in getCubeHostnames():
-        if links_csv == None or nodes_csv == None:
-            print "export_cubenet_to_csvs requires a links_csv and nodes_csv output file if dispatching to %s (temp won't work)" % CUBE_COMPUTER
-            sys.exit(2)
+
+    # retry in case of a license error
+    NUM_RETRIES = 5
+    for attempt in range(1,NUM_RETRIES+1):
+
+        license_error = False
+        if hostname not in getCubeHostnames():
+            if links_csv == None or nodes_csv == None:
+                print "export_cubenet_to_csvs requires a links_csv and nodes_csv output file if dispatching to %s (temp won't work)" % CUBE_COMPUTER
+                sys.exit(2)
              
-        env["MACHINES"] = CUBE_COMPUTER
+            env["MACHINES"] = CUBE_COMPUTER
         
-        cmd = r'y:\champ\util\bin\dispatch-one.bat "runtpp ' + script + '"'
-        print cmd
-        proc = subprocess.Popen( cmd, cwd = filedir, stdout=subprocess.PIPE, stderr=subprocess.PIPE, env=env)
-        for line in proc.stdout:
-            line = line.strip('\r\n')
-            print "stdout: " + line
-    else:
-        cmd = 'runtpp.exe ' + script 
-        print cmd
-        print filedir
+            cmd = r'y:\champ\util\bin\dispatch-one.bat "runtpp ' + script + '"'
+            print cmd
+            proc = subprocess.Popen( cmd, cwd = filedir, stdout=subprocess.PIPE, stderr=subprocess.PIPE, env=env)
+            for line in proc.stdout:
+                line = line.strip('\r\n')
+                print "stdout: " + line
+                if line=="RUNTPP: Licensing error": license_error = True
+        else:
+            cmd = 'runtpp.exe ' + script 
+            print cmd
+            print filedir
         
-        proc = subprocess.Popen( cmd, cwd = filedir, stdout=subprocess.PIPE, stderr=subprocess.PIPE, env=env)
-        for line in proc.stdout:
-            line = line.strip('\r\n')
-            print "stdout: " + line
-            
+            proc = subprocess.Popen( cmd, cwd = filedir, stdout=subprocess.PIPE, stderr=subprocess.PIPE, env=env)
+            for line in proc.stdout:
+                line = line.strip('\r\n')
+                print "stdout: " + line
+                if line=="RUNTPP: Licensing error": license_error = True
+
+        print "EXPORTING CUBE NETWORK: ",env['CUBENET']
+        print "...adding variables %s, %s:" % (env['XTRALINKVAR'], env['XTRANODEVAR'])
+        print "...running script: \n      %s" % (script)
+
+        # retry on license error
+        if license_error:
+            print "Received license error"
+            if attempt == NUM_RETRIES:
+                print "Out of retry attempts"
+                sys.exit(2)
+
+            # retry
+            print("Retrying {} ...".format(attempt))
+            time.sleep(1)
+            continue
      
-    print "EXPORTING CUBE NETWORK: ",env['CUBENET']
-    print "...adding variables %s, %s:" % (env['XTRALINKVAR'], env['XTRANODEVAR'])
-    print "...running script: \n      %s" % (script)
-    
+        retStderr = []
+        for line in proc.stderr:
+            line = line.strip('\r\n')
+            print "stderr: " + line
+        retcode  = proc.wait()
+        # success -- stop looping
+        if retcode == 0: break
 
-
-    retStderr = []
-    for line in proc.stderr:
-        line = line.strip('\r\n')
-        print "stderr: " + line
-    retcode  = proc.wait()
-    if retcode != 0: raise
+        # not license error -- break
+        if retcode != 0: raise
 
 
     print "Received %d from [%s]" % (retcode, cmd)
