@@ -88,13 +88,10 @@ COMMITTED_PROJECTS = collections.OrderedDict([
                'CC_070009_Slatten_Ranch_Rd_Extension',
                'SF_070004_Geary_BRT_Phase1',
                'SON070004_101_MarinSonNarrows_Phase2',
-               'SOL070020_I80_I680_SR12_Int_2B_7',
                'SOL110006_Jepson_1B_1C',
                'SCL190008_US101_DLC_Int_Imp',
                'I880_US101_AdaptiveRampMetering'],
-        'trn':['BRT030001_BART_to_SanJose',
-               'SF_010028_Caltrain_Modernization',
-               'SOL070020_I80_I680_SR12_Int_2B_7',
+        'trn':['SF_010028_Caltrain_Modernization',
                'SON090002_SMART_to_Windsor',
                'REG090037_New_BART_Trains']
     }),
@@ -131,10 +128,12 @@ MAJOR_PROJECTS = collections.OrderedDict([
             'trn':['MAJ_Sonoma_Frequency_Increase']
     }),
     (2025, {'hwy':['MAJ_SF_070004_Geary_BRT_Phase2',
+                   'MAJ_SOL070020_I80_I680_SR12_Int_2B_7'
                    'MAJ_SF_Congestion_Pricing',
                    'MAJ_SCL050009_VTA_Eastridge_Extension',
                    'MAJ_Bay_Area_Forward_committed'],
             'trn':['MAJ_SF_070004_Geary_BRT_Phase2',
+                   'MAJ_SOL070020_I80_I680_SR12_Int_2B_7'
                    'MAJ_SCL050009_VTA_Eastridge_Extension',
                    'MAJ_SF_Congestion_Pricing']
     }),
