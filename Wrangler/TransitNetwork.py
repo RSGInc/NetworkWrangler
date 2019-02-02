@@ -1,4 +1,4 @@
-import copy, glob, inspect, math, os, re, sets, sys, xlrd
+import copy, glob, inspect, math, os, re, sys, xlrd
 from collections import defaultdict
 from .Faresystem import Faresystem
 from .Linki import Linki
@@ -616,7 +616,7 @@ class TransitNetwork(Network):
         logstr = ""
         if len(self.lines)>0 or writeEmptyFiles:
             # for verifying uniqueness of line names
-            line_names = sets.Set()
+            line_names = set()
 
             logstr += " lines"
             f = open(os.path.join(path,name+".lin"), 'w');
