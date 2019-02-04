@@ -141,7 +141,6 @@ MAJOR_PROJECTS = collections.OrderedDict([
                    'MAJ_ElCaminoReal_BRT',
                    'MAJ_I680_SR4_Int_Widening_Phases_3_5',
                    'MAJ_SR4_Operational_Improvements',
-                   'MAJ_SR4_Widening_BrentwoodToDiscoveryBay',
                    'MAJ_Better_Market_St'],
             'trn':['MAJ_BRT030001_BART_to_SanJose',
                    'MAJ_SF_050002_Caltrain_Ext_TransbayTerminal',
