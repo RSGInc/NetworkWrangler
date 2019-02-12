@@ -169,21 +169,21 @@ if PROJECT == "FU1":
         })
     ])
 
-    # Put them together for NETWORK_PROJECTS
-    NETWORK_PROJECTS = collections.OrderedDict()
-    for YEAR in COMMITTED_PROJECTS.keys():
-      NETWORK_PROJECTS[YEAR] = {
-        'hwy':COMMITTED_PROJECTS[YEAR]['hwy'] + MAJOR_PROJECTS[YEAR]['hwy'],
-        'trn':COMMITTED_PROJECTS[YEAR]['trn'] + MAJOR_PROJECTS[YEAR]['trn']
-      }
-
 # Put them together for NETWORK_PROJECTS
 NETWORK_PROJECTS = collections.OrderedDict()
 for YEAR in COMMITTED_PROJECTS.keys():
-  NETWORK_PROJECTS[YEAR] = {
-    'hwy':COMMITTED_PROJECTS[YEAR]['hwy'],
-    'trn':COMMITTED_PROJECTS[YEAR]['trn']
-  }
+    # Future Round1 includes major projects
+    if PROJECT == "FU1":
+        NETWORK_PROJECTS[YEAR] = {
+            'hwy':COMMITTED_PROJECTS[YEAR]['hwy'] + MAJOR_PROJECTS[YEAR]['hwy'],
+            'trn':COMMITTED_PROJECTS[YEAR]['trn'] + MAJOR_PROJECTS[YEAR]['trn']
+        }
+    elif PROJECT == "PPA":
+        # Project Performance Assessment baseline does not include major projects
+        NETWORK_PROJECTS[YEAR] = {
+            'hwy':COMMITTED_PROJECTS[YEAR]['hwy'],
+            'trn':COMMITTED_PROJECTS[YEAR]['trn']
+        }
 
 # done at the end in case they need to remove transit project links
 # remove "False and" clauses when these are coded
