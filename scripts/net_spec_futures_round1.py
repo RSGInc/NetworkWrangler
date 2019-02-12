@@ -131,12 +131,12 @@ if PROJECT == "FU1":
                        'MAJ_SOL070020_I80_I680_SR12_Int_2B_7',
                        'MAJ_SCL050009_VTA_Eastridge_Extension',
                        'MAJ_Bay_Area_Forward_committed',
-                       'SOL070020_I80_I680_SR12_Int_1_2A'],
+                       'MAJ_SOL070020_I80_I680_SR12_Int_1_2A'],
                 'trn':['MAJ_SF_070004_Geary_BRT_Phase2',
                        'MAJ_SOL070020_I80_I680_SR12_Int_2B_7',
                        'MAJ_SCL050009_VTA_Eastridge_Extension',
                        'MAJ_SF_Congestion_Pricing',
-                       'SOL070020_I80_I680_SR12_Int_1_2A']
+                       'MAJ_SOL070020_I80_I680_SR12_Int_1_2A']
         }),
         (2030, {'hwy':['MAJ_SanPablo_BRT',
                        'MAJ_ElCaminoReal_BRT',
