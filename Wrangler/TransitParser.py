@@ -329,7 +329,8 @@ class TransitParser(Parser):
         """
         program = TransitParser.PROGRAM_UNKNOWN  # default
         rows = []
-        currentRoute = None
+        currentRoute    = None
+        currentComments = []
 
         # try to figure out what type of file this is -- TRNBUILD or PT
         for comment in self.tfp.linecomments:
@@ -343,12 +344,23 @@ class TransitParser(Parser):
                     program = TransitParser.PROGRAM_PT
         WranglerLogger.debug("convertLineData: PROGRAM: {}".format(program))
 
+        line_num = 1
         for line in self.tfp.lines:
+
+            # WranglerLogger.debug("{:5} line[0]={}".format(line_num, line[0]))
+            line_num += 1
 
             # Add comments as simple strings
             if line[0] == 'smcw':
                 cmt = line[1].strip()
-                rows.append(cmt)
+                # WranglerLogger.debug("smcw line={}".format(line))
+
+                if currentRoute:
+                    # don't add it now since we might mess up the ordering
+                    # if we haven't closed out the last line
+                    currentComments.append(cmt)
+                else:
+                    rows.append(cmt)
                 continue
 
             # Handle Line attributes
@@ -367,6 +379,13 @@ class TransitParser(Parser):
                 if key=='NAME':
                     if currentRoute:
                         rows.append(currentRoute)
+
+                    # now add the comments stored up
+                    if len(currentComments)>0:
+                        # WranglerLogger.debug("currentComments: {}".format(currentComments))
+                        rows.extend(currentComments)
+                        currentComments = []
+
                     currentRoute = TransitLine(name=value)
                 else:
                     currentRoute[key] = value  # Just store all other attributes

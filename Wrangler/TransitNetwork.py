@@ -84,26 +84,42 @@ class TransitNetwork(Network):
                         self.parseFile(filename)
 
             elif self.modelType in [Network.MODEL_TYPE_TM1]:
-                # read the the block file to find the line filenames
+                # read the the block file to find the line filenames if it exists
                 block_filename = os.path.join(basenetworkpath, "transit_lines", networkName + ".block")
                 line_filenames = []
-                WranglerLogger.info("Reading {}".format(block_filename))
-                file_re = re.compile(r"^\s*read\s+file\s*=\s*trn[\\](\S*)$")
-                block_file = open(block_filename,"r")
-                for line in block_file:
-                    result = re.match(file_re, line)
-                    if result: line_filenames.append(result.group(1))
-                block_file.close()
+                flat_dirs      = False
+
+                if os.path.exists(block_filename):
+                    WranglerLogger.info("Reading {}".format(block_filename))
+                    file_re = re.compile(r"^\s*read\s+file\s*=\s*trn[\\](\S*)$")
+                    block_file = open(block_filename,"r")
+                    for line in block_file:
+                        result = re.match(file_re, line)
+                        if result: line_filenames.append(result.group(1))
+                    block_file.close()
+                else:
+                    # if it doesn't exist, assume networkName.lin and flat file structure
+                    line_filenames.append("{}.lin".format(networkName))
+                    flat_dirs = True
+
                 WranglerLogger.debug("Line filenames: {}".format(line_filenames))
 
                 # read those line files
                 for filename in line_filenames:
-                    self.parseFile(os.path.join(basenetworkpath, "transit_lines", filename))
+                    if flat_dirs:
+                        self.parseFile(os.path.join(basenetworkpath, filename), insert_replace=False)
+                    else:
+                        self.parseFile(os.path.join(basenetworkpath, "transit_lines", filename), insert_replace=False)
 
                 # now the rest
-                for filename in glob.glob(os.path.join(basenetworkpath, "transit_support", "*.*")):
+                if flat_dirs:
+                    glob_str = os.path.join(basenetworkpath, "*.*")
+                else:
+                    glob_str = os.path.join(basenetworkpath, "transit_support", "*.*")
+
+                for filename in glob.glob(glob_str):
                     suffix = filename.rsplit(".")[-1].lower()
-                    if suffix in ["dat", "pnr", "sup", "zac"]:
+                    if suffix in ["dat", "pnr", "sup", "zac", "access", "link", "xfer"]:
                         WranglerLogger.debug("About to read {}".format(filename))
                         if filename.endswith("_access_links.dat"):
                             self.parseFileAsSuffix(filename, "access", False)
@@ -112,7 +128,7 @@ class TransitNetwork(Network):
                         elif filename.endswith("Transit_Support_Nodes.dat"):
                             self.parseFileAsSuffix(filename, "node", False)
                         else:
-                            self.parseFile(filename)
+                            self.parseFile(filename, insert_replace=False)
 
             # fares
             for farefile in TransitNetwork.FARE_FILES[self.modelType]:
@@ -658,7 +674,14 @@ class TransitNetwork(Network):
         if len(self.pnrs)>0 or writeEmptyFiles:
             for pnr_file in self.pnrs.keys():
                 logstr += " {}_pnr".format(pnr_file)
-                f = open(os.path.join(path,"{}_{}.pnr".format(name,pnr_file)), 'w');
+
+                # don't prepend name unless it's not there already
+                if pnr_file.startswith(name):
+                    pnr_out_file = "{}.pnr".format(pnr_file)
+                else:
+                    pnr_out_file = "{}_{}.pnr".format(name,pnr_file)
+
+                f = open(os.path.join(path,pnr_out_file),'w')
                 for pnr in self.pnrs[pnr_file]:
                     f.write(str(pnr)+"\n")
                 f.close()
@@ -748,7 +771,7 @@ class TransitNetwork(Network):
         success, children, nextcharacter = self.parser.parse(trntxt, production="transit_file")
         if not nextcharacter==len(trntxt):
             errorstr  = "\n   Did not successfully read the whole file; got to nextcharacter=%d out of %d total" % (nextcharacter, len(trntxt))
-            errorstr += "\n   Did read %d lines, next unread text = [%s]" % (len(children), trntxt[nextcharacter:nextcharacter+50])
+            errorstr += "\n   Did read %d lines, next unread text = [%s]" % (len(children), trntxt[nextcharacter:nextcharacter+200])
             raise NetworkException(errorstr)
 
         # Convert from parser-tree format to in-memory transit data structures:
