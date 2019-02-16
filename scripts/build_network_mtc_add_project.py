@@ -45,7 +45,7 @@ if __name__ == '__main__':
     parser.add_argument("--hwy", dest='hwy', action='store_true', help="Pass if project is a roadway project")
     parser.add_argument("--trn", dest='trn', action='store_true', help="Pass if project is a transit project")
     parser.add_argument("project_short_id", help="Short ID of project, to be used for directory")
-    parser.add_argument("project", help="Project to add")
+    parser.add_argument("project", help="Project to add", nargs="+")
     args = parser.parse_args()
 
     if not args.hwy and not args.trn:
@@ -113,12 +113,15 @@ if __name__ == '__main__':
         # if applying project
         if (netmode == "hwy" and args.hwy) or (netmode == "trn" and args.trn):
 
-            Wrangler.WranglerLogger.info("Applying project [%s] of type [%s]" % (args.project, netmode))
-            cloned_SHA1 = networks[netmode].cloneProject(networkdir=args.project, tag=None,
-                                                        projtype="project", tempdir=TEMP_SUBDIR)
-            (parentdir, networkdir, gitdir, projectsubdir) = networks[netmode].getClonedProjectArgs(args.project, None, "project", TEMP_SUBDIR)
+            # iterate through projects specified, since args.project is a list
+            for my_project in args.project:
 
-            applied_SHA1 = networks[netmode].applyProject(parentdir, networkdir, gitdir, projectsubdir)
+                Wrangler.WranglerLogger.info("Applying project [%s] of type [%s]" % (my_project, netmode))
+                cloned_SHA1 = networks[netmode].cloneProject(networkdir=my_project, tag=None,
+                                                             projtype="project", tempdir=TEMP_SUBDIR)
+                (parentdir, networkdir, gitdir, projectsubdir) = networks[netmode].getClonedProjectArgs(my_project, None, "project", TEMP_SUBDIR)
+
+                applied_SHA1 = networks[netmode].applyProject(parentdir, networkdir, gitdir, projectsubdir)
 
         # write networks
         final_path = os.path.join(OUTPUT_FUTURE_DIR,netmode)
@@ -140,3 +143,4 @@ if __name__ == '__main__':
             Wrangler.TransitNetwork.capacity.writeTransitPrefixToVehicle(directory = final_path)
 
     Wrangler.WranglerLogger.debug("Successfully completed running %s" % os.path.abspath(__file__))
+
