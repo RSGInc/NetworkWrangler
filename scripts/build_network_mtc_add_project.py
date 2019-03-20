@@ -9,7 +9,7 @@ USAGE = """
     with subdirs BASE_DIR_project_short_id
 
 """
-PPA_DIR = "M:\Application\Model One\RTP2021\ProjectPerformanceAssessment\TestProjects"
+PPA_DIR = "M:\Application\Model One\RTP2021\ProjectPerformanceAssessment\Projects"
 MODEL_RUN_PREFIX = "2050_TM150_"
 
 def findBaseDirectory(future):
