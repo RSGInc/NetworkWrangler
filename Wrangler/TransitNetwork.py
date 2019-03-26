@@ -28,7 +28,7 @@ class TransitNetwork(Network):
             "bart.fare",     "xfer.fare",  "farelinks.fare"],
         Network.MODEL_TYPE_TM1:
            ["ACE.far",       "Amtrak.far", "BART.far",
-            "Caltrain.far",  "Ferry.far",
+            "Caltrain.far",  "Ferry.far",  "HSR.far",
             "SMART.far",     "xfare.far",  "farelinks.far",
             "transit_faremat.block"],
         Network.MODEL_TYPE_TM2:
