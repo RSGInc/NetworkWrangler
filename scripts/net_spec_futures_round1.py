@@ -189,8 +189,8 @@ for YEAR in COMMITTED_PROJECTS.keys():
 # remove "False and" clauses when these are coded
 if SCENARIO=="CleanAndGreen":
     # NOTE: Earthquake is assumed in Round1 2035 but since the effect doesn't stay; this is handled in build_network_mtc_futures.py
-    # High Speed Rail
-    NETWORK_PROJECTS[2030]['trn'].append("HSR")
+    # High Speed Rail ----> we are no longer running HSR in the baseline
+    #NETWORK_PROJECTS[2030]['trn'].append("HSR")
     if PROJECT == "FU1":
         # Haywired Earthquake in 2035
         NETWORK_PROJECTS[2035]['hwy'].append("Earthquake")
