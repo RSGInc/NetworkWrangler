@@ -3,7 +3,7 @@ from simpleparse import generator
 from simpleparse.parser import Parser
 from simpleparse.dispatchprocessor import *
 import collections, re
-
+from .Factor import Factor
 from .Faresystem import Faresystem
 from .Linki import Linki
 from .Logger import WranglerLogger
@@ -24,7 +24,7 @@ WRANGLER_FILE_SUFFICES = [ "lin", "link", "pnr", "zac", "access", "xfer", "pts" 
 # NOTE: even though XYSPEED and TIMEFAC are node attributes here, I'm not sure that's really ok --
 # Cube documentation implies TF and XYSPD are node attributes...
 transit_file_def=r'''
-transit_file      := smcw*, ( accessli / line / link / pnr / zac / supplink / faresystem / waitcrvdef / crowdcrvdef / operator / mode / vehicletype )+, smcw*, whitespace*
+transit_file      := smcw*, ( accessli / line / link / pnr / zac / supplink / factor / faresystem / waitcrvdef / crowdcrvdef / operator / mode / vehicletype )+, smcw*, whitespace*
 
 line              := whitespace?, smcw?, c"LINE", whitespace, lin_attr*, lin_node*, whitespace?
 lin_attr          := ( lin_attr_name, whitespace?, "=", whitespace?, attr_value, whitespace?,
@@ -61,6 +61,11 @@ supplink_attr     := (( (supplink_attr_name, whitespace?, "=", whitespace?, attr
                        whitespace?, comma?, whitespace?)
 npair_attr_name    := c"nodes" / c"n"
 supplink_attr_name:= c"mode" / c"dist" / c"speed" / c"oneway" / c"time"
+
+factor            := whitespace?, smcw?, c"FACTOR", whitespace, factor_attr*, whitespace?, semicolon_comment*
+factor_attr       := ( (factor_attr_name, whitespace?, "=", whitespace?, attr_value),
+                        whitespace?, comma?, whitespace? )
+factor_attr_name  := c"maxwaittime" / word_nodes
 
 faresystem        := whitespace?, smcw?, c"FARESYSTEM", whitespace, faresystem_attr*, whitespace?, semicolon_comment*
 faresystem_attr   := (( (faresystem_attr_name, whitespace?, "=", whitespace?, attr_value) /
@@ -123,6 +128,7 @@ class TransitFileProcessor(DispatchProcessor):
         self.nodes     = []
         self.liType    = ''
         self.supplinks = []
+        self.factors   = []
         self.faresystems  = []
         # PT System control statements
         self.waitcrvdefs  = []
@@ -250,6 +256,10 @@ class TransitFileProcessor(DispatchProcessor):
     def supplink(self, tup, buffer):
         supplink = self.process_line(tup, buffer)
         self.supplinks.append(supplink)
+
+    def factor(self, tup, buffer):
+        factor = self.process_line(tup, buffer)
+        self.factors.append(factor)
 
     def faresystem(self, tup, buffer):
         fs = self.process_line(tup, buffer)
@@ -422,11 +432,12 @@ class TransitParser(Parser):
         return (program, rows)
 
     def convertLinkData(self):
-        """ Convert the parsed tree of data into a usable python list of transit lines
-            returns list of comments and transit line objects
+        """ Convert the parsed tree of data into a usable python list of transit links
+            returns list of comments and transit link & factor objects
         """
         rows = []
         currentLink = None
+        currentFactor = None
         key = None
         value = None
         comment = None
@@ -468,6 +479,34 @@ class TransitParser(Parser):
 
         # Save last link too
         if currentLink: rows.append(currentLink)
+
+        for factor in self.tfp.factors:
+            currentFactor = Factor()
+
+            # factor[0]:
+            # ('smcw', '; BART-eBART timed transfer\n', 
+            #    [('semicolon_comment', '; BART-eBART timed transfer\n',
+            #      [('comment', ' BART-eBART timed transfer', [])])])
+            # keep as line comment
+            if factor[0][0] == 'smcw':
+                smcw = factor.pop(0)
+                rows.append(smcw[1].strip())
+
+            # the rest are attributes
+            # [('factor_attr', 'MAXWAITTIME=1, ', [('factor_attr_name', 'MAXWAITTIME', []), ('attr_value', '1', [('alphanums', '1', [])])]), 
+            #  ('factor_attr', 'NODES=15536\n',   [('factor_attr_name', 'NODES', [('word_nodes', 'NODES', [])]), ('attr_value', '15536', [('alphanums', '15536', [])])])]
+            for factor_attr in factor:
+                if factor_attr[0] != 'factor_attr':
+                    WranglerLogger.critical("** unexpected factor item: {}".format(factor_attr))
+
+                factor_attr_name = factor_attr[2][0]  # ('factor_attr_name', 'MAXWAITTIME', [])
+                factor_attr_val  = factor_attr[2][1]  # ('attr_value', '1', [('alphanums', '1', [])])
+
+                # set it
+                currentFactor[factor_attr_name[1]] = factor_attr_val[1]
+
+            rows.append(currentFactor)
+
         return rows
 
     def convertPNRData(self):

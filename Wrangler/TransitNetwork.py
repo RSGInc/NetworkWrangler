@@ -1,5 +1,6 @@
 import copy, glob, inspect, math, os, re, sys, xlrd
 from collections import defaultdict
+from .Factor import Factor
 from .Faresystem import Faresystem
 from .Linki import Linki
 from .Logger import WranglerLogger
@@ -49,7 +50,7 @@ class TransitNetwork(Network):
                          networkPlanSubdir, networkName)
         self.program      = TransitParser.PROGRAM_TRNBUILD # will be one of PROGRAM_PT or PROGRAM_TRNBUILD
         self.lines        = []
-        self.links        = []
+        self.links        = [] # TransitLink instances, Factor instances and comments (strings)
         self.pnrs         = {} # key is file name since these need to stay separated
         self.zacs         = []
         self.accessli     = []
@@ -250,6 +251,25 @@ class TransitNetwork(Network):
         """
         del self.lines[:]
 
+    def validateFrequencies(self):
+        """
+        Makes sure none of the transit lines have 0 frequencies for all time periods.
+        """
+        WranglerLogger.debug("Validating frequencies")
+
+        # For each line
+        for line in self:
+            if not isinstance(line,TransitLine): continue
+
+            freqs = line.getFreqs()
+            nonzero_found = False
+            for freq in freqs:
+                if float(freq) > 0:
+                    nonzero_found = True
+                    break
+
+            if nonzero_found==False:
+                raise NetworkException('Lines {} has only zero frequencies'.format(line.name))
 
     def validateWnrsAndPnrs(self):
         """
@@ -599,6 +619,8 @@ class TransitNetwork(Network):
         Write out this full transit network to disk in path specified.
         """
         if not suppressValidation:
+
+            self.validateFrequencies()
             self.validateWnrsAndPnrs()
             
             if not cubeNetFileForValidation:
