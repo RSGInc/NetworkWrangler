@@ -10,7 +10,7 @@ USAGE = """
 
 """
 PPA_DIR = "M:\Application\Model One\RTP2021\ProjectPerformanceAssessment\Projects"
-MODEL_RUN_PREFIX = "2050_TM150_"
+MODEL_RUN_PREFIX = "2050_TM150_PPA_"
 
 def findBaseDirectory(future):
     """
