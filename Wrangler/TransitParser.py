@@ -440,7 +440,7 @@ class TransitParser(Parser):
         currentFactor = None
         key = None
         value = None
-        comment = None
+        comments = []
 
         for link in self.tfp.links:
             # Each link is a 3-tuple:  key, value, list-of-children.
@@ -480,6 +480,7 @@ class TransitParser(Parser):
         # Save last link too
         if currentLink: rows.append(currentLink)
 
+
         for factor in self.tfp.factors:
             currentFactor = Factor()
 
@@ -496,6 +497,10 @@ class TransitParser(Parser):
             # [('factor_attr', 'MAXWAITTIME=1, ', [('factor_attr_name', 'MAXWAITTIME', []), ('attr_value', '1', [('alphanums', '1', [])])]), 
             #  ('factor_attr', 'NODES=15536\n',   [('factor_attr_name', 'NODES', [('word_nodes', 'NODES', [])]), ('attr_value', '15536', [('alphanums', '15536', [])])])]
             for factor_attr in factor:
+                if factor_attr[0] == 'semicolon_comment':
+                    comments.append(factor_attr[1])
+                    continue
+
                 if factor_attr[0] != 'factor_attr':
                     WranglerLogger.critical("** unexpected factor item: {}".format(factor_attr))
 
@@ -506,6 +511,9 @@ class TransitParser(Parser):
                 currentFactor[factor_attr_name[1]] = factor_attr_val[1]
 
             rows.append(currentFactor)
+            if len(comments)>0:
+                rows.extend(comments)
+                comments = []
 
         return rows
 
