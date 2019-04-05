@@ -10,7 +10,6 @@ USAGE = """
 
 """
 PPA_DIR = "M:\Application\Model One\RTP2021\ProjectPerformanceAssessment\Projects"
-MODEL_RUN_PREFIX = "2050_TM151_PPA_"
 
 def findBaseDirectory(future):
     """
@@ -21,7 +20,7 @@ def findBaseDirectory(future):
     """
     dir_list = sorted(os.listdir(PPA_DIR))
 
-    model_id_re = re.compile("^baseline_(BF|CG|RT)_(.*)")
+    model_id_re = re.compile("^2050_TM151_PPA_(BF|CG|RT)_(.*)")
     return_dir  = None
 
     for dirname in dir_list:
@@ -59,7 +58,8 @@ if __name__ == '__main__':
     HWY_NET_NAME     = "freeflow.net"
     TRN_NET_NAME     = "transitLines"
     BASE_DIR         = findBaseDirectory(args.future)   # e.g. 2050_TM150_PPA_BF_00
-    PIVOT_DIR        = os.path.join(PPA_DIR, BASE_DIR, "network_2050")  # full path of input network
+    PIVOT_DIR        = os.path.join(PPA_DIR, BASE_DIR, "INPUT")  # full path of input network
+    SUFFIX_NUM       = 0  # suffix for this network
     TRANSIT_CAPACITY_DIR = os.path.join(PIVOT_DIR, "trn")
 
     OUTPUT_DIR       = os.path.join(PPA_DIR, args.project_short_id)
@@ -105,9 +105,16 @@ if __name__ == '__main__':
     if TRANSIT_CAPACITY_DIR:
         Wrangler.TransitNetwork.capacity = Wrangler.TransitCapacity(directory=TRANSIT_CAPACITY_DIR)
 
-    # this is the directory for writing networks
-    OUTPUT_FUTURE_DIR = os.path.join(OUTPUT_DIR, "{}_{}".format(BASE_DIR.replace("baseline_",MODEL_RUN_PREFIX), args.project_short_id))
-    if not os.path.exists(OUTPUT_FUTURE_DIR): os.mkdir(OUTPUT_FUTURE_DIR)
+    # figure out the directory for writing networks
+    while True:
+      OUTPUT_FUTURE_DIR = os.path.join(OUTPUT_DIR, "{}_{}_{:02d}".format(BASE_DIR, args.project_short_id, SUFFIX_NUM))
+      if os.path.exists(OUTPUT_FUTURE_DIR):
+        Wrangler.WranglerLogger.info("OUTPUT_FUTURE_DIR {} exists -- iterating".format(OUTPUT_FUTURE_DIR))
+        SUFFIX_NUM += 1
+      else:
+        Wrangler.WranglerLogger.info("OUTPUT_FUTURE_DIR is {}".format(OUTPUT_FUTURE_DIR))
+        os.mkdir(OUTPUT_FUTURE_DIR)
+        break
 
     for netmode in ["hwy","trn"]:
         # if applying project
