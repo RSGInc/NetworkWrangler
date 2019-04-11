@@ -66,11 +66,24 @@ if __name__ == '__main__':
     # make OUTPUT_DIR
     if not os.path.exists(OUTPUT_DIR): os.mkdir(OUTPUT_DIR)
 
-    # move into it so the log is here
+    # move into it so the scratch is here
     os.chdir(OUTPUT_DIR)
 
+    # figure out the directory for writing networks
+    while True:
+      OUTPUT_FUTURE_DIR = os.path.join(OUTPUT_DIR, "{}_{}_{:02d}".format(BASE_DIR, args.project_short_id, SUFFIX_NUM))
+      if os.path.exists(OUTPUT_FUTURE_DIR):
+        Wrangler.WranglerLogger.info("OUTPUT_FUTURE_DIR {} exists -- iterating".format(OUTPUT_FUTURE_DIR))
+        SUFFIX_NUM += 1
+      else:
+        Wrangler.WranglerLogger.info("OUTPUT_FUTURE_DIR is {}".format(OUTPUT_FUTURE_DIR))
+        os.mkdir(OUTPUT_FUTURE_DIR)
+        break
+
+    # put log file into the run dir
     LOG_FILENAME     = "addproject_{}_{}_{}_{}.info.LOG".format(PROJECT, SCENARIO, args.project_short_id, NOW)
-    Wrangler.setupLogging(LOG_FILENAME, LOG_FILENAME.replace("info", "debug"))
+    Wrangler.setupLogging(os.path.join(OUTPUT_FUTURE_DIR, LOG_FILENAME),
+                          os.path.join(OUTPUT_FUTURE_DIR, LOG_FILENAME.replace("info", "debug")))
 
 
     Wrangler.WranglerLogger.info("Using base directory {}".format(PIVOT_DIR))
@@ -105,16 +118,6 @@ if __name__ == '__main__':
     if TRANSIT_CAPACITY_DIR:
         Wrangler.TransitNetwork.capacity = Wrangler.TransitCapacity(directory=TRANSIT_CAPACITY_DIR)
 
-    # figure out the directory for writing networks
-    while True:
-      OUTPUT_FUTURE_DIR = os.path.join(OUTPUT_DIR, "{}_{}_{:02d}".format(BASE_DIR, args.project_short_id, SUFFIX_NUM))
-      if os.path.exists(OUTPUT_FUTURE_DIR):
-        Wrangler.WranglerLogger.info("OUTPUT_FUTURE_DIR {} exists -- iterating".format(OUTPUT_FUTURE_DIR))
-        SUFFIX_NUM += 1
-      else:
-        Wrangler.WranglerLogger.info("OUTPUT_FUTURE_DIR is {}".format(OUTPUT_FUTURE_DIR))
-        os.mkdir(OUTPUT_FUTURE_DIR)
-        break
 
     for netmode in ["hwy","trn"]:
         # if applying project
