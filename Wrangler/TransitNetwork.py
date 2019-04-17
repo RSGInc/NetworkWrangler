@@ -284,6 +284,8 @@ class TransitNetwork(Network):
         setToOffstreet  = {} # lineset => True if has offstreet nodes
         doneNodes       = set()
         
+        critical_found  = False
+
         # For each line
         for line in self:
             if not isinstance(line,TransitLine): continue
@@ -324,8 +326,17 @@ class TransitNetwork(Network):
                     if not isinstance(zac,ZACLink): continue
                     
                     m = re.match(nodepair_pattern, zac.id)
-                    if m.group(1)==stopNodeStr: wnrNodes.add(int(m.group(2)))
-                    if m.group(2)==stopNodeStr: wnrNodes.add(int(m.group(1)))
+                    if m.group(1)==stopNodeStr: 
+                        # this one is invalid for TM1
+                        if self.modelType in [Network.MODEL_TYPE_TM1]:
+                            errorstr = "ZONEACCESS link should be funnel-stop but stop-funnel found: {}".format(zac)
+                            WranglerLogger.critical(errorstr)
+                            critical_found = True
+                        else:
+                            wnrNodes.add(int(m.group(2)))
+
+                    if m.group(2)==stopNodeStr:
+                        wnrNodes.add(int(m.group(1)))
 
                 #print "Check for PNR"
                 for pnr_filename in self.pnrs.keys():
@@ -388,7 +399,10 @@ class TransitNetwork(Network):
                 if numWnrs == 0 and setToOffstreet[lineset]:
                     errorstr = "Zero wnrNodes or onstreetxfers for stop %s!" % stopNodeStr
                     WranglerLogger.critical(errorstr)
-                    # raise NetworkException(errorstr)
+                    critical_found = True
+
+        if critical_found:
+            raise NetworkException("Critical errors found")
                                                               
     def line(self, name):
         """
