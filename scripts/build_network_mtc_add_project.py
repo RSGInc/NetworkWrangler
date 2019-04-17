@@ -9,7 +9,12 @@ USAGE = """
     with subdirs BASE_DIR_project_short_id
 
 """
-PPA_DIR = "M:\Application\Model One\RTP2021\ProjectPerformanceAssessment\Projects"
+PPA_DIR    = "M:\Application\Model One\RTP2021\ProjectPerformanceAssessment\Projects"
+NODE_NAMES = "M:\Application\Model One\Networks\TM1_2015_Base_Network\Node Description.xls"
+
+# for transit network validation output
+os.environ["CHAMP_node_names"] = NODE_NAMES
+
 
 def findBaseDirectory(future):
     """
