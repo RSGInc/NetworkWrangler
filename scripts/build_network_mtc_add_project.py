@@ -21,12 +21,12 @@ def findBaseDirectory(future):
     Returns the highest version base directory for the given future.
     Right now, that just means sorting alphabetically and returning the last one.
 
-    Returns just the dirname (not full path)
+    Queries the user which base directory to use and returns the base directory name (not full path)
     """
     dir_list = sorted(os.listdir(PPA_DIR))
 
     model_id_re = re.compile("^2050_TM151_PPA_(BF|CG|RT)_(.*)")
-    return_dir  = None
+    return_dirs = []
 
     for dirname in dir_list:
         match = model_id_re.match(dirname)
@@ -35,13 +35,65 @@ def findBaseDirectory(future):
         run_version = match.group(2)
 
         if future=="CleanAndGreen" and future_code=="CG":
-            return_dir = dirname
+            return_dirs.append(dirname)
         elif future=="RisingTides" and future_code=="RT":
-            return_dir = dirname
+            return_dirs.append(dirname)
         elif future=="BackToTheFuture" and future_code=="BF":
-            return_dir = dirname
+            return_dirs.append(dirname)
 
-    return return_dir
+    if len(return_dirs) == 0:
+      raise Exception("No base directories found")
+
+    print("The following base directory options were found: ")
+    for dirname in return_dirs:
+      print(" -> {}".format(dirname))
+    print("Which base directory do you want to use? (No response means {}) ".format(return_dirs[-1]))
+    response = raw_input("")
+    print("  response = [%s]" % response)
+
+    response = response.strip()
+    if response == "":
+      return return_dirs[-1]
+
+    if response in return_dirs:
+      return response
+
+    raise Exception("Didn't understand response [{}]".format(response))
+
+def determineProjectDirectory(OUTPUT_DIR, BASE_DIR, project_short_id):
+
+    dir_list          = sorted(os.listdir(OUTPUT_DIR))
+    dir_re_str        = "^{}_{}_(\d\d)$".format(BASE_DIR, project_short_id)
+    dir_re            = re.compile(dir_re_str)
+    existing_suffixes = []
+
+    print(dir_re_str)
+
+    for dirname in dir_list:
+      print(dirname)
+      match = dir_re.match(dirname)
+      if match == None: continue
+      suffix = match.group(1)
+      existing_suffixes.append(int(suffix))
+
+    print("Found existing project diretories with suffixes: {}".format(existing_suffixes))
+    proposed_suffix = 0
+    if len(existing_suffixes) > 0: proposed_suffix = existing_suffixes[-1] + 1
+    print("Which suffix number do you want to use? (No response means {}) ".format(proposed_suffix))
+    response = raw_input("")
+    print("  response = [%s]" % response)
+    
+    response_suffix = proposed_suffix
+    if response != "":
+      response_suffix = int(response.strip())
+
+    if response_suffix in existing_suffixes:
+      raise Exception("Cannot use suffix that is already in use")
+
+    project_dir = os.path.join(OUTPUT_DIR, "{}_{}_{:02d}".format(BASE_DIR, project_short_id, response_suffix))
+    print("OUTPUT_FUTURE_DIR is {}".format(project_dir))
+
+    return project_dir
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=USAGE, formatter_class=argparse.RawDescriptionHelpFormatter)
@@ -64,26 +116,16 @@ if __name__ == '__main__':
     TRN_NET_NAME     = "transitLines"
     BASE_DIR         = findBaseDirectory(args.future)   # e.g. 2050_TM150_PPA_BF_00
     PIVOT_DIR        = os.path.join(PPA_DIR, BASE_DIR, "INPUT")  # full path of input network
-    SUFFIX_NUM       = 0  # suffix for this network
     TRANSIT_CAPACITY_DIR = os.path.join(PIVOT_DIR, "trn")
 
     OUTPUT_DIR       = os.path.join(PPA_DIR, args.project_short_id)
     # make OUTPUT_DIR
     if not os.path.exists(OUTPUT_DIR): os.mkdir(OUTPUT_DIR)
 
+    OUTPUT_FUTURE_DIR = determineProjectDirectory(OUTPUT_DIR, BASE_DIR, args.project_short_id)
+    os.mkdir(OUTPUT_FUTURE_DIR)
     # move into it so the scratch is here
     os.chdir(OUTPUT_DIR)
-
-    # figure out the directory for writing networks
-    while True:
-      OUTPUT_FUTURE_DIR = os.path.join(OUTPUT_DIR, "{}_{}_{:02d}".format(BASE_DIR, args.project_short_id, SUFFIX_NUM))
-      if os.path.exists(OUTPUT_FUTURE_DIR):
-        Wrangler.WranglerLogger.info("OUTPUT_FUTURE_DIR {} exists -- iterating".format(OUTPUT_FUTURE_DIR))
-        SUFFIX_NUM += 1
-      else:
-        Wrangler.WranglerLogger.info("OUTPUT_FUTURE_DIR is {}".format(OUTPUT_FUTURE_DIR))
-        os.mkdir(OUTPUT_FUTURE_DIR)
-        break
 
     # put log file into the run dir
     LOG_FILENAME     = "addproject_{}_{}_{}_{}.info.LOG".format(PROJECT, SCENARIO, args.project_short_id, NOW)
