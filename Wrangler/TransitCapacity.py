@@ -246,6 +246,19 @@ class TransitCapacity:
                              vehicleType_OP=vehicleType,
                              lineNameIsRegex=lineNameIsRegex)
     
+    def setVehicleTypeForPrefix(self, prefix, system, vehicleType):
+        """
+        Sets the vehicle type for the given prefix.
+        """
+        if vehicleType not in self.vehicleTypeToCapacity:
+            WranglerLogger.warn("Setting vehicle type for prefix {} but vehicleType {} unknown" % (prefix, vehicleType))
+
+        if prefix in self.prefixToVehicleType.keys():
+            WranglerLogger.debug("Overwriting system/vehicle type for prefix {}.  Was {}/{}, setting to {}/{}".format(prefix, 
+                                 self.prefixToVehicleType[prefix][0], self.prefixToVehicleType[prefix][1], system, vehicleType))
+        # prefix -> [ system, vehicletype ]
+        self.prefixToVehicleType[prefix] = [system, vehicleType]
+
     def setVehicleTypes(self, linename, vehicleType_AM, vehicleType_PM, vehicleType_OP, lineNameIsRegex = False):
         """
         Sets the vehicle types for this line name.
@@ -260,12 +273,17 @@ class TransitCapacity:
        
 
         if lineNameIsRegex:
+            num_updated = 0
             linename_re = re.compile(linename, flags=re.IGNORECASE)
             for name in self.linenameToAttributes.keys():
                 if re.search(linename_re, name):
                     self.linenameToAttributes[name][TransitCapacity.ATTR_AMVEHTYPE] = vehicleType_AM
                     self.linenameToAttributes[name][TransitCapacity.ATTR_PMVEHTYPE] = vehicleType_PM
                     self.linenameToAttributes[name][TransitCapacity.ATTR_OPVEHTYPE] = vehicleType_OP
+                    num_updated += 1
+
+            if num_updated==0:
+                WranglerLogger.warn("setVehicleTypes called with lineNameIsRegex and no matching configuration for line name {}".format(linename))
         else:
             if linename.upper() not in self.linenameToAttributes:
                 raise NetworkException("TransitCapacity: setAllVehicleTypes for unknown linename %s" % linename)
