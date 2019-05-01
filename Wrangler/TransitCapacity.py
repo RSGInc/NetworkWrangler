@@ -107,8 +107,8 @@ class TransitCapacity:
         """
         l2vReader = csv.reader(open(os.path.join(directory,filename)))
         for name,system,stripped,simplename,fullLineName,vehicleTypeAM,vehicleTypePM,vehicleTypeOP in l2vReader:
-            self.linenameToAttributes[name] = [system, fullLineName, vehicleTypeAM,vehicleTypePM,vehicleTypeOP]
-            self.linenameToSimple[name] = [stripped, simplename]
+            self.linenameToAttributes[name.upper()] = [system, fullLineName, vehicleTypeAM,vehicleTypePM,vehicleTypeOP]
+            self.linenameToSimple[name.upper()] = [stripped, simplename]
         # print "linenameToAttributes = " + str(self.linenameToAttributes)
 
     def writeTransitLineToVehicle(self, directory=".", filename="transitLineToVehicle.csv"):
