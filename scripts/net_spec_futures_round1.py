@@ -70,7 +70,7 @@ COMMITTED_PROJECTS = collections.OrderedDict([
                'SON090002_SMART',
                'SON090002_SMART_to_Larkspur',
                'CC_070062_Richmond_Ferry',
-               'MAJ_MuniForward_Committed',
+               'MuniForward_Committed',
                'VTA_Next',
                'SCL130001_237_101_MAT_Int_Mod'],
     }),
