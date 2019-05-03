@@ -274,11 +274,14 @@ class TransitLine(object):
         # default is true
         return True
     
-    def setOneWay(self):
+    def setOneWay(self, oneway=True):
         """
-        Turns on the oneway flag
+        Sets the oneway flag based on the given arg.
         """
-        self.attr["ONEWAY"] = "T"
+        if oneway:
+            self.attr["ONEWAY"] = "T"
+        else:
+            self.attr["ONEWAY"] = "F"
         
     def hasOffstreetNodes(self, modeltype):
         """
