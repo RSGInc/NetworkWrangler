@@ -88,10 +88,12 @@ COMMITTED_PROJECTS = collections.OrderedDict([
                'SON070004_101_MarinSonNarrows_Phase2',
                'SOL110006_Jepson_1B_1C',
                'SCL190008_US101_DLC_Int_Imp',
-               'I880_US101_AdaptiveRampMetering'],
+               'I880_US101_AdaptiveRampMetering',
+               'SOL070020_I80_I680_SR12_Int_1_2A'],
         'trn':['SF_010028_Caltrain_Modernization',
                'SON090002_SMART_to_Windsor',
-               'REG090037_New_BART_Trains']
+               'REG090037_New_BART_Trains',
+               'SOL070020_I80_I680_SR12_Int_1_2A']
     }),
     (2030, {
         'hwy':[{'name':'Bridge_Toll_Updates', 'kwargs':{'MODELYEAR':'2030'}},
@@ -130,13 +132,11 @@ if PROJECT == "FU1":
                        'MAJ_SF_Congestion_Pricing',
                        'MAJ_SOL070020_I80_I680_SR12_Int_2B_7',
                        'MAJ_SCL050009_VTA_Eastridge_Extension',
-                       'MAJ_Bay_Area_Forward_committed',
-                       'MAJ_SOL070020_I80_I680_SR12_Int_1_2A'],
+                       'MAJ_Bay_Area_Forward_committed',],
                 'trn':['MAJ_SF_070004_Geary_BRT_Phase2',
                        'MAJ_SOL070020_I80_I680_SR12_Int_2B_7',
                        'MAJ_SCL050009_VTA_Eastridge_Extension',
-                       'MAJ_SF_Congestion_Pricing',
-                       'MAJ_SOL070020_I80_I680_SR12_Int_1_2A']
+                       'MAJ_SF_Congestion_Pricing']
         }),
         (2030, {'hwy':['MAJ_SanPablo_BRT',
                        'MAJ_ElCaminoReal_BRT',
