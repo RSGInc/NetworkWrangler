@@ -9,7 +9,7 @@ USAGE = """
     with subdirs BASE_DIR_project_short_id
 
 """
-PPA_DIR    = "M:\Application\Model One\RTP2021\ProjectPerformanceAssessment\Projects"
+PPA_DIR    = "ML:\RTP2021_PPA\Projects"
 NODE_NAMES = "M:\Application\Model One\Networks\TM1_2015_Base_Network\Node Description.xls"
 
 # for transit network validation output
