@@ -100,6 +100,7 @@ if __name__ == '__main__':
     parser.add_argument("future", choices=["CleanAndGreen", "RisingTides", "BackToTheFuture"], help="Specify which Future Scenario for which to create networks")
     parser.add_argument("--hwy", dest='hwy', action='store_true', help="Pass if project is a roadway project")
     parser.add_argument("--trn", dest='trn', action='store_true', help="Pass if project is a transit project")
+    parser.add_argument("--kwarg", dest='kwarg', help="To pass kwargs to project apply(), pass keyword and value", nargs=2)
     parser.add_argument("project_short_id", help="Short ID of project, to be used for directory")
     parser.add_argument("project", help="Project to add", nargs="+")
     args = parser.parse_args()
@@ -117,6 +118,10 @@ if __name__ == '__main__':
     BASE_DIR         = findBaseDirectory(args.future)   # e.g. 2050_TM150_PPA_BF_00
     PIVOT_DIR        = os.path.join(PPA_DIR, BASE_DIR, "INPUT")  # full path of input network
     TRANSIT_CAPACITY_DIR = os.path.join(PIVOT_DIR, "trn")
+
+    # setup kwargs to pass
+    kwargs           = {}
+    if args.kwarg: kwargs[args.kwarg[0]] = '"{}"'.format(args.kwarg[1])
 
     OUTPUT_DIR       = os.path.join(PPA_DIR, args.project_short_id)
     # make OUTPUT_DIR
@@ -175,10 +180,10 @@ if __name__ == '__main__':
 
                 Wrangler.WranglerLogger.info("Applying project [%s] of type [%s]" % (my_project, netmode))
                 cloned_SHA1 = networks[netmode].cloneProject(networkdir=my_project, tag=None,
-                                                             projtype="project", tempdir=TEMP_SUBDIR)
+                                                             projtype="project", tempdir=TEMP_SUBDIR, **kwargs)
                 (parentdir, networkdir, gitdir, projectsubdir) = networks[netmode].getClonedProjectArgs(my_project, None, "project", TEMP_SUBDIR)
 
-                applied_SHA1 = networks[netmode].applyProject(parentdir, networkdir, gitdir, projectsubdir)
+                applied_SHA1 = networks[netmode].applyProject(parentdir, networkdir, gitdir, projectsubdir, **kwargs)
 
         # write networks
         final_path = os.path.join(OUTPUT_FUTURE_DIR,netmode)

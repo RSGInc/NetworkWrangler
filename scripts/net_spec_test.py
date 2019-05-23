@@ -28,8 +28,9 @@ NETWORK_PROJECTS = collections.OrderedDict([
             {'name':'Bridge_Toll_Updates', 'kwargs':{'MODELYEAR':'2015'}}
         ], 'trn':[]}),  
     (2020, {
-        'hwy':[{'name':'Bridge_Toll_Updates', 'kwargs':{'MODELYEAR':'2020'}}],
-        'trn':['demo_project']
+        'hwy':[{'name':'Bridge_Toll_Updates', 'kwargs':{'MODELYEAR':'2020'}},
+               'Transform_MtnV_Cup_SJ_Rail_Loop'],
+        'trn':[{'name':'demo_project', 'kwargs':{'FUTURE':'"BackToTheFuture"'}}]
     }),
     (2025, {
         'hwy':[], 'trn':[]
