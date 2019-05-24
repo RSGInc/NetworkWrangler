@@ -128,12 +128,12 @@ if PROJECT == "FU1":
         (2020, {'hwy':[],
                 'trn':['MAJ_Sonoma_Frequency_Increase']
         }),
-        (2025, {'hwy':['MAJ_SF_070004_Geary_BRT_Phase2',
+        (2025, {'hwy':['MAJ_Geary_BRT_Phase2',
                        'MAJ_SF_Congestion_Pricing',
                        'MAJ_SOL070020_I80_I680_SR12_Int_2B_7',
                        'MAJ_SCL050009_VTA_Eastridge_Extension',
                        'MAJ_Bay_Area_Forward_committed',],
-                'trn':['MAJ_SF_070004_Geary_BRT_Phase2',
+                'trn':['MAJ_Geary_BRT_Phase2',
                        'MAJ_SOL070020_I80_I680_SR12_Int_2B_7',
                        'MAJ_SCL050009_VTA_Eastridge_Extension',
                        'MAJ_SF_Congestion_Pricing']
