@@ -77,9 +77,8 @@ COMMITTED_PROJECTS = collections.OrderedDict([
     (2025, {
         'hwy':[{'name':'Bridge_Toll_Updates', 'kwargs':{'MODELYEAR':'2025'}},
                'EXP_CC_050028_I680_SB_HOV_Completion',
-               'EXP_101B1',
-               'EXP_101B2'
-               'EXP_680C1',
+               'EXP_101B',
+               'EXP_680C',
                'EXP_85C',
                'EXP_101C',
                'ALA150001_I680_SR84_Int_Wid',
@@ -98,7 +97,7 @@ COMMITTED_PROJECTS = collections.OrderedDict([
     }),
     (2030, {
         'hwy':[{'name':'Bridge_Toll_Updates', 'kwargs':{'MODELYEAR':'2030'}},
-               'EXP_880A'],
+               'EXP_880B'],
         'trn':['BART_NoProject']
     }),
     (2035, {

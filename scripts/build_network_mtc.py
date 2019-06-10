@@ -493,7 +493,7 @@ if __name__ == '__main__':
                               name="transitLines",
                               writeEmptyFiles = False,
                               suppressQuery = True,
-                              suppressValidation = True,
+                              suppressValidation = False,
                               cubeNetFileForValidation = hwy_abs_path)
 
         # Write the transit capacity configuration
