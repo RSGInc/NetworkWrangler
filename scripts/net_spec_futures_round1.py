@@ -17,9 +17,11 @@ OUT_DIR = "network_{}"  # YEAR
 ###########################################################
 # For Round 1 and Project Performance Assessment Base both
 COMMITTED_PROJECTS = collections.OrderedDict([
-(2015, {'hwy':['PROJ_attributes',  # adds PROJ attributes to NODE and LINK
+    (2015, {
+        'hwy':['PROJ_attributes',  # adds PROJ attributes to NODE and LINK
                {'name':'Bridge_Toll_Updates', 'kwargs':{'MODELYEAR':'2015'}}],
-        'trn':[]}),
+        'trn':['bit64_expbus_farehack']
+    }),
     (2020, {
         'hwy':[{'name':'Bridge_Toll_Updates', 'kwargs':{'MODELYEAR':'2020'}},
                'EXP_237B',
