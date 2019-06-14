@@ -24,7 +24,7 @@ COMMITTED_PROJECTS = collections.OrderedDict([
     }),
     (2020, {
         'hwy':[{'name':'Bridge_Toll_Updates', 'kwargs':{'MODELYEAR':'2020'}},
-               'EXP_237B',
+               {'name':'EXP_237B',            'kwargs':{'FUTURE':SCENARIO}},
                'EXP_580C',
                'EXP_680D',
                'EXP_680F',
