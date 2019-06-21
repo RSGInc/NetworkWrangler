@@ -581,6 +581,67 @@ class TransitNetwork(Network):
             if denom[t] > 0: combined[t] = round(1/denom[t],2)
         return combined
 
+    def getValueFromXfare(self, fare_filename, from_mode, to_mode):
+        """
+        Assuming that fare_filename contains XFARE information (e.g. XFAR[from_mode]=to_mode1,to_mode2,...)
+        Returns the value set for from_mode to to_mode
+        If none found, throws a NetworkException
+        """
+        xfare_re = re.compile("xfare\[(\d+)\]=((\d+)(,\s*\d+)*)", re.IGNORECASE)
+        if fare_filename not in self.farefiles.keys():
+            raise NetworkException("Fare file {} not found".format(fare_filename))
+
+        for line in self.farefiles[fare_filename]:
+            # WranglerLogger.debug("getValueFromXfare() line = {}".format(line))
+            result = xfare_re.match(line)
+            if result == None: continue
+            my_from_mode = int(result.group(1))
+            if my_from_mode != from_mode: continue
+
+            my_to_mode_strings = result.group(2).split(",")
+            my_to_modes = [int(x) for x in my_to_mode_strings]
+            # WranglerLogger.debug("getValueFromXfare my_to_modes={}".format(my_to_modes))
+            if len(my_to_modes) < to_mode:
+                raise NetworkException("to_mode {} not found: {}".format(to_mode, my_to_modes))
+            return my_to_modes[to_mode-1] # index starts at zero
+
+        raise NetworkException("from_mode {} not found".format(from_mode))
+
+    def setValueToXfare(self, fare_filename, from_mode, to_mode, value):
+        """
+        Assuming that fare_filename contains XFARE information (e.g. XFAR[from_mode]=to_mode1,to_mode2,...)
+        Sets the value for from_mode to to_mode to value.
+        Throws NetworkException if the appropriate spot isn't found
+        """
+        xfare_re = re.compile("(xfare\[(\d+)\]=)((\d+)(,\s*\d+)*)", re.IGNORECASE)
+        if fare_filename not in self.farefiles.keys():
+            raise NetworkException("Fare file {} not found".format(fare_filename))
+
+        for line_idx in range(len(self.farefiles[fare_filename])):
+            line = self.farefiles[fare_filename][line_idx]
+
+            # WranglerLogger.debug("getValueFromXfare() line = {}".format(line))
+            result = xfare_re.match(line)
+            if result == None: continue
+            my_from_mode = int(result.group(2))
+            if my_from_mode != from_mode: continue
+
+            my_to_mode_strings = result.group(3).split(",")
+            my_to_modes = [int(x) for x in my_to_mode_strings]
+            # WranglerLogger.debug("getValueFromXfare my_to_modes={}".format(my_to_modes))
+            if len(my_to_modes) < to_mode:
+                raise NetworkException("to_mode {} not found: {}".format(to_mode, my_to_modes))
+            
+            my_to_modes[to_mode-1] = value # index starts at zero
+            # put the line back together
+            my_to_mode_strings = [str(x) for x in my_to_modes]
+            comma_str = ','
+            line = "{}{}\n".format(result.group(1),comma_str.join(my_to_mode_strings))
+            self.farefiles[fare_filename][line_idx] = line
+            return
+
+        raise NetworkException("from_mode {} not found".format(from_mode))
+
     def verifyTransitLineFrequencies(self, frequencies, coverage=None):
         """
         Utility function to verify the frequencies are as expected.
