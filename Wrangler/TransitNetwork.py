@@ -778,7 +778,7 @@ class TransitNetwork(Network):
                 else:
                     pnr_out_file = "{}_{}.pnr".format(name,pnr_file)
 
-                f = open(os.path.join(path,pnr_out_file),'w')
+                f = open(os.path.join(path,pnr_out_file),'a')
                 for pnr in self.pnrs[pnr_file]:
                     f.write(str(pnr)+"\n")
                 f.close()
