@@ -1,0 +1,31 @@
+;
+; check_for_errors.job
+;
+;  Input: FREEFLOW.BLD
+; Output: FREEFLOW_ERRORS.NET
+; Summary: Looks for errors in FREEFLOW.net
+;
+
+RUN PGM=HWYNET
+  FILEI NETI=FREEFLOW.BLD
+
+  PHASE=LINKMERGE
+
+    ; STRPOS(str,str2) Returns the position in str2 where str begins. If str does not exist in str2, returns 0. Both strings are case sensitive. 
+    ; search for a comma or a quote in the string -- that's probably an error
+    _POS1 = STRPOS(',' , CITYNAME)
+    _POS2 = STRPOS('"' , CITYNAME)
+
+    IF ((_POS1 > 0) || (_POS2 > 0))
+      _NUM_ERRORS = _NUM_ERRORS + 1
+      PRINT LIST="PROBABLE bad link :",A,"-",B," CITYNAME=",CITYNAME
+    ENDIF
+
+  ENDPHASE
+
+;  PHASE=SUMMARY
+;    IF (_NUM_ERRRORS > 0)
+;      ABORT MSG="_NUM_ERRORS > 0"
+;    ENDIF
+;  ENDPHASE
+ENDRUN
