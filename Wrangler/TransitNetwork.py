@@ -587,7 +587,7 @@ class TransitNetwork(Network):
         Returns the value set for from_mode to to_mode
         If none found, throws a NetworkException
         """
-        xfare_re = re.compile("xfare\[(\d+)\]=((\d+)(,\s*\d+)*)", re.IGNORECASE)
+        xfare_re = re.compile("xfare\[(\d+)\]=((-?\d+)(,\s*-?\d+)*)", re.IGNORECASE)
         if fare_filename not in self.farefiles.keys():
             raise NetworkException("Fare file {} not found".format(fare_filename))
 
@@ -613,7 +613,7 @@ class TransitNetwork(Network):
         Sets the value for from_mode to to_mode to value.
         Throws NetworkException if the appropriate spot isn't found
         """
-        xfare_re = re.compile("(xfare\[(\d+)\]=)((\d+)(,\s*\d+)*)", re.IGNORECASE)
+        xfare_re = re.compile("(xfare\[(\d+)\]=)((-?\d+)(,\s*-?\d+)*)", re.IGNORECASE)
         if fare_filename not in self.farefiles.keys():
             raise NetworkException("Fare file {} not found".format(fare_filename))
 
