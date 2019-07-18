@@ -418,7 +418,7 @@ class TransitLine(object):
             
             nodeIdx += 1
     
-    def splitLink(self,nodeA,nodeB,newNodeNum,stop=False):
+    def splitLink(self,nodeA,nodeB,newNodeNum,stop=False,verboseLog=True):
         """
         Checks to see if the link exists in the line (throws an exception if not)
         and then inserts the *newNodeNum* in between *nodeA* and *nodeB* (as a stop, if *stop* is True)
@@ -437,7 +437,7 @@ class TransitLine(object):
             currentNodeNum = abs(int(self.n[nodeIdx].num))
             if currentNodeNum == abs(nodeB) and nodeNumPrev == abs(nodeA):
                 self.n.insert(nodeIdx,newNode)
-                WranglerLogger.debug("In line %s: inserted node %s between node %s and node %s" % (self.name,newNode.num,str(nodeA),str(nodeB)))
+                if verboseLog: WranglerLogger.debug("In line %s: inserted node %s between node %s and node %s" % (self.name,newNode.num,str(nodeA),str(nodeB)))
             nodeNumPrev = currentNodeNum
     
     def extendLine(self, oldnode, newsection, beginning=True):
@@ -604,6 +604,28 @@ class TransitLine(object):
             return True
 
         return False
+
+    def removeDummyJag(self, to_remove_dict):
+        """
+        Iterates through nodes and for patterns that look like x,y,x where y is in to_remove_dict keys,
+        replaces with just x.  Converts y to int (without abs) so requires to_remove_dict keys to have matching sign
+        Used by TransitNetwork.moveBusesToExpressLanes().
+        Returns True if any nodes were removed, False otherwise.
+        """
+        removed_nodes = False
+        # iterate backwards so we can freely delete from the list
+        for node_idx in range(len(self.n)-3, -1, -1):
+
+            nodeNum           = int(self.n[node_idx+2].num)
+            prev_nodeNum      = int(self.n[node_idx+1].num)
+            prev_prev_nodeNum = int(self.n[node_idx  ].num)
+            if nodeNum == prev_prev_nodeNum and prev_nodeNum in to_remove_dict:
+                # WranglerLogger.debug("removeDummyJag: {} ({},{},{}) => {}".format(self.name, nodeNum, prev_nodeNum, prev_prev_nodeNum, nodeNum))
+                del[self.n[node_idx+2]]
+                del[self.n[node_idx+1]]
+                removed_nodes = True
+
+        return removed_nodes
 
     # Dictionary methods
     def __getitem__(self,key): return self.attr[key.upper()]

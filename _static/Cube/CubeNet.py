@@ -189,7 +189,7 @@ def import_cube_nodes_links_from_csvs(cubeNetFile,
 
         #add additional fields        
         link_array = [dist]
-        link_array.extend(r[4:])
+        link_array.extend(r[3:])
         
         links_dict[(a,b)] = link_array
     F.close()

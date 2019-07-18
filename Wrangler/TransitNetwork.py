@@ -1,4 +1,4 @@
-import copy, glob, inspect, math, os, re, sys, xlrd
+import copy, glob, inspect, math, os, re, shutil, sys, xlrd
 from collections import defaultdict
 from .Factor import Factor
 from .Faresystem import Faresystem
@@ -508,17 +508,23 @@ class TransitNetwork(Network):
                 
         return len(del_acc_idxs) + len(del_xfer_idxs)
                 
-    def splitLinkInTransitLines(self,nodeA,nodeB,newNode,stop=False):
+    def splitLinkInTransitLines(self,nodeA,nodeB,newNode,stop=False,verboseLog=True):
         """
         Goes through each line and for any with links going from *nodeA* to *nodeB*, inserts
         the *newNode* in between them (as a stop if *stop* is True).
+        Returns list of lines affected.
         """
+        lines_split = []
         totReplacements = 0
         for line in self:
             if line.hasLink(nodeA,nodeB):
-                line.splitLink(nodeA,nodeB,newNode,stop=stop)
+                line.splitLink(nodeA,nodeB,newNode,stop=stop,verboseLog=verboseLog)
                 totReplacements+=1
-        WranglerLogger.debug("Total Lines with Link %s-%s split:%d" % (str(nodeA),str(nodeB),totReplacements))
+                lines_split.append(line.name)
+
+        # log only if instructed instructed
+        if verboseLog: WranglerLogger.debug("Total Lines with Link %s-%s split:%d" % (str(nodeA),str(nodeB),totReplacements))
+        return lines_split
     
     def replaceSegmentInTransitLines(self,nodeA,nodeB,newNodes):
         """
@@ -1303,6 +1309,162 @@ class TransitNetwork(Network):
                         failures += 1
         return (failures == 0)
     
+    def moveBusesToHovAndExpressLanes(self):
+        """
+        Moves transit lines from GP links to equivalent HOV links and equivalent Express Lane links
+        """
+        # In order to run this, the roadway network needs written for us to read
+        # so pick a place to write it
+        import tempfile
+        tempdir = tempfile.mkdtemp()
+        WranglerLogger.debug("Writing roadway network to tempdir {}".format(tempdir))
+
+        Network.allNetworks['hwy'].write(path=tempdir, name="freeflow.net", writeEmptyFiles=False, suppressQuery=True, suppressValidation=True)
+        tempnet = os.path.join(tempdir, "freeflow.net")
+
+        # Read it
+        import Cube
+        link_vars = ['LANES','USE','FT','TOLLCLASS','ROUTENUM','ROUTEDIR','PROJ']
+        (nodes_dict, links_dict) = Cube.import_cube_nodes_links_from_csvs(tempnet, extra_link_vars=link_vars,
+                                        links_csv=os.path.join(tempdir,"cubenet_links.csv"),
+                                        nodes_csv=os.path.join(tempdir,"cubenet_nodes.csv"),
+                                        exportIfExists=True)
+        WranglerLogger.debug("Have {} nodes and {} links".format(len(nodes_dict), len(links_dict)))
+
+        # links_dict: (a,b) => list with distance followed by extra_link_vars
+        links_list = []
+        for a_b_tuple in links_dict.keys():
+            # put all attributes into a list
+            distance = float(links_dict[a_b_tuple][0])
+            lanes    = int(links_dict[a_b_tuple][1])
+            use      = int(links_dict[a_b_tuple][2])
+            ft       = int(links_dict[a_b_tuple][3])
+            tollclass= int(links_dict[a_b_tuple][4])
+            routenum = int(links_dict[a_b_tuple][5])
+            routedir = links_dict[a_b_tuple][6].strip(" '")
+            if routedir == "' '": routedir = ""
+            proj     = links_dict[a_b_tuple][7].strip(" '")
+            if proj == "' '": proj = ""
+
+            link_list = [ a_b_tuple[0], a_b_tuple[1]] + [distance, lanes, use, ft, tollclass, routenum, routedir, proj]
+            # append to list of links
+            links_list.append(link_list)
+        
+        # let's use pandas for this
+        import pandas
+        pandas.options.display.width = 500
+        pandas.options.display.max_columns = 100
+
+        link_cols = ["a","b","DISTANCE"] + link_vars
+        links_df = pandas.DataFrame.from_records(data=links_list, columns=link_cols)
+        WranglerLogger.debug("\n:{}".format(links_df.head()))
+
+        # filter out HOV and express lane links
+        hov_links_df   = links_df.loc[ (links_df.USE == 2)|(links_df.USE==3) ]
+        el_links_df    = links_df.loc[ links_df.TOLLCLASS >= 11 ]
+        gp_links_df    = links_df.loc[ (links_df.USE==1)&((links_df.FT<=3)|(links_df.FT==5)|(links_df.FT==8)|(links_df.FT==10))]
+        dummy_links_df = links_df.loc[ links_df.FT==6 ]
+
+        WranglerLogger.debug("Found {} hov links, {} express lane links and {} general purpose links".format(
+                             len(hov_links_df), len(el_links_df), len(gp_links_df)))
+
+        # dummy B -> hov A, a_GP1 will be the first point of dummy access link
+        hov_group1_df  = pandas.merge(left=hov_links_df, right=dummy_links_df[["a","b"]],
+                                      how="inner", left_on=["a"], right_on=["b"], suffixes=["","_GP1"]).drop(columns="b_GP1")
+
+        # hov B -> dummy A, b_GP2 will be the second point of dummy egress link
+        hov_group1_df  = pandas.merge(left=hov_group1_df, right=dummy_links_df[["a","b"]],
+                                      how="inner", left_on=["b"], right_on=["a"], suffixes=["","_GP2"]).drop(columns="a_GP2")
+
+        # merge to the full GP links for complete info
+        hov_group1_df  = pandas.merge(left=hov_group1_df, right=gp_links_df, how="inner",
+                                      left_on=["a_GP1", "b_GP2"], right_on=["a","b"], suffixes=["","_GP"]).drop(columns=["a_GP1","b_GP2"])
+
+        WranglerLogger.debug("Found general purpose links for {} out of {} hov links: \n{}".format(
+                             len(hov_group1_df), len(hov_links_df), hov_group1_df.head()))
+
+        # Note which links don't have GP equivalents
+        hov_unmatched_df = pandas.merge(left=hov_links_df, right=hov_group1_df[["a","b","a_GP","b_GP"]], how="left")
+        WranglerLogger.debug("\n{}".format(hov_unmatched_df.head()))
+        hov_unmatched_df = hov_unmatched_df.loc[ pandas.isnull(hov_unmatched_df.a_GP) ].drop(columns=["a_GP","b_GP"])
+        WranglerLogger.debug("hov links without match ({}):\n{}".format(len(hov_unmatched_df), hov_unmatched_df))
+
+        # replace all instances of a_GP, b_GP with a_GP,a,hov,b_hov,b_gp
+        # keep hov_nodes and gp_nodes
+        lines_moved = []
+        hov_nodes = {}
+        gp_nodes  = {}
+        hov_dict_list = hov_group1_df.to_dict(orient='records')
+        for hov_record in hov_dict_list:
+            # split twice
+            lines_split1 = self.splitLinkInTransitLines(int(hov_record["a_GP"]), int(hov_record["b_GP"]), newNode=-1*int(hov_record["a"]), stop=False, verboseLog=False)
+            lines_split2 = self.splitLinkInTransitLines(int(hov_record["a"   ]), int(hov_record["b_GP"]), newNode=-1*int(hov_record["b"]), stop=False, verboseLog=False)
+            lines_moved.extend(lines_split1)
+            lines_moved.extend(lines_split2)
+            lines_moved = sorted(set(lines_moved))
+            # keep these for fixing up lines
+            hov_nodes[int(hov_record["a"])] = int(hov_record["a_GP"])
+            hov_nodes[int(hov_record["b"])] = int(hov_record["b_GP"])
+            gp_nodes[-1*int(hov_record["a_GP"])] = int(hov_record["a"])
+            gp_nodes[-1*int(hov_record["b_GP"])] = int(hov_record["b"])
+
+        # when two links in a row are moved, there can be an artifact where the dummy link is used twice -- remove these
+        for line in self.line(re.compile(".")):
+            line.removeDummyJag(gp_nodes)
+
+        WranglerLogger.info("Moved the following {} lines to hov links: {}".format(len(lines_moved), lines_moved))
+
+        ##################  do it again for express lanes ##################
+
+        # dummy B -> el A, a_GP1 will be the first point of dummy access link
+        el_group1_df  = pandas.merge(left=el_links_df, right=dummy_links_df[["a","b"]],
+                                      how="inner", left_on=["a"], right_on=["b"], suffixes=["","_GP1"]).drop(columns="b_GP1")
+
+        # el B -> dummy A, b_GP2 will be the second point of dummy egress link
+        el_group1_df  = pandas.merge(left=el_group1_df, right=dummy_links_df[["a","b"]],
+                                      how="inner", left_on=["b"], right_on=["a"], suffixes=["","_GP2"]).drop(columns="a_GP2")
+
+        # merge to the full GP links for complete info
+        el_group1_df  = pandas.merge(left=el_group1_df, right=gp_links_df, how="inner",
+                                      left_on=["a_GP1", "b_GP2"], right_on=["a","b"], suffixes=["","_GP"]).drop(columns=["a_GP1","b_GP2"])
+
+        WranglerLogger.debug("Found general purpose links for {} out of {} el links: \n{}".format(
+                             len(el_group1_df), len(el_links_df), el_group1_df.head()))
+
+        # Note which links don't have GP equivalents
+        el_unmatched_df = pandas.merge(left=el_links_df, right=el_group1_df[["a","b","a_GP","b_GP"]], how="left")
+        WranglerLogger.debug("\n{}".format(el_unmatched_df.head()))
+        el_unmatched_df = el_unmatched_df.loc[ pandas.isnull(el_unmatched_df.a_GP) ].drop(columns=["a_GP","b_GP"])
+        WranglerLogger.debug("el links without match ({}):\n{}".format(len(el_unmatched_df), el_unmatched_df))
+        
+        # replace all instances of a_GP, b_GP with a_GP,a,el,b_el,b_gp
+        # keep el_nodes and gp_nodes
+        lines_moved = []
+        el_nodes  = {}
+        gp_nodes  = {}
+        el_dict_list = el_group1_df.to_dict(orient='records')
+        for el_record in el_dict_list:
+            # split twice            
+            lines_split1 = self.splitLinkInTransitLines(int(el_record["a_GP"]), int(el_record["b_GP"]), newNode=-1*int(el_record["a"]), stop=False, verboseLog=False)
+            lines_split2 = self.splitLinkInTransitLines(int(el_record["a"   ]), int(el_record["b_GP"]), newNode=-1*int(el_record["b"]), stop=False, verboseLog=False)
+            lines_moved.extend(lines_split1)
+            lines_moved.extend(lines_split2)
+            lines_moved = sorted(set(lines_moved))
+            # keep these for fixing up lines
+            el_nodes[int(el_record["a"])] = int(el_record["a_GP"])
+            el_nodes[int(el_record["b"])] = int(el_record["b_GP"])
+            gp_nodes[-1*int(el_record["a_GP"])] = int(el_record["a"])
+            gp_nodes[-1*int(el_record["b_GP"])] = int(el_record["b"])
+
+        # when two links in a row are moved, there can be an artifact where the dummy link is used twice -- remove these
+        for line in self.line(re.compile(".")):
+            line.removeDummyJag(gp_nodes)
+
+        WranglerLogger.info("Moved the following {} lines to el links: {}".format(len(lines_moved), lines_moved))
+
+        # remove the temp dir
+        shutil.rmtree(tempdir)
+
     def checkValidityOfLinks(self, cubeNetFile):
         """
         Checks the validity of each of the transit links against the given cubeNetFile.
