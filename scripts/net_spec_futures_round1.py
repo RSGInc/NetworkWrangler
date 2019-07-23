@@ -20,7 +20,7 @@ COMMITTED_PROJECTS = collections.OrderedDict([
     (2015, {
         'hwy':['PROJ_attributes',  # adds PROJ attributes to NODE and LINK
                {'name':'Bridge_Toll_Updates', 'kwargs':{'MODELYEAR':'2015'}}],
-        'trn':['bit64_expbus_farehack']
+        'trn':[]
     }),
     (2020, {
         'hwy':[{'name':'Bridge_Toll_Updates', 'kwargs':{'MODELYEAR':'2020'}},
