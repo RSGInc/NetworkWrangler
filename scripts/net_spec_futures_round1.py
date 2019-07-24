@@ -152,7 +152,7 @@ if PROJECT == "FU1":
                        'MAJ_Better_Market_St'],
                 'trn':['MAJ_BRT030001_BART_to_SanJose',
                        'MAJ_SF_050002_Caltrain_Ext_TransbayTerminal',
-                       'MAJ_WETA_Service_Frequency_Increase',
+                       {'name':'MAJ_WETA_Service_Frequency_Increase',            'kwargs':{'FUTURE':SCENARIO}},
                        'MAJ_Alameda_Point_SF_Ferry',
                        'MAJ_MissionBay_SF_Ferry',
                        'MAJ_RedwoodCity_SF_Ferry',
