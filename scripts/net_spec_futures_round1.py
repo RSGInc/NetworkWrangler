@@ -197,7 +197,7 @@ if SCENARIO=="CleanAndGreen":
     # NOTE: Earthquake is assumed in Round1 2035 but since the effect doesn't stay; this is handled in build_network_mtc_futures.py
     if PROJECT == "FU1":
         # High Speed Rail is only included in Round1, not Project Performance Baseline
-        NETWORK_PROJECTS[2030]['trn'].append("HSR")
+        # NETWORK_PROJECTS[2030]['trn'].append("HSR") REMOVED FROM ROUND 1
 
         # Haywired Earthquake in 2035
         NETWORK_PROJECTS[2035]['hwy'].append("Earthquake")
