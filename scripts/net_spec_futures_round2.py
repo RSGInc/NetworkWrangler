@@ -177,6 +177,57 @@ if PROJECT == "FU1":
     ])
 
 ###########################################################
+# For Round 1 Only
+if PROJECT == "FU2":
+    MAJOR_PROJECTS = collections.OrderedDict([
+        (2015, {'hwy':[],
+                'trn':[]
+        }),
+        (2020, {'hwy':[],
+                'trn':['MAJ_Sonoma_Frequency_Increase']
+        }),
+        (2025, {'hwy':['MAJ_Geary_BRT_Phase2',
+                       'MAJ_SF_Congestion_Pricing',
+                       'MAJ_SOL070020_I80_I680_SR12_Int_2B_7',
+                       'MAJ_SCL050009_VTA_Eastridge_Extension',
+                       'MAJ_Bay_Area_Forward_committed',],
+                'trn':['MAJ_Geary_BRT_Phase2',
+                       'MAJ_SOL070020_I80_I680_SR12_Int_2B_7',
+                       'MAJ_SCL050009_VTA_Eastridge_Extension',
+                       'MAJ_SF_Congestion_Pricing']
+        }),
+        (2030, {'hwy':['MAJ_SanPablo_BRT',
+                       'MAJ_ElCaminoReal_BRT',
+                       'MAJ_I680_SR4_Int_Widening_Phases_3_5',
+                       'MAJ_SR4_Operational_Improvements',
+                       'MAJ_Better_Market_St'],
+                'trn':['MAJ_BRT030001_BART_to_SanJose',
+                       'MAJ_SF_050002_Caltrain_Ext_TransbayTerminal',
+                       {'name':'MAJ_WETA_Service_Frequency_Increase',            'kwargs':{'FUTURE':SCENARIO}},
+                       'MAJ_Alameda_Point_SF_Ferry',
+                       'MAJ_MissionBay_SF_Ferry',
+                       'MAJ_RedwoodCity_SF_Ferry',
+                       'MAJ_MTC050027_Berkeley_Ferry',
+                       'MAJ_Better_Market_St',
+                       'MAJ_REG090037_BART_Core_Cap']
+        }),
+        (2035, {'hwy':['MAJ_Treasure_Island_Congestion_Pricing'],
+                'trn':['MAJ_MuniForward_Uncommitted',
+                       'MAJ_Vasona_LRT_Extension',
+                       'MAJ_Treasure_Island_Congestion_Pricing']
+        }),
+        (2040, {'hwy':[],
+                'trn':[]
+        }),
+        (2045, {'hwy':[],
+                'trn':[]
+        }),
+        (2050, {'hwy':[],
+                'trn':[]
+        })
+    ])
+
+###########################################################
 # For Round 2 Only all scenarios
 if PROJECT == "FU2":
     TRANSFORM_PROJECTS = collections.OrderedDict([
@@ -252,8 +303,8 @@ for YEAR in COMMITTED_PROJECTS.keys():
         }
     elif PROJECT == "FU2":
         NETWORK_PROJECTS[YEAR] = {
-            'hwy':COMMITTED_PROJECTS[YEAR]['hwy'] + MAJOR_PROJECTS[YEAR]['hwy'],
-            'trn':COMMITTED_PROJECTS[YEAR]['trn'] + MAJOR_PROJECTS[YEAR]['trn']
+            'hwy':COMMITTED_PROJECTS[YEAR]['hwy'] + MAJOR_PROJECTS[YEAR]['hwy'] + TRANSFORM_PROJECTS[YEAR]['hwy'],
+            'trn':COMMITTED_PROJECTS[YEAR]['trn'] + MAJOR_PROJECTS[YEAR]['trn'] + TRANSFORM_PROJECTS[YEAR]['trn']
         }
     elif PROJECT in ["PPA", "PPA_NoSLR"]:
         # Project Performance Assessment baseline does not include major projects
@@ -278,7 +329,7 @@ if SCENARIO=="CleanAndGreen":
         # Sea Level Rise in 2045
         NETWORK_PROJECTS[2045]['trn'].append("Adapt_To_SLR1")
     # Sea Level Rise in FU1 and PPA (but not PPA_NoSLR)
-    if PROJECT != ("PPA_NoSLR" OR "FU2"):
+    if PROJECT != "PPA_NoSLR":
         # Sea Level Rise in 2045
         NETWORK_PROJECTS[2045]['hwy'].append("SeaLevelRise_1foot")
         NETWORK_PROJECTS[2045]['trn'].append("SeaLevelRise_1foot")
@@ -300,7 +351,7 @@ elif SCENARIO=="RisingTides":
         NETWORK_PROJECTS[2045]['trn'].append("Adapt_To_SLR2")
 
     # Sea Level Rise in FU1 and PPA (but not PPA_NoSLR)
-    if PROJECT != ("PPA_NoSLR" OR "FU2"):
+    if PROJECT != "PPA_NoSLR":
         # Sea Level Rise in 2040
         NETWORK_PROJECTS[2040]['hwy'].append("SeaLevelRise_2feet")
         NETWORK_PROJECTS[2040]['trn'].append("SeaLevelRise_2feet")
@@ -324,7 +375,7 @@ elif SCENARIO=="BackToTheFuture":
         NETWORK_PROJECTS[2045]['trn'].append("Adapt_To_SLR1")
 
     # Sea Level Rise in FU1 and PPA (but not PPA_NoSLR)
-    if PROJECT != ("PPA_NoSLR" OR "FU2"):
+    if PROJECT != "PPA_NoSLR":
         NETWORK_PROJECTS[2050]['hwy'].append("SeaLevelRise_2feet")
         NETWORK_PROJECTS[2050]['trn'].append("SeaLevelRise_2feet")
 

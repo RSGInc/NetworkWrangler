@@ -358,7 +358,7 @@ if __name__ == '__main__':
     parser.add_argument("--configword", help="optional word for network specification script")
     parser.add_argument("--model_type", choices=[Wrangler.Network.MODEL_TYPE_TM1, Wrangler.Network.MODEL_TYPE_TM2],
                         default=Wrangler.Network.MODEL_TYPE_TM1)
-    parser.add_argument("--analysis", choices=["Round1","PPA","PPA_NoSLR"], help="Specify which set of analysis are relevant for these networks.", default="Round1")
+    parser.add_argument("--analysis", choices=["Round1","Round2","PPA","PPA_NoSLR"], help="Specify which set of analysis are relevant for these networks.", default="Round1")
     parser.add_argument("net_spec", metavar="network_specification.py", help="Script which defines required variables indicating how to build the network")
     parser.add_argument("future", choices=["CleanAndGreen", "RisingTides", "BackToTheFuture"], help="Specify which Future Scenario for which to create networks")
     args = parser.parse_args()
