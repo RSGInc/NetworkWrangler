@@ -384,8 +384,6 @@ if __name__ == '__main__':
 
     if args.analysis == "Round1":
         PROJECT = "FU1"
-    elif args.analysis == "Round2":
-        PROJECT = "FU2"
     elif args.analysis in ["PPA","PPA_NoSLR"]:
         PROJECT = args.analysis
 
