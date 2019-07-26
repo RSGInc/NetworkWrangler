@@ -22,11 +22,11 @@ OUT_DIR = SCENARIO + "_network_{}"  # YEAR
 # For example:
 #     {'name':"Muni_TEP", 'kwargs':{'servicePlan':"'2012oct'"}}
 NETWORK_PROJECTS = collections.OrderedDict([
-    (2015, 
-        {'hwy':['PROJ_attributes'], 'trn':['PROJ_attributes']}),  
+    (2015, {'hwy':['PROJ_attributes'], 'trn':['PROJ_attributes']}),  # adds PROJ attributes to NODE and LINK
     (2020, {
-        'hwy':[],
-        'trn':['Resilience_Dumbarton']
+        'hwy':['SLR1'
+               ],
+        'trn':['SLR1']
     }),
     (2025, {
         'hwy':[], 'trn':[]
