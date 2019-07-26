@@ -80,7 +80,8 @@ COMMITTED_PROJECTS = collections.OrderedDict([
                'SonomaCounty_Transit_NoBuild2050',
                'SMART_Novato',
                'Xfare_update_2020',
-               'ACTransit_Committed'],
+               'ACTransit_Committed',
+               'Move_buses_to_HOV_EXP_lanes'],
     }),
     (2025, {
         'hwy':[{'name':'Bridge_Toll_Updates', 'kwargs':{'MODELYEAR':'2025'}},
@@ -102,12 +103,14 @@ COMMITTED_PROJECTS = collections.OrderedDict([
         'trn':['SF_010028_Caltrain_Modernization',
                'SON090002_SMART_to_Windsor',
                'REG090037_New_BART_Trains',
-               'SOL070020_I80_I680_SR12_Int_1_2A']
+               'SOL070020_I80_I680_SR12_Int_1_2A',
+               'Move_buses_to_HOV_EXP_lanes']
     }),
     (2030, {
         'hwy':[{'name':'Bridge_Toll_Updates', 'kwargs':{'MODELYEAR':'2030'}},
                'EXP_880A'],
-        'trn':['BART_NoProject']
+        'trn':['BART_NoProject',
+        'Move_buses_to_HOV_EXP_lanes']
     }),
     (2035, {
         'hwy':[{'name':'Bridge_Toll_Updates', 'kwargs':{'MODELYEAR':'2035'}}],
