@@ -78,7 +78,8 @@ COMMITTED_PROJECTS = collections.OrderedDict([
                'VTA_Next',
                'SCL130001_237_101_MAT_Int_Mod',
                'SonomaCounty_Transit_NoBuild2050',
-               'SMART_Novato'],
+               'SMART_Novato',
+               'Xfare_update_2020'],
     }),
     (2025, {
         'hwy':[{'name':'Bridge_Toll_Updates', 'kwargs':{'MODELYEAR':'2025'}},
@@ -152,7 +153,7 @@ if PROJECT == "FU1":
                        'MAJ_Better_Market_St'],
                 'trn':['MAJ_BRT030001_BART_to_SanJose',
                        'MAJ_SF_050002_Caltrain_Ext_TransbayTerminal',
-                       {'name':'MAJ_WETA_Service_Frequency_Increase',            'kwargs':{'FUTURE':SCENARIO}},
+                       'MAJ_WETA_Service_Frequency_Increase',
                        'MAJ_Alameda_Point_SF_Ferry',
                        'MAJ_MissionBay_SF_Ferry',
                        'MAJ_RedwoodCity_SF_Ferry',
