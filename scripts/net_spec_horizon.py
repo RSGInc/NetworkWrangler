@@ -208,8 +208,8 @@ TRANSFORM_PROJECTS = collections.OrderedDict([
 
     }),
     (2030, {# all futures
-            'hwy_all' :['ReX_express'],
-            'trn_all' :['ReX_express'],
+            'hwy_all' :['Futures_C4_ReX_Express'],
+            'trn_all' :['Futures_C4_ReX_Express'],
             # CleanAndGreen, BackToTheFuture only
             'hwy_cgbf':['Transform_Dumbarton_Rail'],
             'trn_cgbf':['MAJ_SanJose_LRT_Subway',
