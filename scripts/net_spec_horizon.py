@@ -290,18 +290,28 @@ if SCENARIO=="CleanAndGreen":
         # Haywired Earthquake in 2035
         NETWORK_PROJECTS[2035]['hwy'].append("Earthquake")
         NETWORK_PROJECTS[2035]['trn'].append("Earthquake")
+
     # Sea Level Rise in FU1 and PPA (but not PPA_NoSLR)
-    if PROJECT != "PPA_NoSLR":
+    if PROJECT in ["FU1","PPA"]:
         # Sea Level Rise in 2045
         NETWORK_PROJECTS[2045]['hwy'].append("SeaLevelRise_1foot")
         NETWORK_PROJECTS[2045]['trn'].append("SeaLevelRise_1foot")
+    # But we've adapted in FU2
+    elif PROJECT == "FU2":
+        NETWORK_PROJECTS[2045]['hwy'].append("SeaLevelRise_HighAdaptation")
+        NETWORK_PROJECTS[2045]['trn'].append("SeaLevelRise_HighAdaptation")
+
 elif SCENARIO=="RisingTides":
 
     # Sea Level Rise in FU1 and PPA (but not PPA_NoSLR)
-    if PROJECT != "PPA_NoSLR":
+    if PROJECT in ["FU1", "PPA"]:
         # Sea Level Rise in 2030
         NETWORK_PROJECTS[2030]['hwy'].append("SeaLevelRise_1foot")
         NETWORK_PROJECTS[2030]['trn'].append("SeaLevelRise_1foot")
+    # But we've adapted in FU2
+    elif PROJECT == "FU2":
+        NETWORK_PROJECTS[2030]['hwy'].append("SeaLevelRise_LowAdaptation")
+        NETWORK_PROJECTS[2030]['trn'].append("SeaLevelRise_LowAdaptation")
 
     if PROJECT == "FU1":
         # Haywired Earthquake in 2035
@@ -309,19 +319,27 @@ elif SCENARIO=="RisingTides":
         NETWORK_PROJECTS[2035]['trn'].append("Earthquake")
 
     # Sea Level Rise in FU1 and PPA (but not PPA_NoSLR)
-    if PROJECT != "PPA_NoSLR":
+    if PROJECT in ["FU1", "PPA"]:
         # Sea Level Rise in 2040
         NETWORK_PROJECTS[2040]['hwy'].append("SeaLevelRise_2feet")
         NETWORK_PROJECTS[2040]['trn'].append("SeaLevelRise_2feet")
         # Sea Level Rise in 2050
         NETWORK_PROJECTS[2050]['hwy'].append("SeaLevelRise_3feet")
         NETWORK_PROJECTS[2050]['trn'].append("SeaLevelRise_3feet")
+    # In FU2, adaptation still holds but no need to reapply
+    elif PROJECT == "FU2":
+        pass
 
 elif SCENARIO=="BackToTheFuture":
     # Sea Level Rise in FU1 and PPA (but not PPA_NoSLR)
-    if PROJECT != "PPA_NoSLR":
+    if PROJECT  in ["FU1", "PPA"]:
         NETWORK_PROJECTS[2035]['hwy'].append("SeaLevelRise_1foot")
         NETWORK_PROJECTS[2035]['trn'].append("SeaLevelRise_1foot")
+    # But we've adapted in FU2
+    elif PROJECT == "FU2":
+        NETWORK_PROJECTS[2035]['hwy'].append("SeaLevelRise_HighAdaptation")
+        NETWORK_PROJECTS[2035]['trn'].append("SeaLevelRise_HighAdaptation")
+
     # NOTE: Earthquake is assumed in Round1 2035 but since the effect doesn't stay; this is handled in build_network_mtc_futures.py
     if PROJECT == "FU1":
         # Haywired Earthquake in 2035
@@ -329,9 +347,12 @@ elif SCENARIO=="BackToTheFuture":
         NETWORK_PROJECTS[2035]['trn'].append("Earthquake")
 
     # Sea Level Rise in FU1 and PPA (but not PPA_NoSLR)
-    if PROJECT != "PPA_NoSLR":
+    if PROJECT in ["FU1", "PPA"]:
         NETWORK_PROJECTS[2050]['hwy'].append("SeaLevelRise_2feet")
         NETWORK_PROJECTS[2050]['trn'].append("SeaLevelRise_2feet")
+    # In FU2, adaptation still holds but no need to reapply
+    elif PROJECT == "FU2":
+        pass
 
 # OPTIONAL. The default route network project directory is Y:\networks.  If
 # projects are stored in another directory, then use this variable to specify it.
