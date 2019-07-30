@@ -80,8 +80,7 @@ COMMITTED_PROJECTS = collections.OrderedDict([
                'SonomaCounty_Transit_NoBuild2050',
                'SMART_Novato',
                'Xfare_update_2020',
-               'ACTransit_Committed',
-               'Move_buses_to_HOV_EXP_lanes'],
+               'ACTransit_Committed'],
     }),
     (2025, {
         'hwy':[{'name':'Bridge_Toll_Updates', 'kwargs':{'MODELYEAR':'2025'}},
@@ -103,14 +102,12 @@ COMMITTED_PROJECTS = collections.OrderedDict([
         'trn':['SF_010028_Caltrain_Modernization',
                'SON090002_SMART_to_Windsor',
                'REG090037_New_BART_Trains',
-               'SOL070020_I80_I680_SR12_Int_1_2A',
-               'Move_buses_to_HOV_EXP_lanes']
+               'SOL070020_I80_I680_SR12_Int_1_2A']
     }),
     (2030, {
         'hwy':[{'name':'Bridge_Toll_Updates', 'kwargs':{'MODELYEAR':'2030'}},
                'EXP_880A'],
-        'trn':['BART_NoProject',
-        'Move_buses_to_HOV_EXP_lanes']
+        'trn':['BART_NoProject']
     }),
     (2035, {
         'hwy':[{'name':'Bridge_Toll_Updates', 'kwargs':{'MODELYEAR':'2035'}}],
@@ -353,6 +350,14 @@ elif SCENARIO=="BackToTheFuture":
     # In FU2, adaptation still holds but no need to reapply
     elif PROJECT == "FU2":
         pass
+
+#
+# Move buses to HOV/Express lanes at the end
+#
+for YEAR in NETWORK_PROJECTS.keys():
+    # if anything is applied
+    if ((len(NETWORK_PROJECTS[YEAR]['hwy']) > 0) or (len(NETWORK_PROJECTS[YEAR]['trn']) > 0)):
+        NETWORK_PROJECTS[YEAR]['trn'].append('Move_buses_to_HOV_EXP_lanes')
 
 # OPTIONAL. The default route network project directory is Y:\networks.  If
 # projects are stored in another directory, then use this variable to specify it.
