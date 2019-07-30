@@ -131,9 +131,8 @@ COMMITTED_PROJECTS = collections.OrderedDict([
 ])
 
 ###########################################################
-# For Round 1 Only
-if PROJECT == "FU1":
-    MAJOR_PROJECTS = collections.OrderedDict([
+# Round1 and Round2 Major Projects
+MAJOR_PROJECTS = collections.OrderedDict([
         (2015, {'hwy':[],
                 'trn':[]
         }),
@@ -181,6 +180,77 @@ if PROJECT == "FU1":
         })
     ])
 
+###########################################################
+# Round2 Transformative Projects -- Note that some are not included in Rising Tides, Falling Fortunes
+# RAWG June 2019 Agenda Item 3: Horizon - Futures Round 2: Final Strategies for Round 2 Analysis
+# https://mtc.legistar.com/View.ashx?M=F&ID=7281685&GUID=82EACC9C-82E9-4895-85CF-29F8C3CD9EF0
+TRANSFORM_PROJECTS = collections.OrderedDict([
+    (2015, {# all futures
+            'hwy_all' :[],
+            'trn_all' :[],
+            # CleanAndGreen, BackToTheFuture only
+            'hwy_cgbf':[],
+            'trn_cgbf':[]
+    }),
+    (2020, {# all futures
+            'hwy_all' :[],
+            'trn_all' :[],
+            # CleanAndGreen, BackToTheFuture only
+            'hwy_cgbf':[],
+            'trn_cgbf':[]
+    }),
+    (2025, {# all futures
+            'hwy_all' :['Futures_H10_Vision_Zero'],
+            'trn_all' :['Futures_H10_Vision_Zero'],
+            # CleanAndGreen, BackToTheFuture only
+            'hwy_cgbf':['Transform_Valley_Link'],
+            'trn_cgbf':['Transform_Valley_Link'],
+
+    }),
+    (2030, {# all futures
+            'hwy_all' :['ReX_express'],
+            'trn_all' :['ReX_express'],
+            # CleanAndGreen, BackToTheFuture only
+            'hwy_cgbf':['Transform_Dumbarton_Rail'],
+            'trn_cgbf':['MAJ_SanJose_LRT_Subway',
+                        'Transform_Muni_Southwest_Subway',
+                        'MAJ_EBart_Extension_Brentwood',
+                        'Futures_SMART_to_Healdsburg',
+                        'Transform_Dumbarton_Rail']
+    }),
+    (2035, {# all futures
+            'hwy_all' :[],
+            'trn_all' :[],
+            # CleanAndGreen, BackToTheFuture only
+            'hwy_cgbf':[],
+            'trn_cgbf':['Caltrain_PCBB10_NoHSR']
+    }),
+    (2040, {# all futures
+            'hwy_all' :[],
+            'trn_all' :[],
+            # CleanAndGreen, BackToTheFuture only
+            'hwy_cgbf':['Transform_SMART_To_Richmond'],
+            'trn_cgbf':['Transform_VTA_NorthSJ_Subway',
+                        'Transform_SMART_To_Richmond']
+    }),
+    (2045, {# all futures
+            'hwy_all' :[],
+            'trn_all' :[],
+            # CleanAndGreen, BackToTheFuture only
+            'hwy_cgbf':[],
+            'trn_cgbf':['Transform_VTA_LRT_Automation']
+    }),
+    (2050, {# all futures
+            'hwy_all' :['Futures_C6_Tolls_on_Freeways',
+                        'Futures_PBA5_HOT_to_HOV3'],
+            'trn_all' :['Futures_C6_Tolls_on_Freeways',
+                        'Futures_PBA5_HOT_to_HOV3'],
+            # CleanAndGreen, BackToTheFuture only
+            'hwy_cgbf':['Crossings3'],
+            'trn_cgbf':['Crossings3']
+    })
+])
+
 # Put them together for NETWORK_PROJECTS
 NETWORK_PROJECTS = collections.OrderedDict()
 for YEAR in COMMITTED_PROJECTS.keys():
@@ -190,6 +260,18 @@ for YEAR in COMMITTED_PROJECTS.keys():
             'hwy':COMMITTED_PROJECTS[YEAR]['hwy'] + MAJOR_PROJECTS[YEAR]['hwy'],
             'trn':COMMITTED_PROJECTS[YEAR]['trn'] + MAJOR_PROJECTS[YEAR]['trn']
         }
+    elif PROJECT == "FU2":
+        # only use those marked hwy_all, trn_all
+        if SCENARIO == "RisingTides":
+            NETWORK_PROJECTS[YEAR] = {
+                'hwy':COMMITTED_PROJECTS[YEAR]['hwy'] + MAJOR_PROJECTS[YEAR]['hwy'] + TRANSFORM_PROJECTS[YEAR]['hwy_all'],
+                'trn':COMMITTED_PROJECTS[YEAR]['trn'] + MAJOR_PROJECTS[YEAR]['trn'] + TRANSFORM_PROJECTS[YEAR]['trn_all']
+            }
+        elif SCENARIO in ["CleanAndGreen","BackToTheFuture"]:
+            NETWORK_PROJECTS[YEAR] = {
+                'hwy':COMMITTED_PROJECTS[YEAR]['hwy'] + MAJOR_PROJECTS[YEAR]['hwy'] + TRANSFORM_PROJECTS[YEAR]['hwy_all'] + TRANSFORM_PROJECTS[YEAR]['hwy_cgbf'],
+                'trn':COMMITTED_PROJECTS[YEAR]['trn'] + MAJOR_PROJECTS[YEAR]['trn'] + TRANSFORM_PROJECTS[YEAR]['trn_all'] + TRANSFORM_PROJECTS[YEAR]['trn_cgbf']
+            }
     elif PROJECT in ["PPA", "PPA_NoSLR"]:
         # Project Performance Assessment baseline does not include major projects
         NETWORK_PROJECTS[YEAR] = {
