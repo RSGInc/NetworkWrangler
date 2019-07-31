@@ -195,7 +195,7 @@ if __name__ == '__main__':
             # create the subdir for SET_CAPCLASS with set_capclass.job as apply.s
             SET_CAPCLASS     = "set_capclass"
             SET_CAPCLASS_DIR = os.path.join(TEMP_SUBDIR, SET_CAPCLASS)
-            os.mkdir(SET_CAPCLASS_DIR)
+            os.makedirs(SET_CAPCLASS_DIR)
             source_file      = os.path.join(os.path.dirname(THIS_FILE), "set_capclass.job")
             shutil.copyfile( source_file, os.path.join(SET_CAPCLASS_DIR, "apply.s"))
 
@@ -214,7 +214,7 @@ if __name__ == '__main__':
             # create the subdir for ERROR_CHECK with check_for_errors.job as apply.s
             ERROR_CHECK      = "check_for_errors"
             ERROR_CHECK_DIR  = os.path.join(TEMP_SUBDIR, ERROR_CHECK)
-            os.mkdir(ERROR_CHECK_DIR)
+            os.makedirs(ERROR_CHECK_DIR)
             source_file      = os.path.join(os.path.dirname(THIS_FILE), "check_for_errors.job")
             shutil.copyfile( source_file, os.path.join(ERROR_CHECK_DIR, "apply.s"))
 
