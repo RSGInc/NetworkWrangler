@@ -491,7 +491,7 @@ if __name__ == '__main__':
                                                              projtype=projType, tempdir=TEMP_SUBDIR, **kwargs)
                 (parentdir, networkdir, gitdir, projectsubdir) = networks[netmode].getClonedProjectArgs(project_name, None, projType, TEMP_SUBDIR)
 
-                if args.future in ["CleanAndGreen","BackToTheFuture"] and project_name == "Earthquake":
+                if ((project_name == "Earthquake") and ((PROJECT == "FU1" and args.future in ["CleanAndGreen","BackToTheFuture"]) or (PROJECT == "FU2"))):
                     # Then this "project" is only temporary, so save aside a deepcopy of the network PRIOR
                     # to the apply to restore after we write it
                     networks_without_earthquake[netmode] = copy.deepcopy(networks[netmode])

@@ -280,7 +280,7 @@ for YEAR in COMMITTED_PROJECTS.keys():
 # remove "False and" clauses when these are coded
 if SCENARIO=="CleanAndGreen":
     # NOTE: Earthquake is assumed in Round1 2035 but since the effect doesn't stay; this is handled in build_network_mtc_futures.py
-    if PROJECT == "FU1":
+    if PROJECT in ["FU1","FU2"]:
         # High Speed Rail is only included in Round1, not Project Performance Baseline
         # NETWORK_PROJECTS[2030]['trn'].append("HSR") REMOVED FROM ROUND 1
 
@@ -310,7 +310,7 @@ elif SCENARIO=="RisingTides":
         NETWORK_PROJECTS[2030]['hwy'].append("SeaLevelRise_LowAdaptation")
         NETWORK_PROJECTS[2030]['trn'].append("SeaLevelRise_LowAdaptation")
 
-    if PROJECT == "FU1":
+    if PROJECT in ["FU1","FU2"]:
         # Haywired Earthquake in 2035
         NETWORK_PROJECTS[2035]['hwy'].append("Earthquake")
         NETWORK_PROJECTS[2035]['trn'].append("Earthquake")
@@ -338,7 +338,7 @@ elif SCENARIO=="BackToTheFuture":
         NETWORK_PROJECTS[2035]['trn'].append("SeaLevelRise_HighAdaptation")
 
     # NOTE: Earthquake is assumed in Round1 2035 but since the effect doesn't stay; this is handled in build_network_mtc_futures.py
-    if PROJECT == "FU1":
+    if PROJECT in ["FU1","FU2"]:
         # Haywired Earthquake in 2035
         NETWORK_PROJECTS[2035]['hwy'].append("Earthquake")
         NETWORK_PROJECTS[2035]['trn'].append("Earthquake")
