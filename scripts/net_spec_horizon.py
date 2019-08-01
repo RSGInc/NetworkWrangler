@@ -80,7 +80,8 @@ COMMITTED_PROJECTS = collections.OrderedDict([
                'SonomaCounty_Transit_NoBuild2050',
                'SMART_Novato',
                'Xfare_update_2020',
-               'ACTransit_Committed'],
+               'ACTransit_Committed',
+               'ferry_update_2019'],
     }),
     (2025, {
         'hwy':[{'name':'Bridge_Toll_Updates', 'kwargs':{'MODELYEAR':'2025'}},
