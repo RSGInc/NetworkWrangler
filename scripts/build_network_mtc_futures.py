@@ -419,6 +419,8 @@ if __name__ == '__main__':
     if not os.path.exists(SCRATCH_SUBDIR): os.mkdir(SCRATCH_SUBDIR)
     os.chdir(SCRATCH_SUBDIR)
 
+    os.environ["CHAMP_node_names"] = os.path.join(PIVOT_DIR,"Node Description.xls")
+
     networks = {
         'hwy' :Wrangler.HighwayNetwork(modelType=args.model_type, modelVersion=1.0,
                                        basenetworkpath=os.path.join(PIVOT_DIR,"hwy"),
