@@ -224,8 +224,14 @@ class HighwayNetwork(Network):
         newtolls       = open(newtollsfile, 'r')
         new_reader     = csv.reader(newtolls, skipinitialspace=True)
         new_fieldnames = next(new_reader)
-        # they need to match
-        if (fieldnames != new_fieldnames):
+        # they need to match, or fieldnames can be longer
+        if fieldnames == new_fieldnames:
+            # excellent
+            pass
+        elif len(new_fieldnames) < len(fieldnames) and fieldnames[:len(new_fieldnames)] == new_fieldnames:
+            # ok -- some columns at end can be blank
+            pass
+        else:
             raise NetworkException("Toll file {} has different fieldnames ({}) than expected ({})".format(newtollsfile, new_fieldnames, fieldnames))
 
         for row in new_reader:
