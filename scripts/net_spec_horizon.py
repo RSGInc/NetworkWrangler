@@ -198,16 +198,20 @@ TRANSFORM_PROJECTS = collections.OrderedDict([
             'trn_cgbf':[]
     }),
     (2025, {# all futures
-            'hwy_all' :['Futures_H10_Vision_Zero'],
-            'trn_all' :['Futures_H10_Vision_Zero'],
+            'hwy_all' :['EXP_uncommitted_all',
+                        'Futures_H10_Vision_Zero'],
+            'trn_all' :['EXP_uncommitted_all',
+                        'Futures_H10_Vision_Zero'],
             # CleanAndGreen, BackToTheFuture only
             'hwy_cgbf':['Transform_Valley_Link'],
             'trn_cgbf':['Transform_Valley_Link'],
 
     }),
     (2030, {# all futures
-            'hwy_all' :['Futures_C4_ReX_Express'],
-            'trn_all' :['Futures_C4_ReX_Express'],
+            'hwy_all' :['EXP_gapclosure',
+                        'Futures_C4_ReX_Express'],
+            'trn_all' :['EXP_gapclosure',
+                        'Futures_C4_ReX_Express'],
             # CleanAndGreen, BackToTheFuture only
             'hwy_cgbf':['Transform_Dumbarton_Rail'],
             'trn_cgbf':['MAJ_SanJose_LRT_Subway',
@@ -229,7 +233,8 @@ TRANSFORM_PROJECTS = collections.OrderedDict([
             # CleanAndGreen, BackToTheFuture only
             'hwy_cgbf':['Transform_SMART_To_Richmond'],
             'trn_cgbf':['Transform_VTA_NorthSJ_Subway',
-                        'Transform_SMART_To_Richmond']
+                        'Transform_SMART_To_Richmond',
+                        'Transform_VTA_LRT_FullGradeSep']
     }),
     (2045, {# all futures
             'hwy_all' :[],
