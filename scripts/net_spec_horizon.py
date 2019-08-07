@@ -131,13 +131,14 @@ COMMITTED_PROJECTS = collections.OrderedDict([
 ###########################################################
 # Round1 and Round2 Major Projects
 MAJOR_PROJECTS = collections.OrderedDict([
-        (2015, {'hwy':[],
+        (2015, {'hwy':[{'name':'Bridge_Toll_Updates_2.2pct', 'kwargs':{'MODELYEAR':'2015'}}],
                 'trn':[]
         }),
-        (2020, {'hwy':[],
+        (2020, {'hwy':[{'name':'Bridge_Toll_Updates_2.2pct', 'kwargs':{'MODELYEAR':'2020'}}],
                 'trn':['MAJ_Sonoma_Frequency_Increase']
         }),
-        (2025, {'hwy':['MAJ_Geary_BRT_Phase2',
+        (2025, {'hwy':[{'name':'Bridge_Toll_Updates_2.2pct', 'kwargs':{'MODELYEAR':'2025'}}
+                       'MAJ_Geary_BRT_Phase2',
                        'MAJ_SF_Congestion_Pricing',
                        'MAJ_SOL070020_I80_I680_SR12_Int_2B_7',
                        'MAJ_SCL050009_VTA_Eastridge_Extension',
@@ -147,7 +148,8 @@ MAJOR_PROJECTS = collections.OrderedDict([
                        'MAJ_SCL050009_VTA_Eastridge_Extension',
                        'MAJ_SF_Congestion_Pricing']
         }),
-        (2030, {'hwy':['MAJ_SanPablo_BRT',
+        (2030, {'hwy':[{'name':'Bridge_Toll_Updates_2.2pct', 'kwargs':{'MODELYEAR':'2030'}}
+                       'MAJ_SanPablo_BRT',
                        'MAJ_ElCaminoReal_BRT',
                        'MAJ_I680_SR4_Int_Widening_Phases_3_5',
                        'MAJ_SR4_Operational_Improvements',
@@ -162,18 +164,19 @@ MAJOR_PROJECTS = collections.OrderedDict([
                        'MAJ_Better_Market_St',
                        'MAJ_REG090037_BART_Core_Cap']
         }),
-        (2035, {'hwy':['MAJ_Treasure_Island_Congestion_Pricing'],
+        (2035, {'hwy':[{'name':'Bridge_Toll_Updates_2.2pct', 'kwargs':{'MODELYEAR':'2035'}}
+                       'MAJ_Treasure_Island_Congestion_Pricing'],
                 'trn':['MAJ_MuniForward_Uncommitted',
                        'MAJ_Vasona_LRT_Extension',
                        'MAJ_Treasure_Island_Congestion_Pricing']
         }),
-        (2040, {'hwy':[],
+        (2040, {'hwy':[{'name':'Bridge_Toll_Updates_2.2pct', 'kwargs':{'MODELYEAR':'2040'}}],
                 'trn':[]
         }),
-        (2045, {'hwy':[],
+        (2045, {'hwy':[{'name':'Bridge_Toll_Updates_2.2pct', 'kwargs':{'MODELYEAR':'2045'}}],
                 'trn':[]
         }),
-        (2050, {'hwy':[],
+        (2050, {'hwy':[{'name':'Bridge_Toll_Updates_2.2pct', 'kwargs':{'MODELYEAR':'2050'}}],
                 'trn':[]
         })
     ])
