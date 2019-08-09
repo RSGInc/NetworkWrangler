@@ -247,10 +247,10 @@ TRANSFORM_PROJECTS = collections.OrderedDict([
             'trn_cgbf':['Transform_VTA_LRT_Automation']
     }),
     (2050, {# all futures
-            'hwy_all' :['Futures_C6_Tolls_on_Freeways',
-                        'Futures_PBA5_HOT_to_HOV3'],
-            'trn_all' :['Futures_C6_Tolls_on_Freeways',
-                        'Futures_PBA5_HOT_to_HOV3'],
+            'hwy_all' :['Futures_PBA5_HOT_to_HOV3',
+                        'Futures_C6_Tolls_on_Freeways'],
+            'trn_all' :['Futures_PBA5_HOT_to_HOV3',
+                        'Futures_C6_Tolls_on_Freeways'],
             # CleanAndGreen, BackToTheFuture only
             'hwy_cgbf':['Crossings3'],
             'trn_cgbf':['Crossings3']
