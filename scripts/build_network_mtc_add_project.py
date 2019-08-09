@@ -98,10 +98,10 @@ def determineProjectDirectory(OUTPUT_DIR, BASE_DIR, project_short_id):
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=USAGE, formatter_class=argparse.RawDescriptionHelpFormatter)
-    parser.add_argument("future", choices=["CleanAndGreen", "RisingTides", "BackToTheFuture"], help="Specify which Future Scenario for which to create networks")
+    parser.add_argument("future", choices=["CleanAndGreen", "RisingTides", "BackToTheFuture","all"], help="Specify which Future Scenario for which to create networks")
     parser.add_argument("--hwy", dest='hwy', action='store_true', help="Pass if project is a roadway project")
     parser.add_argument("--trn", dest='trn', action='store_true', help="Pass if project is a transit project")
-    parser.add_argument("--kwarg", dest='kwarg', help="To pass kwargs to project apply(), pass keyword and value", nargs=2)
+    parser.add_argument("--kwarg", dest='kwarg', help="To pass keyword args to project apply(), pass keyword and value", nargs=2)
     parser.add_argument("project_short_id", help="Short ID of project, to be used for directory")
     parser.add_argument("project", help="Project to add", nargs="+")
     args = parser.parse_args()
@@ -110,139 +110,151 @@ if __name__ == '__main__':
         print("Project must be roadway, transit or both.  Please specify --hwy and/or --trn")
         sys.exit(2)
 
-    NOW              = time.strftime("%Y%b%d.%H%M%S")
+
     PROJECT          = "PPA"
-    SCENARIO         = args.future
     NETWORK_BASE_DIR = r"M:\\Application\\Model One\\NetworkProjects"
     HWY_NET_NAME     = "freeflow.net"
     TRN_NET_NAME     = "transitLines"
-    BASE_DIR         = findBaseDirectory(args.future)   # e.g. 2050_TM150_PPA_BF_00
-    PIVOT_DIR        = os.path.join(PPA_DIR, BASE_DIR, "INPUT")  # full path of input network
-    TRANSIT_CAPACITY_DIR = os.path.join(PIVOT_DIR, "trn")
 
-    # setup kwargs to pass
-    kwargs           = {}
-    if args.kwarg: kwargs[args.kwarg[0]] = '"{}"'.format(args.kwarg[1])
+    if args.future == "all":
+        FUTURES = ["CleanAndGreen", "RisingTides", "BackToTheFuture"]
+    else:
+        FUTURES = [args.future]
 
-    OUTPUT_DIR       = os.path.join(PPA_DIR, args.project_short_id)
-    # make OUTPUT_DIR
-    if not os.path.exists(OUTPUT_DIR): os.mkdir(OUTPUT_DIR)
+    for SCENARIO in FUTURES:
+        NOW              = time.strftime("%Y%b%d.%H%M%S")
+        BASE_DIR         = findBaseDirectory(SCENARIO)   # e.g. 2050_TM150_PPA_BF_00
+        PIVOT_DIR        = os.path.join(PPA_DIR, BASE_DIR, "INPUT")  # full path of input network
+        TRANSIT_CAPACITY_DIR = os.path.join(PIVOT_DIR, "trn")
 
-    OUTPUT_FUTURE_DIR = determineProjectDirectory(OUTPUT_DIR, BASE_DIR, args.project_short_id)
-    os.mkdir(OUTPUT_FUTURE_DIR)
-    # move into it so the scratch is here
-    os.chdir(OUTPUT_DIR)
-
-    # put log file into the run dir
-    LOG_FILENAME     = "addproject_{}_{}_{}_{}.info.LOG".format(PROJECT, SCENARIO, args.project_short_id, NOW)
-    Wrangler.setupLogging(os.path.join(OUTPUT_FUTURE_DIR, LOG_FILENAME),
-                          os.path.join(OUTPUT_FUTURE_DIR, LOG_FILENAME.replace("info", "debug")))
-
-
-    Wrangler.WranglerLogger.info("Using base directory {}".format(PIVOT_DIR))
-
-    # Create a scratch directory to check out project repos into
-    SCRATCH_SUBDIR   = "scratch"
-    TEMP_SUBDIR      = "Wrangler_tmp_" + NOW    
-    if not os.path.exists(SCRATCH_SUBDIR): os.mkdir(SCRATCH_SUBDIR)
-    os.chdir(SCRATCH_SUBDIR)
-
-    networks = {
-        'hwy' :Wrangler.HighwayNetwork(modelType=Wrangler.Network.MODEL_TYPE_TM1, modelVersion=1.0,
-                                       basenetworkpath=os.path.join(PIVOT_DIR,"hwy"),
-                                       networkBaseDir=NETWORK_BASE_DIR,
-                                       networkProjectSubdir=None,
-                                       networkSeedSubdir=None,
-                                       networkPlanSubdir=None,
-                                       isTiered=True,
-                                       tag=None,
-                                       tempdir=TEMP_SUBDIR,
-                                       networkName="hwy",
-                                       tierNetworkName=HWY_NET_NAME),
-        'trn':Wrangler.TransitNetwork( modelType=Wrangler.Network.MODEL_TYPE_TM1, modelVersion=1.0,
-                                       basenetworkpath=os.path.join(PIVOT_DIR,"trn"),
-                                       networkBaseDir=NETWORK_BASE_DIR,
-                                       networkProjectSubdir=None,
-                                       networkSeedSubdir=None,
-                                       networkPlanSubdir=None,
-                                       isTiered=True,
-                                       networkName=TRN_NET_NAME)
-    }
-    if TRANSIT_CAPACITY_DIR:
-        Wrangler.TransitNetwork.capacity = Wrangler.TransitCapacity(directory=TRANSIT_CAPACITY_DIR)
+        # setup kwargs to pass
+        kwargs           = {}
+        if args.kwarg:
+            # assume "all" is special as a kwarg value and should be replaced with the SCENARIO
+            if args.kwarg[1] == "all":
+                kwargs[args.kwarg[0]] = '"{}"'.format(SCENARIO)
+            else:
+                kwargs[args.kwarg[0]] = '"{}"'.format(args.kwarg[1])
+    
+        OUTPUT_DIR       = os.path.join(PPA_DIR, args.project_short_id)
+        # make OUTPUT_DIR
+        if not os.path.exists(OUTPUT_DIR): os.mkdir(OUTPUT_DIR)
+    
+        OUTPUT_FUTURE_DIR = determineProjectDirectory(OUTPUT_DIR, BASE_DIR, args.project_short_id)
+        os.mkdir(OUTPUT_FUTURE_DIR)
+        # move into it so the scratch is here
+        os.chdir(OUTPUT_DIR)
+    
+        # put log file into the run dir
+        LOG_FILENAME     = "addproject_{}_{}_{}_{}.info.LOG".format(PROJECT, SCENARIO, args.project_short_id, NOW)
+        Wrangler.setupLogging(os.path.join(OUTPUT_FUTURE_DIR, LOG_FILENAME),
+                              os.path.join(OUTPUT_FUTURE_DIR, LOG_FILENAME.replace("info", "debug")))
 
 
-    for netmode in ["hwy","trn"]:
-        # if applying project
-        if (netmode == "hwy" and args.hwy) or (netmode == "trn" and args.trn):
+        Wrangler.WranglerLogger.info("Using base directory {}".format(PIVOT_DIR))
 
-            # iterate through projects specified, since args.project is a list
-            for my_project in args.project:
+        # Create a scratch directory to check out project repos into
+        SCRATCH_SUBDIR   = "scratch"
+        TEMP_SUBDIR      = "Wrangler_tmp_" + NOW    
+        if not os.path.exists(SCRATCH_SUBDIR): os.mkdir(SCRATCH_SUBDIR)
+        os.chdir(SCRATCH_SUBDIR)
+    
+        networks = {
+            'hwy' :Wrangler.HighwayNetwork(modelType=Wrangler.Network.MODEL_TYPE_TM1, modelVersion=1.0,
+                                           basenetworkpath=os.path.join(PIVOT_DIR,"hwy"),
+                                           networkBaseDir=NETWORK_BASE_DIR,
+                                           networkProjectSubdir=None,
+                                           networkSeedSubdir=None,
+                                           networkPlanSubdir=None,
+                                           isTiered=True,
+                                           tag=None,
+                                           tempdir=TEMP_SUBDIR,
+                                           networkName="hwy",
+                                           tierNetworkName=HWY_NET_NAME),
+            'trn':Wrangler.TransitNetwork( modelType=Wrangler.Network.MODEL_TYPE_TM1, modelVersion=1.0,
+                                           basenetworkpath=os.path.join(PIVOT_DIR,"trn"),
+                                           networkBaseDir=NETWORK_BASE_DIR,
+                                           networkProjectSubdir=None,
+                                           networkSeedSubdir=None,
+                                           networkPlanSubdir=None,
+                                           isTiered=True,
+                                           networkName=TRN_NET_NAME)
+        }
+        if TRANSIT_CAPACITY_DIR:
+            Wrangler.TransitNetwork.capacity = Wrangler.TransitCapacity(directory=TRANSIT_CAPACITY_DIR)
 
-                Wrangler.WranglerLogger.info("Applying project [%s] of type [%s]" % (my_project, netmode))
-                cloned_SHA1 = networks[netmode].cloneProject(networkdir=my_project, tag=None,
-                                                             projtype="project", tempdir=TEMP_SUBDIR, **kwargs)
-                (parentdir, networkdir, gitdir, projectsubdir) = networks[netmode].getClonedProjectArgs(my_project, None, "project", TEMP_SUBDIR)
 
-                applied_SHA1 = networks[netmode].applyProject(parentdir, networkdir, gitdir, projectsubdir, **kwargs)
+        for netmode in ["hwy","trn"]:
+            # if applying project
+            if (netmode == "hwy" and args.hwy) or (netmode == "trn" and args.trn):
+ 
+                # iterate through projects specified, since args.project is a list
+                for my_project in args.project:
+    
+                    Wrangler.WranglerLogger.info("Applying project [%s] of type [%s]" % (my_project, netmode))
+                    cloned_SHA1 = networks[netmode].cloneProject(networkdir=my_project, tag=None,
+                                                                 projtype="project", tempdir=TEMP_SUBDIR, **kwargs)
+                    (parentdir, networkdir, gitdir, projectsubdir) = networks[netmode].getClonedProjectArgs(my_project, None, "project", TEMP_SUBDIR)
+    
+                    applied_SHA1 = networks[netmode].applyProject(parentdir, networkdir, gitdir, projectsubdir, **kwargs)
 
-        # write networks
-        final_path = os.path.join(OUTPUT_FUTURE_DIR,netmode)
-        if not os.path.exists(final_path): os.makedirs(final_path)
+            # write networks
+            final_path = os.path.join(OUTPUT_FUTURE_DIR,netmode)
+            if not os.path.exists(final_path): os.makedirs(final_path)
 
-        if netmode=="hwy":
+            if netmode=="hwy":
 
-            # create the subdir for SET_CAPCLASS with set_capclass.job as apply.s
-            SET_CAPCLASS     = "set_capclass"
-            SET_CAPCLASS_DIR = os.path.join(TEMP_SUBDIR, SET_CAPCLASS)
-            os.makedirs(SET_CAPCLASS_DIR)
-            source_file      = os.path.join(os.path.dirname(THIS_FILE), "set_capclass.job")
-            shutil.copyfile( source_file, os.path.join(SET_CAPCLASS_DIR, "apply.s"))
+                # create the subdir for SET_CAPCLASS with set_capclass.job as apply.s
+                SET_CAPCLASS     = "set_capclass"
+                SET_CAPCLASS_DIR = os.path.join(TEMP_SUBDIR, SET_CAPCLASS)
+                if not os.path.isdir(SET_CAPCLASS_DIR): os.makedirs(SET_CAPCLASS_DIR)
+                source_file      = os.path.join(os.path.dirname(THIS_FILE), "set_capclass.job")
+                shutil.copyfile( source_file, os.path.join(SET_CAPCLASS_DIR, "apply.s"))
 
-            # apply set_capclass before writing any hwy network
-            try:
-              applied_SHA1 = networks[netmode].applyProject(parentdir=TEMP_SUBDIR, networkdir=SET_CAPCLASS,
-                                                            gitdir=os.path.join(TEMP_SUBDIR, SET_CAPCLASS))
-            except Wrangler.NetworkException as ne:
-              Wrangler.WranglerLogger.debug("set_capclass exception: {}".format(ne.args[0]))
-              # this is expected -- since we're using a hack and this isn't a git project
-              if ne.args[0].startswith("Git log failed"): 
-                pass
-              else:
-                raise ne
+                # apply set_capclass before writing any hwy network
+                try:
+                  applied_SHA1 = networks[netmode].applyProject(parentdir=TEMP_SUBDIR, networkdir=SET_CAPCLASS,
+                                                                gitdir=os.path.join(TEMP_SUBDIR, SET_CAPCLASS))
+                except Wrangler.NetworkException as ne:
+                  Wrangler.WranglerLogger.debug("set_capclass exception: {}".format(ne.args[0]))
+                  # this is expected -- since we're using a hack and this isn't a git project
+                  if ne.args[0].startswith("Git log failed"): 
+                    pass
+                  else:
+                    raise ne
 
-            # create the subdir for ERROR_CHECK with check_for_errors.job as apply.s
-            ERROR_CHECK      = "check_for_errors"
-            ERROR_CHECK_DIR  = os.path.join(TEMP_SUBDIR, ERROR_CHECK)
-            os.makedirs(ERROR_CHECK_DIR)
-            source_file      = os.path.join(os.path.dirname(THIS_FILE), "check_for_errors.job")
-            shutil.copyfile( source_file, os.path.join(ERROR_CHECK_DIR, "apply.s"))
+                # create the subdir for ERROR_CHECK with check_for_errors.job as apply.s
+                ERROR_CHECK      = "check_for_errors"
+                ERROR_CHECK_DIR  = os.path.join(TEMP_SUBDIR, ERROR_CHECK)
+                if not os.path.isdir(ERROR_CHECK_DIR): os.makedirs(ERROR_CHECK_DIR)
+                source_file      = os.path.join(os.path.dirname(THIS_FILE), "check_for_errors.job")
+                shutil.copyfile( source_file, os.path.join(ERROR_CHECK_DIR, "apply.s"))
 
-            # apply check_for_errors before writing any hwy network
-            try:
-              applied_SHA1 = networks[netmode].applyProject(parentdir=TEMP_SUBDIR, networkdir=ERROR_CHECK,
-                                                            gitdir=os.path.join(TEMP_SUBDIR, ERROR_CHECK))
-            except Wrangler.NetworkException as ne:
-              Wrangler.WranglerLogger.debug("check_for_errors exception: {}".format(ne.args[0]))
-              # this is expected -- since we're using a hack and this isn't a git project
-              if ne.args[0].startswith("Git log failed"): 
-                pass
-              else:
-                raise ne
+                # apply check_for_errors before writing any hwy network
+                try:
+                  applied_SHA1 = networks[netmode].applyProject(parentdir=TEMP_SUBDIR, networkdir=ERROR_CHECK,
+                                                                gitdir=os.path.join(TEMP_SUBDIR, ERROR_CHECK))
+                except Wrangler.NetworkException as ne:
+                  Wrangler.WranglerLogger.debug("check_for_errors exception: {}".format(ne.args[0]))
+                  # this is expected -- since we're using a hack and this isn't a git project
+                  if ne.args[0].startswith("Git log failed"): 
+                    pass
+                  else:
+                    raise ne
 
-            networks['hwy'].write(path=final_path,name=HWY_NET_NAME,suppressQuery=True,
-                                  suppressValidation=True) # MTC doesn't have turn penalties
-        else:
-            networks['trn'].write(path=final_path,
-                                  name=TRN_NET_NAME,
-                                  writeEmptyFiles = False,
-                                  suppressQuery = False,
-                                  suppressValidation = False,
-                                  cubeNetFileForValidation = os.path.join(os.path.abspath(OUTPUT_FUTURE_DIR), "hwy", HWY_NET_NAME))
-            # Write the transit capacity configuration
-            Wrangler.TransitNetwork.capacity.writeTransitVehicleToCapacity(directory = final_path)
-            Wrangler.TransitNetwork.capacity.writeTransitLineToVehicle(directory = final_path)
-            Wrangler.TransitNetwork.capacity.writeTransitPrefixToVehicle(directory = final_path)
+                networks['hwy'].write(path=final_path,name=HWY_NET_NAME,suppressQuery=True,
+                                      suppressValidation=True) # MTC doesn't have turn penalties
+            else:
+                networks['trn'].write(path=final_path,
+                                      name=TRN_NET_NAME,
+                                      writeEmptyFiles = False,
+                                      suppressQuery = False,
+                                      suppressValidation = False,
+                                      cubeNetFileForValidation = os.path.join(os.path.abspath(OUTPUT_FUTURE_DIR), "hwy", HWY_NET_NAME))
+                # Write the transit capacity configuration
+                Wrangler.TransitNetwork.capacity.writeTransitVehicleToCapacity(directory = final_path)
+                Wrangler.TransitNetwork.capacity.writeTransitLineToVehicle(directory = final_path)
+                Wrangler.TransitNetwork.capacity.writeTransitPrefixToVehicle(directory = final_path)
 
-    Wrangler.WranglerLogger.debug("Successfully completed running %s" % os.path.abspath(__file__))
+        Wrangler.WranglerLogger.debug("Successfully completed running %s" % os.path.abspath(__file__))
 

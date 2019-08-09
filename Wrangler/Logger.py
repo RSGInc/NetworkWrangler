@@ -15,6 +15,9 @@ def setupLogging(infoLogFilename, debugLogFilename, logToConsole=True):
         Pass none to either.
         Spews it all out to console too, if logToConsole is true.
     """
+    # clear handlers if any exist already
+    WranglerLogger.handlers = []
+
     # create a logger
     WranglerLogger.setLevel(logging.DEBUG)
 
