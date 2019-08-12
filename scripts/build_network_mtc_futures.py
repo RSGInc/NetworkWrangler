@@ -504,6 +504,14 @@ if __name__ == '__main__':
                 applied_SHA1 = networks[netmode].applyProject(parentdir, networkdir, gitdir, projectsubdir, **kwargs)
                 appliedcount += 1
 
+                # if hwy project has set_capclass override, copy it to set_capclass/apply.s
+                set_capclass_override = os.path.join(TEMP_SUBDIR, project_name, "set_capclass.job")
+                if os.path.exists(set_capclass_override):
+                    dest_file = os.path.join(SET_CAPCLASS_DIR, "apply.s")
+                    shutil.copyfile(set_capclass_override, dest_file)
+                    Wrangler.WranglerLogger.info("Copied override {} to {}".format(set_capclass_override, dest_file))
+
+
             # apply set_capclass before writing any hwy network
             if netmode == "hwy" and appliedcount > 0:
                 applied_SHA1 = networks[netmode].applyProject(parentdir=TEMP_SUBDIR, networkdir=SET_CAPCLASS,
