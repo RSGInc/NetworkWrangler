@@ -201,9 +201,9 @@ TRANSFORM_PROJECTS = collections.OrderedDict([
             'trn_cgbf':[]
     }),
     (2025, {# all futures
-            'hwy_all' :['EXP_uncommitted_all',
+            'hwy_all' :[{'name':'EXP_uncommitted_all',                   'kwargs':{'FUTURE':SCENARIO}},
                         'Futures_H10_Vision_Zero'],
-            'trn_all' :['EXP_uncommitted_all',
+            'trn_all' :[{'name':'EXP_uncommitted_all',                   'kwargs':{'FUTURE':SCENARIO}},
                         'Futures_H10_Vision_Zero'],
             # CleanAndGreen, BackToTheFuture only
             'hwy_cgbf':['Transform_Valley_Link'],
