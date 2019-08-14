@@ -201,9 +201,9 @@ TRANSFORM_PROJECTS = collections.OrderedDict([
             'trn_cgbf':[]
     }),
     (2025, {# all futures
-            'hwy_all' :[{'name':'EXP_uncommitted_all',                   'kwargs':{'FUTURE':SCENARIO}},
+            'hwy_all' :[{'name':'EXP_uncommitted_all',   'kwargs':{'FUTURE':SCENARIO}},
                         'Futures_H10_Vision_Zero'],
-            'trn_all' :[{'name':'EXP_uncommitted_all',                   'kwargs':{'FUTURE':SCENARIO}},
+            'trn_all' :[{'name':'EXP_uncommitted_all',   'kwargs':{'FUTURE':'"{}"'.format(SCENARIO)}},  # pass as quoted string
                         'Futures_H10_Vision_Zero'],
             # CleanAndGreen, BackToTheFuture only
             'hwy_cgbf':['Transform_Valley_Link'],

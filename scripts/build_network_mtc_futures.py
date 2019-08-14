@@ -484,7 +484,7 @@ if __name__ == '__main__':
                 (project_name, projType, tag, kwargs) = getProjectAttributes(project)
                 if tag == None: tag = TAG
 
-                Wrangler.WranglerLogger.info("Applying project [%s] of type [%s] with tag [%s]" % (project_name, projType, tag))
+                Wrangler.WranglerLogger.info("Applying project [{}] of type [{}] with tag [{}] and kwargs[{}]".format(project_name, projType, tag, kwargs))
                 if projType=='plan':
                     continue
 
