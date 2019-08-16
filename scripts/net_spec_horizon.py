@@ -231,7 +231,7 @@ TRANSFORM_PROJECTS = collections.OrderedDict([
             'trn_cgbf':['Caltrain_PCBB10_NoHSR']
     }),
     (2040, {# all futures
-            'hwy_all' :[],
+            'hwy_all' :['Transform_Richmond_Bridge_Replacement'],
             'trn_all' :[],
             # CleanAndGreen, BackToTheFuture only
             'hwy_cgbf':['Transform_SMART_To_Richmond'],
