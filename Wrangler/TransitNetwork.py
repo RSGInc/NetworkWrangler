@@ -1362,7 +1362,7 @@ class TransitNetwork(Network):
         # filter out HOV and express lane links
         hov_links_df   = links_df.loc[ (links_df.USE == 2)|(links_df.USE==3) ]
         el_links_df    = links_df.loc[ links_df.TOLLCLASS >= 11 ]
-        gp_links_df    = links_df.loc[ (links_df.USE==1)&((links_df.FT<=3)|(links_df.FT==5)|(links_df.FT==8)|(links_df.FT==10))]
+        gp_links_df    = links_df.loc[ (links_df.USE==1)&((links_df.FT<=3)|(links_df.FT==5)|(links_df.FT==7)|(links_df.FT==8)|(links_df.FT==10))]
         dummy_links_df = links_df.loc[ links_df.FT==6 ]
 
         WranglerLogger.debug("Found {} hov links, {} express lane links and {} general purpose links".format(
