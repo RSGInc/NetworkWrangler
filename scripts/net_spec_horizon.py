@@ -99,9 +99,11 @@ COMMITTED_PROJECTS = collections.OrderedDict([
                'SOL110006_Jepson_1B_1C',
                'SCL190008_US101_DLC_Int_Imp',
                'I880_US101_AdaptiveRampMetering',
+               'MAJ_SCL050009_VTA_Eastridge_Extension',
                'SOL070020_I80_I680_SR12_Int_1_2A'],
         'trn':['SF_010028_Caltrain_Modernization',
                'SON090002_SMART_to_Windsor',
+               'MAJ_SCL050009_VTA_Eastridge_Extension',
                'REG090037_New_BART_Trains',
                'SOL070020_I80_I680_SR12_Int_1_2A']
     }),
@@ -141,11 +143,9 @@ MAJOR_PROJECTS = collections.OrderedDict([
                        'MAJ_Geary_BRT_Phase2',
                        'MAJ_SF_Congestion_Pricing',
                        'MAJ_SOL070020_I80_I680_SR12_Int_2B_7',
-                       'MAJ_SCL050009_VTA_Eastridge_Extension',
                        'MAJ_Bay_Area_Forward_committed',],
                 'trn':['MAJ_Geary_BRT_Phase2',
                        'MAJ_SOL070020_I80_I680_SR12_Int_2B_7',
-                       'MAJ_SCL050009_VTA_Eastridge_Extension',
                        'MAJ_SF_Congestion_Pricing']
         }),
         (2030, {'hwy':[{'name':'Bridge_Toll_Updates_3pct', 'kwargs':{'MODELYEAR':'2030'}},
