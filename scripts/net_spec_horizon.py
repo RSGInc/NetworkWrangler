@@ -365,12 +365,18 @@ elif SCENARIO=="BackToTheFuture":
         pass
 
 #
+# For every year where a project is applied do the following:
+# Convert all zero-length links to 0.01
 # Move buses to HOV/Express lanes at the end
 #
 for YEAR in NETWORK_PROJECTS.keys():
     # if anything is applied
     if ((len(NETWORK_PROJECTS[YEAR]['hwy']) > 0) or (len(NETWORK_PROJECTS[YEAR]['trn']) > 0)):
+        NETWORK_PROJECTS[YEAR]['hwy'].append('No_zero_length_links')
+
+    if ((len(NETWORK_PROJECTS[YEAR]['hwy']) > 0) or (len(NETWORK_PROJECTS[YEAR]['trn']) > 0)):
         NETWORK_PROJECTS[YEAR]['trn'].append('Move_buses_to_HOV_EXP_lanes')
+
 
 # OPTIONAL. The default route network project directory is Y:\networks.  If
 # projects are stored in another directory, then use this variable to specify it.
