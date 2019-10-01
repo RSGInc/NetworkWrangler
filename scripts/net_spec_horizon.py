@@ -294,6 +294,10 @@ if SCENARIO=="CleanAndGreen":
         # High Speed Rail is only included in Round1, not Project Performance Baseline nor Round2
         NETWORK_PROJECTS[2030]['trn'].append("HSR")
 
+    elif PROJECT == "FU2":
+        # this needs to be added before Earthquake or it's lost
+        NETWORK_PROJECTS[2035]['trn'].append("Caltrain_PCBB10_HSR")
+
     # NOTE: Earthquake is assumed in Round1 2035 but since the effect doesn't stay; this is handled in build_network_mtc_futures.py
     if PROJECT in ["FU1","FU2"]:
         # Haywired Earthquake in 2035
@@ -307,7 +311,6 @@ if SCENARIO=="CleanAndGreen":
         NETWORK_PROJECTS[2045]['trn'].append("SeaLevelRise_1foot")
     # But we've adapted in FU2 (also add caltrain PCBB project without HSR)
     elif PROJECT == "FU2":
-        NETWORK_PROJECTS[2035]['trn'].append("Caltrain_PCBB10_HSR")
         NETWORK_PROJECTS[2045]['hwy'].append("SeaLevelRise_HighAdaptation")
         NETWORK_PROJECTS[2045]['trn'].append("SeaLevelRise_HighAdaptation")
 
