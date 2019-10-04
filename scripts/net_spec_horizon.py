@@ -326,6 +326,9 @@ elif SCENARIO=="RisingTides":
         NETWORK_PROJECTS[2030]['hwy'].append("SeaLevelRise_LowAdaptation")
         NETWORK_PROJECTS[2030]['trn'].append("SeaLevelRise_LowAdaptation")
 
+        NETWORK_PROJECTS[2030]['hwy'].append("SeaLevelRise_HighAdaptation")
+        NETWORK_PROJECTS[2030]['trn'].append("SeaLevelRise_HighAdaptation")
+
     if PROJECT in ["FU1","FU2"]:
         # Haywired Earthquake in 2035
         NETWORK_PROJECTS[2035]['hwy'].append("Earthquake")
