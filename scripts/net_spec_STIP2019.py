@@ -22,23 +22,9 @@ OUT_DIR = SCENARIO + "_network_{}"  # YEAR
 # For example:
 #     {'name':"Muni_TEP", 'kwargs':{'servicePlan':"'2012oct'"}}
 NETWORK_PROJECTS = collections.OrderedDict([
-    (2015, 
-        {'hwy':['PROJ_attributes',
-                'STIP_Base_MarinNarrows',
-                'STIP_HOT',
-                'ALA150004_EastBay_BRT',
-                'SF_070005_VanNess_BRT'], 
-         'trn':['SOL030002_FairfieldVacaville_Stn',
-                'ALA150004_EastBay_BRT',
-                'ALA050015_BART_to_WarmSprings',
-                'STIP_ACBRT',
-                'CC_050025_EBart_to_Antioch',
-                'SCL110005_BART_to_Berryessa',
-                'SF_010015_Transbay_Terminal',
-                'SF_010037_Muni_Central_Subway',
-                'SON090002_SMART',
-                'SF_070005_VanNess_BRT',
-                'CC_070062_Richmond_Ferry']}),  
+    (2015, {
+        'hwy':[], 'trn':[]
+    }),
     (2020, {
         'hwy':[],
         'trn':[]
@@ -52,9 +38,23 @@ NETWORK_PROJECTS = collections.OrderedDict([
     (2035, {
         'hwy':[], 'trn':[]
     }),
-    (2040, {
-        'hwy':[], 'trn':[]
-    }),
+    (2040,
+        {'hwy':['PROJ_attributes',
+                'STIP_Base_MarinNarrows',
+                'STIP_HOT',
+                'ALA150004_EastBay_BRT',
+                'SF_070005_VanNess_BRT'],
+         'trn':['SOL030002_FairfieldVacaville_Stn',
+                'ALA150004_EastBay_BRT',
+                'ALA050015_BART_to_WarmSprings',
+                'STIP_ACBRT',
+                'CC_050025_EBart_to_Antioch',
+                'SCL110005_BART_to_Berryessa',
+                'SF_010015_Transbay_Terminal',
+                'SF_010037_Muni_Central_Subway',
+                'SON090002_SMART',
+                'SF_070005_VanNess_BRT',
+                'CC_070062_Richmond_Ferry']}),
     (2045, {
         'hwy':[], 'trn':[]
     }),
