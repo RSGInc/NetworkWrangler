@@ -38,11 +38,7 @@ NETWORK_PROJECTS = collections.OrderedDict([
                'ALA130005_Dougherty_road_widening',
                'ALA130006_Dublin_Blvd_widening',
                'ALA130014_7th_St_road_diet',
-               'ALA130026_Shattuck_Complete_Streets',
-               'ALA170049_Central_AVE_Safety_Improvements',
-               'ALA170052_Fruitvale_Ave_ped_improvements',
                'ALA150004_EastBay_BRT',
-               'CC_130001_BaileyRd_SR4',
                'CC_130046_I680_SR4_Int_Rec',
                'CC_070035_I80_SPDamRd_Int_Phase1',
                'CC_070011_Brentwood_Blvd_Widening',
@@ -61,9 +57,7 @@ NETWORK_PROJECTS = collections.OrderedDict([
                'ALA050014_SR84_Widening',
                'ALA170011_BayBridge_HOV_Connectors',
                'ALA150047_TelegraphAve_Complete_Streets',
-               'SM_110047_SR92_ElCam_Ramp_Mod',
                'SCL190002_280_Foothill_improvement',
-               'SCL190006_101SB_offramp_improvement',
                'I80_AdaptiveRampMetering',
                'VAR170021_Freeway_Performance_I880',
                'SonomaCounty_Transit_NoBuild2050',
@@ -94,39 +88,23 @@ NETWORK_PROJECTS = collections.OrderedDict([
                'EXP_CC_050028_I680_SB_HOV_Completion',
                'EXP_101B1',
                'EXP_101B2',
-               'EXP_680C1',
-               'EXP_85C',
-               'EXP_101C',
-               'ALA150001_I680_SR84_Int_Wid',
-               'ALA150043_Claremont_road_diet',
-               'CC_070009_Slatten_Ranch_Rd_Extension',
-               'SF_070004_Geary_BRT_Phase1',
-               'SON070004_101_MarinSonNarrows_Phase2',
-               'SOL110006_Jepson_1B_1C',
-               'SCL190008_US101_DLC_Int_Imp',
-               'I880_US101_AdaptiveRampMetering',
-               'MAJ_SCL050009_VTA_Eastridge_Extension',
-               'SOL070020_I80_I680_SR12_Int_1_2A'],
+               'EXP_101C'],
         'trn':['SF_010028_Caltrain_Modernization',
-               'SON090002_SMART_to_Windsor',
-               'MAJ_SCL050009_VTA_Eastridge_Extension',
-               'REG090037_New_BART_Trains',
-               'SOL070020_I80_I680_SR12_Int_1_2A']
+               'REG090037_New_BART_Trains']
     }),
     (2030, {
-        'hwy':[{'name':'Bridge_Toll_Updates_2_2pct', 'kwargs':{'MODELYEAR':'2030'}},
-               'EXP_880A'],
-        'trn':['BART_NoProject']
+        'hwy':[{'name':'Bridge_Toll_Updates_2_2pct', 'kwargs':{'MODELYEAR':'2030'}}],
+        'trn':[]
     }),
     (2035, {
         'hwy':[{'name':'Bridge_Toll_Updates_2_2pct', 'kwargs':{'MODELYEAR':'2035'}}],
         'trn':[]
     }),
-    (2040,
-        {'hwy':[{'name':'Bridge_Toll_Updates_2_2pct', 'kwargs':{'MODELYEAR':'2040'}},
-                'STIP_Base_MarinNarrows',
-                'STIP_HOT'],
-         'trn':['STIP_ACBRT']}),
+# every project in the STIP 2040 baseline are loaded on or before 2035
+    (2040, {
+        'hwy':[{'name':'Bridge_Toll_Updates_2_2pct', 'kwargs':{'MODELYEAR':'2040'}}],
+        'trn':[]
+    }),
     (2045, {
         'hwy':[], 'trn':[]
     }),
