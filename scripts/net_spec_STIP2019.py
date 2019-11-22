@@ -103,13 +103,17 @@ NETWORK_PROJECTS = collections.OrderedDict([
 # every project in the STIP 2040 baseline are loaded on or before 2035
     (2040, {
         'hwy':[{'name':'Bridge_Toll_Updates_2_2pct', 'kwargs':{'MODELYEAR':'2040'}}],
-        'trn':[]
+        'trn':['Move_buses_to_HOV_EXP_lanes']
     }),
+    # note that this is not really the 2045 network, it's really the STIP project set to build the STIP 2040 with Project
     (2045, {
-        'hwy':[], 'trn':[]
-    }),
-    (2050, {
-        'hwy':[], 'trn':[]
+         # todo: add all STIP projects here for hwy and trn respectively
+         'hwy':['STIP_17_06_0010_WoodsideRd',
+                'STIP_ProduceAve',
+                'STIP_ITS_SoSF',
+                'STIP_ITS_SM',
+                'STIP_FairgroundsDr'],
+         'trn':['Move_buses_to_HOV_EXP_lanes']
     })
 ])
 
