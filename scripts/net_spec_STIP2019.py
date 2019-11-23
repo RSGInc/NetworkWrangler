@@ -100,20 +100,27 @@ NETWORK_PROJECTS = collections.OrderedDict([
         'hwy':[{'name':'Bridge_Toll_Updates_2_2pct', 'kwargs':{'MODELYEAR':'2035'}}],
         'trn':[]
     }),
-# every project in the STIP 2040 baseline are loaded on or before 2035
+   # every project in the STIP 2040 baseline are loaded on or before 2035
     (2040, {
-        'hwy':[{'name':'Bridge_Toll_Updates_2_2pct', 'kwargs':{'MODELYEAR':'2040'}}],
+        'hwy':[{'name':'Bridge_Toll_Updates_2_2pct', 'kwargs':{'MODELYEAR':'2040'}},
+              'EXP_STIP_NoProject'],
         'trn':['Move_buses_to_HOV_EXP_lanes']
     }),
     # note that this is not really the 2045 network, it's really the STIP project set to build the STIP 2040 with Project
     (2045, {
-         # todo: add all STIP projects here for hwy and trn respectively
-         'hwy':['STIP_17_06_0010_WoodsideRd',
+         'hwy':['SOL110006_Jepson_1B_1C',
+                'STIP_US101_Managed_Lanes_I80_Solano',
+                'STIP_US101_Managed_Lanes_NI380',
+                'STIP_US101_ManagedLanes_Whipple_I380',
+                'STIP_US101_ExpLanes_Phase5',
+                'MAJ_SR4_Operational_Improvements',
+                'STIP_17_06_0010_WoodsideRd',
                 'STIP_ProduceAve',
                 'STIP_ITS_SoSF',
                 'STIP_ITS_SM',
                 'STIP_FairgroundsDr'],
-         'trn':['Move_buses_to_HOV_EXP_lanes']
+         'trn':['MAJ_BRT030001_BART_to_SanJose',
+                'Move_buses_to_HOV_EXP_lanes']
     })
 ])
 
