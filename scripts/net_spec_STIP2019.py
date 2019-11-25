@@ -103,7 +103,7 @@ NETWORK_PROJECTS = collections.OrderedDict([
    # every project in the STIP 2040 baseline are loaded on or before 2035
     (2040, {
         'hwy':[{'name':'Bridge_Toll_Updates_2_2pct', 'kwargs':{'MODELYEAR':'2040'}},
-              'EXP_STIP_NoProject'],
+              'EXP_STIP_NoProject'], # this is not a real project - it sets the toll rates for express lanes
         'trn':['Move_buses_to_HOV_EXP_lanes']
     }),
     # note that this is not really the 2045 network, it's really the STIP project set to build the STIP 2040 with Project
@@ -118,7 +118,8 @@ NETWORK_PROJECTS = collections.OrderedDict([
                 'STIP_ProduceAve',
                 'STIP_ITS_SoSF',
                 'STIP_ITS_SM',
-                'STIP_FairgroundsDr'],
+                'STIP_FairgroundsDr',
+                'EXP_STIP_Project'], # this project is not a real project - it sets the toll rates for express lanes
          'trn':['MAJ_BRT030001_BART_to_SanJose',
                 'Move_buses_to_HOV_EXP_lanes']
     })
