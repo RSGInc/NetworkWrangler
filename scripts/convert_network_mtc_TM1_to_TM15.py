@@ -5,6 +5,8 @@ USAGE = """
 
   Converts a TM1.0 network (pre MTC use of NetworkWrangler) to a TM1.5 network (post MTC use of NetworkWrangler)
 
+  e.g. python convert_network_mtc_TM1_to_TM15.py "M:\Application\Model One\RTP2017\Scenarios\2005_05_003\INPUT_fullcopy" net_2005_05_003_TM151
+
 """
 
 if __name__ == '__main__':

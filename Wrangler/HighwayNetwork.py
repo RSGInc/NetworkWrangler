@@ -76,7 +76,12 @@ class HighwayNetwork(Network):
         WranglerLogger.debug("Using tier network %s" % tierNetwork)
         shutil.copyfile(tierNetwork,"FREEFLOW.BLD")
         for filename in ["turnsam.pen",         "turnspm.pen",          "turnsop.pen",    "tolls.csv"]:
-            shutil.copyfile(os.path.join(parentdir,networkdir,filename), filename)
+            try:
+                shutil.copyfile(os.path.join(parentdir,networkdir,filename), filename)
+            except:
+                WranglerLogger.warn("Couldn't find file {} -- Touching an empty file".format(filename))
+                # touch a blank file
+                with open(filename, 'a'): os.utime(filename, None)
 
         # done
         self.applyingBasenetwork = False
