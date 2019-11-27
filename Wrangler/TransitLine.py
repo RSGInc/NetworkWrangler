@@ -103,7 +103,8 @@ class TransitLine(object):
     }
     
     def __init__(self, name=None, template=None):
-        self.attr = {}
+
+        self.attr = { "FREQ[1]":0, "FREQ[2]":0, "FREQ[3]":0, "FREQ[4]":0, "FREQ[5]":0 }
         self.n = []
         self.comment = None
 
@@ -188,18 +189,21 @@ class TransitLine(object):
         Return the frequencies for this line as a list of 5 strings
         (representing AM,MD,PM,EV,EA for CHAMP, or EA,AM,MD,PM,EV for TM1)
         """
-        if 'HEADWAY[1]' in self.attr:
-            return [self.attr['HEADWAY[1]'],
-                    self.attr['HEADWAY[2]'],
-                    self.attr['HEADWAY[3]'],
-                    self.attr['HEADWAY[4]'],
-                    self.attr['HEADWAY[5]']]
+        try:
+            if 'HEADWAY[1]' in self.attr:
+                return [self.attr['HEADWAY[1]'],
+                        self.attr['HEADWAY[2]'],
+                        self.attr['HEADWAY[3]'],
+                        self.attr['HEADWAY[4]'],
+                        self.attr['HEADWAY[5]']]
 
-        return [self.attr['FREQ[1]'],
-                self.attr['FREQ[2]'],
-                self.attr['FREQ[3]'],
-                self.attr['FREQ[4]'],
-                self.attr['FREQ[5]']]
+            return [self.attr['FREQ[1]'],
+                    self.attr['FREQ[2]'],
+                    self.attr['FREQ[3]'],
+                    self.attr['FREQ[4]'],
+                    self.attr['FREQ[5]']]
+        except:
+            WranglerLogger.fatal("problem with getFreqs() for {}  self.attr={}".format(self.name, self.attr))
 
     def getFreq(self, timeperiod, modeltype):
         """

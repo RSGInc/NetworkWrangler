@@ -135,6 +135,9 @@ class TransitNetwork(Network):
             for farefile in TransitNetwork.FARE_FILES[self.modelType]:
 
                 fullfarefile = os.path.join(basenetworkpath, farefile)
+                # try transit_fares subdir if it's not here
+                if not os.path.exists(fullfarefile):
+                    fullfarefile = os.path.join(basenetworkpath, "transit_fares", farefile)
 
                 if modelType==Network.MODEL_TYPE_TM2:
 
@@ -910,7 +913,7 @@ class TransitNetwork(Network):
         self.parser.tfp.liType = suffix
         logstr = "   Reading %s as %s" % (fullfile, suffix)
         f = open(fullfile, 'r');
-        prog,lines,links,pnr,zac,accessli,xferli,nodes,supps,faresys,pts = self.parseAndPrintTransitFile(f.read(), verbosity=0)
+        prog,lines,links,pnr,zac,accessli,xferli,nodes,supps,faresys,pts = self.parseAndPrintTransitFile(f.read().rstrip('\0'), verbosity=0)
         f.close()
         logstr += self.doMerge(fullfile,prog,lines,links,pnr,zac,accessli,xferli,nodes,supps,faresys,pts,insert_replace)
         WranglerLogger.debug(logstr)
