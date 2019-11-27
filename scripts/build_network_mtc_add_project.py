@@ -77,7 +77,7 @@ def determineProjectDirectory(OUTPUT_DIR, BASE_DIR, project_short_id):
       suffix = match.group(1)
       existing_suffixes.append(int(suffix))
 
-    print("Found existing project diretories with suffixes: {}".format(existing_suffixes))
+    print("Found existing project directories with suffixes: {}".format(existing_suffixes))
     proposed_suffix = 0
     if len(existing_suffixes) > 0: proposed_suffix = existing_suffixes[-1] + 1
     print("Which suffix number do you want to use? (No response means {}) ".format(proposed_suffix))
