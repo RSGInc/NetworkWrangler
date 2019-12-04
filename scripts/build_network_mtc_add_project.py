@@ -8,6 +8,9 @@ USAGE = """
   Creates PPA_DIR\project_short_id
     with subdirs BASE_DIR_project_short_id
 
+  Alternatively, the user can specify the input directory, output directory and directory with
+  the network project.  Default use case is PPA.
+
 """
 PPA_DIR    = "L:\RTP2021_PPA\Projects"
 NODE_NAMES = "M:\Application\Model One\Networks\TM1_2015_Base_Network\Node Description.xls"
@@ -98,9 +101,12 @@ def determineProjectDirectory(OUTPUT_DIR, BASE_DIR, project_short_id):
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=USAGE, formatter_class=argparse.RawDescriptionHelpFormatter)
-    parser.add_argument("future", choices=["CleanAndGreen", "RisingTides", "BackToTheFuture","all"], help="Specify which Future Scenario for which to create networks")
+    parser.add_argument("future", choices=["CleanAndGreen", "RisingTides", "BackToTheFuture","all","None"], help="Specify which Future Scenario for which to create networks")
     parser.add_argument("--hwy", dest='hwy', action='store_true', help="Pass if project is a roadway project")
     parser.add_argument("--trn", dest='trn', action='store_true', help="Pass if project is a transit project")
+    parser.add_argument("--input_network",  dest='input_network',  help="Pass input network path if desired; otherwise, PPA path is assumed")
+    parser.add_argument("--output_network", dest='output_network', help="Pass output network path if desired; otherwise, PPA path is assumed")
+    parser.add_argument("--input_projects", dest='input_projects', help="Pass directory for network projects; if none passed, M:\\Application\\Model One\\NetworkProjects is assumed")
     parser.add_argument("--kwarg", dest='kwarg', help="To pass keyword args to project apply(), pass keyword and value", nargs=2)
     parser.add_argument("project_short_id", help="Short ID of project, to be used for directory")
     parser.add_argument("project", help="Project to add", nargs="+")
@@ -112,7 +118,11 @@ if __name__ == '__main__':
 
 
     PROJECT          = "PPA"
-    NETWORK_BASE_DIR = r"M:\\Application\\Model One\\NetworkProjects"
+    if args.input_projects:
+        NETWORK_BASE_DIR = args.input_projects
+    else:
+        NETWORK_BASE_DIR = r"M:\\Application\\Model One\\NetworkProjects"
+
     HWY_NET_NAME     = "freeflow.net"
     TRN_NET_NAME     = "transitLines"
 
@@ -123,8 +133,13 @@ if __name__ == '__main__':
 
     for SCENARIO in FUTURES:
         NOW              = time.strftime("%Y%b%d.%H%M%S")
-        BASE_DIR         = findBaseDirectory(SCENARIO)   # e.g. 2050_TM150_PPA_BF_00
-        PIVOT_DIR        = os.path.join(PPA_DIR, BASE_DIR, "INPUT")  # full path of input network
+        if args.input_network:
+          print("Using input network {}".format(args.input_network))
+          BASE_DIR       = args.input_network
+          PIVOT_DIR      = args.input_network
+        else:
+          BASE_DIR       = findBaseDirectory(SCENARIO)   # e.g. 2050_TM150_PPA_BF_00
+          PIVOT_DIR      = os.path.join(PPA_DIR, BASE_DIR, "INPUT")  # full path of input network
         TRANSIT_CAPACITY_DIR = os.path.join(PIVOT_DIR, "trn")
 
         # setup kwargs to pass
@@ -136,21 +151,31 @@ if __name__ == '__main__':
             else:
                 kwargs[args.kwarg[0]] = '"{}"'.format(args.kwarg[1])
     
-        OUTPUT_DIR       = os.path.join(PPA_DIR, args.project_short_id)
-        # make OUTPUT_DIR
-        if not os.path.exists(OUTPUT_DIR): os.mkdir(OUTPUT_DIR)
+        if args.output_network:
+            print("Using output network {}".format(args.output_network))
+            OUTPUT_DIR       = args.output_network
+            # make OUTPUT_DIR
+            if not os.path.exists(OUTPUT_DIR): os.mkdir(OUTPUT_DIR)
+            OUTPUT_FUTURE_DIR = OUTPUT_DIR
+            # move into it so the scratch is here
+            os.chdir(OUTPUT_DIR)
+
+        else:
+            OUTPUT_DIR       = os.path.join(PPA_DIR, args.project_short_id)
+            # make OUTPUT_DIR
+            if not os.path.exists(OUTPUT_DIR): os.mkdir(OUTPUT_DIR)
     
-        OUTPUT_FUTURE_DIR = determineProjectDirectory(OUTPUT_DIR, BASE_DIR, args.project_short_id)
-        os.mkdir(OUTPUT_FUTURE_DIR)
-        # move into it so the scratch is here
-        os.chdir(OUTPUT_DIR)
+            OUTPUT_FUTURE_DIR = determineProjectDirectory(OUTPUT_DIR, BASE_DIR, args.project_short_id)
+            os.mkdir(OUTPUT_FUTURE_DIR)
+            # move into it so the scratch is here
+            os.chdir(OUTPUT_DIR)
     
         # put log file into the run dir
         LOG_FILENAME     = "addproject_{}_{}_{}_{}.info.LOG".format(PROJECT, SCENARIO, args.project_short_id, NOW)
         Wrangler.setupLogging(os.path.join(OUTPUT_FUTURE_DIR, LOG_FILENAME),
                               os.path.join(OUTPUT_FUTURE_DIR, LOG_FILENAME.replace("info", "debug")))
 
-
+        Wrangler.WranglerLogger.info("Input args: {}".format(args))
         Wrangler.WranglerLogger.info("Using base directory {}".format(PIVOT_DIR))
 
         # Create a scratch directory to check out project repos into
