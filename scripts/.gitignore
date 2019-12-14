@@ -6,4 +6,5 @@ scratch
 *.LOG
 *.PRN
 TPPL*
-net_*
+net_2*
+net_P*
