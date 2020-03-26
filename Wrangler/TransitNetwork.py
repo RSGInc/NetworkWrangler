@@ -1476,10 +1476,15 @@ class TransitNetwork(Network):
         import Cube
     
         extra_link_vars = []
+        link_var_names  = {}
+
         if self.modelType == Network.MODEL_TYPE_CHAMP:
             extra_link_vars=['STREETNAME',
                              'LANE_AM', 'LANE_OP','LANE_PM',
                              'BUSLANE_AM', 'BUSLANE_OP', 'BUSLANE_PM']
+        elif self.modelType == Network.MODEL_TYPE_TM1:
+            extra_link_vars=['LANES','BRT']
+            link_var_names={ 'DISTANCE':0, 'LANES':1, 'BRT':2 }
 
         (nodes_dict, links_dict) = Cube.import_cube_nodes_links_from_csvs(cubeNetFile,
                                         extra_link_vars=extra_link_vars,
@@ -1509,7 +1514,16 @@ class TransitNetwork(Network):
                 for (a,b) in link_list:
                     
                     # it's a road link
-                    if (a,b) in links_dict: continue
+                    if (a,b) in links_dict:
+
+                        if self.modelType == Network.MODEL_TYPE_TM1:
+                            # if LANES = 0 and BRT != 1 then transit will be suuuuuuuper slow
+                            if ((int(links_dict[(a,b)][link_var_names['LANES']]) == 0) and \
+                                (int(links_dict[(a,b)][link_var_names['BRT'  ]]) != 1)):
+                                msg = "line {} is running on link {}-{} which has LANES=0 and BRT!=1".format(line.name, a, b)
+                                WranglerLogger.fatal(msg)
+                                raise NetworkException(msg)
+                        continue
                     
                     found_link = False
                     for link in self.links:
