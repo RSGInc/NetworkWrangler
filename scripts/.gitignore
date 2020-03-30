@@ -1,6 +1,7 @@
 CleanAndGreen
 RisingTides
 BackToTheFuture
+BlueprintNetworks*
 Test_Scenario_*
 scratch
 *.LOG
@@ -8,3 +9,4 @@ scratch
 TPPL*
 net_2*
 net_P*
+network_*

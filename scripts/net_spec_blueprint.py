@@ -1,21 +1,16 @@
 import os
 # MANDATORY. Set this to be the Project Name.
 # e.g. "RTP2021", "TIP2021", etc
-PROJECT  = "PBA50"
-SCENARIO = "Blueprint Basic"
+PROJECT  = "Blueprint"
 
 # MANDATORY. Set this to be the git tag for checking out network projects.
 TAG = "HEAD"
-# MANDATORY. Set this to the directory in which to write your outputs.
-# "hwy" and "trn" subdirectories will be created here.
-OUT_DIR = SCENARIO + " network_{}"   # YEAR
-# MANDATORY.  Should be a dictionary with keys "hwy", "trn"
-# to a list of projects.  A project can either be a simple string, or it can be
+
+# A project can either be a simple string, or it can be
 # a dictionary with with keys 'name', 'tag' (optional), and 'kwargs' (optional)
 # to specify a special tag or special keyword args for the projects apply() call.
 # For example:
 #     {'name':"Muni_TEP", 'kwargs':{'servicePlan':"'2012oct'"}}
-
 ###########################################################
 COMMITTED_PROJECTS = collections.OrderedDict([
     (2015, {
@@ -25,7 +20,7 @@ COMMITTED_PROJECTS = collections.OrderedDict([
     }),
     (2020, {
         'hwy':[{'name':'Bridge_Toll_Updates_2_2pct', 'kwargs':{'MODELYEAR':'2020'}},
-               {'name':'EXP_237B',                   'kwargs':{'FUTURE':SCENARIO}},
+               {'name':'EXP_237B',                   'kwargs':{'FUTURE':"PBA50"}}, # todo: update this to support PBA50
                'EXP_580C',
                'EXP_680D',
                'EXP_680F',
@@ -172,48 +167,27 @@ BLUEPRINT_PROJECTS = collections.OrderedDict([
         })
     ])
 
-###########################################################
-# Blueprint Plus projects
-BLUEPRINTPLUS_PROJECTS = collections.OrderedDict([
-        (2015, {'hwy':[],
-                'trn':[]
-        }),
-        (2020, {'hwy':[],
-                'trn':[]
-        }),
-        (2025, {'hwy':[],
-                'trn':[]
-        }),
-        (2030, {'hwy':[],
-                'trn':[]
-        }),
-        (2035, {'hwy':[],
-                'trn':[]
-        }),
-        (2040, {'hwy':[],
-                'trn':[]
-        }),
-        (2045, {'hwy':[],
-                'trn':[]
-        }),
-        (2050, {'hwy':[],
-                'trn':[]
-        })
-    ])
 
 # Put them together for NETWORK_PROJECTS
-NETWORK_PROJECTS = collections.OrderedDict()
+NETWORK_PROJECTS   = collections.OrderedDict()
+
 for YEAR in COMMITTED_PROJECTS.keys():
-    # BLueprint includes Commited projects
+    if BP_VARIANT == "Baseline":
+        # baseline: just committed
+        NETWORK_PROJECTS[YEAR] = {
+            'hwy':COMMITTED_PROJECTS[YEAR]['hwy'],
+            'trn':COMMITTED_PROJECTS[YEAR]['trn']
+        }
+        # todo: add sea level rise since it's unprotected
+
+    elif BP_VARIANT == "Blueprint":
+        # blueprint basic: baseline plus blueprint projects, some seal level rise effects
         NETWORK_PROJECTS[YEAR] = {
             'hwy':COMMITTED_PROJECTS[YEAR]['hwy'] + BLUEPRINT_PROJECTS[YEAR]['hwy'],
             'trn':COMMITTED_PROJECTS[YEAR]['trn'] + BLUEPRINT_PROJECTS[YEAR]['trn']
         }
-#    elif PROJECT == "Blueprint Plus":
-#          NETWORK_PROJECTS[YEAR] = {
-#              'hwy':COMMITTED_PROJECTS[YEAR]['hwy'] + BLUEPRINT_PROJECTS[YEAR]['hwy'] + BLUEPRINTPLUS_PROJECTS[YEAR]['hwy'],
-#              'trn':COMMITTED_PROJECTS[YEAR]['trn'] + BLUEPRINT_PROJECTS[YEAR]['trn'] + BLUEPRINTPLUS_PROJECTS[YEAR]['trn']
-#            }
+
+    # NOTE: SLR and crossings are handled in build_network_mtc_blueprint.py
 
 #
 # For every year where a project is applied do the following:
