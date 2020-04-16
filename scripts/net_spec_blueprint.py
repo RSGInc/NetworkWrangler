@@ -143,7 +143,8 @@ BLUEPRINT_PROJECTS = collections.OrderedDict([
         (2025, {'hwy':['RRSP_E14_Mission_Corridor'],
                 'trn':['RRSP_E14_Mission_Corridor']
         }),
-        (2030, {'hwy':['MAJ_SanPablo_BRT'],
+        (2030, {'hwy':['MAJ_SanPablo_BRT',
+                       'BP_Tolls_On_Congested_Freeways_2030'],
                 'trn':['MAJ_BRT030001_BART_to_SanJose',
                        'BART_Irvington_Infill',
                        'MAJ_REG090037_BART_Core_Cap',
@@ -151,7 +152,8 @@ BLUEPRINT_PROJECTS = collections.OrderedDict([
                        'BP_PDA_Transit_Enhancements']
         }),
         (2035, {'hwy':['MAJ_MuniForward_Uncommitted',
-                       'MAJ_Treasure_Island_Congestion_Pricing'],
+                       'MAJ_Treasure_Island_Congestion_Pricing',
+                       'BP_Tolls_On_Congested_Freeways_2035'],
                 'trn':['MAJ_MuniForward_Uncommitted',
                        'RRSP_South_East_Waterfront_Transit_Imp',
                        'MAJ_Treasure_Island_Congestion_Pricing']
