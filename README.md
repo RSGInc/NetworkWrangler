@@ -8,12 +8,14 @@ set of projects to that base network.
 
 The base network and resulting network are in the Citilabs Cube format (http://www.citilabs.com/software/cube/)
 
+See also: [next generation Network Wrangler](https://github.com/wsp-sag/network_wrangler)
+
 Contributors
 =======
 NetworkWrangler is the brainchild of Billy Charlton, who was the Deputy Director for Technology Services at SFCTA through 2011.
 Contributors include:
 * Elizabeth Sall, 2010-2014
-* Lisa Zorn, 2010-2014
+* Lisa Zorn, 2010-2014, 2018-Present (MTC fork)
 * Dan Tischler, 2011-Present
 * Drew Cooper, 2013-Present
 * Bhargava Sana, 2015-Present
