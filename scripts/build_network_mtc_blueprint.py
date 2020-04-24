@@ -545,6 +545,9 @@ if __name__ == '__main__':
             # do the Blueprint Basic version, with Sea Level Rise effects
             BP_SLR_PROJECT = "BP_Sea_Level_Rise_Protections"
 
+            # it would be nice if this were more automatic...
+            networks['hwy'].saveNetworkFiles(suffix="_plus", to_suffix=True)
+
             networks_bp_basic = {}
             networks_bp_basic['hwy'] = copy.deepcopy(networks['hwy'])
             networks_bp_basic['trn'] = copy.deepcopy(networks['trn'])
@@ -582,6 +585,9 @@ if __name__ == '__main__':
             Wrangler.TransitNetwork.capacity.writeTransitVehicleToCapacity(directory = trnpath)
             Wrangler.TransitNetwork.capacity.writeTransitLineToVehicle(directory = trnpath)
             Wrangler.TransitNetwork.capacity.writeTransitPrefixToVehicle(directory = trnpath)
+
+            # revert back to the plus rowadway network without BP_Sea_Level_Rise_Protections
+            networks['hwy'].saveNetworkFiles(suffix="_plus", to_suffix=False)
 
     # build the Plus Crossing version
     if BP_VARIANT == "Blueprint" and YEAR == 2050:

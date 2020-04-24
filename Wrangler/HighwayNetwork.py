@@ -86,6 +86,19 @@ class HighwayNetwork(Network):
         # done
         self.applyingBasenetwork = False
 
+    def saveNetworkFiles(self, suffix, to_suffix):
+        """
+        Since roadway networks are not stored in memory but in files, this is useful
+        for when the network builder is doing something tricky.
+        """
+        for filename in ["FREEFLOW.BLD", "turnsam.pen", "turnspm.pen", "turnsop.pen", "tolls.csv"]:
+            if to_suffix:
+                shutil.copy2(src=filename, dst="{}{}".format(filename, suffix))
+                WranglerLogger.debug("Copying {:20} to {}{}".format(filename, filename, suffix))
+            else:
+                shutil.copy2(src="{}{}".format(filename, suffix), dst=filename)
+                WranglerLogger.debug("Copying {:20} to {}".format(filename+suffix, filename))
+
     def applyProject(self, parentdir, networkdir, gitdir, projectsubdir=None, **kwargs):
         """
         Applies a roadway project by calling ``runtpp`` on the ``apply.s`` script.
