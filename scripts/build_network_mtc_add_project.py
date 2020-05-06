@@ -108,6 +108,7 @@ if __name__ == '__main__':
     parser.add_argument("--output_network", dest='output_network', help="Pass output network path if desired; otherwise, PPA path is assumed")
     parser.add_argument("--input_projects", dest='input_projects', help="Pass directory for network projects; if none passed, M:\\Application\\Model One\\NetworkProjects is assumed")
     parser.add_argument("--kwarg", dest='kwarg', help="To pass keyword args to project apply(), pass keyword and value", nargs=2)
+    parser.add_argument("--tag",   dest='tag',   help="s for project")
     parser.add_argument("project_short_id", help="Short ID of project, to be used for directory")
     parser.add_argument("project", help="Project to add", nargs="+")
     args = parser.parse_args()
@@ -217,7 +218,7 @@ if __name__ == '__main__':
                 for my_project in args.project:
     
                     Wrangler.WranglerLogger.info("Applying project [%s] of type [%s]" % (my_project, netmode))
-                    cloned_SHA1 = networks[netmode].cloneProject(networkdir=my_project, tag=None,
+                    cloned_SHA1 = networks[netmode].cloneProject(networkdir=my_project, tag=args.tag,
                                                                  projtype="project", tempdir=TEMP_SUBDIR, **kwargs)
                     (parentdir, networkdir, gitdir, projectsubdir) = networks[netmode].getClonedProjectArgs(my_project, None, "project", TEMP_SUBDIR)
     
