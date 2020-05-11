@@ -108,8 +108,7 @@ COMMITTED_PROJECTS = collections.OrderedDict([
     }),
     (2030, {
         'hwy':[{'name':'Bridge_Toll_Updates_2_2pct', 'kwargs':{'MODELYEAR':'2030'}},
-               'EXP_880A',
-               'BP_Vision_Zero'],
+               'EXP_880A'],
         'trn':['BART_NoProject']
     }),
     (2035, {
@@ -141,11 +140,13 @@ BLUEPRINT_PROJECTS = collections.OrderedDict([
                 'trn':['MAJ_AC_Frequency_Improvement',
                        'RRSP_Alameda_Point_Transit_Improvements']
         }),
-        (2025, {'hwy':['RRSP_E14_Mission_Corridor'],
+        (2025, {'hwy':['RRSP_E14_Mission_Corridor',
+                       'BP_Vision_Zero'],
                 'trn':['RRSP_E14_Mission_Corridor']
         }),
         (2030, {'hwy':['MAJ_SanPablo_BRT',
-                       'BP_Tolls_On_Congested_Freeways_2030'],
+                       'BP_Tolls_On_Congested_Freeways_2030',
+                       'BP_Vision_Zero'],
                 'trn':['MAJ_BRT030001_BART_to_SanJose',
                        'BART_Irvington_Infill',
                        'MAJ_REG090037_BART_Core_Cap',
@@ -154,18 +155,19 @@ BLUEPRINT_PROJECTS = collections.OrderedDict([
         }),
         (2035, {'hwy':['MAJ_MuniForward_Uncommitted',
                        'MAJ_Treasure_Island_Congestion_Pricing',
-                       'BP_Tolls_On_Congested_Freeways_2035'],
+                       'BP_Tolls_On_Congested_Freeways_2035',
+                       'BP_Vision_Zero'],
                 'trn':['MAJ_MuniForward_Uncommitted',
                        'RRSP_South_East_Waterfront_Transit_Imp',
                        'MAJ_Treasure_Island_Congestion_Pricing']
         }),
-        (2040, {'hwy':[],
+        (2040, {'hwy':['BP_Vision_Zero'],
                 'trn':[]
         }),
-        (2045, {'hwy':[],
+        (2045, {'hwy':['BP_Vision_Zero'],
                 'trn':[]
         }),
-        (2050, {'hwy':[],
+        (2050, {'hwy':['BP_Vision_Zero'],
                 'trn':[]
         })
     ])
