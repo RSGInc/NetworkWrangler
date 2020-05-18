@@ -136,17 +136,20 @@ BLUEPRINT_PROJECTS = collections.OrderedDict([
                 'trn':[]
         }),
         (2020, {'hwy':['MAJ_AC_Frequency_Improvement',
-                       'RRSP_Alameda_Point_Transit_Improvements'],
+                       'RRSP_Alameda_Point_Transit_Improvements',
+                       'EXP_Blueprint'],
                 'trn':['MAJ_AC_Frequency_Improvement',
                        'RRSP_Alameda_Point_Transit_Improvements']
         }),
         (2025, {'hwy':['RRSP_E14_Mission_Corridor',
-                       'BP_Vision_Zero'],
+                       'BP_Vision_Zero',
+                       'EXP_Blueprint'],
                 'trn':['RRSP_E14_Mission_Corridor']
         }),
         (2030, {'hwy':['MAJ_SanPablo_BRT',
                        'BP_Tolls_On_Congested_Freeways_2030',
-                       'BP_Vision_Zero'],
+                       'BP_Vision_Zero',
+                       'EXP_Blueprint'],
                 'trn':['MAJ_BRT030001_BART_to_SanJose',
                        'BART_Irvington_Infill',
                        'MAJ_REG090037_BART_Core_Cap',
@@ -156,18 +159,22 @@ BLUEPRINT_PROJECTS = collections.OrderedDict([
         (2035, {'hwy':['MAJ_MuniForward_Uncommitted',
                        'MAJ_Treasure_Island_Congestion_Pricing',
                        'BP_Tolls_On_Congested_Freeways_2035',
-                       'BP_Vision_Zero'],
+                       'BP_Vision_Zero',
+                       'EXP_Blueprint'],
                 'trn':['MAJ_MuniForward_Uncommitted',
                        'RRSP_South_East_Waterfront_Transit_Imp',
                        'MAJ_Treasure_Island_Congestion_Pricing']
         }),
-        (2040, {'hwy':['BP_Vision_Zero'],
+        (2040, {'hwy':['BP_Vision_Zero',
+                       'EXP_Blueprint'],
                 'trn':[]
         }),
-        (2045, {'hwy':['BP_Vision_Zero'],
+        (2045, {'hwy':['BP_Vision_Zero',
+                       'EXP_Blueprint'],
                 'trn':[]
         }),
-        (2050, {'hwy':['BP_Vision_Zero'],
+        (2050, {'hwy':['BP_Vision_Zero',
+                       'EXP_Blueprint'],
                 'trn':[]
         })
     ])
