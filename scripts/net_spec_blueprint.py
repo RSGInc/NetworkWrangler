@@ -59,7 +59,8 @@ COMMITTED_PROJECTS = collections.OrderedDict([
                'I80_AdaptiveRampMetering',
                'VAR170021_Freeway_Performance_I880',
                'SonomaCounty_Transit_NoBuild2050',
-               'SF_MuniForward_Committed'],
+               'SF_MuniForward_Committed',
+               'EXP_Blueprint_NoProject'],
         'trn':['ALA050015_BART_to_WarmSprings',
                'ACGo',
                'CC_050025_EBart_to_Antioch',
@@ -99,7 +100,8 @@ COMMITTED_PROJECTS = collections.OrderedDict([
                'SCL190008_US101_DLC_Int_Imp',
                'I880_US101_AdaptiveRampMetering',
                'MAJ_SCL050009_VTA_Eastridge_Extension',
-               'SOL070020_I80_I680_SR12_Int_1_2A'],
+               'SOL070020_I80_I680_SR12_Int_1_2A',
+               'EXP_Blueprint_NoProject'],
         'trn':['SF_010028_Caltrain_Modernization',
                'SON090002_SMART_to_Windsor',
                'MAJ_SCL050009_VTA_Eastridge_Extension',
@@ -108,23 +110,28 @@ COMMITTED_PROJECTS = collections.OrderedDict([
     }),
     (2030, {
         'hwy':[{'name':'Bridge_Toll_Updates_2_2pct', 'kwargs':{'MODELYEAR':'2030'}},
-               'EXP_880A'],
+               'EXP_880A',
+               'EXP_Blueprint_NoProject'],
         'trn':['BART_NoProject']
     }),
     (2035, {
-        'hwy':[{'name':'Bridge_Toll_Updates_2_2pct', 'kwargs':{'MODELYEAR':'2035'}}],
+        'hwy':[{'name':'Bridge_Toll_Updates_2_2pct', 'kwargs':{'MODELYEAR':'2035'}},
+               'EXP_Blueprint_NoProject'],
         'trn':[]
     }),
     (2040, {
-        'hwy':[{'name':'Bridge_Toll_Updates_2_2pct', 'kwargs':{'MODELYEAR':'2040'}}],
+        'hwy':[{'name':'Bridge_Toll_Updates_2_2pct', 'kwargs':{'MODELYEAR':'2040'}},
+               'EXP_Blueprint_NoProject'],
         'trn':[]
     }),
     (2045, {
-        'hwy':[{'name':'Bridge_Toll_Updates_2_2pct', 'kwargs':{'MODELYEAR':'2045'}}],
+        'hwy':[{'name':'Bridge_Toll_Updates_2_2pct', 'kwargs':{'MODELYEAR':'2045'}},
+               'EXP_Blueprint_NoProject'],
         'trn':[]
     }),
     (2050, {
-        'hwy':[{'name':'Bridge_Toll_Updates_2_2pct', 'kwargs':{'MODELYEAR':'2050'}}],
+        'hwy':[{'name':'Bridge_Toll_Updates_2_2pct', 'kwargs':{'MODELYEAR':'2050'}},
+               'EXP_Blueprint_NoProject'],
         'trn':[]
     })
 ])
