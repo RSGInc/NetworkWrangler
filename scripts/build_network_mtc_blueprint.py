@@ -604,7 +604,7 @@ if __name__ == '__main__':
             copyloned_SHA1 = networks[netmode].cloneProject(networkdir=project_name, tag=tag,
                                                             projtype=projType, tempdir=TEMP_SUBDIR, **kwargs)
             (parentdir, networkdir, gitdir, projectsubdir) = networks[netmode].getClonedProjectArgs(project_name, None, projType, TEMP_SUBDIR)
-            applied_SHA1 = networks_bp_basic[netmode].applyProject(parentdir, networkdir, gitdir, projectsubdir, **kwargs)
+            applied_SHA1 = networks[netmode].applyProject(parentdir, networkdir, gitdir, projectsubdir, **kwargs)
 
             hwypath=os.path.join("..", "BlueprintNetworks", "net_{}_{}".format(YEAR, bp_subvariant), HWY_SUBDIR)
             if not os.path.exists(hwypath): os.makedirs(hwypath)
