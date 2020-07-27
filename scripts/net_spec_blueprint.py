@@ -149,9 +149,13 @@ BLUEPRINT_PROJECTS = collections.OrderedDict([
                        'RRSP_Alameda_Point_Transit_Improvements']
         }),
         (2025, {'hwy':['RRSP_E14_Mission_Corridor',
+                       'Transform_SR37_Widening_Interim',
                        'BP_Vision_Zero',
                        'EXP_Blueprint'],
-                'trn':['RRSP_E14_Mission_Corridor']
+                'trn':['RRSP_E14_Mission_Corridor',
+                       'Transform_SR37_Widening_Interim',
+                       # 'FBP_AL_001_NewarkFremPDA', # including this caused BP_PDA_Transit_Enhancements to error
+                       ]
         }),
         (2030, {'hwy':['MAJ_SanPablo_BRT',
                        'BP_Tolls_On_Congested_Freeways_2030',
