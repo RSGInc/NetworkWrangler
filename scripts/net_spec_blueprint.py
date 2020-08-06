@@ -81,6 +81,7 @@ COMMITTED_PROJECTS = collections.OrderedDict([
                'Xfare_update_2020',
                'ACTransit_Committed',
                'ferry_update_2019',
+               'Napa_Solano_Updates_2020',
                'SamTrans_ECR_Rapid'],
     }),
     (2025, {
@@ -154,7 +155,7 @@ BLUEPRINT_PROJECTS = collections.OrderedDict([
                        'EXP_Blueprint'],
                 'trn':['RRSP_E14_Mission_Corridor',
                        'Transform_SR37_Widening_Interim',
-                       # 'FBP_AL_001_NewarkFremPDA', # including this caused BP_PDA_Transit_Enhancements to error
+                       'FBP_AL_001_NewarkFremPDA'
                        ]
         }),
         (2030, {'hwy':['MAJ_SanPablo_BRT',
@@ -177,6 +178,7 @@ BLUEPRINT_PROJECTS = collections.OrderedDict([
                        'MAJ_Treasure_Island_Congestion_Pricing']
         }),
         (2040, {'hwy':['BP_Vision_Zero',
+                       'FBP_SC_050_I680_Montague_Int_Imp', 
                        'EXP_Blueprint'],
                 'trn':[]
         }),
