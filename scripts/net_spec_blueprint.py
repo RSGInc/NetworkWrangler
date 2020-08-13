@@ -167,11 +167,13 @@ BLUEPRINT_PROJECTS = collections.OrderedDict([
         (2030, {'hwy':['MAJ_SanPablo_BRT',
                        'BP_Tolls_On_Congested_Freeways_2030',
                        'BP_Vision_Zero',
+                       'FBP_MU_056_Dumbarton_GRT',
                        'EXP_Blueprint'],
                 'trn':['MAJ_BRT030001_BART_to_SanJose',
                        'BART_Irvington_Infill',
                        'MAJ_REG090037_BART_Core_Cap',
                        'MAJ_SanPablo_BRT',
+                       'FBP_MU_056_Dumbarton_GRT',
                        'BP_PDA_Transit_Enhancements']
         }),
         (2035, {'hwy':['MAJ_MuniForward_Uncommitted',
