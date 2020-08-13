@@ -155,12 +155,14 @@ BLUEPRINT_PROJECTS = collections.OrderedDict([
                        'Transform_SR37_Widening_Interim',
                        'MAJ_SF_Congestion_Pricing',
                        'MAJ_Geary_BRT_Phase2',
+                       'FBP_MU_041_Hovercraft_Pilot',
                        'BP_Vision_Zero',
                        'EXP_Blueprint'],
                 'trn':['RRSP_E14_Mission_Corridor',
                        'Transform_SR37_Widening_Interim',
                        'MAJ_SF_Congestion_Pricing',
                        'MAJ_Geary_BRT_Phase2',
+                       'FBP_MU_041_Hovercraft_Pilot',
                        'FBP_AL_001_NewarkFremPDA'
                        ]
         }),
