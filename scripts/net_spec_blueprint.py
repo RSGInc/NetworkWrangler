@@ -163,6 +163,7 @@ BLUEPRINT_PROJECTS = collections.OrderedDict([
                        'MAJ_SF_Congestion_Pricing',
                        'MAJ_Geary_BRT_Phase2',
                        'FBP_MU_041_Hovercraft_Pilot',
+                       'FBP_MU_049_Caltrain_6TPHPD',
                        'FBP_AL_001_NewarkFremPDA'
                        ]
         }),
@@ -176,6 +177,7 @@ BLUEPRINT_PROJECTS = collections.OrderedDict([
                        'MAJ_REG090037_BART_Core_Cap',
                        'MAJ_SanPablo_BRT',
                        'FBP_MU_056_Dumbarton_GRT',
+                       'FBP_MU_049_Caltrain_8TPHPD',
                        'BP_PDA_Transit_Enhancements']
         }),
         (2035, {'hwy':['MAJ_MuniForward_Uncommitted',
