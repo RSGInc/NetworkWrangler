@@ -60,6 +60,7 @@ COMMITTED_PROJECTS = collections.OrderedDict([
                'VAR170021_Freeway_Performance_I880',
                'SonomaCounty_Transit_NoBuild2050',
                'SF_MuniForward_Committed',
+               'FBP_MU_029_Broadway_Transit_Only_Lanes',
                'EXP_Blueprint_NoProject'],
         'trn':['ALA050015_BART_to_WarmSprings',
                'ACGo',
