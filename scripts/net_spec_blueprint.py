@@ -146,6 +146,7 @@ BLUEPRINT_PROJECTS = collections.OrderedDict([
         (2020, {'hwy':['MAJ_AC_Frequency_Improvement',
                        'RRSP_Alameda_Point_Transit_Improvements',
                        'MAJ_MTC050027_Berkeley_Ferry',
+                       'FBP_MU_029_Broadway_Transit_Only_Lanes'
                        'EXP_Blueprint'],
                 'trn':['MAJ_AC_Frequency_Improvement',
                        'MAJ_MTC050027_Berkeley_Ferry',
