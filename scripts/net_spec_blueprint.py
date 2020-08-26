@@ -196,7 +196,7 @@ BLUEPRINT_PROJECTS = collections.OrderedDict([
                        'FBP_SC_050_I680_Montague_Int_Imp', 
                        'EXP_Blueprint',
                        'FBP_NP_074_SoscolWide'],
-                'trn':[]
+                'trn':['MAJ_Vasona_LRT_Extension']
         }),
         (2045, {'hwy':['BP_Vision_Zero',
                        'EXP_Blueprint'],
