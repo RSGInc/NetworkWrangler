@@ -182,6 +182,7 @@ BLUEPRINT_PROJECTS = collections.OrderedDict([
                        'MAJ_SanPablo_BRT',
                        'FBP_MU_056_Dumbarton_GRT',
                        'FBP_MU_049_Caltrain_8TPHPD',
+                       'FBP_MU_061_ReX_Green',
                        'BP_PDA_Transit_Enhancements']
         }),
         (2035, {'hwy':['MAJ_MuniForward_Uncommitted',
