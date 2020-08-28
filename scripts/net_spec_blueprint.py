@@ -167,6 +167,7 @@ BLUEPRINT_PROJECTS = collections.OrderedDict([
                        'FBP_MU_041_Hovercraft_Pilot',
                        'FBP_MU_049_Caltrain_6TPHPD',
                        'FBP_MU_059_ACTransbay_Freq_Incr',
+                       'FBP_MU_060_ReX_Blue',
                        'FBP_AL_001_NewarkFremPDA'
                        ]
         }),
