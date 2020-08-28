@@ -192,6 +192,7 @@ BLUEPRINT_PROJECTS = collections.OrderedDict([
                        'EXP_Blueprint'],
                 'trn':['MAJ_MuniForward_Uncommitted',
                        'RRSP_South_East_Waterfront_Transit_Imp',
+                       'FBP_MU_062_ReX_Red',
                        'MAJ_Treasure_Island_Congestion_Pricing']
         }),
         (2040, {'hwy':['BP_Vision_Zero',
