@@ -162,7 +162,7 @@ BLUEPRINT_PROJECTS = collections.OrderedDict([
                        'BP_Vision_Zero',
                        'EXP_Blueprint',
                        'MAJ_AC_Frequency_Improvement',
-                       'MU_044_SouthSF_Ferry_Serv_Incr',
+                       'FBP_MU_044_SouthSF_Ferry_Serv_Incr',
                        'FBP_MR_026_NovatoWide'],
                 'trn':['RRSP_E14_Mission_Corridor',
                        'Transform_SR37_Widening_Interim',
@@ -173,7 +173,7 @@ BLUEPRINT_PROJECTS = collections.OrderedDict([
                        'FBP_MU_059_ACTransbay_Freq_Incr',
                        'FBP_MU_060_ReX_Blue',
                        'MAJ_AC_Frequency_Improvement',
-                       'MU_044_SouthSF_Ferry_Serv_Incr',
+                       'FBP_MU_044_SouthSF_Ferry_Serv_Incr',
                        'FBP_AL_001_NewarkFremPDA'
                        ]
         }),
@@ -182,7 +182,7 @@ BLUEPRINT_PROJECTS = collections.OrderedDict([
                        'BP_Vision_Zero',
                        'FBP_MU_056_Dumbarton_GRT',
                        'MAJ_SanPablo_BRT',
-                       'MU_044_Richmond_Ferry_Serv_Incr',
+                       'FBP_MU_044_Richmond_Ferry_Serv_Incr',
                        'MAJ_REG090037_BART_Core_Cap',
                        'EXP_Blueprint'],
                 'trn':['MAJ_BRT030001_BART_to_SanJose',
@@ -193,7 +193,7 @@ BLUEPRINT_PROJECTS = collections.OrderedDict([
                        'FBP_MU_049_Caltrain_8TPHPD',
                        'FBP_MU_061_ReX_Green',
                        'MAJ_SanPablo_BRT',
-                       'MU_044_Richmond_Ferry_Serv_Incr',
+                       'FBP_MU_044_Richmond_Ferry_Serv_Incr',
                        'MAJ_REG090037_BART_Core_Cap',
                        'BP_PDA_Transit_Enhancements']
         }),
