@@ -147,9 +147,11 @@ BLUEPRINT_PROJECTS = collections.OrderedDict([
         (2020, {'hwy':['MAJ_AC_Frequency_Improvement',
                        'RRSP_Alameda_Point_Transit_Improvements',
                        'MAJ_MTC050027_Berkeley_Ferry',
+                       'MAJ_WETA_Service_Frequency_Increase',
                        'EXP_Blueprint'],
                 'trn':['MAJ_AC_Frequency_Improvement',
                        'MAJ_MTC050027_Berkeley_Ferry',
+                       'MAJ_WETA_Service_Frequency_Increase',
                        'RRSP_Alameda_Point_Transit_Improvements']
         }),
         (2025, {'hwy':['RRSP_E14_Mission_Corridor',
@@ -160,6 +162,7 @@ BLUEPRINT_PROJECTS = collections.OrderedDict([
                        'BP_Vision_Zero',
                        'EXP_Blueprint',
                        'MAJ_AC_Frequency_Improvement',
+                       'MU_044_SouthSF_Ferry_Serv_Incr',
                        'FBP_MR_026_NovatoWide'],
                 'trn':['RRSP_E14_Mission_Corridor',
                        'Transform_SR37_Widening_Interim',
@@ -170,6 +173,7 @@ BLUEPRINT_PROJECTS = collections.OrderedDict([
                        'FBP_MU_059_ACTransbay_Freq_Incr',
                        'FBP_MU_060_ReX_Blue',
                        'MAJ_AC_Frequency_Improvement',
+                       'MU_044_SouthSF_Ferry_Serv_Incr',
                        'FBP_AL_001_NewarkFremPDA'
                        ]
         }),
@@ -178,6 +182,7 @@ BLUEPRINT_PROJECTS = collections.OrderedDict([
                        'BP_Vision_Zero',
                        'FBP_MU_056_Dumbarton_GRT',
                        'MAJ_SanPablo_BRT',
+                       'MU_044_Richmond_Ferry_Serv_Incr',
                        'EXP_Blueprint'],
                 'trn':['MAJ_BRT030001_BART_to_SanJose',
                        'BART_Irvington_Infill',
@@ -187,6 +192,7 @@ BLUEPRINT_PROJECTS = collections.OrderedDict([
                        'FBP_MU_049_Caltrain_8TPHPD',
                        'FBP_MU_061_ReX_Green',
                        'MAJ_SanPablo_BRT',
+                       'MU_044_Richmond_Ferry_Serv_Incr',
                        'BP_PDA_Transit_Enhancements']
         }),
         (2035, {'hwy':['MAJ_MuniForward_Uncommitted',
