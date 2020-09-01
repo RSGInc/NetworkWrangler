@@ -174,6 +174,7 @@ BLUEPRINT_PROJECTS = collections.OrderedDict([
                        'FBP_MU_060_ReX_Blue',
                        'MAJ_AC_Frequency_Improvement',
                        'FBP_MU_044_SouthSF_Ferry_Serv_Incr',
+                       'GGT_Service_Imp',
                        'FBP_AL_001_NewarkFremPDA'
                        ]
         }),
