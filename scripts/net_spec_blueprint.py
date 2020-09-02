@@ -163,6 +163,7 @@ BLUEPRINT_PROJECTS = collections.OrderedDict([
                        'EXP_Blueprint',
                        'MAJ_AC_Frequency_Improvement',
                        'FBP_MU_044_SouthSF_Ferry_Serv_Incr',
+                       'FBP_MU_029_ACRapid_2025',
                        'FBP_MR_026_NovatoWide'],
                 'trn':['RRSP_E14_Mission_Corridor',
                        'Transform_SR37_Widening_Interim',
@@ -175,8 +176,8 @@ BLUEPRINT_PROJECTS = collections.OrderedDict([
                        'MAJ_AC_Frequency_Improvement',
                        'FBP_MU_044_SouthSF_Ferry_Serv_Incr',
                        'GGT_Service_Imp',
-                       'FBP_AL_001_NewarkFremPDA'
-                       ]
+                       'FBP_MU_029_ACRapid_2025',
+                       'FBP_AL_001_NewarkFremPDA']
         }),
         (2030, {'hwy':['MAJ_SanPablo_BRT',
                        'BP_Tolls_On_Congested_Freeways_2030',
@@ -211,8 +212,10 @@ BLUEPRINT_PROJECTS = collections.OrderedDict([
         (2040, {'hwy':['BP_Vision_Zero',
                        'FBP_SC_050_I680_Montague_Int_Imp', 
                        'EXP_Blueprint',
+                       'FBP_MU_029_ACRapid_2040',
                        'FBP_NP_074_SoscolWide'],
-                'trn':['MAJ_Vasona_LRT_Extension']
+                'trn':['MAJ_Vasona_LRT_Extension',
+                       'FBP_MU_029_ACRapid_2040']
         }),
         (2045, {'hwy':['BP_Vision_Zero',
                        'EXP_Blueprint'],
