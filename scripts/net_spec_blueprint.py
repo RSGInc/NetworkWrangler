@@ -198,7 +198,6 @@ BLUEPRINT_PROJECTS = collections.OrderedDict([
                        'FBP_MU_061_ReX_Green',
                        'MAJ_SanPablo_BRT',
                        'FBP_MU_044_Richmond_Ferry_Serv_Incr',
-                       'MAJ_REG090037_BART_Core_Cap',
                        'Transform_Valley_Link',
                        'BP_PDA_Transit_Enhancements']
         }),
