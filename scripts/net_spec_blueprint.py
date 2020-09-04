@@ -189,6 +189,7 @@ BLUEPRINT_PROJECTS = collections.OrderedDict([
                        'MAJ_SanPablo_BRT',
                        'FBP_MU_044_Richmond_Ferry_Serv_Incr',
                        'MAJ_REG090037_BART_Core_Cap',
+                       'Transform_Valley_Link',
                        'EXP_Blueprint'],
                 'trn':['MAJ_BRT030001_BART_to_SanJose',
                        'BART_Irvington_Infill',
@@ -200,6 +201,7 @@ BLUEPRINT_PROJECTS = collections.OrderedDict([
                        'MAJ_SanPablo_BRT',
                        'FBP_MU_044_Richmond_Ferry_Serv_Incr',
                        'MAJ_REG090037_BART_Core_Cap',
+                       'Transform_Valley_Link',
                        'BP_PDA_Transit_Enhancements']
         }),
         (2035, {'hwy':['MAJ_MuniForward_Uncommitted',
