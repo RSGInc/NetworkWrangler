@@ -144,14 +144,12 @@ BLUEPRINT_PROJECTS = collections.OrderedDict([
         (2015, {'hwy':[],
                 'trn':[]
         }),
-        (2020, {'hwy':['MAJ_AC_Frequency_Improvement',
-                       'RRSP_Alameda_Point_Transit_Improvements',
+        (2020, {'hwy':['RRSP_Alameda_Point_Transit_Improvements',
                        'MAJ_MTC050027_Berkeley_Ferry',
                        'MAJ_WETA_Service_Frequency_Increase',
                        'ALA150004_EastBay_BRT',
                        'EXP_Blueprint'],
-                'trn':['MAJ_AC_Frequency_Improvement',
-                       'MAJ_MTC050027_Berkeley_Ferry',
+                'trn':['MAJ_MTC050027_Berkeley_Ferry',
                        'MAJ_WETA_Service_Frequency_Increase',
                        'ALA150004_EastBay_BRT',
                        'RRSP_Alameda_Point_Transit_Improvements']
