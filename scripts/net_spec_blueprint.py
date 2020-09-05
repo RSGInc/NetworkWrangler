@@ -217,7 +217,8 @@ BLUEPRINT_PROJECTS = collections.OrderedDict([
                        'EXP_Blueprint',
                        'FBP_MU_029_ACRapid_2040',
                        'FBP_NP_074_SoscolWide',
-                       'FBP_CC_059_PittAntiochWide'],
+                       'FBP_CC_059_PittAntiochWide',
+                       'FBP_CC_051_SR4_Operation_Improvements_WB'],
                 'trn':['MAJ_Vasona_LRT_Extension',
                        'FBP_MU_029_ACRapid_2040']
         }),
