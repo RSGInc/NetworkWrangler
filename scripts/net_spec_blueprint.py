@@ -204,6 +204,7 @@ BLUEPRINT_PROJECTS = collections.OrderedDict([
                        'FBP_MU_044_Richmond_Ferry_Serv_Incr',
                        'Transform_Valley_Link',
                        'FBP_SF_028_SF_Express_Bus_On_Exp_Lanes',
+                       'MAJ_SF_050002_Caltrain_Ext_TransbayTerminal',
                        'BP_PDA_Transit_Enhancements']
         }),
         (2035, {'hwy':['MAJ_MuniForward_Uncommitted',
