@@ -222,9 +222,11 @@ BLUEPRINT_PROJECTS = collections.OrderedDict([
                        'FBP_NP_074_SoscolWide',
                        'FBP_CC_059_PittAntiochWide',
                        'FBP_CC_051_SR4_Operation_Improvements_WB',
-                       'FBP_CC_037_680_AuxLanes'],
+                       'FBP_CC_037_680_AuxLanes',
+                       'RRSP_EC_Cap_Imp_ECR_Bus'],
                 'trn':['MAJ_Vasona_LRT_Extension',
-                       'FBP_MU_029_ACRapid_2040']
+                       'FBP_MU_029_ACRapid_2040',
+                       'RRSP_EC_Cap_Imp_ECR_Bus']
         }),
         (2045, {'hwy':['BP_Vision_Zero',
                        'EXP_Blueprint'],
