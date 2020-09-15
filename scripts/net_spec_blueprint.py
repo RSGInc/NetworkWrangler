@@ -152,7 +152,6 @@ BLUEPRINT_PROJECTS = collections.OrderedDict([
                 'trn':['MAJ_MTC050027_Berkeley_Ferry',
                        'MAJ_WETA_Service_Frequency_Increase',
                        'ALA150004_EastBay_BRT',
-                       'FBP_Beale_Transit_Only_Lane',
                        'RRSP_Alameda_Point_Transit_Improvements']
         }),
         (2025, {'hwy':['RRSP_E14_Mission_Corridor',
