@@ -228,7 +228,8 @@ BLUEPRINT_PROJECTS = collections.OrderedDict([
                        'FBP_CC_059_PittAntiochWide',
                        'FBP_CC_051_SR4_Operation_Improvements_WB',
                        'FBP_CC_037_680_AuxLanes',
-                       'RRSP_EC_Cap_Imp_ECR_Bus'],
+                       'RRSP_EC_Cap_Imp_ECR_Bus',
+                       'MAJ_SR_239'],
                 'trn':['MAJ_Vasona_LRT_Extension',
                        'FBP_MU_029_ACRapid_2040',
                        'RRSP_EC_Cap_Imp_ECR_Bus']
