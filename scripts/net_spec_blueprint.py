@@ -82,6 +82,7 @@ COMMITTED_PROJECTS = collections.OrderedDict([
                'ACTransit_Committed',
                'ferry_update_2019',
                'Napa_Solano_Updates_2020',
+               'FBP_Beale_Transit_Only_Lane',
                'SamTrans_ECR_Rapid'],
     }),
     (2025, {
