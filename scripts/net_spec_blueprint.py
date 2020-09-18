@@ -92,6 +92,7 @@ COMMITTED_PROJECTS = collections.OrderedDict([
                'EXP_101B2',
                'EXP_680C1',
                'EXP_85C',
+               'EXP_85D',
                'EXP_101C',
                'ALA150001_I680_SR84_Int_Wid',
                'ALA150043_Claremont_road_diet',
