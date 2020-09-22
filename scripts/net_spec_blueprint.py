@@ -233,7 +233,8 @@ BLUEPRINT_PROJECTS = collections.OrderedDict([
                        'MAJ_SR_239'],
                 'trn':['MAJ_Vasona_LRT_Extension',
                        'FBP_MU_029_ACRapid_2040',
-                       'RRSP_EC_Cap_Imp_ECR_Bus']
+                       'RRSP_EC_Cap_Imp_ECR_Bus',
+                       'MAJ_SJC_People_Mover']
         }),
         (2045, {'hwy':['BP_Vision_Zero',
                        'EXP_Blueprint'],
