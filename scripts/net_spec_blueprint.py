@@ -235,6 +235,7 @@ BLUEPRINT_PROJECTS = collections.OrderedDict([
                        'FBP_MU_029_ACRapid_2040',
                        'RRSP_EC_Cap_Imp_ECR_Bus',
                        'MAJ_SJC_People_Mover',
+                       'FBP_NP_028_NapaVineRegRoutesFrequency',
                        'MAJ_ElCaminoReal_BRT']
         }),
         (2045, {'hwy':['BP_Vision_Zero',
