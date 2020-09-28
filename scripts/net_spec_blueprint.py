@@ -167,7 +167,7 @@ BLUEPRINT_PROJECTS = collections.OrderedDict([
                        'FBP_MU_029_ACRapid_2025',
                        'FBP_MR_026_NovatoWide',
                        'FBP_CC_054_CrowCanyonWide',
-                       'TSP on SR-29',
+                       'FBP_NP_038_TSP_On_SR29',
                        'FBP_CC_050_SR4_Operation_Improvements_EB',
                        'FBP_SL_033_FairgroundsWide'],
                 'trn':['RRSP_E14_Mission_Corridor',
