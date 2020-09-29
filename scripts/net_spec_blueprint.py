@@ -169,6 +169,7 @@ BLUEPRINT_PROJECTS = collections.OrderedDict([
                        'FBP_CC_054_CrowCanyonWide',
                        'FBP_NP_038_TSP_On_SR29',
                        'FBP_CC_050_SR4_Operation_Improvements_EB',
+                       'FBP_NP_044_Soscol_Junction',
                        'FBP_SL_033_FairgroundsWide'],
                 'trn':['RRSP_E14_Mission_Corridor',
                        'Transform_SR37_Widening_Interim',
@@ -182,6 +183,7 @@ BLUEPRINT_PROJECTS = collections.OrderedDict([
                        'FBP_MU_044_SouthSF_Ferry_Serv_Incr',
                        'GGT_Service_Imp',
                        'FBP_MU_029_ACRapid_2025',
+                       'FBP_NP_044_Soscol_Junction',
                        'FBP_AL_001_NewarkFremPDA']
         }),
         (2030, {'hwy':['MAJ_SanPablo_BRT',
