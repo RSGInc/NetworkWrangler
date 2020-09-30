@@ -234,6 +234,7 @@ BLUEPRINT_PROJECTS = collections.OrderedDict([
                        'FBP_CC_037_680_AuxLanes',
                        'RRSP_EC_Cap_Imp_ECR_Bus',
                        'MAJ_SR_239',
+                       'FBP_NP_033_Napa_PNR_Lots',
                        'MAJ_ElCaminoReal_BRT'],
                 'trn':['MAJ_Vasona_LRT_Extension',
                        'FBP_MU_029_ACRapid_2040',
@@ -242,6 +243,7 @@ BLUEPRINT_PROJECTS = collections.OrderedDict([
                        'FBP_NP_028_NapaVineRegRoutesFrequency',
                        'FBP_NP_034_NapaVineRegExpServiceHrs',
                        'FBP_NP_029_NapaVineLocExpServiceHrs',
+                       'FBP_NP_033_Napa_PNR_Lots',
                        'MAJ_ElCaminoReal_BRT']
         }),
         (2045, {'hwy':['BP_Vision_Zero',
