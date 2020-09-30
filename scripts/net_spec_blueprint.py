@@ -195,6 +195,7 @@ BLUEPRINT_PROJECTS = collections.OrderedDict([
                        'FBP_MU_044_Richmond_Ferry_Serv_Incr',
                        'MAJ_REG090037_BART_Core_Cap',
                        'Transform_Valley_Link',
+                       'FBP_NP_040_VINE_Exp_Bus_Enhancements',
                        'EXP_Blueprint'],
                 'trn':['MAJ_BRT030001_BART_to_SanJose',
                        'BART_Irvington_Infill',
