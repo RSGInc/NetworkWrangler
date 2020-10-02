@@ -211,7 +211,7 @@ BLUEPRINT_PROJECTS = collections.OrderedDict([
                        'FBP_SF_028_SF_Express_Bus_On_Exp_Lanes',
                        'MAJ_SF_050002_Caltrain_Ext_TransbayTerminal',
                        'FBP_SF_024_Historic_Streetcar_Ext',
-                       'FBP_MuniForward_Uncommitted_Rail'.
+                       'FBP_MuniForward_Uncommitted_Rail',
                        'BP_PDA_Transit_Enhancements']
         }),
         (2035, {'hwy':['MAJ_MuniForward_Uncommitted',
@@ -221,11 +221,13 @@ BLUEPRINT_PROJECTS = collections.OrderedDict([
                        'RRSP_East_West_Connector',
                        'EXP_Blueprint',
                        'Transform_I680_Multimodal_Imp',
+                       'MAJ_MuniForward_Uncommitted',
                        'FBP_SM_022_I380_Widening'],
                 'trn':['MAJ_MuniForward_Uncommitted',
                        'RRSP_South_East_Waterfront_Transit_Imp',
                        'FBP_MU_062_ReX_Red',
                        'Transform_I680_Multimodal_Imp',
+                       'MAJ_MuniForward_Uncommitted',
                        'MAJ_Treasure_Island_Congestion_Pricing']
         }),
         (2040, {'hwy':['BP_Vision_Zero',
