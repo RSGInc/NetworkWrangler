@@ -104,14 +104,12 @@ COMMITTED_PROJECTS = collections.OrderedDict([
                'MAJ_SCL050009_VTA_Eastridge_Extension',
                'SOL070020_I80_I680_SR12_Int_1_2A',
                'ALA170052_Fruitvale_Ave_ped_improvements',
-               'EXP_Blueprint_NoProject',
-               {'name':'MAJ_SOL070020_I80_I680_SR12_Int_2B_7','kwargs':{'PHASE':'"2B"'}}],
+               'EXP_Blueprint_NoProject'],
         'trn':['SF_010028_Caltrain_Modernization',
                'SON090002_SMART_to_Windsor',
                'MAJ_SCL050009_VTA_Eastridge_Extension',
                'REG090037_New_BART_Trains',
-               'SOL070020_I80_I680_SR12_Int_1_2A',
-               {'name':'MAJ_SOL070020_I80_I680_SR12_Int_2B_7','kwargs':{'PHASE':'"2B"'}}]
+               'SOL070020_I80_I680_SR12_Int_1_2A']
     }),
     (2030, {
         'hwy':[{'name':'Bridge_Toll_Updates_2_2pct', 'kwargs':{'MODELYEAR':'2030'}},
@@ -121,13 +119,8 @@ COMMITTED_PROJECTS = collections.OrderedDict([
     }),
     (2035, {
         'hwy':[{'name':'Bridge_Toll_Updates_2_2pct', 'kwargs':{'MODELYEAR':'2035'}},
-               'EXP_Blueprint_NoProject',
-               {'name':'MAJ_SOL070020_I80_I680_SR12_Int_2B_7','kwargs':{'PHASE':'"3"'}},
-               {'name':'MAJ_SOL070020_I80_I680_SR12_Int_2B_7','kwargs':{'PHASE':'"4"'}},
-               {'name':'MAJ_SOL070020_I80_I680_SR12_Int_2B_7','kwargs':{'PHASE':'"5"'}}],
-        'trn':[{'name':'MAJ_SOL070020_I80_I680_SR12_Int_2B_7','kwargs':{'PHASE':'"3"'}},
-               {'name':'MAJ_SOL070020_I80_I680_SR12_Int_2B_7','kwargs':{'PHASE':'"4"'}},
-               {'name':'MAJ_SOL070020_I80_I680_SR12_Int_2B_7','kwargs':{'PHASE':'"5"'}}]
+               'EXP_Blueprint_NoProject'],
+        'trn':[]
     }),
     (2040, {
         'hwy':[{'name':'Bridge_Toll_Updates_2_2pct', 'kwargs':{'MODELYEAR':'2040'}},
@@ -141,11 +134,8 @@ COMMITTED_PROJECTS = collections.OrderedDict([
     }),
     (2050, {
         'hwy':[{'name':'Bridge_Toll_Updates_2_2pct', 'kwargs':{'MODELYEAR':'2050'}},
-               'EXP_Blueprint_NoProject',
-               {'name':'MAJ_SOL070020_I80_I680_SR12_Int_2B_7','kwargs':{'PHASE':'"6"'}},
-               {'name':'MAJ_SOL070020_I80_I680_SR12_Int_2B_7','kwargs':{'PHASE':'"7"'}}],
-        'trn':[{'name':'MAJ_SOL070020_I80_I680_SR12_Int_2B_7','kwargs':{'PHASE':'"6"'}},
-               {'name':'MAJ_SOL070020_I80_I680_SR12_Int_2B_7','kwargs':{'PHASE':'"7"'}}]
+               'EXP_Blueprint_NoProject'],
+        'trn':[]
     })
 ])
 
