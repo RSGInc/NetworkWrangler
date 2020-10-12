@@ -171,7 +171,7 @@ BLUEPRINT_PROJECTS = collections.OrderedDict([
                        'FBP_CC_050_SR4_Operation_Improvements_EB',
                        'FBP_NP_044_Soscol_Junction',
                        'FBP_SL_033_FairgroundsWide',
-                       {'name':'MAJ_SOL070020_I80_I680_SR12_Int_2B_7','kwargs':{'PHASE':'"2B"'}}],
+                       {'name':'MAJ_SOL070020_I80_I680_SR12_Int_2B_7','kwargs':{'PHASE':"'2B'"}}],
                 'trn':[{'name':'FBP_MU_046_ACE_Freq_Inc', 'kwargs':{'MODELYEAR':'2025'}},
                        'RRSP_E14_Mission_Corridor',
                        'Transform_SR37_Widening_Interim',
@@ -187,7 +187,7 @@ BLUEPRINT_PROJECTS = collections.OrderedDict([
                        'FBP_MU_029_ACRapid_2025',
                        'FBP_NP_044_Soscol_Junction',
                        'FBP_AL_001_NewarkFremPDA',
-                       {'name':'MAJ_SOL070020_I80_I680_SR12_Int_2B_7','kwargs':{'PHASE':'"2B"'}}]
+                       {'name':'MAJ_SOL070020_I80_I680_SR12_Int_2B_7','kwargs':{'PHASE':"'2B'"}}]
         }),
         (2030, {'hwy':['MAJ_SanPablo_BRT',
                        'BP_Tolls_On_Congested_Freeways_2030',
@@ -224,17 +224,17 @@ BLUEPRINT_PROJECTS = collections.OrderedDict([
                        'EXP_Blueprint',
                        'Transform_I680_Multimodal_Imp',
                        'FBP_SM_022_I380_Widening',
-                       {'name':'MAJ_SOL070020_I80_I680_SR12_Int_2B_7','kwargs':{'PHASE':'"3"'}},
-                       {'name':'MAJ_SOL070020_I80_I680_SR12_Int_2B_7','kwargs':{'PHASE':'"4"'}},
-                       {'name':'MAJ_SOL070020_I80_I680_SR12_Int_2B_7','kwargs':{'PHASE':'"5"'}}],
+                       {'name':'MAJ_SOL070020_I80_I680_SR12_Int_2B_7','kwargs':{'PHASE':"'3'"}},
+                       {'name':'MAJ_SOL070020_I80_I680_SR12_Int_2B_7','kwargs':{'PHASE':"'4'"}},
+                       {'name':'MAJ_SOL070020_I80_I680_SR12_Int_2B_7','kwargs':{'PHASE':"'5'"}}],
                 'trn':['MAJ_MuniForward_Uncommitted',
                        'RRSP_South_East_Waterfront_Transit_Imp',
                        'FBP_MU_062_ReX_Red',
                        'Transform_I680_Multimodal_Imp',
                        'MAJ_Treasure_Island_Congestion_Pricing',
-                       {'name':'MAJ_SOL070020_I80_I680_SR12_Int_2B_7','kwargs':{'PHASE':'"3"'}},
-                       {'name':'MAJ_SOL070020_I80_I680_SR12_Int_2B_7','kwargs':{'PHASE':'"4"'}},
-                       {'name':'MAJ_SOL070020_I80_I680_SR12_Int_2B_7','kwargs':{'PHASE':'"5"'}}]
+                       {'name':'MAJ_SOL070020_I80_I680_SR12_Int_2B_7','kwargs':{'PHASE':"'3'"}},
+                       {'name':'MAJ_SOL070020_I80_I680_SR12_Int_2B_7','kwargs':{'PHASE':"'4'"}},
+                       {'name':'MAJ_SOL070020_I80_I680_SR12_Int_2B_7','kwargs':{'PHASE':"'5'"}}]
         }),
         (2040, {'hwy':['BP_Vision_Zero',
                        'FBP_SC_050_I680_Montague_Int_Imp', 
@@ -265,10 +265,10 @@ BLUEPRINT_PROJECTS = collections.OrderedDict([
         }),
         (2050, {'hwy':['BP_Vision_Zero',
                        'EXP_Blueprint',
-                       {'name':'MAJ_SOL070020_I80_I680_SR12_Int_2B_7','kwargs':{'PHASE':'"6"'}},
-                       {'name':'MAJ_SOL070020_I80_I680_SR12_Int_2B_7','kwargs':{'PHASE':'"7"'}}],
-                'trn':[{'name':'MAJ_SOL070020_I80_I680_SR12_Int_2B_7','kwargs':{'PHASE':'"6"'}},
-                       {'name':'MAJ_SOL070020_I80_I680_SR12_Int_2B_7','kwargs':{'PHASE':'"7"'}}]
+                       {'name':'MAJ_SOL070020_I80_I680_SR12_Int_2B_7','kwargs':{'PHASE':"'6'"}},
+                       {'name':'MAJ_SOL070020_I80_I680_SR12_Int_2B_7','kwargs':{'PHASE':"'7'"}}],
+                'trn':[{'name':'MAJ_SOL070020_I80_I680_SR12_Int_2B_7','kwargs':{'PHASE':"'6'"}},
+                       {'name':'MAJ_SOL070020_I80_I680_SR12_Int_2B_7','kwargs':{'PHASE':"'7'"}}]
         })
     ])
 
