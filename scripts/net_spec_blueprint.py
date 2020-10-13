@@ -265,7 +265,8 @@ BLUEPRINT_PROJECTS = collections.OrderedDict([
         }),
         (2045, {'hwy':['BP_Vision_Zero',
                        'EXP_Blueprint'],
-                'trn':[{'name':'FBP_MU_046_ACE_Freq_Inc', 'kwargs':{'MODELYEAR':'2045'}}]
+                'trn':[{'name':'FBP_MU_046_ACE_Freq_Inc', 'kwargs':{'MODELYEAR':'2045'}},
+                       'FBP_SC_106_VTA_LRT_Modernization']
         }),
         (2050, {'hwy':['BP_Vision_Zero',
                        'EXP_Blueprint',
