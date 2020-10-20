@@ -202,6 +202,7 @@ BLUEPRINT_PROJECTS = collections.OrderedDict([
                        'FBP_NP_040_VINE_Exp_Bus_Enhancements',
                        'FBP_MR_021_101_580_Direct_Connector',
                      #  'FBP_MR_018_US101_BOS',
+                       'FBP_CC_036_I80_ExpBus_Impr',
                        'EXP_Blueprint',
                        {'name':'FBP_CC_040_041_042_I680_SR4_Int_Phases_1_2_4_5','kwargs':{'PHASE':"'4'"}}],
                 'trn':[{'name':'FBP_MU_046_ACE_Freq_Inc', 'kwargs':{'MODELYEAR':'2030'}},
@@ -219,6 +220,7 @@ BLUEPRINT_PROJECTS = collections.OrderedDict([
                        'MAJ_SF_050002_Caltrain_Ext_TransbayTerminal',
                        'FBP_SF_024_Historic_Streetcar_Ext',
                        'FBP_MuniForward_Uncommitted_Rail',
+                       'FBP_CC_036_I80_ExpBus_Impr',
                        'BP_PDA_Transit_Enhancements']
         }),
         (2035, {'hwy':['MAJ_MuniForward_Uncommitted',
