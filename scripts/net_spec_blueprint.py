@@ -254,6 +254,7 @@ BLUEPRINT_PROJECTS = collections.OrderedDict([
                        'RRSP_EC_Cap_Imp_ECR_Bus',
                        'MAJ_SR_239',
                        'FBP_NP_033_Napa_PNR_Lots',
+                       'FBP_CC_018_BRT_Brentwood',
                        'MAJ_ElCaminoReal_BRT',
                        {'name':'FBP_CC_040_041_042_I680_SR4_Int_Phases_1_2_4_5','kwargs':{'PHASE':"'5'"}}],
                 'trn':[{'name':'FBP_MU_046_ACE_Freq_Inc', 'kwargs':{'MODELYEAR':'2040'}},
@@ -265,6 +266,7 @@ BLUEPRINT_PROJECTS = collections.OrderedDict([
                        'FBP_NP_034_NapaVineRegExpServiceHrs',
                        'FBP_NP_029_NapaVineLocExpServiceHrs',
                        'FBP_NP_033_Napa_PNR_Lots',
+                       'FBP_CC_018_BRT_Brentwood',
                        'MAJ_ElCaminoReal_BRT']
         }),
         (2045, {'hwy':['BP_Vision_Zero',
