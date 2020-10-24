@@ -204,7 +204,8 @@ BLUEPRINT_PROJECTS = collections.OrderedDict([
                      #  'FBP_MR_018_US101_BOS',
                        'FBP_CC_036_I80_ExpBus_Impr',
                        'EXP_Blueprint',
-                       {'name':'FBP_CC_040_041_042_I680_SR4_Int_Phases_1_2_4_5','kwargs':{'PHASE':"'4'"}}],
+                       {'name':'FBP_CC_040_041_042_I680_SR4_Int_Phases_1_2_4_5','kwargs':{'PHASE':"'4'"}},
+                       'FBP_CC_021_Ant_Mart_Herc_Ferry'],
                 'trn':[{'name':'FBP_MU_046_ACE_Freq_Inc', 'kwargs':{'MODELYEAR':'2030'}},
                        'MAJ_BRT030001_BART_to_SanJose',
                        'BART_Irvington_Infill',
@@ -221,7 +222,8 @@ BLUEPRINT_PROJECTS = collections.OrderedDict([
                        'FBP_SF_024_Historic_Streetcar_Ext',
                        'FBP_MuniForward_Uncommitted_Rail',
                        'FBP_CC_036_I80_ExpBus_Impr',
-                       'BP_PDA_Transit_Enhancements']
+                       'BP_PDA_Transit_Enhancements',
+                       'FBP_CC_021_Ant_Mart_Herc_Ferry']
         }),
         (2035, {'hwy':['MAJ_MuniForward_Uncommitted',
                        'MAJ_Treasure_Island_Congestion_Pricing',
