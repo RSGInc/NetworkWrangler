@@ -191,6 +191,7 @@ BLUEPRINT_PROJECTS = collections.OrderedDict([
                        'FBP_MU_029_ACRapid_2025',
                        'FBP_NP_044_Soscol_Junction',
                        'FBP_AL_001_NewarkFremPDA',
+                       'MAJ_RedwoodCity_SF_Ferry',
                        {'name':'MAJ_SOL070020_I80_I680_SR12_Int_2B_7','kwargs':{'PHASE':"'2B'"}}]
         }),
         (2030, {'hwy':['MAJ_SanPablo_BRT',
