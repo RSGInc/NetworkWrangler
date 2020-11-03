@@ -226,8 +226,8 @@ BLUEPRINT_PROJECTS = collections.OrderedDict([
                        'FBP_SF_024_Historic_Streetcar_Ext',
                        'FBP_MuniForward_Uncommitted_Rail',
                        'FBP_CC_036_I80_ExpBus_Impr',
-                       'BP_PDA_Transit_Enhancements']
-                 #      'FBP_CC_021_Ant_Mart_Herc_Ferry']
+                       'BP_PDA_Transit_Enhancements',
+                       'FBP_CC_021_Ant_Mart_Herc_Ferry']
         }),
         (2035, {'hwy':['MAJ_MuniForward_Uncommitted',
                        'MAJ_Treasure_Island_Congestion_Pricing',
