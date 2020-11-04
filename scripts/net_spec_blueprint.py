@@ -247,6 +247,7 @@ BLUEPRINT_PROJECTS = collections.OrderedDict([
                        'Transform_I680_Multimodal_Imp',
                        'Transform_SeamlessTransit',
                        'MAJ_Treasure_Island_Congestion_Pricing',
+                       'RRSP_East_West_Connector',
                        {'name':'MAJ_SOL070020_I80_I680_SR12_Int_2B_7','kwargs':{'PHASE':"'3'"}},
                        {'name':'MAJ_SOL070020_I80_I680_SR12_Int_2B_7','kwargs':{'PHASE':"'4'"}},
                        {'name':'MAJ_SOL070020_I80_I680_SR12_Int_2B_7','kwargs':{'PHASE':"'5'"}}]
