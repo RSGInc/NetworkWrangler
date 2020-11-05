@@ -542,7 +542,8 @@ if __name__ == '__main__':
 
         # build the Basic version, with Sea Level Rise effects
         # Blueprint Plus has no Sea Level Rise effects as they're all mitigated/protected
-        if BP_VARIANT == "Blueprint" and YEAR >= 2035:
+        # 11/2/2020 lmz disabled since we're not building Blueprint Basic
+        if False and BP_VARIANT == "Blueprint" and YEAR >= 2035:
 
             bp_subvariant = "Blueprint Basic"
 
