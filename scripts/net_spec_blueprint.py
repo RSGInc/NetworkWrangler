@@ -282,7 +282,8 @@ BLUEPRINT_PROJECTS = collections.OrderedDict([
                        {'name':'FBP_SF_012_Geneva_Harney_BRT', 'kwargs':{'MODELYEAR':'2040'}},
                        'FBP_SC_105_SanTomasWide',
                        'FBP_SC_102_CalaverasWide',
-                       'FBP_CC_039_Eastbound24Wide'],
+                       'FBP_CC_039_Eastbound24Wide',
+                       'FBP_MU_064_SR37_LongTerm'],
                 'trn':[{'name':'FBP_MU_046_ACE_Freq_Inc', 'kwargs':{'MODELYEAR':'2040'}},
                        'MAJ_Vasona_LRT_Extension',
                        'FBP_MU_029_ACRapid_2040',
@@ -294,7 +295,8 @@ BLUEPRINT_PROJECTS = collections.OrderedDict([
                        'FBP_NP_033_Napa_PNR_Lots',
                        'FBP_CC_018_BRT_Brentwood',
                        {'name':'FBP_SF_012_Geneva_Harney_BRT', 'kwargs':{'MODELYEAR':'2040'}},
-                       'MAJ_ElCaminoReal_BRT']
+                       'MAJ_ElCaminoReal_BRT',
+                       'FBP_MU_064_SR37_LongTerm']
         }),
         (2045, {'hwy':['BP_Vision_Zero',
                        'EXP_Blueprint',
