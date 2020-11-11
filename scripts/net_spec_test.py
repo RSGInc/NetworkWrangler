@@ -24,32 +24,44 @@ OUT_DIR = SCENARIO + "_network_{}"  # YEAR
 NETWORK_PROJECTS = collections.OrderedDict([
     (2015, 
         {'hwy':[
-            'PROJ_attributes', # adds PROJ attributes to NODE and LINK
-            {'name':'Bridge_Toll_Updates_2_2pct', 'kwargs':{'MODELYEAR':'2015'}}
-        ], 'trn':[]}),  
+            'PROJ_attributes' # adds PROJ attributes to NODE and LINK
+        ],
+        'trn':[]
+    }),  
     (2020, {
-        'hwy':[{'name':'Bridge_Toll_Updates_2_2pct', 'kwargs':{'MODELYEAR':'2020'}},
-             # {'name':'demo_project',               'kwargs':{'TEST':'"ZERO_LANES"'}}
-              ],
-        'trn':[{'name':'demo_project', 'kwargs':{'FUTURE':'"BackToTheFuture"'}}]
+        'hwy':[
+            {'name':'demo_project',        'kwargs':{'TEST':'BUNNIES'}}
+        ], 
+        'trn':[
+            {'name':'demo_project',        'kwargs':{'FUTURE':"'CleanAndGreen'"}}
+        ]
     }),
     (2025, {
-        'hwy':[], 'trn':[]
+        'hwy':[
+        ],
+        'trn':[
+            {'name':'demo_project',        'kwargs':{'FUTURE':"'BackToTheFuture'"}}
+        ]
     }),
     (2030, {
-        'hwy':[], 'trn':[]
+        'hwy':[], 
+        'trn':[]
     }),
     (2035, {
-        'hwy':[], 'trn':[]
+        'hwy':[],
+        'trn':[]
     }),
     (2040, {
-        'hwy':[], 'trn':[]
+        'hwy':[], 
+        'trn':[]
     }),
     (2045, {
-        'hwy':[], 'trn':[]
+        'hwy':[],
+        'trn':[]
     }),
     (2050, {
-        'hwy':[], 'trn':[]
+        'hwy':[],
+        'trn':[]
     })
 ])
 

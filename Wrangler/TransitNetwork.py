@@ -406,7 +406,7 @@ class TransitNetwork(Network):
 
         if critical_found:
             raise NetworkException("Critical errors found")
-                                                              
+                           
     def line(self, name):
         """
         If a string is passed in, return the line for that name exactly (a :py:class:`TransitLine` object).
@@ -429,7 +429,28 @@ class TransitNetwork(Network):
                 allLines.append(self.lines[i])
             return allLines
         raise NetworkException('Line name not found: %s' % (name,))
-    
+
+    def deleteLine(self, name):
+        """
+        If a string is passed in, delete the line for that name exactly.  (Throws an exception of it's not a line name)
+        If a regex, delete all the lines that match, debug-logging the deleted line names.
+        """
+        if isinstance(name,str):
+            del self.lines[self.lines.index(name)]
+            return
+
+        if str(type(name))==str(type(re.compile("."))):
+            for idx in range(len(self.lines)-1,-1,-1): # go backwards
+                if isinstance(self.lines[idx],str): continue
+                if name.match(self.lines[idx].name):
+                    WranglerLogger.debug("Deleting line {}".format(self.lines[idx].name))
+                    del self.lines[idx]
+            return
+
+        # didn't understand name argument
+        raise NetworkException("deleteLine() didn't understand name argument [{}]".format(name))
+
+
     def deleteLinkForNodes(self, nodeA, nodeB, include_reverse=True):
         """
         Delete any TransitLink in self.links[] from nodeA to nodeB (these should be integers).
