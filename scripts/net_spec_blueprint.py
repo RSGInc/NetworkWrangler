@@ -154,7 +154,8 @@ BLUEPRINT_PROJECTS = collections.OrderedDict([
                 'trn':['MAJ_MTC050027_Berkeley_Ferry',
                        'MAJ_WETA_Service_Frequency_Increase',
                        'ALA150004_EastBay_BRT',
-                       'RRSP_Alameda_Point_Transit_Improvements']
+                       'RRSP_Alameda_Point_Transit_Improvements',
+                       {'name':'FBP_SL_026_SolExpressBus', 'kwargs':{'MODELYEAR':'2020'}}]
         }),
         (2025, {'hwy':['RRSP_E14_Mission_Corridor',
                        'Transform_SR37_Widening_Interim',
@@ -263,7 +264,8 @@ BLUEPRINT_PROJECTS = collections.OrderedDict([
                        {'name':'MAJ_SOL070020_I80_I680_SR12_Int_2B_7','kwargs':{'PHASE':"'3'"}},
                        {'name':'MAJ_SOL070020_I80_I680_SR12_Int_2B_7','kwargs':{'PHASE':"'4'"}},
                        {'name':'FBP_SF_012_Geneva_Harney_BRT', 'kwargs':{'MODELYEAR':'2035'}},
-                       {'name':'MAJ_SOL070020_I80_I680_SR12_Int_2B_7','kwargs':{'PHASE':"'5'"}}]
+                       {'name':'MAJ_SOL070020_I80_I680_SR12_Int_2B_7','kwargs':{'PHASE':"'5'"}},
+                       {'name':'FBP_SL_026_SolExpressBus', 'kwargs':{'MODELYEAR':'2035'}}]
         }),
         (2040, {'hwy':['BP_Vision_Zero',
                        'FBP_SC_050_I680_Montague_Int_Imp', 
