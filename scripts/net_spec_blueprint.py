@@ -299,7 +299,8 @@ BLUEPRINT_PROJECTS = collections.OrderedDict([
                        'FBP_CC_018_BRT_Brentwood',
                        {'name':'FBP_SF_012_Geneva_Harney_BRT', 'kwargs':{'MODELYEAR':'2040'}},
                        'MAJ_ElCaminoReal_BRT',
-                       'FBP_MU_064_SR37_LongTerm']
+                       'FBP_MU_064_SR37_LongTerm',
+                       'HSR']
         }),
         (2045, {'hwy':['BP_Vision_Zero',
                        'EXP_Blueprint',
