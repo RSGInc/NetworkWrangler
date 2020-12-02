@@ -189,6 +189,7 @@ BLUEPRINT_PROJECTS = collections.OrderedDict([
                        'FBP_CC_065_LaurelWide',
                        'FBP_AL_062_TassajaraWide',
                        'FBP_SC_039_SR237WBWide',
+                       'FBP_AL_051_7St_Grade_Sep_West',
                        'EXP_Blueprint',
                        'FBP_AL_039_I580_Interchange_Imps',
                        'FBP_CC_056_LaurelExtension',
