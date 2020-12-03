@@ -239,6 +239,7 @@ BLUEPRINT_PROJECTS = collections.OrderedDict([
                        'FBP_CC_066_CypressWide',
                        'FBP_SC_059_SR237EBWide',
                        'FBP_AL_064_UnionCityWide',
+                       'FBP_AL_045_Oak_Ala_Access_Pr',
                        'EXP_Blueprint',
                        'FBP_SC_054_SR17_Corridor_Relief',
                        'FBP_AL_043_A_StreetWide'],
@@ -260,6 +261,7 @@ BLUEPRINT_PROJECTS = collections.OrderedDict([
                        'FBP_CC_036_I80_ExpBus_Impr',
                        'BP_PDA_Transit_Enhancements',
                        'FBP_CC_021_Ant_Mart_Herc_Ferry',
+                       'FBP_AL_045_Oak_Ala_Access_Pr',
                        {'name':'FBP_SF_012_Geneva_Harney_BRT', 'kwargs':{'MODELYEAR':'2030'}},
                        {'name':'FBP_CC_15_23rd_St_BRT', 'kwargs':{'MODELYEAR':'2030'}}]
         }),
