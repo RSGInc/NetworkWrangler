@@ -192,6 +192,7 @@ BLUEPRINT_PROJECTS = collections.OrderedDict([
                        'FBP_AL_051_7St_Grade_Sep_West',
                        'FBP_AL_044_I880_Whipple_Imps',
                        'FBP_AL_055_DubBlvd_NCanyons_Ext',
+                       'FBP_SN_017_Arata_Int',
                        'EXP_Blueprint',
                        'FBP_AL_039_I580_Interchange_Imps',
                        'FBP_CC_056_LaurelExtension',
