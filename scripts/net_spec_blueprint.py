@@ -281,6 +281,7 @@ BLUEPRINT_PROJECTS = collections.OrderedDict([
                        {'name':'FBP_SF_012_Geneva_Harney_BRT', 'kwargs':{'MODELYEAR':'2035'}},
                        {'name':'EXP_uncommitted_all', 'kwargs':{'MODELYEAR':'2035'}},
                        'FBP_AL_076_TelegraphDiet',
+                       'FBP_SN_018_Cotati_101_RailroadAve_Impr'
                        'EXP_Blueprint'],
                 'trn':['MAJ_MuniForward_Uncommitted',
                        'RRSP_South_East_Waterfront_Transit_Imp',
