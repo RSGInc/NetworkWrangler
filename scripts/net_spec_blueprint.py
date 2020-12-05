@@ -246,7 +246,7 @@ BLUEPRINT_PROJECTS = collections.OrderedDict([
                        'EXP_Blueprint',
                        'FBP_SC_054_SR17_Corridor_Relief',
                        'FBP_AL_043_A_StreetWide',
-                       'FBP_CC_061_West_Leland_Ext_Phase1'],
+                       'FBP_CC_061_062_West_Leland_Ext_Phases1_2'],
                 'trn':[{'name':'FBP_MU_046_ACE_Freq_Inc', 'kwargs':{'MODELYEAR':'2030'}},
                        'MAJ_BRT030001_BART_to_SanJose',
                        'BART_Irvington_Infill',
