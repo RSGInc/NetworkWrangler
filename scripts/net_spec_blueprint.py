@@ -203,7 +203,8 @@ BLUEPRINT_PROJECTS = collections.OrderedDict([
                        'FBP_SC_073_BlossomHill_101Wide',
                        'FBP_SC_082_US101_25_Interchange',
                        'FBP_SM_035_Peninsula_101_OnOffRamps',
-                       'FBP_CC_045_SanPabloDam_Interchange_Phase2'],
+                       'FBP_CC_045_SanPabloDam_Interchange_Phase2',
+                       'FBP_CC_030_OakleyAmtrak'],
                 'trn':[{'name':'FBP_MU_046_ACE_Freq_Inc', 'kwargs':{'MODELYEAR':'2025'}},
                        'RRSP_E14_Mission_Corridor',
                        'Transform_SR37_Widening_Interim',
@@ -222,7 +223,8 @@ BLUEPRINT_PROJECTS = collections.OrderedDict([
                        'MAJ_RedwoodCity_SF_Ferry',
                        {'name':'MAJ_SOL070020_I80_I680_SR12_Int_2B_7','kwargs':{'PHASE':"'2B'"}},
                        {'name':'FBP_SF_012_Geneva_Harney_BRT', 'kwargs':{'MODELYEAR':'2025'}},
-                       {'name':'FBP_CC_15_23rd_St_BRT', 'kwargs':{'MODELYEAR':'2025'}}]
+                       {'name':'FBP_CC_15_23rd_St_BRT', 'kwargs':{'MODELYEAR':'2025'}},
+                       'FBP_CC_030_OakleyAmtrak']
         }),
         (2030, {'hwy':['MAJ_SanPablo_BRT',
                        'BP_Tolls_On_Congested_Freeways_2030',
