@@ -168,6 +168,7 @@ BLUEPRINT_PROJECTS = collections.OrderedDict([
                        'BP_Vision_Zero',
                        'EXP_Blueprint',
                        'MAJ_AC_Frequency_Improvement',
+                       'MRN050034_101_MarinSonNarrows_Phase2',
                        'FBP_MU_044_SouthSF_Ferry_Serv_Incr',
                        'FBP_MU_029_ACRapid_2025',
                        'FBP_MR_026_NovatoWide',
