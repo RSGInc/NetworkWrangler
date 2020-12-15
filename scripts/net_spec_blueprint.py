@@ -354,6 +354,7 @@ BLUEPRINT_PROJECTS = collections.OrderedDict([
                        'HSR']
         }),
         (2045, {'hwy':['BP_Vision_Zero',
+                       'FBP_AL_048_SR262_Phase1',
                        {'name':'EXP_uncommitted_all', 'kwargs':{'MODELYEAR':'2045'}},
                        {'name':'MAJ_Bay_Area_Forward_all', 'kwargs':{'MODELYEAR':'2045'}},
                        'EXP_Blueprint'],
