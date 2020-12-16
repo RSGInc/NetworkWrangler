@@ -86,7 +86,8 @@ COMMITTED_PROJECTS = collections.OrderedDict([
                'ferry_update_2019',
                'Napa_Solano_Updates_2020',
                'FBP_Beale_Transit_Only_Lane',
-               'SamTrans_ECR_Rapid'],
+               'SamTrans_ECR_Rapid',
+               'ALA150004_EastBay_BRT'],
     }),
     (2025, {
         'hwy':[{'name':'Bridge_Toll_Updates_2_2pct', 'kwargs':{'MODELYEAR':'2025'}},
@@ -148,11 +149,9 @@ BLUEPRINT_PROJECTS = collections.OrderedDict([
         (2015, {'hwy':[],
                 'trn':[]
         }),
-        (2020, {'hwy':['ALA150004_EastBay_BRT',
-                       {'name':'EXP_uncommitted_all', 'kwargs':{'MODELYEAR':'2020'}},
+        (2020, {'hwy':[{'name':'EXP_uncommitted_all', 'kwargs':{'MODELYEAR':'2020'}},
                        'EXP_Blueprint'],
-                'trn':['ALA150004_EastBay_BRT',
-                       {'name':'FBP_SL_026_SolExpressBus', 'kwargs':{'MODELYEAR':'2020'}}]
+                'trn':[{'name':'FBP_SL_026_SolExpressBus', 'kwargs':{'MODELYEAR':'2020'}}]
         }),
         (2025, {'hwy':['RRSP_Alameda_Point_Transit_Improvements',
                        'MAJ_MTC050027_Berkeley_Ferry',
