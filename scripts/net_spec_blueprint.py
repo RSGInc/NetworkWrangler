@@ -321,6 +321,7 @@ BLUEPRINT_PROJECTS = collections.OrderedDict([
                        'FBP_CC_018_BRT_Brentwood',
                        'FBP_SC_043_I280_Mainline_Impr',
                        'MAJ_ElCaminoReal_BRT',
+                       'FBP_AL_042_I680_Stoneridge_Widening',
                        {'name':'FBP_CC_040_041_042_I680_SR4_Int_Phases_1_2_4_5','kwargs':{'PHASE':"'5'"}},
                        {'name':'EXP_uncommitted_all', 'kwargs':{'MODELYEAR':'2040'}},
                        {'name':'FBP_SF_012_Geneva_Harney_BRT', 'kwargs':{'MODELYEAR':'2040'}},
