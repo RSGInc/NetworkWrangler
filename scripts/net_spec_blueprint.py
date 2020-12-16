@@ -256,7 +256,8 @@ BLUEPRINT_PROJECTS = collections.OrderedDict([
                        'FBP_AL_043_A_StreetWide',
                        'FBP_CC_061_062_West_Leland_Ext_Phases1_2',
                        'FBP_SM_042_Hwy1_ManorDrive',
-                       'FBP_SL_042_Jepson_2B_2C'],
+                       'FBP_SL_042_Jepson_2B_2C',
+                       'FBP_CC_024_Oakley_PNR_Tri_Delta'],
                 'trn':[{'name':'FBP_MU_046_ACE_Freq_Inc', 'kwargs':{'MODELYEAR':'2030'}},
                        'MAJ_BRT030001_BART_to_SanJose',
                        'BART_Irvington_Infill',
@@ -277,7 +278,8 @@ BLUEPRINT_PROJECTS = collections.OrderedDict([
                        'FBP_CC_021_Ant_Mart_Herc_Ferry',
                        'FBP_AL_045_Oak_Ala_Access_Pr',
                        {'name':'FBP_SF_012_Geneva_Harney_BRT', 'kwargs':{'MODELYEAR':'2030'}},
-                       {'name':'FBP_CC_15_23rd_St_BRT', 'kwargs':{'MODELYEAR':'2030'}}]
+                       {'name':'FBP_CC_15_23rd_St_BRT', 'kwargs':{'MODELYEAR':'2030'}},
+                       'FBP_CC_024_Oakley_PNR_Tri_Delta']
         }),
         (2035, {'hwy':['MAJ_MuniForward_Uncommitted',
                        'MAJ_Treasure_Island_Congestion_Pricing',
