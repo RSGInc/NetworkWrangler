@@ -150,8 +150,7 @@ BLUEPRINT_PROJECTS = collections.OrderedDict([
         (2015, {'hwy':[],
                 'trn':[]
         }),
-        (2020, {'hwy':[{'name':'EXP_uncommitted_all', 'kwargs':{'MODELYEAR':'2020'}},
-                       'EXP_Blueprint'],
+        (2020, {'hwy':['EXP_Blueprint'],
                 'trn':[]
         }),
         (2025, {'hwy':['RRSP_Alameda_Point_Transit_Improvements',
