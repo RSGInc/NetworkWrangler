@@ -6,7 +6,7 @@ PROJECT  = "Blueprint"
 # MANDATORY. Set this to be the git tag for checking out network projects.
 TAG = "HEAD"
 
-# A project can either be a simple string, or it can be
+# A Alamedaproject can either be a simple string, or it can be
 # a dictionary with with keys 'name', 'tag' (optional), and 'kwargs' (optional)
 # to specify a special tag or special keyword args for the projects apply() call.
 # For example:
@@ -357,9 +357,9 @@ BLUEPRINT_PROJECTS = collections.OrderedDict([
                        'FBP_CC_019_CCCTA_Freq_Increase']
         }),
         (2045, {'hwy':['BP_Vision_Zero',
-                       'FBP_AL_048_SR262_Phase1',
                        {'name':'EXP_uncommitted_all', 'kwargs':{'MODELYEAR':'2045'}},
                        {'name':'MAJ_Bay_Area_Forward_all', 'kwargs':{'MODELYEAR':'2045'}},
+                       'FBP_AL_048_SR262_Phase1',
                        'EXP_Blueprint'],
                 'trn':[{'name':'FBP_MU_046_ACE_Freq_Inc', 'kwargs':{'MODELYEAR':'2045'}},
                        'FBP_SC_106_VTA_LRT_Modernization']
