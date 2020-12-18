@@ -222,6 +222,7 @@ BLUEPRINT_PROJECTS = collections.OrderedDict([
                        'FBP_NP_044_Soscol_Junction',
                        'FBP_AL_001_NewarkFremPDA',
                        'MAJ_RedwoodCity_SF_Ferry',
+                       'MAJ_Alameda_Point_SF_Ferry',
                        {'name':'MAJ_SOL070020_I80_I680_SR12_Int_2B_7','kwargs':{'PHASE':"'2B'"}},
                        {'name':'FBP_SF_012_Geneva_Harney_BRT', 'kwargs':{'MODELYEAR':'2025'}},
                        {'name':'FBP_CC_15_23rd_St_BRT', 'kwargs':{'MODELYEAR':'2025'}},
