@@ -281,6 +281,7 @@ BLUEPRINT_PROJECTS = collections.OrderedDict([
                        'BP_PDA_Transit_Enhancements',
                        'FBP_CC_021_Ant_Mart_Herc_Ferry',
                        'FBP_AL_045_Oak_Ala_Access_Pr',
+                       'FBP_CC_028_Hercules_Station',
                        {'name':'FBP_SF_012_Geneva_Harney_BRT', 'kwargs':{'MODELYEAR':'2030'}},
                        {'name':'FBP_CC_15_23rd_St_BRT', 'kwargs':{'MODELYEAR':'2030'}},
                        'FBP_CC_024_Oakley_PNR_Tri_Delta']
