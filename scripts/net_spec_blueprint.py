@@ -374,7 +374,8 @@ BLUEPRINT_PROJECTS = collections.OrderedDict([
                        {'name':'MAJ_SOL070020_I80_I680_SR12_Int_2B_7','kwargs':{'PHASE':"'7'"}},
                        'FBP_SC_028_Stevens_Creek_LRT',
                        {'name':'MAJ_Bay_Area_Forward_all', 'kwargs':{'MODELYEAR':'2050'}},
-                       'EXP_Blueprint'],
+                       'EXP_Blueprint',
+                       'FBP_SC_041_Envision_Highway_Minor'],
                 'trn':[{'name':'MAJ_SOL070020_I80_I680_SR12_Int_2B_7','kwargs':{'PHASE':"'6'"}},
                        {'name':'MAJ_SOL070020_I80_I680_SR12_Int_2B_7','kwargs':{'PHASE':"'7'"}},
                        'FBP_SC_028_Stevens_Creek_LRT']
