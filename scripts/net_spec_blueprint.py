@@ -264,7 +264,8 @@ BLUEPRINT_PROJECTS = collections.OrderedDict([
                        'FBP_SM_042_Hwy1_ManorDrive',
                        'FBP_SL_042_Jepson_2B_2C',
                        'FBP_CC_024_Oakley_PNR_Tri_Delta',
-                       'FBP_SC_083_US101_Zanker_Skyport_Interchange'],
+                       'FBP_SC_083_US101_Zanker_Skyport_Interchange'
+                       'FBP_SL_022_SonomaBlvd_Diet'],
                 'trn':[{'name':'FBP_MU_046_ACE_Freq_Inc', 'kwargs':{'MODELYEAR':'2030'}},
                        'MAJ_BRT030001_BART_to_SanJose',
                        'BART_Irvington_Infill',
