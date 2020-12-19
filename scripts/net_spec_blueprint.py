@@ -229,7 +229,8 @@ BLUEPRINT_PROJECTS = collections.OrderedDict([
                        {'name':'FBP_CC_15_23rd_St_BRT', 'kwargs':{'MODELYEAR':'2025'}},
                        'FBP_CC_030_OakleyAmtrak',
                        'FBP_SM_020_Regional_Express_Buses',
-                       'FBP_SL_019_BeniciaRoad_Diet']
+                       'FBP_SL_019_BeniciaRoad_Diet',
+                       'FBP_SL_023_WestTexasRoad_Diet']
         }),
         (2030, {'hwy':['MAJ_SanPablo_BRT',
                        'BP_Tolls_On_Congested_Freeways_2030',
