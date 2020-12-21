@@ -351,6 +351,7 @@ BLUEPRINT_PROJECTS = collections.OrderedDict([
                        'FBP_CC_038_SR242_Clayton_OnOffRamps',
                        'FBP_SC_047_I280_Winchester_OffRamp',
                        'FBP_SC_076_US101_Taylor_Interchange',
+                       'FBP_NP_051_Airport_Junction',
                        'FBP_SC_101_BrokawBridgeWide',
                        'FBP_SC_081_US101_SR237'],
                 'trn':[{'name':'FBP_MU_046_ACE_Freq_Inc', 'kwargs':{'MODELYEAR':'2040'}},
@@ -367,6 +368,7 @@ BLUEPRINT_PROJECTS = collections.OrderedDict([
                        {'name':'FBP_SF_012_Geneva_Harney_BRT', 'kwargs':{'MODELYEAR':'2040'}},
                        'MAJ_ElCaminoReal_BRT',
                        'FBP_MU_064_SR37_LongTerm',
+                       'FBP_NP_051_Airport_Junction',
                        'HSR',
                        'FBP_CC_019_CCCTA_Freq_Increase']
         }),
