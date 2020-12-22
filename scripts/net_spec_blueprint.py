@@ -378,6 +378,7 @@ BLUEPRINT_PROJECTS = collections.OrderedDict([
                        {'name':'EXP_uncommitted_all', 'kwargs':{'MODELYEAR':'2045'}},
                        {'name':'MAJ_Bay_Area_Forward_all', 'kwargs':{'MODELYEAR':'2045'}},
                        'FBP_AL_048_SR262_Phase1',
+                       'FBP_NP_045_SR29_Gateway_Impr',
                        'EXP_Blueprint'],
                 'trn':[{'name':'FBP_MU_046_ACE_Freq_Inc', 'kwargs':{'MODELYEAR':'2045'}},
                        'FBP_SC_106_VTA_LRT_Modernization']
