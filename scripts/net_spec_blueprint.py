@@ -350,6 +350,7 @@ BLUEPRINT_PROJECTS = collections.OrderedDict([
                        'FBP_CC_039_Eastbound24Wide',
                        'FBP_MU_064_SR37_LongTerm',
                        'FBP_SC_094_LawrenceWide',
+                       'FBP_NP_066_Newell_Dr',
                        'EXP_Blueprint',
                        'FBP_AL_052_AutoMallWide',
                        'FBP_CC_038_SR242_Clayton_OnOffRamps',
