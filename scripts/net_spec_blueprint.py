@@ -311,6 +311,7 @@ BLUEPRINT_PROJECTS = collections.OrderedDict([
                        {'name':'MAJ_Bay_Area_Forward_all', 'kwargs':{'MODELYEAR':'2035'}},
                        'FBP_AL_076_TelegraphDiet',
                        'FBP_SN_018_Cotati_101_RailroadAve_Impr',
+                       'FBP_NP_079_Trower_Ext',
                        'EXP_Blueprint'],
                 'trn':['MAJ_MuniForward_Uncommitted',
                        'RRSP_South_East_Waterfront_Transit_Imp',
