@@ -323,6 +323,7 @@ BLUEPRINT_PROJECTS = collections.OrderedDict([
                        'MAJ_Treasure_Island_Congestion_Pricing',
                        'RRSP_East_West_Connector',
                        'MAJ_Treasure_Island_Ferry',
+                       'FBP_NP_079_Trower_Ext',
                        {'name':'MAJ_SOL070020_I80_I680_SR12_Int_2B_7','kwargs':{'PHASE':"'3'"}},
                        {'name':'MAJ_SOL070020_I80_I680_SR12_Int_2B_7','kwargs':{'PHASE':"'4'"}},
                        {'name':'FBP_SF_012_Geneva_Harney_BRT', 'kwargs':{'MODELYEAR':'2035'}},
