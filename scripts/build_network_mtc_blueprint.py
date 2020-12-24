@@ -115,7 +115,7 @@ def getProjectYear(PROJECTS, my_proj, netmode):
             proj = PROJECTS[year][netmode][proj_idx]
             if type(proj) is dict and my_proj == proj['name']:
                 return "{}.{}.{:0>2d}".format(year,netmode,proj_idx+1)
-            elif proj == my_proj:             
+            elif proj == my_proj:
                 return "{}.{}.{:0>2d}".format(year,netmode,proj_idx+1)
     return -1
 
@@ -224,7 +224,7 @@ def preCheckRequirementsForAllProjects(networks):
                 # test mode - don't use TAG for TEST_PROJECTS
                 if BUILD_MODE=="test" and type(TEST_PROJECTS)==type(['List']):
                     if project_name in TEST_PROJECTS:
-                        Wrangler.WranglerLogger.debug("Skipping tag [%s] because test mode and [%s] is in TEST_PROJECTS" % 
+                        Wrangler.WranglerLogger.debug("Skipping tag [%s] because test mode and [%s] is in TEST_PROJECTS" %
                                                       (TAG, project_name))
                         tag = None
 
@@ -260,18 +260,18 @@ def preCheckRequirementsForAllProjects(networks):
                                                   (cmd, cmd_dir, str(retStdout), str(retStderr)))
                     sys.exit(2)
                 head_SHA1 = retStdout[0].split()[0]
-    
+
                 # if they're different, log more information and get approval (if not in test mode)
                 if cloned_SHA1 != head_SHA1:
                     Wrangler.WranglerLogger.warn("Using non-head version of project of %s" % project_name)
                     Wrangler.WranglerLogger.warn("  Applying version [%s], Head is [%s]" % (cloned_SHA1, head_SHA1))
-    
+
                     cmd = "git log %s..%s" % (cloned_SHA1, head_SHA1)
                     (retcode, retStdout, retStderr) = networks[netmode]._runAndLog(cmd, run_dir = cmd_dir)
-                    Wrangler.WranglerLogger.warn("  The following commits are not included:") 
+                    Wrangler.WranglerLogger.warn("  The following commits are not included:")
                     for line in retStdout:
                         Wrangler.WranglerLogger.warn("    %s" % line)
-    
+
                     # test mode => warn is sufficient
                     # non-test mode => get explicit approval
                     if BUILD_MODE !="test":
@@ -280,14 +280,14 @@ def preCheckRequirementsForAllProjects(networks):
                         Wrangler.WranglerLogger.debug("  response = [%s]" % response)
                         if response.strip().lower()[0] != "y":
                             sys.exit(2)
-    
+
                 # find out if the project is stale
                 else:
                     cmd = 'git show -s --format="%%ct" %s' % cloned_SHA1
                     (retcode, retStdout, retStderr) = networks[netmode]._runAndLog(cmd, run_dir = cmd_dir)
                     applied_commit_date = datetime.datetime.fromtimestamp(int(retStdout[0]))
                     applied_commit_age = datetime.datetime.now() - applied_commit_date
-    
+
                     # if older than one year, holler
                     STALE_YEARS = 2
                     if applied_commit_age > datetime.timedelta(days=365*STALE_YEARS):
@@ -300,9 +300,9 @@ def preCheckRequirementsForAllProjects(networks):
                             Wrangler.WranglerLogger.debug("  response = [%s]" % response)
                             if response.strip().lower() not in ["y", "yes"]:
                                 sys.exit(2)
-    
+
                 clonedcount += 1
-            
+
                 # format: netmode -> project -> { netmode: [requirements] }
                 if len(prereqs  ) > 0: PRE_REQS[ netmode][project_name] = prereqs
                 if len(coreqs   ) > 0: CO_REQS[  netmode][project_name] = coreqs
@@ -407,14 +407,14 @@ if __name__ == '__main__':
         os.mkdir("BlueprintNetworks")
 
     LOG_FILENAME = "build%snetwork_%s_%s_%s.info.LOG" % ("TEST" if BUILD_MODE=="test" else "", PROJECT, BP_VARIANT, NOW)
-    Wrangler.setupLogging(os.path.join("BlueprintNetworks",LOG_FILENAME), 
+    Wrangler.setupLogging(os.path.join("BlueprintNetworks",LOG_FILENAME),
                           os.path.join("BlueprintNetworks",LOG_FILENAME.replace("info", "debug")))
     if TRANSIT_CAPACITY_DIR:
         Wrangler.TransitNetwork.capacity = Wrangler.TransitCapacity(directory=TRANSIT_CAPACITY_DIR)
 
     # Create a scratch directory to check out project repos into
     SCRATCH_SUBDIR = "scratch"
-    TEMP_SUBDIR    = "Wrangler_tmp_" + NOW    
+    TEMP_SUBDIR    = "Wrangler_tmp_" + NOW
     if not os.path.exists(SCRATCH_SUBDIR): os.mkdir(SCRATCH_SUBDIR)
     os.chdir(SCRATCH_SUBDIR)
 
@@ -500,10 +500,6 @@ if __name__ == '__main__':
             Wrangler.WranglerLogger.info("Blueprint 2015 == Baseline 2015 -- skipping output")
             continue
 
-        if BP_VARIANT=="Baseline" and YEAR==2035:
-            Wrangler.WranglerLogger.warn("TODO: Baseline needs SLR since it's not mitigated")
-
-
         # Initialize output subdirectories up a level (not in scratch)
         bp_subvariant = BP_VARIANT
         # for before 2035, there's no difference between Blueprint Basic or the Blueprint Plus variants
@@ -515,19 +511,22 @@ if __name__ == '__main__':
         elif BP_VARIANT == "Blueprint" and YEAR == 2050:
             bp_subvariant = "Blueprint Plus Fix It First"
 
-        hwypath=os.path.join("..", "BlueprintNetworks", "net_{}_{}".format(YEAR, bp_subvariant), HWY_SUBDIR)
-        if not os.path.exists(hwypath): os.makedirs(hwypath)
-        trnpath = os.path.join("..", "BlueprintNetworks", "net_{}_{}".format(YEAR, bp_subvariant), TRN_SUBDIR)
-        if not os.path.exists(trnpath): os.makedirs(trnpath)
+        # skip writing the network if it is the Baseline on or after 2035 (because sea level rise effects will be added in a subsequent step)
+        if BP_VARIANT!="Baseline" or YEAR<2035:
 
-        # apply set_capclass before writing any hwy network
-        applied_SHA1 = networks['hwy'].applyProject(parentdir=TEMP_SUBDIR, networkdir=SET_CAPCLASS,
+            hwypath=os.path.join("..", "BlueprintNetworks", "net_{}_{}".format(YEAR, bp_subvariant), HWY_SUBDIR)
+            if not os.path.exists(hwypath): os.makedirs(hwypath)
+            trnpath = os.path.join("..", "BlueprintNetworks", "net_{}_{}".format(YEAR, bp_subvariant), TRN_SUBDIR)
+            if not os.path.exists(trnpath): os.makedirs(trnpath)
+
+            # apply set_capclass before writing any hwy network
+            applied_SHA1 = networks['hwy'].applyProject(parentdir=TEMP_SUBDIR, networkdir=SET_CAPCLASS,
                                                     gitdir=os.path.join(TEMP_SUBDIR, SET_CAPCLASS), **kwargs)
 
-        networks['hwy'].write(path=hwypath,name=HWY_NET_NAME,suppressQuery=True,
+            networks['hwy'].write(path=hwypath,name=HWY_NET_NAME,suppressQuery=True,
                               suppressValidation=True) # MTC doesn't have turn penalties
 
-        networks['trn'].write(path=trnpath,
+            networks['trn'].write(path=trnpath,
                               name="transitLines",
                               writeEmptyFiles = False,
                               suppressQuery = True if BUILD_MODE=="test" else False,
@@ -535,10 +534,63 @@ if __name__ == '__main__':
                               cubeNetFileForValidation = os.path.join(os.path.abspath(hwypath), HWY_NET_NAME))
 
 
-        # Write the transit capacity configuration
-        Wrangler.TransitNetwork.capacity.writeTransitVehicleToCapacity(directory = trnpath)
-        Wrangler.TransitNetwork.capacity.writeTransitLineToVehicle(directory = trnpath)
-        Wrangler.TransitNetwork.capacity.writeTransitPrefixToVehicle(directory = trnpath)
+            # Write the transit capacity configuration
+            Wrangler.TransitNetwork.capacity.writeTransitVehicleToCapacity(directory = trnpath)
+            Wrangler.TransitNetwork.capacity.writeTransitLineToVehicle(directory = trnpath)
+            Wrangler.TransitNetwork.capacity.writeTransitPrefixToVehicle(directory = trnpath)
+
+        # build the Baseline, with Sea Level Rise effects
+        if BP_VARIANT=="Baseline" and YEAR>=2035:
+
+            bp_subvariant = "Baseline"
+
+            # Sea Level Rise effects
+            BP_SLR_PROJECT = "BP_Sea_Level_Rise_Inundation"
+
+            # it would be nice if this were more automatic...
+            networks['hwy'].saveNetworkFiles(suffix="_plus", to_suffix=True)
+
+            networks_bp_baseline = {}
+            networks_bp_baseline['hwy'] = copy.deepcopy(networks['hwy'])
+            networks_bp_baseline['trn'] = copy.deepcopy(networks['trn'])
+
+            for netmode in NET_MODES:
+                (project_name, projType, tag, kwargs) = getProjectAttributes(BP_SLR_PROJECT)
+                # Wrangler.WranglerLogger.debug("BP SLR Project {} has project_name=[{}] projType=[{}] tag=[{}] kwargs=[{}]".format(BP_SLR_PROJECT,
+                #                                project_name, projType, tag, kwargs))
+                applied_SHA1 = None
+                copyloned_SHA1 = networks_bp_baseline[netmode].cloneProject(networkdir=project_name, tag=tag,
+                                                                         projtype=projType, tempdir=TEMP_SUBDIR, **kwargs)
+                (parentdir, networkdir, gitdir, projectsubdir) = networks_bp_baseline[netmode].getClonedProjectArgs(project_name, None, projType, TEMP_SUBDIR)
+                applied_SHA1 = networks_bp_baseline[netmode].applyProject(parentdir, networkdir, gitdir, projectsubdir, **kwargs)
+
+                hwypath=os.path.join("..", "BlueprintNetworks", "net_{}_{}".format(YEAR, bp_subvariant), HWY_SUBDIR)
+                if not os.path.exists(hwypath): os.makedirs(hwypath)
+                trnpath = os.path.join("..", "BlueprintNetworks", "net_{}_{}".format(YEAR, bp_subvariant), TRN_SUBDIR)
+                if not os.path.exists(trnpath): os.makedirs(trnpath)
+
+            applied_SHA1 = networks_bp_baseline['hwy'].applyProject(parentdir=TEMP_SUBDIR, networkdir=SET_CAPCLASS,
+                                                                 gitdir=os.path.join(TEMP_SUBDIR, SET_CAPCLASS))
+
+            networks_bp_baseline['hwy'].write(path=hwypath,name=HWY_NET_NAME,suppressQuery=True,
+                                           suppressValidation=True) # MTC doesn't have turn penalties
+
+            networks_bp_baseline['trn'].write(path=trnpath,
+                                           name="transitLines",
+                                           writeEmptyFiles = False,
+                                           suppressQuery = True if BUILD_MODE=="test" else False,
+                                           suppressValidation = False,
+                                           cubeNetFileForValidation = os.path.join(os.path.abspath(hwypath), HWY_NET_NAME))
+
+
+            # Write the transit capacity configuration
+            Wrangler.TransitNetwork.capacity.writeTransitVehicleToCapacity(directory = trnpath)
+            Wrangler.TransitNetwork.capacity.writeTransitLineToVehicle(directory = trnpath)
+            Wrangler.TransitNetwork.capacity.writeTransitPrefixToVehicle(directory = trnpath)
+
+            # revert back to the plus rowadway network without BP_Sea_Level_Rise_Inundation
+            networks['hwy'].saveNetworkFiles(suffix="_plus", to_suffix=False)
+
 
         # build the Basic version, with Sea Level Rise effects
         # Blueprint Plus has no Sea Level Rise effects as they're all mitigated/protected
@@ -548,7 +600,7 @@ if __name__ == '__main__':
             bp_subvariant = "Blueprint Basic"
 
             # do the Blueprint Basic version, with Sea Level Rise effects
-            BP_SLR_PROJECT = "BP_Sea_Level_Rise_Protections"
+            BP_SLR_PROJECT = "BP_Sea_Level_Rise_Inundation"
 
             # it would be nice if this were more automatic...
             networks['hwy'].saveNetworkFiles(suffix="_plus", to_suffix=True)
@@ -577,21 +629,21 @@ if __name__ == '__main__':
 
             networks_bp_basic['hwy'].write(path=hwypath,name=HWY_NET_NAME,suppressQuery=True,
                                            suppressValidation=True) # MTC doesn't have turn penalties
-        
+
             networks_bp_basic['trn'].write(path=trnpath,
                                            name="transitLines",
                                            writeEmptyFiles = False,
                                            suppressQuery = True if BUILD_MODE=="test" else False,
                                            suppressValidation = False,
                                            cubeNetFileForValidation = os.path.join(os.path.abspath(hwypath), HWY_NET_NAME))
-        
-        
+
+
             # Write the transit capacity configuration
             Wrangler.TransitNetwork.capacity.writeTransitVehicleToCapacity(directory = trnpath)
             Wrangler.TransitNetwork.capacity.writeTransitLineToVehicle(directory = trnpath)
             Wrangler.TransitNetwork.capacity.writeTransitPrefixToVehicle(directory = trnpath)
 
-            # revert back to the plus rowadway network without BP_Sea_Level_Rise_Protections
+            # revert back to the plus rowadway network without BP_Sea_Level_Rise_Inundation
             networks['hwy'].saveNetworkFiles(suffix="_plus", to_suffix=False)
 
     # build the Plus Crossing version
@@ -621,15 +673,15 @@ if __name__ == '__main__':
 
         networks['hwy'].write(path=hwypath,name=HWY_NET_NAME,suppressQuery=True,
                               suppressValidation=True) # MTC doesn't have turn penalties
-    
+
         networks['trn'].write(path=trnpath,
                               name="transitLines",
                               writeEmptyFiles = False,
                               suppressQuery = True if BUILD_MODE=="test" else False,
                               suppressValidation = False,
                               cubeNetFileForValidation = os.path.join(os.path.abspath(hwypath), HWY_NET_NAME))
-    
-    
+
+
         # Write the transit capacity configuration
         Wrangler.TransitNetwork.capacity.writeTransitVehicleToCapacity(directory = trnpath)
         Wrangler.TransitNetwork.capacity.writeTransitLineToVehicle(directory = trnpath)
