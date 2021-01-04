@@ -211,6 +211,7 @@ BLUEPRINT_PROJECTS = collections.OrderedDict([
                        'FBP_SL_023_WestTexasRoad_Diet',
                        'FBP_NP_036_SR29_Imola_PNR',
                        'FBP_SN_012_PetalumaBlvd_Diet',
+                       'MAJ_MissionBay_SF_Ferry',
                        'FBP_SC_072_US101_Trimble_Interchange'],
                 'trn':['RRSP_Alameda_Point_Transit_Improvements',
                        'MAJ_MTC050027_Berkeley_Ferry',
@@ -237,7 +238,8 @@ BLUEPRINT_PROJECTS = collections.OrderedDict([
                        {'name':'FBP_SF_012_Geneva_Harney_BRT', 'kwargs':{'MODELYEAR':'2025'}},
                        {'name':'FBP_CC_15_23rd_St_BRT', 'kwargs':{'MODELYEAR':'2025'}},
                        'FBP_CC_030_OakleyAmtrak',
-                       'FBP_SM_020_Regional_Express_Buses',              
+                       'FBP_SM_020_Regional_Express_Buses',
+                       'MAJ_MissionBay_SF_Ferry',              
                        'MAJ_Sonoma_Frequency_Increase']
         }),
         (2030, {'hwy':['MAJ_SanPablo_BRT',
