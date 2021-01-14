@@ -545,7 +545,13 @@ if __name__ == '__main__':
             bp_subvariant = "Baseline"
 
             # Sea Level Rise effects
-            BP_SLR_PROJECT = "BP_Sea_Level_Rise_Inundation"
+            # no inundation prior to 2035
+            # 1 foot between 2035 and 2045
+            # 2 foot in 2050
+            if YEAR >= 2035 and YEAR < 2050:
+                BP_SLR_PROJECT = {'name':"BP_Sea_Level_Rise_Inundation", 'kwargs':{'MODELYEAR':'2035'}}
+            if YEAR == 2050:
+                BP_SLR_PROJECT = {'name':"BP_Sea_Level_Rise_Inundation", 'kwargs':{'MODELYEAR':'2050'}}
 
             # it would be nice if this were more automatic...
             networks['hwy'].saveNetworkFiles(suffix="_plus", to_suffix=True)
