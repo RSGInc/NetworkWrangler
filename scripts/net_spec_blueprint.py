@@ -367,6 +367,7 @@ BLUEPRINT_PROJECTS = collections.OrderedDict([
                        'FBP_NP_051_Airport_Junction',
                        'FBP_SC_101_BrokawBridgeWide',
                        'FBP_SC_081_US101_SR237',
+                       'FBP_SC_088_Envision_Expwy',
                        'FBP_SC_042_I280_Downtown_Access_Improvements'],
                 'trn':[{'name':'FBP_MU_046_ACE_Freq_Inc', 'kwargs':{'MODELYEAR':'2040'}},
                        'MAJ_Vasona_LRT_Extension',
@@ -383,6 +384,7 @@ BLUEPRINT_PROJECTS = collections.OrderedDict([
                        'MAJ_ElCaminoReal_BRT',
                        'FBP_MU_064_SR37_LongTerm',
                        'FBP_NP_051_Airport_Junction',
+                       'FBP_SC_088_Envision_Expwy',
                        'HSR',
                        'FBP_CC_019_CCCTA_Freq_Increase']
         }),
