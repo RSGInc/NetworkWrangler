@@ -24,6 +24,7 @@ COMMITTED_PROJECTS = collections.OrderedDict([
                'EXP_580C',
                'EXP_680D',
                'EXP_680F',
+               'EXP_880A',
                'SCL130001_237_101_MAT_Int_Mod',
                'REG090003_SCLARA_FIP',
                'ALA130005_Dougherty_road_widening',
@@ -121,7 +122,6 @@ COMMITTED_PROJECTS = collections.OrderedDict([
     }),
     (2030, {
         'hwy':[{'name':'Bridge_Toll_Updates_2_2pct', 'kwargs':{'MODELYEAR':'2030'}},
-               'EXP_880A',
                'EXP_Blueprint_NoProject'],
         'trn':['BART_NoProject']
     }),
