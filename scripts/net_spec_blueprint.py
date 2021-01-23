@@ -23,7 +23,6 @@ COMMITTED_PROJECTS = collections.OrderedDict([
                {'name':'EXP_237B',                   'kwargs':{'FUTURE':"PBA50"}}, # todo: update this to support PBA50
                'EXP_580C',
                'EXP_680D',
-               'EXP_680F',
                'EXP_880A',
                'SCL130001_237_101_MAT_Int_Mod',
                'REG090003_SCLARA_FIP',
@@ -98,6 +97,7 @@ COMMITTED_PROJECTS = collections.OrderedDict([
                'EXP_101B1',
                'EXP_101B2',
                'EXP_680C1',
+               'EXP_680F',
                'EXP_85D',
                'EXP_101C',
                'ALA150001_I680_SR84_Int_Wid',
