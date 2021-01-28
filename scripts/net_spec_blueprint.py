@@ -24,6 +24,7 @@ COMMITTED_PROJECTS = collections.OrderedDict([
                'EXP_580C',
                'EXP_680D',
                'EXP_880A',
+               'HOV_680F',
                'SCL130001_237_101_MAT_Int_Mod',
                'REG090003_SCLARA_FIP',
                'ALA130005_Dougherty_road_widening',
