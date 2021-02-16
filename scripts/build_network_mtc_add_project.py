@@ -107,7 +107,8 @@ if __name__ == '__main__':
     parser.add_argument("--input_network",  dest='input_network',  help="Pass input network path if desired; otherwise, PPA path is assumed")
     parser.add_argument("--output_network", dest='output_network', help="Pass output network path if desired; otherwise, PPA path is assumed")
     parser.add_argument("--input_projects", dest='input_projects', help="Pass directory for network projects; if none passed, M:\\Application\\Model One\\NetworkProjects is assumed")
-    parser.add_argument("--kwarg", dest='kwarg', help="To pass keyword args to project apply(), pass keyword and value", nargs=2)
+    parser.add_argument("--kwarg",  dest='kwarg', help="To pass keyword args to project apply(), pass keyword and value", nargs=2)
+    parser.add_argument("--kwarg2", dest='kwarg2', help="To pass keyword args to project apply(), pass keyword and value", nargs=2)
     parser.add_argument("--tag",   dest='tag',   help="tags for project")
     parser.add_argument("project_short_id", help="Short ID of project, to be used for directory")
     parser.add_argument("project", help="Project to add", nargs="+")
@@ -154,6 +155,9 @@ if __name__ == '__main__':
                 kwargs[args.kwarg[0]] = '"{}"'.format(SCENARIO)
             else:
                 kwargs[args.kwarg[0]] = '"{}"'.format(args.kwarg[1])
+        # second optional kwarg
+        if args.kwarg2:
+          kwargs[args.kwarg2[0]] = '"{}"'.format(args.kwarg2[1])
     
         if args.output_network:
             print("Using output network {}".format(args.output_network))
