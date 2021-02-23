@@ -419,7 +419,7 @@ BLUEPRINT_PROJECTS = collections.OrderedDict([
 NETWORK_PROJECTS   = collections.OrderedDict()
 
 for YEAR in COMMITTED_PROJECTS.keys():
-    if BP_VARIANT == "Baseline":
+    if NET_VARIANT == "Baseline":
         # baseline: just committed
         NETWORK_PROJECTS[YEAR] = {
             'hwy':COMMITTED_PROJECTS[YEAR]['hwy'],
@@ -427,14 +427,14 @@ for YEAR in COMMITTED_PROJECTS.keys():
         }
         # todo: add sea level rise since it's unprotected
 
-    elif BP_VARIANT == "Blueprint":
-        # blueprint basic: baseline plus blueprint projects, some seal level rise effects
+    else:
+        # blueprint, alt1, alt2
         NETWORK_PROJECTS[YEAR] = {
             'hwy':COMMITTED_PROJECTS[YEAR]['hwy'] + BLUEPRINT_PROJECTS[YEAR]['hwy'],
             'trn':COMMITTED_PROJECTS[YEAR]['trn'] + BLUEPRINT_PROJECTS[YEAR]['trn']
         }
 
-    # NOTE: SLR and crossings are handled in build_network_mtc_blueprint.py
+    # NOTE: SLR is handled in build_network_mtc_blueprint.py
 
 #
 # For every year where a project is applied do the following:

@@ -362,7 +362,7 @@ if __name__ == '__main__':
     parser.add_argument("--model_type", choices=[Wrangler.Network.MODEL_TYPE_TM1, Wrangler.Network.MODEL_TYPE_TM2],
                         default=Wrangler.Network.MODEL_TYPE_TM1)
     parser.add_argument("net_spec", metavar="network_specification.py", help="Script which defines required variables indicating how to build the network")
-    parser.add_argument("bpvariant", choices=["Baseline", "Blueprint"], help="Specify which Blueprint variant network to create.  Note 'Blueprint' will build three variants")
+    parser.add_argument("netvariant", choices=["Baseline", "Blueprint"], help="Specify which network variant network to create.")
     args = parser.parse_args()
 
     NOW         = time.strftime("%Y%b%d.%H%M%S")
@@ -388,7 +388,7 @@ if __name__ == '__main__':
 
     # Read the configuration
     NETWORK_CONFIG = args.net_spec
-    BP_VARIANT     = args.bpvariant
+    NET_VARIANT     = args.netvariant
     exec(open(NETWORK_CONFIG).read())
 
     # Verify mandatory fields are set
@@ -406,7 +406,7 @@ if __name__ == '__main__':
     if not os.path.exists("BlueprintNetworks"):
         os.mkdir("BlueprintNetworks")
 
-    LOG_FILENAME = "build%snetwork_%s_%s_%s.info.LOG" % ("TEST" if BUILD_MODE=="test" else "", PROJECT, BP_VARIANT, NOW)
+    LOG_FILENAME = "build%snetwork_%s_%s_%s.info.LOG" % ("TEST" if BUILD_MODE=="test" else "", PROJECT, NET_VARIANT, NOW)
     Wrangler.setupLogging(os.path.join("BlueprintNetworks",LOG_FILENAME),
                           os.path.join("BlueprintNetworks",LOG_FILENAME.replace("info", "debug")))
     if TRANSIT_CAPACITY_DIR:
@@ -496,16 +496,16 @@ if __name__ == '__main__':
             Wrangler.WranglerLogger.info("No applied projects for this year -- skipping output")
             continue
 
-        if BP_VARIANT=="Blueprint" and YEAR==2015:
+        if NET_VARIANT!="Baseline" and YEAR==2015:
             Wrangler.WranglerLogger.info("Blueprint 2015 == Baseline 2015 -- skipping output")
             continue
 
-        # Baseline with  YEAR >= 2035 get SLR, covered in next clause
-        if BP_VARIANT=="Blueprint" or YEAR<2035:
+        # Baseline AND YEAR >= 2035 get SLR, covered in next clause
+        if NET_VARIANT!="Baseline" or YEAR<2035:
 
-            hwypath=os.path.join("..", "BlueprintNetworks", "net_{}_{}".format(YEAR, BP_VARIANT), HWY_SUBDIR)
+            hwypath=os.path.join("..", "BlueprintNetworks", "net_{}_{}".format(YEAR, NET_VARIANT), HWY_SUBDIR)
             if not os.path.exists(hwypath): os.makedirs(hwypath)
-            trnpath = os.path.join("..", "BlueprintNetworks", "net_{}_{}".format(YEAR, BP_VARIANT), TRN_SUBDIR)
+            trnpath = os.path.join("..", "BlueprintNetworks", "net_{}_{}".format(YEAR, NET_VARIANT), TRN_SUBDIR)
             if not os.path.exists(trnpath): os.makedirs(trnpath)
 
             # apply set_capclass before writing any hwy network
@@ -529,7 +529,7 @@ if __name__ == '__main__':
             Wrangler.TransitNetwork.capacity.writeTransitPrefixToVehicle(directory = trnpath)
 
         # build the Baseline, with Sea Level Rise effects
-        if BP_VARIANT=="Baseline" and YEAR>=2035:
+        if NET_VARIANT=="Baseline" and YEAR>=2035:
 
             # Sea Level Rise effects
             # no inundation prior to 2035
@@ -557,9 +557,9 @@ if __name__ == '__main__':
                 (parentdir, networkdir, gitdir, projectsubdir) = networks_bp_baseline[netmode].getClonedProjectArgs(project_name, None, projType, TEMP_SUBDIR)
                 applied_SHA1 = networks_bp_baseline[netmode].applyProject(parentdir, networkdir, gitdir, projectsubdir, **kwargs)
 
-                hwypath=os.path.join("..", "BlueprintNetworks", "net_{}_{}".format(YEAR, BP_VARIANT), HWY_SUBDIR)
+                hwypath=os.path.join("..", "BlueprintNetworks", "net_{}_{}".format(YEAR, NET_VARIANT), HWY_SUBDIR)
                 if not os.path.exists(hwypath): os.makedirs(hwypath)
-                trnpath = os.path.join("..", "BlueprintNetworks", "net_{}_{}".format(YEAR, BP_VARIANT), TRN_SUBDIR)
+                trnpath = os.path.join("..", "BlueprintNetworks", "net_{}_{}".format(YEAR, NET_VARIANT), TRN_SUBDIR)
                 if not os.path.exists(trnpath): os.makedirs(trnpath)
 
             applied_SHA1 = networks_bp_baseline['hwy'].applyProject(parentdir=TEMP_SUBDIR, networkdir=SET_CAPCLASS,
