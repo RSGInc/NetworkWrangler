@@ -154,8 +154,8 @@ BLUEPRINT_PROJECTS = collections.OrderedDict([
         (2015, {'hwy':[],
                 'trn':[]
         }),
-        (2020, {'hwy':[],
-                'trn':[]
+        (2020, {'hwy':[{'name':'demo_project', 'variants_include':['Alt2'],        'kwargs':{'FUTURE':"'BackToTheFuture'"}}],
+                'trn':[{'name':'demo_project', 'variants_include':['Alt1','Alt2'], 'kwargs':{'FUTURE':"'CleanAndGreen'"}  }]
         }),
         (2025, {'hwy':['RRSP_Alameda_Point_Transit_Improvements',
                        'MAJ_MTC050027_Berkeley_Ferry',
@@ -355,7 +355,7 @@ BLUEPRINT_PROJECTS = collections.OrderedDict([
                        'FBP_SC_105_SanTomasWide',
                        'FBP_SC_102_CalaverasWide',
                        'FBP_CC_039_Eastbound24Wide',
-                       'FBP_MU_064_SR37_LongTerm',
+                       {'name':'FBP_MU_064_SR37_LongTerm', 'variants_exclude':['Alt1']},
                        'FBP_SC_094_LawrenceWide',
                        'FBP_NP_066_Newell_Dr',
                        'EXP_Blueprint',
@@ -382,7 +382,7 @@ BLUEPRINT_PROJECTS = collections.OrderedDict([
                        'FBP_CC_018_BRT_Brentwood',
                        {'name':'FBP_SF_012_Geneva_Harney_BRT', 'kwargs':{'MODELYEAR':'2040'}},
                        'MAJ_ElCaminoReal_BRT',
-                       'FBP_MU_064_SR37_LongTerm',
+                       {'name':'FBP_MU_064_SR37_LongTerm', 'variants_exclude':['Alt1']},
                        'FBP_NP_051_Airport_Junction',
                        'FBP_MU_056_Dumbarton_GRT',
                        'FBP_SC_088_Envision_Expwy',
@@ -429,10 +429,32 @@ for YEAR in COMMITTED_PROJECTS.keys():
 
     else:
         # blueprint, alt1, alt2
+
         NETWORK_PROJECTS[YEAR] = {
             'hwy':COMMITTED_PROJECTS[YEAR]['hwy'] + BLUEPRINT_PROJECTS[YEAR]['hwy'],
             'trn':COMMITTED_PROJECTS[YEAR]['trn'] + BLUEPRINT_PROJECTS[YEAR]['trn']
         }
+        # handle net_remove, nets keywords
+        for netmode in ['hwy','trn']:
+
+            # iterate backwards via index to delete cleanly
+            for project_idx in range(len(NETWORK_PROJECTS[YEAR][netmode])-1,-1,-1):
+                project = NETWORK_PROJECTS[YEAR][netmode][project_idx]
+                # special handling requires project to be specified as dictionary
+                if not isinstance(project, dict): continue
+
+                # variants_exclude: specifies list of network variants for which this project should be *excluded*
+                if 'variants_exclude' in project.keys() and NET_VARIANT in project['variants_exclude']:
+                    Wrangler.WranglerLogger.info("Removing {} {} {}".format(YEAR, netmode, project))
+                    del NETWORK_PROJECTS[YEAR][netmode][project_idx]
+                    continue
+
+                # variants_include: specifies list of network variants for which this project should be *included*
+                # if this keyword is present, then this project is included *only* for variants in this list
+                if 'variants_include' in project.keys() and NET_VARIANT not in project['variants_include']:
+                    Wrangler.WranglerLogger.info("Removing {} {} {}".format(YEAR, netmode, project))
+                    del NETWORK_PROJECTS[YEAR][netmode][project_idx]
+                    continue
 
     # NOTE: SLR is handled in build_network_mtc_blueprint.py
 

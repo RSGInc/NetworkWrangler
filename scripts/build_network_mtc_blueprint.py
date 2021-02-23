@@ -362,7 +362,7 @@ if __name__ == '__main__':
     parser.add_argument("--model_type", choices=[Wrangler.Network.MODEL_TYPE_TM1, Wrangler.Network.MODEL_TYPE_TM2],
                         default=Wrangler.Network.MODEL_TYPE_TM1)
     parser.add_argument("net_spec", metavar="network_specification.py", help="Script which defines required variables indicating how to build the network")
-    parser.add_argument("netvariant", choices=["Baseline", "Blueprint"], help="Specify which network variant network to create.")
+    parser.add_argument("netvariant", choices=["Baseline", "Blueprint", "Alt1", "Alt2"], help="Specify which network variant network to create.")
     args = parser.parse_args()
 
     NOW         = time.strftime("%Y%b%d.%H%M%S")
@@ -388,7 +388,16 @@ if __name__ == '__main__':
 
     # Read the configuration
     NETWORK_CONFIG = args.net_spec
-    NET_VARIANT     = args.netvariant
+    NET_VARIANT    = args.netvariant
+
+    # networks and log file will be in BlueprintNetworks
+    if not os.path.exists("BlueprintNetworks"):
+        os.mkdir("BlueprintNetworks")
+
+    LOG_FILENAME = "build%snetwork_%s_%s_%s.info.LOG" % ("TEST" if BUILD_MODE=="test" else "", PROJECT, NET_VARIANT, NOW)
+    Wrangler.setupLogging(os.path.join("BlueprintNetworks",LOG_FILENAME),
+                          os.path.join("BlueprintNetworks",LOG_FILENAME.replace("info", "debug")))
+
     exec(open(NETWORK_CONFIG).read())
 
     # Verify mandatory fields are set
@@ -402,13 +411,6 @@ if __name__ == '__main__':
         print("NETWORK_PROJECTS not set in %s" % NETWORK_CONFIG)
         sys.exit(2)
 
-    # networks and log file will be in BlueprintNetworks
-    if not os.path.exists("BlueprintNetworks"):
-        os.mkdir("BlueprintNetworks")
-
-    LOG_FILENAME = "build%snetwork_%s_%s_%s.info.LOG" % ("TEST" if BUILD_MODE=="test" else "", PROJECT, NET_VARIANT, NOW)
-    Wrangler.setupLogging(os.path.join("BlueprintNetworks",LOG_FILENAME),
-                          os.path.join("BlueprintNetworks",LOG_FILENAME.replace("info", "debug")))
     if TRANSIT_CAPACITY_DIR:
         Wrangler.TransitNetwork.capacity = Wrangler.TransitCapacity(directory=TRANSIT_CAPACITY_DIR)
 
