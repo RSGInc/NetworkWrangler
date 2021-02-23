@@ -500,23 +500,12 @@ if __name__ == '__main__':
             Wrangler.WranglerLogger.info("Blueprint 2015 == Baseline 2015 -- skipping output")
             continue
 
-        # Initialize output subdirectories up a level (not in scratch)
-        bp_subvariant = BP_VARIANT
-        # for before 2035, there's no difference between Blueprint Basic or the Blueprint Plus variants
+        # Baseline with  YEAR >= 2035 get SLR, covered in next clause
+        if BP_VARIANT=="Blueprint" or YEAR<2035:
 
-        # for 2035 and after, the default is Plus, while Basic includes Sea Level Rise effects
-        if BP_VARIANT == "Blueprint" and YEAR >= 2035 and YEAR < 2050:
-            bp_subvariant = "Blueprint Plus"
-        # for 2050, Plus options diverge to Fix It First and Crossing
-        elif BP_VARIANT == "Blueprint" and YEAR == 2050:
-            bp_subvariant = "Blueprint Plus Fix It First"
-
-        # skip writing the network if it is the Baseline on or after 2035 (because sea level rise effects will be added in a subsequent step)
-        if BP_VARIANT!="Baseline" or YEAR<2035:
-
-            hwypath=os.path.join("..", "BlueprintNetworks", "net_{}_{}".format(YEAR, bp_subvariant), HWY_SUBDIR)
+            hwypath=os.path.join("..", "BlueprintNetworks", "net_{}_{}".format(YEAR, BP_VARIANT), HWY_SUBDIR)
             if not os.path.exists(hwypath): os.makedirs(hwypath)
-            trnpath = os.path.join("..", "BlueprintNetworks", "net_{}_{}".format(YEAR, bp_subvariant), TRN_SUBDIR)
+            trnpath = os.path.join("..", "BlueprintNetworks", "net_{}_{}".format(YEAR, BP_VARIANT), TRN_SUBDIR)
             if not os.path.exists(trnpath): os.makedirs(trnpath)
 
             # apply set_capclass before writing any hwy network
@@ -542,8 +531,6 @@ if __name__ == '__main__':
         # build the Baseline, with Sea Level Rise effects
         if BP_VARIANT=="Baseline" and YEAR>=2035:
 
-            bp_subvariant = "Baseline"
-
             # Sea Level Rise effects
             # no inundation prior to 2035
             # 1 foot between 2035 and 2045
@@ -554,7 +541,7 @@ if __name__ == '__main__':
                 BP_SLR_PROJECT = {'name':"BP_Sea_Level_Rise_Inundation", 'kwargs':{'MODELYEAR':'2050'}}
 
             # it would be nice if this were more automatic...
-            networks['hwy'].saveNetworkFiles(suffix="_plus", to_suffix=True)
+            networks['hwy'].saveNetworkFiles(suffix="_pre_SLR", to_suffix=True)
 
             networks_bp_baseline = {}
             networks_bp_baseline['hwy'] = copy.deepcopy(networks['hwy'])
@@ -570,9 +557,9 @@ if __name__ == '__main__':
                 (parentdir, networkdir, gitdir, projectsubdir) = networks_bp_baseline[netmode].getClonedProjectArgs(project_name, None, projType, TEMP_SUBDIR)
                 applied_SHA1 = networks_bp_baseline[netmode].applyProject(parentdir, networkdir, gitdir, projectsubdir, **kwargs)
 
-                hwypath=os.path.join("..", "BlueprintNetworks", "net_{}_{}".format(YEAR, bp_subvariant), HWY_SUBDIR)
+                hwypath=os.path.join("..", "BlueprintNetworks", "net_{}_{}".format(YEAR, BP_VARIANT), HWY_SUBDIR)
                 if not os.path.exists(hwypath): os.makedirs(hwypath)
-                trnpath = os.path.join("..", "BlueprintNetworks", "net_{}_{}".format(YEAR, bp_subvariant), TRN_SUBDIR)
+                trnpath = os.path.join("..", "BlueprintNetworks", "net_{}_{}".format(YEAR, BP_VARIANT), TRN_SUBDIR)
                 if not os.path.exists(trnpath): os.makedirs(trnpath)
 
             applied_SHA1 = networks_bp_baseline['hwy'].applyProject(parentdir=TEMP_SUBDIR, networkdir=SET_CAPCLASS,
@@ -595,102 +582,7 @@ if __name__ == '__main__':
             Wrangler.TransitNetwork.capacity.writeTransitPrefixToVehicle(directory = trnpath)
 
             # revert back to the plus rowadway network without BP_Sea_Level_Rise_Inundation
-            networks['hwy'].saveNetworkFiles(suffix="_plus", to_suffix=False)
+            networks['hwy'].saveNetworkFiles(suffix="_pre_SLR", to_suffix=False)
 
-
-        # build the Basic version, with Sea Level Rise effects
-        # Blueprint Plus has no Sea Level Rise effects as they're all mitigated/protected
-        # 11/2/2020 lmz disabled since we're not building Blueprint Basic
-        if False and BP_VARIANT == "Blueprint" and YEAR >= 2035:
-
-            bp_subvariant = "Blueprint Basic"
-
-            # do the Blueprint Basic version, with Sea Level Rise effects
-            BP_SLR_PROJECT = "BP_Sea_Level_Rise_Inundation"
-
-            # it would be nice if this were more automatic...
-            networks['hwy'].saveNetworkFiles(suffix="_plus", to_suffix=True)
-
-            networks_bp_basic = {}
-            networks_bp_basic['hwy'] = copy.deepcopy(networks['hwy'])
-            networks_bp_basic['trn'] = copy.deepcopy(networks['trn'])
-
-            for netmode in NET_MODES:
-                (project_name, projType, tag, kwargs) = getProjectAttributes(BP_SLR_PROJECT)
-                # Wrangler.WranglerLogger.debug("BP SLR Project {} has project_name=[{}] projType=[{}] tag=[{}] kwargs=[{}]".format(BP_SLR_PROJECT,
-                #                                project_name, projType, tag, kwargs))
-                applied_SHA1 = None
-                copyloned_SHA1 = networks_bp_basic[netmode].cloneProject(networkdir=project_name, tag=tag,
-                                                                         projtype=projType, tempdir=TEMP_SUBDIR, **kwargs)
-                (parentdir, networkdir, gitdir, projectsubdir) = networks_bp_basic[netmode].getClonedProjectArgs(project_name, None, projType, TEMP_SUBDIR)
-                applied_SHA1 = networks_bp_basic[netmode].applyProject(parentdir, networkdir, gitdir, projectsubdir, **kwargs)
-
-                hwypath=os.path.join("..", "BlueprintNetworks", "net_{}_{}".format(YEAR, bp_subvariant), HWY_SUBDIR)
-                if not os.path.exists(hwypath): os.makedirs(hwypath)
-                trnpath = os.path.join("..", "BlueprintNetworks", "net_{}_{}".format(YEAR, bp_subvariant), TRN_SUBDIR)
-                if not os.path.exists(trnpath): os.makedirs(trnpath)
-
-            applied_SHA1 = networks_bp_basic['hwy'].applyProject(parentdir=TEMP_SUBDIR, networkdir=SET_CAPCLASS,
-                                                                 gitdir=os.path.join(TEMP_SUBDIR, SET_CAPCLASS))
-
-            networks_bp_basic['hwy'].write(path=hwypath,name=HWY_NET_NAME,suppressQuery=True,
-                                           suppressValidation=True) # MTC doesn't have turn penalties
-
-            networks_bp_basic['trn'].write(path=trnpath,
-                                           name="transitLines",
-                                           writeEmptyFiles = False,
-                                           suppressQuery = True if BUILD_MODE=="test" else False,
-                                           suppressValidation = False,
-                                           cubeNetFileForValidation = os.path.join(os.path.abspath(hwypath), HWY_NET_NAME))
-
-
-            # Write the transit capacity configuration
-            Wrangler.TransitNetwork.capacity.writeTransitVehicleToCapacity(directory = trnpath)
-            Wrangler.TransitNetwork.capacity.writeTransitLineToVehicle(directory = trnpath)
-            Wrangler.TransitNetwork.capacity.writeTransitPrefixToVehicle(directory = trnpath)
-
-            # revert back to the plus rowadway network without BP_Sea_Level_Rise_Inundation
-            networks['hwy'].saveNetworkFiles(suffix="_plus", to_suffix=False)
-
-    # build the Plus Crossing version
-    if BP_VARIANT == "Blueprint" and YEAR == 2050:
-
-        bp_subvariant = "Blueprint Plus Crossing"
-        # do the Blueprint Basic version, with Sea Level Rise effects
-        BP_XING_PROJECT = "BP_Transbay_Crossing"
-        # no need to save since we're done with 2050 BP Plus Fix It First
-        for netmode in NET_MODES:
-            (project_name, projType, tag, kwargs) = getProjectAttributes(BP_XING_PROJECT)
-            # Wrangler.WranglerLogger.debug("BP Xing Project {} has project_name=[{}] projType=[{}] tag=[{}] kwargs=[{}]".format(BP_XING_PROJECT,
-            #                                project_name, projType, tag, kwargs))
-            applied_SHA1 = None
-            copyloned_SHA1 = networks[netmode].cloneProject(networkdir=project_name, tag=tag,
-                                                            projtype=projType, tempdir=TEMP_SUBDIR, **kwargs)
-            (parentdir, networkdir, gitdir, projectsubdir) = networks[netmode].getClonedProjectArgs(project_name, None, projType, TEMP_SUBDIR)
-            applied_SHA1 = networks[netmode].applyProject(parentdir, networkdir, gitdir, projectsubdir, **kwargs)
-
-            hwypath=os.path.join("..", "BlueprintNetworks", "net_{}_{}".format(YEAR, bp_subvariant), HWY_SUBDIR)
-            if not os.path.exists(hwypath): os.makedirs(hwypath)
-            trnpath = os.path.join("..", "BlueprintNetworks", "net_{}_{}".format(YEAR, bp_subvariant), TRN_SUBDIR)
-            if not os.path.exists(trnpath): os.makedirs(trnpath)
-
-        applied_SHA1 = networks['hwy'].applyProject(parentdir=TEMP_SUBDIR, networkdir=SET_CAPCLASS,
-                                                    gitdir=os.path.join(TEMP_SUBDIR, SET_CAPCLASS))
-
-        networks['hwy'].write(path=hwypath,name=HWY_NET_NAME,suppressQuery=True,
-                              suppressValidation=True) # MTC doesn't have turn penalties
-
-        networks['trn'].write(path=trnpath,
-                              name="transitLines",
-                              writeEmptyFiles = False,
-                              suppressQuery = True if BUILD_MODE=="test" else False,
-                              suppressValidation = False,
-                              cubeNetFileForValidation = os.path.join(os.path.abspath(hwypath), HWY_NET_NAME))
-
-
-        # Write the transit capacity configuration
-        Wrangler.TransitNetwork.capacity.writeTransitVehicleToCapacity(directory = trnpath)
-        Wrangler.TransitNetwork.capacity.writeTransitLineToVehicle(directory = trnpath)
-        Wrangler.TransitNetwork.capacity.writeTransitPrefixToVehicle(directory = trnpath)
 
     Wrangler.WranglerLogger.debug("Successfully completed running %s" % os.path.abspath(__file__))
