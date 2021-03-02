@@ -242,7 +242,8 @@ BLUEPRINT_PROJECTS = collections.OrderedDict([
                        'FBP_CC_030_OakleyAmtrak',
                        'FBP_SM_020_Regional_Express_Buses',
                        'MAJ_MissionBay_SF_Ferry',              
-                       'MAJ_Sonoma_Frequency_Increase']
+                       'MAJ_Sonoma_Frequency_Increase',
+                       {'name':'EIR1_Freq_Boosts', 'variants_include':['Alt1'], 'kwargs':{'MODELYEAR':'2025'}}]
         }),
         (2030, {'hwy':['MAJ_SanPablo_BRT',
                        'BP_Tolls_On_Congested_Freeways_2030',
@@ -301,7 +302,8 @@ BLUEPRINT_PROJECTS = collections.OrderedDict([
                        'FBP_CC_028_Hercules_Station',
                        {'name':'FBP_SF_012_Geneva_Harney_BRT', 'kwargs':{'MODELYEAR':'2030'}},
                        {'name':'FBP_CC_15_23rd_St_BRT', 'kwargs':{'MODELYEAR':'2030'}},
-                       'FBP_CC_024_Oakley_PNR_Tri_Delta']
+                       'FBP_CC_024_Oakley_PNR_Tri_Delta',
+                       {'name':'EIR1_Freq_Boosts', 'variants_include':['Alt1'], 'kwargs':{'MODELYEAR':'2030'}}]
         }),
         (2035, {'hwy':['MAJ_MuniForward_Uncommitted',
                        'MAJ_Treasure_Island_Congestion_Pricing',
@@ -335,7 +337,8 @@ BLUEPRINT_PROJECTS = collections.OrderedDict([
                        {'name':'FBP_SF_012_Geneva_Harney_BRT', 'kwargs':{'MODELYEAR':'2035'}},
                        {'name':'MAJ_SOL070020_I80_I680_SR12_Int_2B_7', 'variants_exclude':['Alt1'], 'kwargs':{'PHASE':"'5'"}},
                        {'name':'FBP_SL_026_SolExpressBus', 'kwargs':{'MODELYEAR':'2035'}},
-                       'FBP_SL_020_MilitaryWest_Diet']
+                       'FBP_SL_020_MilitaryWest_Diet',
+                       {'name':'EIR1_Freq_Boosts', 'variants_include':['Alt1'], 'kwargs':{'MODELYEAR':'2035'}}]
         }),
         (2040, {'hwy':['BP_Vision_Zero',
                        'FBP_SC_050_I680_Montague_Int_Imp', 
