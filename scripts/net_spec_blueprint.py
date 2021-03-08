@@ -243,6 +243,7 @@ BLUEPRINT_PROJECTS = collections.OrderedDict([
                        'FBP_SM_020_Regional_Express_Buses',
                        'MAJ_MissionBay_SF_Ferry',              
                        'MAJ_Sonoma_Frequency_Increase',
+                       {'name':'EIR2_HRA_Freq_Incr', 'variants_include':['Alt2']},
                        {'name':'EIR1_Freq_Boosts', 'variants_include':['Alt1'], 'kwargs':{'MODELYEAR':'2025'}}]
         }),
         (2030, {'hwy':['MAJ_SanPablo_BRT',
