@@ -226,7 +226,7 @@ BLUEPRINT_PROJECTS = collections.OrderedDict([
                        'MAJ_Geary_BRT_Phase2',
                        'FBP_MU_041_Hovercraft_Pilot',
                        'FBP_MU_049_Caltrain_6TPHPD',
-                       'FBP_MU_059_ACTransbay_Freq_Incr',
+                       {'name':'FBP_MU_059_ACTransbay_Freq_Incr', 'variants_exclude':['Alt2']},
                        'FBP_MU_060_ReX_Blue',
                        'MAJ_AC_Frequency_Improvement',
                        'FBP_MU_044_SouthSF_Ferry_Serv_Incr',
