@@ -244,6 +244,7 @@ BLUEPRINT_PROJECTS = collections.OrderedDict([
                        'MAJ_MissionBay_SF_Ferry',              
                        'MAJ_Sonoma_Frequency_Increase',
                        {'name':'EIR2_HRA_Freq_Incr', 'variants_include':['Alt2']},
+                       {'name':'EIR2_PDA_Freq_Incr', 'variants_include':['Alt2'],  'kwargs':{'MODELYEAR':'2025'}},
                        {'name':'EIR1_Freq_Boosts', 'variants_include':['Alt1'], 'kwargs':{'MODELYEAR':'2025'}}]
         }),
         (2030, {'hwy':['MAJ_SanPablo_BRT',
@@ -304,6 +305,7 @@ BLUEPRINT_PROJECTS = collections.OrderedDict([
                        {'name':'FBP_SF_012_Geneva_Harney_BRT', 'kwargs':{'MODELYEAR':'2030'}},
                        {'name':'FBP_CC_15_23rd_St_BRT', 'kwargs':{'MODELYEAR':'2030'}},
                        'FBP_CC_024_Oakley_PNR_Tri_Delta',
+                       {'name':'EIR2_PDA_Freq_Incr', 'variants_include':['Alt2'],  'kwargs':{'MODELYEAR':'2030'}},
                        {'name':'EIR1_Freq_Boosts', 'variants_include':['Alt1'], 'kwargs':{'MODELYEAR':'2030'}}]
         }),
         (2035, {'hwy':['MAJ_MuniForward_Uncommitted',
