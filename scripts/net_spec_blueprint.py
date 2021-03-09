@@ -380,6 +380,7 @@ BLUEPRINT_PROJECTS = collections.OrderedDict([
                        {'name':'FBP_MU_056_Dumbarton_GRT', 'variants_exclude':['Alt2']},
                        {'name':'Transform_Valley_Link', 'variants_include':['Alt2']},
                        {'name':'FBP_AL_021_South_Bay_Connect', 'variants_include':['Alt2']},
+                       {'name':'Transform_AC_Transbay_Improvements', 'variants_include':['Alt2']},
                        'FBP_SC_042_I280_Downtown_Access_Improvements'],
                 'trn':[{'name':'FBP_MU_046_ACE_Freq_Inc', 'kwargs':{'MODELYEAR':'2040'}},
                        'MAJ_Vasona_LRT_Extension',
@@ -402,6 +403,7 @@ BLUEPRINT_PROJECTS = collections.OrderedDict([
                        {'name':'MAJ_SF_050002_Caltrain_Ext_TransbayTerminal', 'variants_include':['Alt2']},
                        {'name':'Transform_Valley_Link', 'variants_include':['Alt2']},
                        {'name':'FBP_AL_021_South_Bay_Connect', 'variants_include':['Alt2']},
+                       {'name':'Transform_AC_Transbay_Improvements', 'variants_include':['Alt2']},
                        'FBP_CC_019_CCCTA_Freq_Increase']
         }),
         (2045, {'hwy':['BP_Vision_Zero',
