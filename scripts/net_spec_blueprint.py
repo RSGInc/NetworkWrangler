@@ -341,6 +341,7 @@ BLUEPRINT_PROJECTS = collections.OrderedDict([
                        {'name':'MAJ_SOL070020_I80_I680_SR12_Int_2B_7', 'variants_exclude':['Alt1'], 'kwargs':{'PHASE':"'5'"}},
                        {'name':'FBP_SL_026_SolExpressBus', 'kwargs':{'MODELYEAR':'2035'}},
                        'FBP_SL_020_MilitaryWest_Diet',
+                       {'name':'EIR2_VTA_LRT_Orange', 'variants_include':['Alt2']},
                        {'name':'EIR1_Freq_Boosts', 'variants_include':['Alt1'], 'kwargs':{'MODELYEAR':'2035'}}]
         }),
         (2040, {'hwy':['BP_Vision_Zero',
