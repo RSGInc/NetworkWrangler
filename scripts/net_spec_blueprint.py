@@ -409,6 +409,7 @@ BLUEPRINT_PROJECTS = collections.OrderedDict([
                        {'name':'Transform_Valley_Link',                                                   'variants_include':['Alt2']},
                        {'name':'FBP_AL_021_South_Bay_Connect',                                            'variants_include':['Alt2']},
                        {'name':'Transform_AC_Transbay_Improvements',                                      'variants_include':['Alt2']},
+                       {'name':'EIR2_ReXGreen',                                                           'variants_include':['Alt2']},
                        'FBP_CC_019_CCCTA_Freq_Increase']
         }),
         (2045, {'hwy':['BP_Vision_Zero',
