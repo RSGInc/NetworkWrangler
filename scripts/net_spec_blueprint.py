@@ -218,7 +218,8 @@ BLUEPRINT_PROJECTS = collections.OrderedDict([
                        {'name':'EIR2_Val_Link_ExpressBus',                                                'variants_include':['Alt2']},
                        {'name':'EIR2_ReXBlue',                                                            'variants_include':['Alt2']},
                        'FBP_SC_072_US101_Trimble_Interchange'],
-                'trn':['RRSP_Alameda_Point_Transit_Improvements',
+                'trn':[{'name':'EIR1_Freq_Boosts',              'kwargs':{'MODELYEAR':'2025'},            'variants_include':['Alt1']},
+                       'RRSP_Alameda_Point_Transit_Improvements',
                        'MAJ_MTC050027_Berkeley_Ferry',
                        'MAJ_WETA_Service_Frequency_Increase',
                        {'name':'FBP_MU_046_ACE_Freq_Inc',       'kwargs':{'MODELYEAR':'2025'}},
@@ -248,8 +249,7 @@ BLUEPRINT_PROJECTS = collections.OrderedDict([
                        'MAJ_Sonoma_Frequency_Increase',
                        {'name':'EIR2_HRA_Freq_Incr',                                                      'variants_include':['Alt2']},
                        {'name':'EIR2_PDA_Freq_Incr',            'kwargs':{'MODELYEAR':'2025'},            'variants_include':['Alt2']},
-                       {'name':'EIR2_Val_Link_ExpressBus',                                                'variants_include':['Alt2']},
-                       {'name':'EIR1_Freq_Boosts',              'kwargs':{'MODELYEAR':'2025'},            'variants_include':['Alt1']}]
+                       {'name':'EIR2_Val_Link_ExpressBus',                                                'variants_include':['Alt2']}]
         }),
         (2030, {'hwy':['MAJ_SanPablo_BRT',
                        'BP_Tolls_On_Congested_Freeways_2030',
@@ -287,7 +287,8 @@ BLUEPRINT_PROJECTS = collections.OrderedDict([
                        'FBP_SL_022_SonomaBlvd_Diet',
                        'FBP_SM_027_US101_92',
                        'FBP_SM_007_ElCamino_CompleteStreets'],
-                'trn':[{'name':'FBP_MU_046_ACE_Freq_Inc',       'kwargs':{'MODELYEAR':'2030'}},
+                'trn':[{'name':'EIR1_Freq_Boosts',              'kwargs':{'MODELYEAR':'2030'},            'variants_include':['Alt1']},
+                       {'name':'FBP_MU_046_ACE_Freq_Inc',       'kwargs':{'MODELYEAR':'2030'}},
                        'MAJ_BRT030001_BART_to_SanJose',
                        'BART_Irvington_Infill',
                        'MAJ_REG090037_BART_Core_Cap',
@@ -309,8 +310,7 @@ BLUEPRINT_PROJECTS = collections.OrderedDict([
                        {'name':'FBP_SF_012_Geneva_Harney_BRT',  'kwargs':{'MODELYEAR':'2030'}},
                        {'name':'FBP_CC_15_23rd_St_BRT',         'kwargs':{'MODELYEAR':'2030'}},
                        'FBP_CC_024_Oakley_PNR_Tri_Delta',
-                       {'name':'EIR2_PDA_Freq_Incr',            'kwargs':{'MODELYEAR':'2030'},            'variants_include':['Alt2']},
-                       {'name':'EIR1_Freq_Boosts',              'kwargs':{'MODELYEAR':'2030'},            'variants_include':['Alt1']}]
+                       {'name':'EIR2_PDA_Freq_Incr',            'kwargs':{'MODELYEAR':'2030'},            'variants_include':['Alt2']}]
         }),
         (2035, {'hwy':['MAJ_MuniForward_Uncommitted',
                        'MAJ_Treasure_Island_Congestion_Pricing',
@@ -330,7 +330,8 @@ BLUEPRINT_PROJECTS = collections.OrderedDict([
                        'FBP_SN_018_Cotati_101_RailroadAve_Impr',
                        'FBP_NP_079_Trower_Ext',
                        'EXP_Blueprint'],
-                'trn':['MAJ_MuniForward_Uncommitted',
+                'trn':[{'name':'EIR1_Freq_Boosts', 'kwargs':{'MODELYEAR':'2035'},                         'variants_include':['Alt1']},
+                       'MAJ_MuniForward_Uncommitted',
                        'RRSP_South_East_Waterfront_Transit_Imp',
                        'FBP_MU_062_ReX_Red',
                        'Transform_I680_Multimodal_Imp',
@@ -345,8 +346,7 @@ BLUEPRINT_PROJECTS = collections.OrderedDict([
                        {'name':'MAJ_SOL070020_I80_I680_SR12_Int_2B_7', 'kwargs':{'PHASE':"'5'"},          'variants_exclude':['Alt1']},
                        {'name':'FBP_SL_026_SolExpressBus', 'kwargs':{'MODELYEAR':'2035'}},
                        'FBP_SL_020_MilitaryWest_Diet',
-                       {'name':'EIR2_VTA_LRT_Orange',                                                     'variants_include':['Alt2']},
-                       {'name':'EIR1_Freq_Boosts', 'kwargs':{'MODELYEAR':'2035'},                         'variants_include':['Alt1']}]
+                       {'name':'EIR2_VTA_LRT_Orange',                                                     'variants_include':['Alt2']}]
         }),
         (2040, {'hwy':['BP_Vision_Zero',
                        'FBP_SC_050_I680_Montague_Int_Imp', 
