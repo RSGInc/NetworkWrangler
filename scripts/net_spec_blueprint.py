@@ -332,7 +332,6 @@ BLUEPRINT_PROJECTS = collections.OrderedDict([
                        'EXP_Blueprint'],
                 'trn':['MAJ_MuniForward_Uncommitted',
                        'RRSP_South_East_Waterfront_Transit_Imp',
-                       {'name':'EIR1_Freq_Boosts', 'kwargs':{'MODELYEAR':'2035'},                         'variants_include':['Alt1']},              
                        'FBP_MU_062_ReX_Red',
                        'Transform_I680_Multimodal_Imp',
                        'Transform_SeamlessTransit',
@@ -346,6 +345,7 @@ BLUEPRINT_PROJECTS = collections.OrderedDict([
                        {'name':'MAJ_SOL070020_I80_I680_SR12_Int_2B_7', 'kwargs':{'PHASE':"'5'"},          'variants_exclude':['Alt1']},
                        {'name':'FBP_SL_026_SolExpressBus', 'kwargs':{'MODELYEAR':'2035'}},
                        'FBP_SL_020_MilitaryWest_Diet',
+                       {'name':'EIR1_Freq_Boosts', 'kwargs':{'MODELYEAR':'2035'},                         'variants_include':['Alt1']},
                        {'name':'EIR2_VTA_LRT_Orange',                                                     'variants_include':['Alt2']}]
         }),
         (2040, {'hwy':['BP_Vision_Zero',
