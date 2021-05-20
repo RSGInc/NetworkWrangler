@@ -310,7 +310,8 @@ BLUEPRINT_PROJECTS = collections.OrderedDict([
                        {'name':'FBP_CC_15_23rd_St_BRT',         'kwargs':{'MODELYEAR':'2030'}},
                        'FBP_CC_024_Oakley_PNR_Tri_Delta',
                        {'name':'EIR1_Freq_Boosts',              'kwargs':{'MODELYEAR':'2030'},            'variants_include':['Alt1']},
-                       {'name':'EIR2_PDA_Freq_Incr',            'kwargs':{'MODELYEAR':'2030'},            'variants_include':['Alt2']}]
+                       {'name':'EIR2_PDA_Freq_Incr',            'kwargs':{'MODELYEAR':'2030'},            'variants_include':['Alt2']},
+                       {'name':'EIR2_Fix_Alt2',                 'kwargs':{'MODELYEAR':'2030'},            'variants_include':['Alt2']}]
         }),
         (2035, {'hwy':['MAJ_MuniForward_Uncommitted',
                        'MAJ_Treasure_Island_Congestion_Pricing',
@@ -346,7 +347,8 @@ BLUEPRINT_PROJECTS = collections.OrderedDict([
                        {'name':'FBP_SL_026_SolExpressBus', 'kwargs':{'MODELYEAR':'2035'}},
                        'FBP_SL_020_MilitaryWest_Diet',
                        {'name':'EIR1_Freq_Boosts', 'kwargs':{'MODELYEAR':'2035'},                         'variants_include':['Alt1']},
-                       {'name':'EIR2_VTA_LRT_Orange',                                                     'variants_include':['Alt2']}]
+                       {'name':'EIR2_VTA_LRT_Orange',                                                     'variants_include':['Alt2']},
+                       {'name':'EIR2_Fix_Alt2',                 'kwargs':{'MODELYEAR':'2035'},            'variants_include':['Alt2']}]
         }),
         (2040, {'hwy':['BP_Vision_Zero',
                        'FBP_SC_050_I680_Montague_Int_Imp', 
@@ -412,8 +414,8 @@ BLUEPRINT_PROJECTS = collections.OrderedDict([
                        {'name':'FBP_AL_021_South_Bay_Connect',                                            'variants_include':['Alt2']},
                        {'name':'Transform_AC_Transbay_Improvements',                                      'variants_include':['Alt2']},
                        {'name':'EIR2_ReXGreen',                                                           'variants_include':['Alt2']},
-                       {'name':'EIR2_Fix_Alt2',                                                           'variants_include':['Alt2']},
-                       'FBP_CC_019_CCCTA_Freq_Increase']
+                       'FBP_CC_019_CCCTA_Freq_Increase',
+                       {'name':'EIR2_Fix_Alt2',                 'kwargs':{'MODELYEAR':'2040'},            'variants_include':['Alt2']}]
         }),
         (2045, {'hwy':['BP_Vision_Zero',
                        {'name':'EXP_uncommitted_all',           'kwargs':{'MODELYEAR':'2045'},            'variants_exclude':['Alt1']},
