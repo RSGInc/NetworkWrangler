@@ -247,7 +247,7 @@ BLUEPRINT_PROJECTS = collections.OrderedDict([
                        'MAJ_MissionBay_SF_Ferry',              
                        'MAJ_Sonoma_Frequency_Increase',
                        {'name':'EIR1_Freq_Boosts',              'kwargs':{'MODELYEAR':'2025'},            'variants_include':['Alt1']},
-                       {'name':'EIR2_HRA_Freq_Incr',                                                      'variants_include':['Alt2']},
+                       {'name':'EIR2_HRA_Freq_Incr',            'kwargs':{'MODELYEAR':'2025'},            'variants_include':['Alt2']},
                        {'name':'EIR2_PDA_Freq_Incr',            'kwargs':{'MODELYEAR':'2025'},            'variants_include':['Alt2']},
                        {'name':'EIR2_Val_Link_ExpressBus',                                                'variants_include':['Alt2']}]
         }),
@@ -310,6 +310,7 @@ BLUEPRINT_PROJECTS = collections.OrderedDict([
                        {'name':'FBP_CC_15_23rd_St_BRT',         'kwargs':{'MODELYEAR':'2030'}},
                        'FBP_CC_024_Oakley_PNR_Tri_Delta',
                        {'name':'EIR1_Freq_Boosts',              'kwargs':{'MODELYEAR':'2030'},            'variants_include':['Alt1']},
+                       {'name':'EIR2_HRA_Freq_Incr',            'kwargs':{'MODELYEAR':'2030'},            'variants_include':['Alt2']},
                        {'name':'EIR2_PDA_Freq_Incr',            'kwargs':{'MODELYEAR':'2030'},            'variants_include':['Alt2']},
                        {'name':'EIR2_Fix_Alt2',                 'kwargs':{'MODELYEAR':'2030'},            'variants_include':['Alt2']}]
         }),
