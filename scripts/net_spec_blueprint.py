@@ -332,7 +332,8 @@ BLUEPRINT_PROJECTS = collections.OrderedDict([
                        'FBP_AL_076_TelegraphDiet',
                        'FBP_SN_018_Cotati_101_RailroadAve_Impr',
                        'FBP_NP_079_Trower_Ext',
-                       'EXP_Blueprint'],
+                       'EXP_Blueprint',
+                       {'name':'EIR1_No_SR37',                                                            'variants_include':['Alt1']}],
                 'trn':['MAJ_MuniForward_Uncommitted',
                        'RRSP_South_East_Waterfront_Transit_Imp',
                        'FBP_MU_062_ReX_Red',
@@ -350,7 +351,8 @@ BLUEPRINT_PROJECTS = collections.OrderedDict([
                        'FBP_SL_020_MilitaryWest_Diet',
                        {'name':'EIR1_Freq_Boosts', 'kwargs':{'MODELYEAR':'2035'},                         'variants_include':['Alt1']},
                        {'name':'EIR2_VTA_LRT_Orange',                                                     'variants_include':['Alt2']},
-                       {'name':'EIR2_Fix_Alt2',                 'kwargs':{'MODELYEAR':'2035'},            'variants_include':['Alt2']}]
+                       {'name':'EIR2_Fix_Alt2',                 'kwargs':{'MODELYEAR':'2035'},            'variants_include':['Alt2']},
+                       {'name':'EIR1_No_SR37',                                                            'variants_include':['Alt1']}]
         }),
         (2040, {'hwy':['BP_Vision_Zero',
                        'FBP_SC_050_I680_Montague_Int_Imp', 
