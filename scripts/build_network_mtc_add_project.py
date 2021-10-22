@@ -86,7 +86,7 @@ def determineProjectDirectory(OUTPUT_DIR, BASE_DIR, project_short_id):
     print("Which suffix number do you want to use? (No response means {}) ".format(proposed_suffix))
     response = raw_input("")
     print("  response = [%s]" % response)
-    
+
     response_suffix = proposed_suffix
     if response != "":
       response_suffix = int(response.strip())
@@ -158,7 +158,7 @@ if __name__ == '__main__':
         # second optional kwarg
         if args.kwarg2:
           kwargs[args.kwarg2[0]] = '"{}"'.format(args.kwarg2[1])
-    
+
         if args.output_network:
             print("Using output network {}".format(args.output_network))
             OUTPUT_DIR       = args.output_network
@@ -172,12 +172,12 @@ if __name__ == '__main__':
             OUTPUT_DIR       = os.path.join(PPA_DIR, args.project_short_id)
             # make OUTPUT_DIR
             if not os.path.exists(OUTPUT_DIR): os.mkdir(OUTPUT_DIR)
-    
+
             OUTPUT_FUTURE_DIR = determineProjectDirectory(OUTPUT_DIR, BASE_DIR, args.project_short_id)
             os.mkdir(OUTPUT_FUTURE_DIR)
             # move into it so the scratch is here
             os.chdir(OUTPUT_DIR)
-    
+
         # put log file into the run dir
         LOG_FILENAME     = "addproject_{}_{}_{}_{}.info.LOG".format(PROJECT, SCENARIO, args.project_short_id, NOW)
         Wrangler.setupLogging(os.path.join(OUTPUT_FUTURE_DIR, LOG_FILENAME),
@@ -188,10 +188,10 @@ if __name__ == '__main__':
 
         # Create a scratch directory to check out project repos into
         SCRATCH_SUBDIR   = "scratch"
-        TEMP_SUBDIR      = "Wrangler_tmp_" + NOW    
+        TEMP_SUBDIR      = "Wrangler_tmp_" + NOW
         if not os.path.exists(SCRATCH_SUBDIR): os.mkdir(SCRATCH_SUBDIR)
         os.chdir(SCRATCH_SUBDIR)
-    
+
         networks = {
             'hwy' :Wrangler.HighwayNetwork(modelType=Wrangler.Network.MODEL_TYPE_TM1, modelVersion=1.0,
                                            basenetworkpath=os.path.join(PIVOT_DIR,"hwy"),
@@ -220,15 +220,15 @@ if __name__ == '__main__':
         for netmode in ["hwy","trn"]:
             # if applying project
             if (netmode == "hwy" and args.hwy) or (netmode == "trn" and args.trn):
- 
+
                 # iterate through projects specified, since args.project is a list
                 for my_project in args.project:
-    
+
                     Wrangler.WranglerLogger.info("Applying project [%s] of type [%s]" % (my_project, netmode))
                     cloned_SHA1 = networks[netmode].cloneProject(networkdir=my_project, tag=args.tag,
                                                                  projtype="project", tempdir=TEMP_SUBDIR, **kwargs)
                     (parentdir, networkdir, gitdir, projectsubdir) = networks[netmode].getClonedProjectArgs(my_project, None, "project", TEMP_SUBDIR)
-    
+
                     applied_SHA1 = networks[netmode].applyProject(parentdir, networkdir, gitdir, projectsubdir, **kwargs)
 
             # write networks
@@ -244,6 +244,14 @@ if __name__ == '__main__':
                 source_file      = os.path.join(os.path.dirname(THIS_FILE), "set_capclass.job")
                 shutil.copyfile( source_file, os.path.join(SET_CAPCLASS_DIR, "apply.s"))
 
+                # if hwy project has set_capclass override, copy it to set_capclass/apply.s
+                for my_project in args.project:
+                    set_capclass_override = os.path.join(TEMP_SUBDIR, my_project, "set_capclass.job")
+                    if os.path.exists(set_capclass_override):
+                        dest_file = os.path.join(SET_CAPCLASS_DIR, "apply.s")
+                        shutil.copyfile(set_capclass_override, dest_file)
+                        Wrangler.WranglerLogger.info("Copied override {} to {}".format(set_capclass_override, dest_file))
+
                 # apply set_capclass before writing any hwy network
                 try:
                   applied_SHA1 = networks[netmode].applyProject(parentdir=TEMP_SUBDIR, networkdir=SET_CAPCLASS,
@@ -251,7 +259,7 @@ if __name__ == '__main__':
                 except Wrangler.NetworkException as ne:
                   Wrangler.WranglerLogger.debug("set_capclass exception: {}".format(ne.args[0]))
                   # this is expected -- since we're using a hack and this isn't a git project
-                  if ne.args[0].startswith("Git log failed"): 
+                  if ne.args[0].startswith("Git log failed"):
                     pass
                   else:
                     raise ne
@@ -270,7 +278,7 @@ if __name__ == '__main__':
                 except Wrangler.NetworkException as ne:
                   Wrangler.WranglerLogger.debug("check_for_errors exception: {}".format(ne.args[0]))
                   # this is expected -- since we're using a hack and this isn't a git project
-                  if ne.args[0].startswith("Git log failed"): 
+                  if ne.args[0].startswith("Git log failed"):
                     pass
                   else:
                     raise ne
@@ -290,4 +298,3 @@ if __name__ == '__main__':
                 Wrangler.TransitNetwork.capacity.writeTransitPrefixToVehicle(directory = final_path)
 
         Wrangler.WranglerLogger.debug("Successfully completed running %s" % os.path.abspath(__file__))
-
