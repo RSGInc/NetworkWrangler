@@ -275,11 +275,3 @@ scripts/BP Draft 2/Blueprint Basic/Blueprint Basic network_2050/trn/transitPrefi
 scripts/BP Draft 2/Blueprint Basic/Blueprint Basic network_2050/trn/transitVehicleToCapacity.csv
 scripts/BP Draft 2/Blueprint Basic/Blueprint Basic network_2050/trn/WALK_access.sup
 scripts/BP Draft 2/Blueprint Basic/Blueprint Basic network_2050/trn/xfare.far
-scripts/build_network_mtc_add_project WORKED.py
-scripts/net_spec_blueprint_onGitHub.py
-scripts/net_spec_CARBsensitivity add bp vision zero - did not work.py
-scripts/net_spec_CARBsensitivity.py
-scripts/net_spec_CARBsensitivity_all lane tolling - Worked but NOT USED.py
-scripts/net_spec_CARBsensitivity_didnotbuild.py
-scripts/net_spec_CARBsensitivity_it_thinks_baselineEqblueprint.py
-scripts/net_spec_CARBsensitivity_worked.py
