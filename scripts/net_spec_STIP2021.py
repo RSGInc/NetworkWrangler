@@ -13,7 +13,7 @@ TAG = "HEAD"
 
 # MANDATORY. Set this to the directory in which to write your outputs.
 # "hwy" and "trn" subdirectories will be created here.
-OUT_DIR = SCENARIO + "_network_{}"  # YEAR
+# OUT_DIR = SCENARIO + "_network_{}"  # YEAR
 
 # MANDATORY.  Should be a dictionary with keys "hwy", "muni", "rail", "bus"
 # to a list of projects.  A project can either be a simple string, or it can be

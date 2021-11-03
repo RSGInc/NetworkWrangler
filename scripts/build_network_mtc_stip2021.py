@@ -421,8 +421,6 @@ if __name__ == '__main__':
         print("NETWORK_PROJECTS not set in %s" % NETWORK_CONFIG)
         sys.exit(2)
 
-    LOG_FILENAME = "build%snetwork_%s_%s_%s.info.LOG" % ("TEST" if BUILD_MODE=="test" else "", PROJECT, SCENARIO, NOW)
-    Wrangler.setupLogging(LOG_FILENAME, LOG_FILENAME.replace("info", "debug"))
     if TRANSIT_CAPACITY_DIR:
         Wrangler.TransitNetwork.capacity = Wrangler.TransitCapacity(directory=TRANSIT_CAPACITY_DIR)
 
