@@ -2,18 +2,18 @@ import os
 
 # MANDATORY. Set this to be the Project Name.
 # e.g. "RTP2021", "TIP2021", etc
-PROJECT = "STIP 2021"
+PROJECT = "STIP2021"
 
 # MANDATORY. Set this to be the Scenario Name
-# e.g. "Base", "Baseline"
-# SCENARIO = "Baseline"
+# Pass this as --scenario to build_network_mtc.py
+assert(SCENARIO in ["NoProject","Project"])
 
 # MANDATORY. Set this to be the git tag for checking out network projects.
 TAG = "HEAD"
 
 # MANDATORY. Set this to the directory in which to write your outputs.
 # "hwy" and "trn" subdirectories will be created here.
-OUT_DIR = SCENARIO + "_network_{}"  # YEAR
+OUT_DIR = PROJECT + "_" + SCENARIO + "_network_{}"  # YEAR
 
 # MANDATORY.  Should be a dictionary with keys "hwy", "muni", "rail", "bus"
 # to a list of projects.  A project can either be a simple string, or it can be
@@ -198,7 +198,7 @@ STIP_PROJECTS = collections.OrderedDict([
 NETWORK_PROJECTS   = collections.OrderedDict()
 
 for YEAR in COMMITTED_PROJECTS.keys():
-    if NET_VARIANT == "Baseline":
+    if SCENARIO == "NoProject":
         # baseline: just committed
         NETWORK_PROJECTS[YEAR] = {
             'hwy':COMMITTED_PROJECTS[YEAR]['hwy'],
@@ -232,6 +232,19 @@ for YEAR in COMMITTED_PROJECTS.keys():
                     Wrangler.WranglerLogger.info("Removing {} {} {}".format(YEAR, netmode, project))
                     del NETWORK_PROJECTS[YEAR][netmode][project_idx]
                     continue
+
+#
+# For every year where a project is applied do the following:
+# Convert all zero-length links to 0.01
+# Move buses to HOV/Express lanes at the end
+#
+for YEAR in NETWORK_PROJECTS.keys():
+    # if anything is applied
+    if ((len(NETWORK_PROJECTS[YEAR]['hwy']) > 0) or (len(NETWORK_PROJECTS[YEAR]['trn']) > 0)):
+        NETWORK_PROJECTS[YEAR]['hwy'].append('No_zero_length_links')
+
+    if ((len(NETWORK_PROJECTS[YEAR]['hwy']) > 0) or (len(NETWORK_PROJECTS[YEAR]['trn']) > 0)):
+        NETWORK_PROJECTS[YEAR]['trn'].append('Move_buses_to_HOV_EXP_lanes')
 
 # OPTIONAL. The default route network project directory is Y:\networks.  If
 # projects are stored in another directory, then use this variable to specify it.

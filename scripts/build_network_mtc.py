@@ -290,7 +290,7 @@ def preCheckRequirementsForAllProjects(networks):
                     applied_commit_age = datetime.datetime.now() - applied_commit_date
     
                     # if older than one year, holler
-                    STALE_YEARS = 2
+                    STALE_YEARS = 3
                     if applied_commit_age > datetime.timedelta(days=365*STALE_YEARS):
                         Wrangler.WranglerLogger.warn("  This project was last updated %.1f years ago (over %d), on %s" % \
                                                      (applied_commit_age.days/365.0,
@@ -362,6 +362,7 @@ if __name__ == '__main__':
     parser.add_argument("--configword", help="optional word for network specification script")
     parser.add_argument("--model_type", choices=[Wrangler.Network.MODEL_TYPE_TM1, Wrangler.Network.MODEL_TYPE_TM2],
                         default=Wrangler.Network.MODEL_TYPE_TM1)
+    parser.add_argument("--scenario", help="optional SCENARIO name")
     parser.add_argument("net_spec", metavar="network_specification.py", help="Script which defines required variables indicating how to build the network")
     args = parser.parse_args()
 
@@ -386,6 +387,7 @@ if __name__ == '__main__':
 
     # Read the configuration
     NETWORK_CONFIG = args.net_spec
+    if args.scenario: SCENARIO = args.scenario
     exec(open(NETWORK_CONFIG).read())
 
     # Verify mandatory fields are set
