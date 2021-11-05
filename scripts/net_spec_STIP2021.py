@@ -122,12 +122,14 @@ COMMITTED_PROJECTS = collections.OrderedDict([
                'SOL070020_I80_I680_SR12_Int_1_2A',
                'FBP_NP_036_SR29_Imola_PNR',
                'ALA170052_Fruitvale_Ave_ped_improvements',
-               'EXP_Blueprint_NoProject'],
+               'EXP_Blueprint_NoProject',
+               {'name': 'RRSP_Alameda_Point_Transit_Improvements', 'kwargs':{'BUILT':"'built'"}}],
         'trn':['SF_010028_Caltrain_Modernization',
                'SON090002_SMART_to_Windsor',
                'REG090037_New_BART_Trains',
                'FBP_NP_036_SR29_Imola_PNR',
-               'SOL070020_I80_I680_SR12_Int_1_2A']
+               'SOL070020_I80_I680_SR12_Int_1_2A',
+               {'name': 'RRSP_Alameda_Point_Transit_Improvements', 'kwargs':{'BUILT':"'built'"}}]
     }),
     (2030, {
         'hwy':[{'name':'Bridge_Toll_Updates_2_2pct', 'kwargs':{'MODELYEAR':'2030'}},
