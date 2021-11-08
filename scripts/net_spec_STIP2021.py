@@ -190,7 +190,7 @@ STIP_PROJECTS = collections.OrderedDict([
         'trn':[]
     }),
     (2050, {
-        'hwy':[],
+        'hwy':['STIP_ITS_SM'],
         'trn':[]
     })
 ])
