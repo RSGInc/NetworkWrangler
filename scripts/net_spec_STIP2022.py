@@ -2,7 +2,7 @@ import os
 
 # MANDATORY. Set this to be the Project Name.
 # e.g. "RTP2021", "TIP2021", etc
-PROJECT = "STIP2021"
+PROJECT = "STIP2022"
 
 # MANDATORY. Set this to be the Scenario Name
 # Pass this as --scenario to build_network_mtc.py
