@@ -170,7 +170,7 @@ STIP_PROJECTS = collections.OrderedDict([
         'trn':[],
     }),
     (2025, {
-        'hwy':[],
+        'hwy':['STIP2022_SCL110001_US101SV_EXP_P5'],
         'trn':[]
     }),
     (2030, {
