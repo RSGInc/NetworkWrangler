@@ -175,8 +175,10 @@ STIP_PROJECTS = collections.OrderedDict([
     }),
     (2030, {
         'hwy':['STIP2022_SM190009_US101SM_EXP',
-               'STIP2022_CC170017_I680NB_EXP_P1'],
-        'trn':['MAJ_BRT030001_BART_to_SanJose']
+               'STIP2022_CC170017_I680NB_EXP_P1',
+               'FBP_AL_045_Oak_Ala_Access_Pr'],
+        'trn':['MAJ_BRT030001_BART_to_SanJose',
+               'FBP_AL_045_Oak_Ala_Access_Pr']
     }),
     (2035, {
         'hwy':[],
