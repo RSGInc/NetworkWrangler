@@ -289,7 +289,7 @@ def preCheckRequirementsForAllProjects(networks):
                     applied_commit_age = datetime.datetime.now() - applied_commit_date
 
                     # if older than one year, holler
-                    STALE_YEARS = 2
+                    STALE_YEARS = 3
                     if applied_commit_age > datetime.timedelta(days=365*STALE_YEARS):
                         Wrangler.WranglerLogger.warn("  This project was last updated %.1f years ago (over %d), on %s" % \
                                                      (applied_commit_age.days/365.0,
@@ -362,7 +362,7 @@ if __name__ == '__main__':
     parser.add_argument("--model_type", choices=[Wrangler.Network.MODEL_TYPE_TM1, Wrangler.Network.MODEL_TYPE_TM2],
                         default=Wrangler.Network.MODEL_TYPE_TM1)
     parser.add_argument("net_spec", metavar="network_specification.py", help="Script which defines required variables indicating how to build the network")
-    parser.add_argument("netvariant", choices=["Baseline", "Blueprint", "Alt1", "Alt2"], help="Specify which network variant network to create.")
+    parser.add_argument("netvariant", choices=["Baseline", "Blueprint", "Alt1", "Alt2", "NextGenFwy"], help="Specify which network variant network to create.")
     args = parser.parse_args()
 
     NOW         = time.strftime("%Y%b%d.%H%M%S")
