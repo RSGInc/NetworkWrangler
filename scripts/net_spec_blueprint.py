@@ -157,7 +157,7 @@ BLUEPRINT_PROJECTS = collections.OrderedDict([
         (2020, {'hwy':[],
                 'trn':[]
         }),
-        (2025, {'hwy':[{'name':'RRSP_Alameda_Point_Transit_Improvements',                                   'tag':'PBA50'},
+        (2025, {'hwy':[{'name':'RRSP_Alameda_Point_Transit_Improvements',                                   'tag':'PBA50_Blueprint'},
                        'MAJ_MTC050027_Berkeley_Ferry',
                        'MAJ_WETA_Service_Frequency_Increase',                       
                        {'name':'Transform_SR37_Widening_Interim',                                           'variants_exclude':['Alt1']},
@@ -223,7 +223,7 @@ BLUEPRINT_PROJECTS = collections.OrderedDict([
                        'FBP_AL_001_NewarkFremPDA',
                        {'name':'FBP_MU_059_ACTransbay_Freq_Incr',                                         'variants_exclude':['Alt2']},
                        'MAJ_AC_Frequency_Improvement',
-                       {'name':'RRSP_Alameda_Point_Transit_Improvements',                                 'tag':'PBA50'},
+                       {'name':'RRSP_Alameda_Point_Transit_Improvements',                                 'tag':'PBA50_Blueprint'},
                        'MAJ_MTC050027_Berkeley_Ferry',
                        'MAJ_WETA_Service_Frequency_Increase',
                        {'name':'FBP_MU_046_ACE_Freq_Inc',       'kwargs':{'MODELYEAR':'2025'}},                       
