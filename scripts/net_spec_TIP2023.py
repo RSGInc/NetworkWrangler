@@ -174,18 +174,29 @@ TIP_PROJECTS = collections.OrderedDict([
         'trn':[]
     }),
     (2030, {
-        'hwy':['FBP_AL_062_TassajaraWide',
+        'hwy':['SF_070027_Yerba_Buena_Ramp_Imp',
+               'MAJ_SF_Congestion_Pricing',
+               'MAJ_MissionBay_SF_Ferry',
+               'FBP_SM_033_US101_Holly_Interchange',
+               'FBP_SM_035_Peninsula_101_OnOffRamps',
+               'MAJ_SCL050009_VTA_Eastridge_Extension',
+               'FBP_SL_033_FairgroundsWide',
+               'FBP_AL_062_TassajaraWide',
                'FBP_AL_055_DubBlvd_NCanyons_Ext',
                'FBP_AL_051_7St_Grade_Sep_West',
                'FBP_AL_044_I880_Whipple_Imps'],
-        'trn':[]
+        'trn':['SF_070027_Yerba_Buena_Ramp_Imp',
+               'MAJ_SF_Congestion_Pricing',
+               'MAJ_MissionBay_SF_Ferry',
+               'MAJ_RedwoodCity_SF_Ferry',
+               'MAJ_SCL050009_VTA_Eastridge_Extension']
     }),
     (2035, {
         'hwy':[],
         'trn':[]
     }),
     (2040, {
-        'hwy':[],
+        'hwy':['FBP_MR_021_101_580_Direct_Connector'],
         'trn':[]
     }),
     (2045, {
