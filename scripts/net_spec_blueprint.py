@@ -187,7 +187,7 @@ BLUEPRINT_PROJECTS = collections.OrderedDict([
                        'FBP_SC_103_MontagueWide',
                        {'name':'MAJ_Bay_Area_Forward_all',      'kwargs':{'MODELYEAR':'2025'}},
                        'FBP_CC_057_LoneTreeWide',
-                       'FBP_CC_063_BrentwoodWide',
+                       {'name':'FBP_CC_063_BrentwoodWide',                                                         'tag':'PBA50_Blueprint'},
                        'FBP_CC_067_WillowPassWide',
                        'FBP_CC_065_LaurelWide',
                        'FBP_AL_062_TassajaraWide',
