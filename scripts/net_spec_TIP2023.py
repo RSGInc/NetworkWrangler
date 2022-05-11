@@ -168,7 +168,9 @@ TIP_PROJECTS = collections.OrderedDict([
         'trn':[]
     }),
     (2025, {
-        'hwy':[],
+        'hwy':[
+            {'name':'FBP_CC_054_CrowCanyonWide',    'kwargs':{'PHASE':"'1'"}}
+        ],
         'trn':[]
     }),
     (2030, {
@@ -190,7 +192,8 @@ TIP_PROJECTS = collections.OrderedDict([
                {'name': 'FBP_CC_040_041_042_I680_SR4_Int_Phases_1_2_4_5', 'kwargs':{'PHASE':"'2'"}},
                'FBP_CC_051_SR4_Operation_Improvements_WB',
                'FBP_CC_050_SR4_Operation_Improvements_EB',
-               'CC_070035_I80_SPDamRd_Int_Phase1' ],
+               'CC_070035_I80_SPDamRd_Int_Phase1',
+               {'name':'FBP_CC_054_CrowCanyonWide',    'kwargs':{'PHASE':"'2'"}} ],
         'trn':['SF_070027_Yerba_Buena_Ramp_Imp',
                'MAJ_SF_Congestion_Pricing',
                'MAJ_MissionBay_SF_Ferry',
