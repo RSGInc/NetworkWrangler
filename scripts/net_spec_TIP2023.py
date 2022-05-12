@@ -131,11 +131,8 @@ COMMITTED_PROJECTS = collections.OrderedDict([
     }),
     (2030, {
         'hwy':[{'name':'Bridge_Toll_Updates_2_2pct', 'kwargs':{'MODELYEAR':'2030'}},
-               'EXP_Blueprint_NoProject'
-               'MAJ_Geary_BRT_Phase2',
-               'FBP_SC_103_MontagueWide'],
-        'trn':['BART_NoProject',
-               'MAJ_Geary_BRT_Phase2']
+               'EXP_Blueprint_NoProject'],
+        'trn':['BART_NoProject']
     }),
     (2035, {
         'hwy':[{'name':'Bridge_Toll_Updates_2_2pct', 'kwargs':{'MODELYEAR':'2035'}},
@@ -144,8 +141,7 @@ COMMITTED_PROJECTS = collections.OrderedDict([
     }),
     (2040, {
         'hwy':[{'name':'Bridge_Toll_Updates_2_2pct', 'kwargs':{'MODELYEAR':'2040'}},
-               'EXP_Blueprint_NoProject',
-               'FBP_SC_039_SR237WBWide'],
+               'EXP_Blueprint_NoProject'],
         'trn':[]
     }),
     (2045, {
@@ -198,19 +194,24 @@ TIP_PROJECTS = collections.OrderedDict([
                'FBP_CC_050_SR4_Operation_Improvements_EB',
                'CC_070035_I80_SPDamRd_Int_Phase1',
                {'name':'FBP_CC_054_CrowCanyonWide',    'kwargs':{'PHASE':"'2'"}},
-               'FBP_CC_063_BrentwoodWide' ],
+               'FBP_CC_063_BrentwoodWide',
+                'MAJ_Geary_BRT_Phase2',
+               'FBP_SC_103_MontagueWide',
+                'ALA_Fallon_Realign'],
         'trn':['SF_070027_Yerba_Buena_Ramp_Imp',
                'MAJ_SF_Congestion_Pricing',
                'MAJ_MissionBay_SF_Ferry',
                'MAJ_RedwoodCity_SF_Ferry',
-               'MAJ_SCL050009_VTA_Eastridge_Extension']
+               'MAJ_SCL050009_VTA_Eastridge_Extension',
+               'MAJ_Geary_BRT_Phase2']
     }),
     (2035, {
         'hwy':[],
         'trn':[]
     }),
     (2040, {
-        'hwy':['FBP_MR_021_101_580_Direct_Connector'],
+        'hwy':['FBP_MR_021_101_580_Direct_Connector',
+        'FBP_SC_039_SR237WBWide'],
         'trn':[]
     }),
     (2045, {
