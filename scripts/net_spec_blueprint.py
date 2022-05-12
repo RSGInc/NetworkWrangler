@@ -191,7 +191,7 @@ BLUEPRINT_PROJECTS = collections.OrderedDict([
                        'FBP_CC_067_WillowPassWide',
                        'FBP_CC_065_LaurelWide',
                        'FBP_AL_062_TassajaraWide',
-                       'FBP_SC_039_SR237WBWide',
+                       {'name':'FBP_SC_039_SR237WBWide',                                                     'tag':'PBA50_Blueprint'},      
                        'FBP_AL_051_7St_Grade_Sep_West',
                        'FBP_AL_044_I880_Whipple_Imps',
                        'FBP_AL_055_DubBlvd_NCanyons_Ext',
