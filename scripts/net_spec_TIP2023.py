@@ -6,14 +6,15 @@ PROJECT = "TIP2023"
 
 # MANDATORY. Set this to be the Scenario Name
 # Pass this as --scenario to build_network_mtc.py
-assert(SCENARIO in ["NoProject","Project"])
+#assert(SCENARIO in ["NoProject","Project"])
 
 # MANDATORY. Set this to be the git tag for checking out network projects.
 TAG = "HEAD"
 
 # MANDATORY. Set this to the directory in which to write your outputs.
 # "hwy" and "trn" subdirectories will be created here.
-OUT_DIR = PROJECT + "_" + SCENARIO + "_network_{}"  # YEAR
+#OUT_DIR = PROJECT + "_" + SCENARIO + "_network_{}"  # YEAR
+OUT_DIR = PROJECT + "_" + "_network_{}"  # YEAR
 
 # MANDATORY.  Should be a dictionary with keys "hwy", "muni", "rail", "bus"
 # to a list of projects.  A project can either be a simple string, or it can be
@@ -295,7 +296,7 @@ TIP_PROJECTS = collections.OrderedDict([
                        {'name':'FBP_CC_040_041_042_I680_SR4_Int_Phases_1_2_4_5', 'kwargs':{'PHASE':"'1'"},  'variants_exclude':['Alt1']},
                        {'name':'FBP_CC_040_041_042_I680_SR4_Int_Phases_1_2_4_5', 'kwargs':{'PHASE':"'2'"},  'variants_exclude':['Alt1']},
                        {'name':'FBP_CC_050_SR4_Operation_Improvements_EB',                                  'variants_exclude':['Alt1']},
-                       {'name':'FBP_CC_050_SR4_Operation_Improvements_WB',                                  'variants_exclude':['Alt1']},
+                       {'name':'FBP_CC_051_SR4_Operation_Improvements_WB',                                  'variants_exclude':['Alt1']},
                        {'name':'EXP_uncommitted_noAllLaneTolling', 'kwargs':{'MODELYEAR':'2030'},         'variants_include':['NextGenFwy']}],
                 'trn':['BP_PDA_Transit_Enhancements',
                        {'name':'FBP_MU_046_ACE_Freq_Inc',       'kwargs':{'MODELYEAR':'2030'}},
