@@ -185,7 +185,6 @@ TIP_PROJECTS = collections.OrderedDict([
                        {'name':'EIR1_EXP_uncommitted_all',      'kwargs':{'MODELYEAR':'2025'},              'variants_include':['Alt1']},
                        {'name':'FBP_SF_012_Geneva_Harney_BRT',  'kwargs':{'MODELYEAR':'2025'}},
                        {'name':'FBP_CC_15_23rd_St_BRT',         'kwargs':{'MODELYEAR':'2025'}},
-                       {'name':'MAJ_Bay_Area_Forward_all',      'kwargs':{'MODELYEAR':'2025'}},
                        'FBP_CC_057_LoneTreeWide',
                        'FBP_CC_067_WillowPassWide',
                        'FBP_CC_065_LaurelWide',
