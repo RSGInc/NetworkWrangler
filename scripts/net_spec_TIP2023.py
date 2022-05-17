@@ -117,7 +117,6 @@ COMMITTED_PROJECTS = collections.OrderedDict([
                'SON070004_101_MarinSonNarrows_Phase2',
                'SOL110006_Jepson_1B_1C',
                'SCL190008_US101_DLC_Int_Imp',
-               'CC_170061_Bus_On_Shoulder_680BRT',
                'I880_US101_AdaptiveRampMetering',
                'SOL070020_I80_I680_SR12_Int_1_2A',
                'FBP_NP_036_SR29_Imola_PNR',
