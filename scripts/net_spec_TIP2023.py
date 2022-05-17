@@ -229,6 +229,7 @@ TIP_PROJECTS = collections.OrderedDict([
                        'FBP_SM_020_Regional_Express_Buses',            
                        'MAJ_Sonoma_Frequency_Increase',
                        'SF_Park_Presidio_HOV_Pilot',
+                       'SF_Lombard_HOV_Pilot',
                        {'name':'EIR1_Freq_Boosts',              'kwargs':{'MODELYEAR':'2025'},            'variants_include':['Alt1']},
                        {'name':'EIR2_HRA_Freq_Incr',            'kwargs':{'MODELYEAR':'2025'},            'variants_include':['Alt2']},
                        {'name':'EIR2_PDA_Freq_Incr',            'kwargs':{'MODELYEAR':'2025'},            'variants_include':['Alt2']},
