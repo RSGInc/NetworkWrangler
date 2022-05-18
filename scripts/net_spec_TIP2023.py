@@ -123,7 +123,6 @@ COMMITTED_PROJECTS = collections.OrderedDict([
                'ALA170052_Fruitvale_Ave_ped_improvements',
                'EXP_Blueprint_NoProject'],
         'trn':['SF_010028_Caltrain_Modernization',
-               'SON090002_SMART_to_Windsor',
                'REG090037_New_BART_Trains',
                'FBP_NP_036_SR29_Imola_PNR',
                'SOL070020_I80_I680_SR12_Int_1_2A']
@@ -131,7 +130,8 @@ COMMITTED_PROJECTS = collections.OrderedDict([
     (2030, {
         'hwy':[{'name':'Bridge_Toll_Updates_2_2pct', 'kwargs':{'MODELYEAR':'2030'}},
                'EXP_Blueprint_NoProject'],
-        'trn':['BART_NoProject']
+        'trn':['BART_NoProject',
+               'SON090002_SMART_to_Windsor'],
     }),
     (2035, {
         'hwy':[{'name':'Bridge_Toll_Updates_2_2pct', 'kwargs':{'MODELYEAR':'2035'}},
@@ -232,8 +232,7 @@ TIP_PROJECTS = collections.OrderedDict([
                        {'name':'EIR1_Freq_Boosts',              'kwargs':{'MODELYEAR':'2025'},            'variants_include':['Alt1']},
                        {'name':'EIR2_HRA_Freq_Incr',            'kwargs':{'MODELYEAR':'2025'},            'variants_include':['Alt2']},
                        {'name':'EIR2_PDA_Freq_Incr',            'kwargs':{'MODELYEAR':'2025'},            'variants_include':['Alt2']},
-                       {'name':'EIR2_Val_Link_ExpressBus',                                                'variants_include':['Alt2']},
-                       {'name':'SON090002_SMART_NorthPetaluma',                                           'variants_exclude':['Baseline']}]
+                       {'name':'EIR2_Val_Link_ExpressBus',                                                'variants_include':['Alt2']}]
         }),
         (2030, {'hwy':['MAJ_SanPablo_BRT',
                        'SF_070027_Yerba_Buena_Ramp_Imp',
@@ -328,7 +327,8 @@ TIP_PROJECTS = collections.OrderedDict([
                        {'name':'EIR2_HRA_Freq_Incr',            'kwargs':{'MODELYEAR':'2030'},            'variants_include':['Alt2']},
                        {'name':'EIR2_PDA_Freq_Incr',            'kwargs':{'MODELYEAR':'2030'},            'variants_include':['Alt2']},
                        {'name':'EIR2_Fix_Alt2',                 'kwargs':{'MODELYEAR':'2030'},            'variants_include':['Alt2']},
-                       {'name':'Transform_SR37_Widening_Interim',                                         'variants_exclude':['Alt1']}]
+                       {'name':'Transform_SR37_Widening_Interim',                                         'variants_exclude':['Alt1']},
+                       {'name':'SON090002_SMART_NorthPetaluma',                                           'variants_exclude':['Baseline']}]
         }),
         (2035, {'hwy':['MAJ_MuniForward_Uncommitted',
                        'MAJ_Treasure_Island_Congestion_Pricing',
