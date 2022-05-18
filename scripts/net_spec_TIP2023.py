@@ -277,7 +277,7 @@ TIP_PROJECTS = collections.OrderedDict([
                        'FBP_AL_062_TassajaraWide',
                        'ALA090020_I880_Industrial_Parkway_AuxLanes',
                        'FBP_CC_063_BrentwoodWide',
-                       'CC_170061_Bus_On_Shoulder_680BRT ',
+                       'CC_170061_Bus_On_Shoulder_680BRT',
                        'FBP_CC_054_CrowCanyonWide',
                        'MAJ_Geary_BRT_Phase2',
                        'MAJ_SF_Congestion_Pricing',
