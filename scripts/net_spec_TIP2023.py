@@ -272,6 +272,7 @@ TIP_PROJECTS = collections.OrderedDict([
                        'FBP_SM_027_US101_92',
                        'FBP_SM_007_ElCamino_CompleteStreets',
                        'FBP_AL_044_I880_Whipple_Imps',
+                       'ALA110002_I880_Industrial_Interchange',
                        'FBP_AL_051_7St_Grade_Sep_West',
                        'FBP_AL_055_DubBlvd_NCanyons_Ext',
                        'FBP_AL_062_TassajaraWide',
