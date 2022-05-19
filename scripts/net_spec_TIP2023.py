@@ -289,6 +289,7 @@ TIP_PROJECTS = collections.OrderedDict([
                        'FBP_SL_033_FairgroundsWide',
                        'ALA_Fallon_Realign',
                        'ALA210027_180_Powell_Transit_Access',
+                       'ALA210028_I80_HOV_Bus_Lane_Ext',
                        {'name':'FBP_CC_040_041_042_I680_SR4_Int_Phases_1_2_4_5', 'kwargs':{'PHASE':"'1'"},  'variants_exclude':['Alt1']},
                        {'name':'FBP_CC_040_041_042_I680_SR4_Int_Phases_1_2_4_5', 'kwargs':{'PHASE':"'2'"},  'variants_exclude':['Alt1']},
                        {'name':'FBP_CC_050_SR4_Operation_Improvements_EB',                                  'variants_exclude':['Alt1']},
