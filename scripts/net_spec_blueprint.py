@@ -244,7 +244,7 @@ BLUEPRINT_PROJECTS = collections.OrderedDict([
                        {'name':'FBP_SF_012_Geneva_Harney_BRT',  'kwargs':{'MODELYEAR':'2025'},              'tag':'PBA50_Blueprint'},
                        {'name':'FBP_CC_15_23rd_St_BRT',         'kwargs':{'MODELYEAR':'2025'}},
                        'FBP_CC_030_OakleyAmtrak',
-                       'FBP_SM_020_Regional_Express_Buses',
+                       {'name':'FBP_SM_020_Regional_Express_Buses',                                         'tag':'PBA50_Blueprint'},
                        'MAJ_MissionBay_SF_Ferry',              
                        'MAJ_Sonoma_Frequency_Increase',
                        {'name':'EIR1_Freq_Boosts',              'kwargs':{'MODELYEAR':'2025'},            'variants_include':['Alt1']},

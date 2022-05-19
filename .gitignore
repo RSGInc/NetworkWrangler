@@ -275,3 +275,4 @@ scripts/BP Draft 2/Blueprint Basic/Blueprint Basic network_2050/trn/transitPrefi
 scripts/BP Draft 2/Blueprint Basic/Blueprint Basic network_2050/trn/transitVehicleToCapacity.csv
 scripts/BP Draft 2/Blueprint Basic/Blueprint Basic network_2050/trn/WALK_access.sup
 scripts/BP Draft 2/Blueprint Basic/Blueprint Basic network_2050/trn/xfare.far
+scripts/net_spec_test_flavia.py
