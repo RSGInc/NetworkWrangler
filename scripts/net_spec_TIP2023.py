@@ -9,7 +9,7 @@ PROJECT = "TIP2023"
 #assert(SCENARIO in ["NoProject","Project"])
 
 # MANDATORY. Set this to be the git tag for checking out network projects.
-TAG = "HEAD"
+TAG = "TIP_2023"
 
 # MANDATORY. Set this to the directory in which to write your outputs.
 # "hwy" and "trn" subdirectories will be created here.
