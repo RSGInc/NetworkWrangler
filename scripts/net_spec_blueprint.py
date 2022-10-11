@@ -4,7 +4,9 @@ import os
 PROJECT  = "Blueprint"
 
 # MANDATORY. Set this to be the git tag for checking out network projects.
-TAG = "PBA50_Blueprint"
+#TAG = "HEAD"               # Use this tag if you want NetworkWrangler to use the latest version in the local repo to build the network
+#TAG = "PBA50_Blueprint"    # Use this tag if you want to replicate the network built for PBA50
+TAG = "NGF_NoProject"      # Use this tag if you want to build the Next Gen Freeways No Project variant
 
 # A Alamedaproject can either be a simple string, or it can be
 # a dictionary with with keys 'name', 'tag' (optional), and 'kwargs' (optional)
