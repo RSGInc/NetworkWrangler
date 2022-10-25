@@ -19,7 +19,7 @@ class Supplink(dict):
     def __init__(self):
         dict.__init__(self)
 
-        MODES_INV = dict((v,k) for k,v in Supplink.MODES.iteritems())
+        MODES_INV = dict((v,k) for k,v in Supplink.MODES.items())
 
         self.id=''  # string, e.g. "1-7719"
         self.comment=None
