@@ -3,9 +3,9 @@ import Wrangler
 
 # Based on NetworkWrangler\scripts\build_network.py
 #
-# Blueprint scenarios are No Project, Blueprint Basic, Blueprint Plus
+# Transit Recovery scenarios are Baseline, 
 # Specify the scenario when building
-# Ex python build_network_blueprint.py net_spec_blueprint.py BlueprintBasic
+# Ex python build_network_mtc_transit_recovery.py net_spec_mtc_transit_recovery.py Baseline
 
 USAGE = """
 
@@ -24,7 +24,7 @@ USAGE = """
 ###############################################################################
 # MANDATORY. Set this to be the Project Name.
 # e.g. "RTP2021", "TIP2021", etc
-PROJECT = None
+PROJECT = "TrnRecov"
 
 # MANDATORY. Set this to be the Scenario Name
 # e.g. "Base", "Baseline"
@@ -131,7 +131,7 @@ def checkRequirements(REQUIREMENTS, PROJECTS, req_type='prereq'):
     for netmode in REQUIREMENTS.keys():
         for project in REQUIREMENTS[netmode].keys():
             project_year = getProjectYear(PROJECTS, project, netmode)
-            if project_year == -1:
+            if (type(project_year) == int) and (project_year == -1):
                 Wrangler.WranglerLogger.warn('Cannot find the {} project {} to check its requirements'.format(netmode, project))
                 continue  # raise?
 
@@ -143,10 +143,11 @@ def checkRequirements(REQUIREMENTS, PROJECTS, req_type='prereq'):
                 req_proj_years = {}
                 for req_proj in req_proj_list:
                     req_project_year = getProjectYear(PROJECTS, req_proj, req_netmode)
+                    Wrangler.WranglerLogger.debug('req_project_year=[{}]'.format(req_project_year))
 
                     # prereq
                     if req_type=="prereq":
-                        if req_project_year < 0:
+                        if (type(req_project_year) == int) and (req_project_year < 0):
                             is_ok = False  # required project must be found
                             Wrangler.WranglerLogger.warn("required project not found")
                         if req_project_year > project_year:
@@ -276,7 +277,7 @@ def preCheckRequirementsForAllProjects(networks):
                     # non-test mode => get explicit approval
                     if BUILD_MODE !="test":
                         Wrangler.WranglerLogger.warn("  Is this ok? (y/n) ")
-                        response = raw_input("")
+                        response = input("")
                         Wrangler.WranglerLogger.debug("  response = [%s]" % response)
                         if response.strip().lower()[0] != "y":
                             sys.exit(2)
@@ -296,7 +297,7 @@ def preCheckRequirementsForAllProjects(networks):
                                                       STALE_YEARS, applied_commit_date.strftime("%x")))
                         if BUILD_MODE !="test":
                             Wrangler.WranglerLogger.warn("  Is this ok? (y/n) ")
-                            response = raw_input("")
+                            response = input("")
                             Wrangler.WranglerLogger.debug("  response = [%s]" % response)
                             if response.strip().lower() not in ["y", "yes"]:
                                 sys.exit(2)
@@ -321,7 +322,7 @@ def preCheckRequirementsForAllProjects(networks):
             Wrangler.WranglerLogger.debug('All PRE-REQUISITES were found. Are the PRE-REQUISITES matches correct? (y/n)')
         else:
             Wrangler.WranglerLogger.debug('!!!WARNING!!! Some PRE-REQUISITES were not found or ordered correctly.  Continue anyway? (y/n)')
-        response = raw_input("")
+        response = input("")
         Wrangler.WranglerLogger.debug("  response = [%s]" % response)
         if response.strip().lower() not in ["y", "yes"]:
             sys.exit(2)
@@ -334,7 +335,7 @@ def preCheckRequirementsForAllProjects(networks):
             Wrangler.WranglerLogger.debug('All CO-REQUISITES were found. Are the CO-REQUISITE matches correct? (y/n)')
         else:
             Wrangler.WranglerLogger.debug('!!!WARNING!!! Some CO-REQUISITES were not found.  Continue anyway? (y/n)')
-        response = raw_input("")
+        response = input("")
         Wrangler.WranglerLogger.debug("  response = [%s]" % response)
         if response.strip().lower() not in ["y", "yes"]:
             sys.exit(2)
@@ -347,7 +348,7 @@ def preCheckRequirementsForAllProjects(networks):
             Wrangler.WranglerLogger.debug('!!!WARNING!!! Conflicting projects were found.  Continue anyway? (y/n)')
         else:
             Wrangler.WranglerLogger.debug('No conflicting projects were found. Enter \'y\' to continue.')
-        response = raw_input("")
+        response = input("")
         Wrangler.WranglerLogger.debug("  response = [%s]" % response)
         if response.strip().lower() not in ["y", "yes"]:
             sys.exit(2)
@@ -362,7 +363,7 @@ if __name__ == '__main__':
     parser.add_argument("--model_type", choices=[Wrangler.Network.MODEL_TYPE_TM1, Wrangler.Network.MODEL_TYPE_TM2],
                         default=Wrangler.Network.MODEL_TYPE_TM1)
     parser.add_argument("net_spec", metavar="network_specification.py", help="Script which defines required variables indicating how to build the network")
-    parser.add_argument("netvariant", choices=["Baseline", "Blueprint", "Alt1", "Alt2", "NextGenFwy","TIP2023"], help="Specify which network variant network to create.")
+    parser.add_argument("netvariant", choices=["Baseline", "BestCase", "WorstCase"], help="Specify which network variant network to create.")
     args = parser.parse_args()
 
     NOW         = time.strftime("%Y%b%d.%H%M%S")
@@ -384,19 +385,14 @@ if __name__ == '__main__':
         HWY_SUBDIR       = "hwy"
         HWY_NET_NAME     = "mtc_final_network_base.net"
 
-    PROJECT = "Blueprint"
-
     # Read the configuration
     NETWORK_CONFIG = args.net_spec
     NET_VARIANT    = args.netvariant
-
-    # networks and log file will be in BlueprintNetworks
-    if not os.path.exists("BlueprintNetworks"):
-        os.mkdir("BlueprintNetworks")
+    OUT_DIR        = "{}_network_".format(NET_VARIANT) + "{}"
 
     LOG_FILENAME = "build%snetwork_%s_%s_%s.info.LOG" % ("TEST" if BUILD_MODE=="test" else "", PROJECT, NET_VARIANT, NOW)
-    Wrangler.setupLogging(os.path.join("BlueprintNetworks",LOG_FILENAME),
-                          os.path.join("BlueprintNetworks",LOG_FILENAME.replace("info", "debug")))
+    Wrangler.setupLogging(LOG_FILENAME,
+                          LOG_FILENAME.replace("info", "debug"))
 
     exec(open(NETWORK_CONFIG).read())
 
@@ -451,7 +447,7 @@ if __name__ == '__main__':
 
 
     # Wrangler.WranglerLogger.debug("NETWORK_PROJECTS=%s NET_MODES=%s" % (str(NETWORK_PROJECTS), str(NET_MODES)))
-    preCheckRequirementsForAllProjects(networks)
+    # preCheckRequirementsForAllProjects(networks)
 
     # create the subdir for SET_CAPCLASS with set_capclass.job as apply.s
     SET_CAPCLASS     = "set_capclass"
@@ -459,8 +455,6 @@ if __name__ == '__main__':
     os.makedirs(SET_CAPCLASS_DIR)
     source_file      = os.path.join(os.path.dirname(THIS_FILE), "set_capclass.job")
     shutil.copyfile( source_file, os.path.join(SET_CAPCLASS_DIR, "apply.s"))
-
-    networks_without_earthquake = {}
 
     # Network Loop #2: Now that everything has been checked, build the networks.
     for YEAR in NETWORK_PROJECTS.keys():
@@ -498,93 +492,27 @@ if __name__ == '__main__':
             Wrangler.WranglerLogger.info("No applied projects for this year -- skipping output")
             continue
 
-        if NET_VARIANT!="Baseline" and YEAR==2015:
-            Wrangler.WranglerLogger.info("Blueprint 2015 == Baseline 2015 -- skipping output")
-            continue
+        # Initialize output subdirectories up a level (not in scratch)
+        hwypath=os.path.join("..", OUT_DIR.format(YEAR),HWY_SUBDIR)
+        if not os.path.exists(hwypath): os.makedirs(hwypath)
+        trnpath = os.path.join("..", OUT_DIR.format(YEAR),TRN_SUBDIR)
+        if not os.path.exists(trnpath): os.makedirs(trnpath)
 
-        # Baseline AND YEAR >= 2035 get SLR, covered in next clause
-        if NET_VARIANT!="Baseline" or YEAR<2035:
+        networks['hwy'].write(path=hwypath,name=HWY_NET_NAME,suppressQuery=True,
+                              suppressValidation=True) # MTC TM1 doesn't have turn penalties
 
-            hwypath=os.path.join("..", "BlueprintNetworks", "net_{}_{}".format(YEAR, NET_VARIANT), HWY_SUBDIR)
-            if not os.path.exists(hwypath): os.makedirs(hwypath)
-            trnpath = os.path.join("..", "BlueprintNetworks", "net_{}_{}".format(YEAR, NET_VARIANT), TRN_SUBDIR)
-            if not os.path.exists(trnpath): os.makedirs(trnpath)
-
-            # apply set_capclass before writing any hwy network
-            applied_SHA1 = networks['hwy'].applyProject(parentdir=TEMP_SUBDIR, networkdir=SET_CAPCLASS,
-                                                    gitdir=os.path.join(TEMP_SUBDIR, SET_CAPCLASS), **kwargs)
-
-            networks['hwy'].write(path=hwypath,name=HWY_NET_NAME,suppressQuery=True,
-                              suppressValidation=True) # MTC doesn't have turn penalties
-
-            networks['trn'].write(path=trnpath,
+        os.environ["CHAMP_node_names"] = os.path.join(PIVOT_DIR,"Node Description.xls")
+        hwy_abs_path = os.path.abspath( os.path.join(hwypath, HWY_NET_NAME) )
+        networks['trn'].write(path=trnpath,
                               name="transitLines",
                               writeEmptyFiles = False,
-                              suppressQuery = True if BUILD_MODE=="test" else False,
+                              suppressQuery = True,
                               suppressValidation = False,
-                              cubeNetFileForValidation = os.path.join(os.path.abspath(hwypath), HWY_NET_NAME))
+                              cubeNetFileForValidation = hwy_abs_path)
 
-
-            # Write the transit capacity configuration
-            Wrangler.TransitNetwork.capacity.writeTransitVehicleToCapacity(directory = trnpath)
-            Wrangler.TransitNetwork.capacity.writeTransitLineToVehicle(directory = trnpath)
-            Wrangler.TransitNetwork.capacity.writeTransitPrefixToVehicle(directory = trnpath)
-
-        # build the Baseline, with Sea Level Rise effects
-        if NET_VARIANT=="Baseline" and YEAR>=2035:
-
-            # Sea Level Rise effects
-            # no inundation prior to 2035
-            # 1 foot between 2035 and 2045
-            # 2 foot in 2050
-            if YEAR >= 2035 and YEAR < 2050:
-                BP_SLR_PROJECT = {'name':"BP_Sea_Level_Rise_Inundation", 'kwargs':{'MODELYEAR':'2035'}}
-            if YEAR == 2050:
-                BP_SLR_PROJECT = {'name':"BP_Sea_Level_Rise_Inundation", 'kwargs':{'MODELYEAR':'2050'}}
-
-            # it would be nice if this were more automatic...
-            networks['hwy'].saveNetworkFiles(suffix="_pre_SLR", to_suffix=True)
-
-            networks_bp_baseline = {}
-            networks_bp_baseline['hwy'] = copy.deepcopy(networks['hwy'])
-            networks_bp_baseline['trn'] = copy.deepcopy(networks['trn'])
-
-            for netmode in NET_MODES:
-                (project_name, projType, tag, kwargs) = getProjectAttributes(BP_SLR_PROJECT)
-                # Wrangler.WranglerLogger.debug("BP SLR Project {} has project_name=[{}] projType=[{}] tag=[{}] kwargs=[{}]".format(BP_SLR_PROJECT,
-                #                                project_name, projType, tag, kwargs))
-                applied_SHA1 = None
-                copyloned_SHA1 = networks_bp_baseline[netmode].cloneProject(networkdir=project_name, tag=tag,
-                                                                         projtype=projType, tempdir=TEMP_SUBDIR, **kwargs)
-                (parentdir, networkdir, gitdir, projectsubdir) = networks_bp_baseline[netmode].getClonedProjectArgs(project_name, None, projType, TEMP_SUBDIR)
-                applied_SHA1 = networks_bp_baseline[netmode].applyProject(parentdir, networkdir, gitdir, projectsubdir, **kwargs)
-
-                hwypath=os.path.join("..", "BlueprintNetworks", "net_{}_{}".format(YEAR, NET_VARIANT), HWY_SUBDIR)
-                if not os.path.exists(hwypath): os.makedirs(hwypath)
-                trnpath = os.path.join("..", "BlueprintNetworks", "net_{}_{}".format(YEAR, NET_VARIANT), TRN_SUBDIR)
-                if not os.path.exists(trnpath): os.makedirs(trnpath)
-
-            applied_SHA1 = networks_bp_baseline['hwy'].applyProject(parentdir=TEMP_SUBDIR, networkdir=SET_CAPCLASS,
-                                                                 gitdir=os.path.join(TEMP_SUBDIR, SET_CAPCLASS))
-
-            networks_bp_baseline['hwy'].write(path=hwypath,name=HWY_NET_NAME,suppressQuery=True,
-                                           suppressValidation=True) # MTC doesn't have turn penalties
-
-            networks_bp_baseline['trn'].write(path=trnpath,
-                                           name="transitLines",
-                                           writeEmptyFiles = False,
-                                           suppressQuery = True if BUILD_MODE=="test" else False,
-                                           suppressValidation = False,
-                                           cubeNetFileForValidation = os.path.join(os.path.abspath(hwypath), HWY_NET_NAME))
-
-
-            # Write the transit capacity configuration
-            Wrangler.TransitNetwork.capacity.writeTransitVehicleToCapacity(directory = trnpath)
-            Wrangler.TransitNetwork.capacity.writeTransitLineToVehicle(directory = trnpath)
-            Wrangler.TransitNetwork.capacity.writeTransitPrefixToVehicle(directory = trnpath)
-
-            # revert back to the plus rowadway network without BP_Sea_Level_Rise_Inundation
-            networks['hwy'].saveNetworkFiles(suffix="_pre_SLR", to_suffix=False)
-
+        # Write the transit capacity configuration
+        Wrangler.TransitNetwork.capacity.writeTransitVehicleToCapacity(directory = trnpath)
+        Wrangler.TransitNetwork.capacity.writeTransitLineToVehicle(directory = trnpath)
+        Wrangler.TransitNetwork.capacity.writeTransitPrefixToVehicle(directory = trnpath)
 
     Wrangler.WranglerLogger.debug("Successfully completed running %s" % os.path.abspath(__file__))

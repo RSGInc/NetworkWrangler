@@ -1,12 +1,13 @@
 import os
+import collections
 # MANDATORY. Set this to be the Project Name.
 # e.g. "RTP2021", "TIP2021", etc
-PROJECT  = "Blueprint"
+PROJECT  = "TransitRecov"
 
 # MANDATORY. Set this to be the git tag for checking out network projects.
 #TAG = "HEAD"               # Use this tag if you want NetworkWrangler to use the latest version in the local repo to build the network
 #TAG = "PBA50_Blueprint"    # Use this tag if you want to replicate the network built for PBA50
-TAG = "NGF_NoProject"      # Use this tag if you want to build the Next Gen Freeways No Project variant
+TAG = "HEAD"
 
 # A Alamedaproject can either be a simple string, or it can be
 # a dictionary with with keys 'name', 'tag' (optional), and 'kwargs' (optional)
@@ -127,26 +128,6 @@ COMMITTED_PROJECTS = collections.OrderedDict([
         'hwy':[{'name':'Bridge_Toll_Updates_2_2pct', 'kwargs':{'MODELYEAR':'2030'}},
                'EXP_Blueprint_NoProject'],
         'trn':['BART_NoProject']
-    }),
-    (2035, {
-        'hwy':[{'name':'Bridge_Toll_Updates_2_2pct', 'kwargs':{'MODELYEAR':'2035'}},
-               'EXP_Blueprint_NoProject'],
-        'trn':[]
-    }),
-    (2040, {
-        'hwy':[{'name':'Bridge_Toll_Updates_2_2pct', 'kwargs':{'MODELYEAR':'2040'}},
-               'EXP_Blueprint_NoProject'],
-        'trn':[]
-    }),
-    (2045, {
-        'hwy':[{'name':'Bridge_Toll_Updates_2_2pct', 'kwargs':{'MODELYEAR':'2045'}},
-               'EXP_Blueprint_NoProject'],
-        'trn':[]
-    }),
-    (2050, {
-        'hwy':[{'name':'Bridge_Toll_Updates_2_2pct', 'kwargs':{'MODELYEAR':'2050'}},
-               'EXP_Blueprint_NoProject'],
-        'trn':[]
     })
 ])
 
@@ -318,140 +299,6 @@ BLUEPRINT_PROJECTS = collections.OrderedDict([
                        {'name':'EIR2_HRA_Freq_Incr',            'kwargs':{'MODELYEAR':'2030'},            'variants_include':['Alt2']},
                        {'name':'EIR2_PDA_Freq_Incr',            'kwargs':{'MODELYEAR':'2030'},            'variants_include':['Alt2']},
                        {'name':'EIR2_Fix_Alt2',                 'kwargs':{'MODELYEAR':'2030'},            'variants_include':['Alt2']}]
-        }),
-        (2035, {'hwy':['MAJ_MuniForward_Uncommitted',
-                       'MAJ_Treasure_Island_Congestion_Pricing',
-                       {'name':'BP_Tolls_On_Congested_Freeways_2035',                                     'variants_exclude':['NextGenFwy']},
-                       'BP_Vision_Zero',
-                       'RRSP_East_West_Connector',
-                       'Transform_I680_Multimodal_Imp',
-                       'FBP_SM_022_I380_Widening',
-                       {'name':'MAJ_SOL070020_I80_I680_SR12_Int_2B_7', 'kwargs':{'PHASE':"'3'"},          'variants_exclude':['Alt1']},
-                       {'name':'MAJ_SOL070020_I80_I680_SR12_Int_2B_7', 'kwargs':{'PHASE':"'4'"},          'variants_exclude':['Alt1']},
-                       {'name':'MAJ_SOL070020_I80_I680_SR12_Int_2B_7', 'kwargs':{'PHASE':"'5'"},          'variants_exclude':['Alt1']},
-                       {'name':'FBP_SF_012_Geneva_Harney_BRT',  'kwargs':{'MODELYEAR':'2035'}},
-                       {'name':'EXP_uncommitted_all',           'kwargs':{'MODELYEAR':'2035'},            'variants_exclude':['Alt1', 'NextGenFwy']},
-                       {'name':'EXP_uncommitted_noAllLaneTolling', 'kwargs':{'MODELYEAR':'2035'},         'variants_include':['NextGenFwy']},
-                       {'name':'EIR1_EXP_uncommitted_all',      'kwargs':{'MODELYEAR':'2035'},            'variants_include':['Alt1']},
-                       {'name':'MAJ_Bay_Area_Forward_all',      'kwargs':{'MODELYEAR':'2035'}},
-                       'FBP_AL_076_TelegraphDiet',
-                       'FBP_SN_018_Cotati_101_RailroadAve_Impr',
-                       'FBP_NP_079_Trower_Ext',
-                       'EXP_Blueprint',
-                       {'name':'EIR1_No_SR37',                                                            'variants_include':['Alt1']},
-                       {'name':'NGF_NoProject_tollscsv',                                                  'variants_include':['NextGenFwy']}],
-                'trn':['MAJ_MuniForward_Uncommitted',
-                       'RRSP_South_East_Waterfront_Transit_Imp',
-                       'FBP_MU_062_ReX_Red',
-                       'Transform_I680_Multimodal_Imp',
-                       'Transform_SeamlessTransit',
-                       'MAJ_Treasure_Island_Congestion_Pricing',
-                       'RRSP_East_West_Connector',
-                       'MAJ_Treasure_Island_Ferry',
-                       'FBP_NP_079_Trower_Ext',
-                       {'name':'MAJ_SOL070020_I80_I680_SR12_Int_2B_7', 'kwargs':{'PHASE':"'3'"},          'variants_exclude':['Alt1']},
-                       {'name':'MAJ_SOL070020_I80_I680_SR12_Int_2B_7', 'kwargs':{'PHASE':"'4'"},          'variants_exclude':['Alt1']},
-                       {'name':'FBP_SF_012_Geneva_Harney_BRT',  'kwargs':{'MODELYEAR':'2035'}},
-                       {'name':'MAJ_SOL070020_I80_I680_SR12_Int_2B_7', 'kwargs':{'PHASE':"'5'"},          'variants_exclude':['Alt1']},
-                       {'name':'FBP_SL_026_SolExpressBus', 'kwargs':{'MODELYEAR':'2035'}},
-                       'FBP_SL_020_MilitaryWest_Diet',
-                       {'name':'EIR1_Freq_Boosts', 'kwargs':{'MODELYEAR':'2035'},                         'variants_include':['Alt1']},
-                       {'name':'EIR2_VTA_LRT_Orange',                                                     'variants_include':['Alt2']},
-                       {'name':'EIR2_Fix_Alt2',                 'kwargs':{'MODELYEAR':'2035'},            'variants_include':['Alt2']},
-                       {'name':'EIR1_No_SR37',                                                            'variants_include':['Alt1']}]
-        }),
-        (2040, {'hwy':['BP_Vision_Zero',
-                       'FBP_SC_050_I680_Montague_Int_Imp', 
-                       'FBP_MU_029_ACRapid_2040',
-                       'FBP_NP_074_SoscolWide',
-                       'FBP_CC_059_PittAntiochWide',
-                       {'name':'FBP_CC_051_SR4_Operation_Improvements_WB',                                'variants_exclude':['Alt1']},
-                       'FBP_CC_037_680_AuxLanes',
-                       'RRSP_EC_Cap_Imp_ECR_Bus',
-                       {'name':'MAJ_SR_239',                                                              'variants_exclude':['Alt1']},
-                       'FBP_NP_033_Napa_PNR_Lots',
-                       'FBP_CC_018_BRT_Brentwood',
-                       'FBP_SC_043_I280_Mainline_Impr',
-                       'MAJ_ElCaminoReal_BRT',
-                       'FBP_AL_042_I680_Stoneridge_Widening',
-                       {'name':'FBP_CC_040_041_042_I680_SR4_Int_Phases_1_2_4_5', 'kwargs':{'PHASE':"'5'"},'variants_exclude':['Alt1']},
-                       {'name':'EXP_uncommitted_all',           'kwargs':{'MODELYEAR':'2040'},            'variants_exclude':['Alt1', 'NextGenFwy']},
-                       {'name':'EXP_uncommitted_noAllLaneTolling', 'kwargs':{'MODELYEAR':'2040'},         'variants_include':['NextGenFwy']},
-                       {'name':'EIR1_EXP_uncommitted_all',      'kwargs':{'MODELYEAR':'2040'},            'variants_include':['Alt1']},
-                       {'name':'FBP_SF_012_Geneva_Harney_BRT',  'kwargs':{'MODELYEAR':'2040'}},
-                       {'name':'MAJ_Bay_Area_Forward_all',      'kwargs':{'MODELYEAR':'2040'}},
-                       'FBP_SC_105_SanTomasWide',
-                       'FBP_SC_102_CalaverasWide',
-                       'FBP_CC_039_Eastbound24Wide',
-                       {'name':'FBP_MU_064_SR37_LongTerm',                                                'variants_exclude':['Alt1']},
-                       'FBP_SC_094_LawrenceWide',
-                       'FBP_NP_066_Newell_Dr',
-                       'EXP_Blueprint',
-                       'FBP_AL_052_AutoMallWide',
-                       'FBP_CC_038_SR242_Clayton_OnOffRamps',
-                       'FBP_SC_047_I280_Winchester_OffRamp',
-                       'FBP_SC_076_US101_Taylor_Interchange',
-                       'FBP_NP_051_Airport_Junction',
-                       'FBP_SC_101_BrokawBridgeWide',
-                       'FBP_SC_081_US101_SR237',
-                       'FBP_SC_088_Envision_Expwy',
-                       {'name':'FBP_MU_056_Dumbarton_GRT',                                                'variants_exclude':['Alt2']},
-                       {'name':'EIR2_Val_Link_ExpressBus',      'kwargs':{'action':"'revert'"},           'variants_include':['Alt2']},
-                       {'name':'Transform_Valley_Link',                                                   'variants_include':['Alt2']},
-                       {'name':'FBP_AL_021_South_Bay_Connect',                                            'variants_include':['Alt2']},
-                       {'name':'Transform_AC_Transbay_Improvements',                                      'variants_include':['Alt2']},
-                       'FBP_SC_042_I280_Downtown_Access_Improvements'],
-                'trn':[{'name':'FBP_MU_046_ACE_Freq_Inc',       'kwargs':{'MODELYEAR':'2040'}},
-                       'MAJ_Vasona_LRT_Extension',
-                       'FBP_MU_029_ACRapid_2040',
-                       'RRSP_EC_Cap_Imp_ECR_Bus',
-                       'MAJ_SJC_People_Mover',
-                       'FBP_NP_028_NapaVineRegRoutesFrequency',
-                       'FBP_NP_034_NapaVineRegExpServiceHrs',
-                       'FBP_NP_029_NapaVineLocExpServiceHrs',
-                       'FBP_NP_033_Napa_PNR_Lots',
-                       'FBP_SC_043_I280_Mainline_Impr',
-                       'FBP_CC_018_BRT_Brentwood',
-                       {'name':'FBP_SF_012_Geneva_Harney_BRT',  'kwargs':{'MODELYEAR':'2040'}},
-                       'MAJ_ElCaminoReal_BRT',
-                       {'name':'FBP_MU_064_SR37_LongTerm',                                                'variants_exclude':['Alt1']},
-                       'FBP_NP_051_Airport_Junction',
-                       {'name':'FBP_MU_056_Dumbarton_GRT',                                                'variants_exclude':['Alt2']},
-                       'FBP_SC_088_Envision_Expwy',
-                       {'name':'HSR',                                                                     'variants_exclude':['Alt2']},
-                       {'name':'MAJ_SF_050002_Caltrain_Ext_TransbayTerminal',                             'variants_include':['Alt2']},
-                       {'name':'EIR2_Val_Link_ExpressBus',      'kwargs':{'action':"'revert'"},           'variants_include':['Alt2']},
-                       {'name':'Transform_Valley_Link',                                                   'variants_include':['Alt2']},
-                       {'name':'FBP_AL_021_South_Bay_Connect',                                            'variants_include':['Alt2']},
-                       {'name':'Transform_AC_Transbay_Improvements',                                      'variants_include':['Alt2']},
-                       {'name':'EIR2_ReXGreen',                                                           'variants_include':['Alt2']},
-                       'FBP_CC_019_CCCTA_Freq_Increase',
-                       {'name':'EIR2_Fix_Alt2',                 'kwargs':{'MODELYEAR':'2040'},            'variants_include':['Alt2']}]
-        }),
-        (2045, {'hwy':['BP_Vision_Zero',
-                       {'name':'EXP_uncommitted_all',           'kwargs':{'MODELYEAR':'2045'},            'variants_exclude':['Alt1', 'NextGenFwy']},
-                       {'name':'EXP_uncommitted_noAllLaneTolling', 'kwargs':{'MODELYEAR':'2045'},         'variants_include':['NextGenFwy']},
-                       {'name':'EIR1_EXP_uncommitted_all',      'kwargs':{'MODELYEAR':'2045'},            'variants_include':['Alt1']},
-                       {'name':'MAJ_Bay_Area_Forward_all',      'kwargs':{'MODELYEAR':'2045'}},
-                       {'name':'FBP_AL_048_SR262_Phase1',                                                 'variants_exclude':['Alt1']},
-                       'FBP_NP_045_SR29_Gateway_Impr',
-                       'EXP_Blueprint'],
-                'trn':[{'name':'FBP_MU_046_ACE_Freq_Inc',       'kwargs':{'MODELYEAR':'2045'}},
-                       'FBP_SC_106_VTA_LRT_Modernization']
-        }),
-        (2050, {'hwy':['BP_Vision_Zero',
-                       {'name':'MAJ_SOL070020_I80_I680_SR12_Int_2B_7', 'kwargs':{'PHASE':"'6'"},          'variants_exclude':['Alt1']},
-                       {'name':'MAJ_SOL070020_I80_I680_SR12_Int_2B_7', 'kwargs':{'PHASE':"'7'"},          'variants_exclude':['Alt1']},
-                       'FBP_SC_028_Stevens_Creek_LRT',
-                       {'name':'MAJ_Bay_Area_Forward_all',      'kwargs':{'MODELYEAR':'2050'}},
-                       'EXP_Blueprint',
-                       'FBP_SC_041_Envision_Highway_Minor',
-                       'STIP_ITS_SM',
-                       {'name':'BP_Transbay_Crossing',                                                    'variants_exclude':['Alt2']}],
-                'trn':[{'name':'MAJ_SOL070020_I80_I680_SR12_Int_2B_7', 'kwargs':{'PHASE':"'6'"},          'variants_exclude':['Alt1']},
-                       {'name':'MAJ_SOL070020_I80_I680_SR12_Int_2B_7', 'kwargs':{'PHASE':"'7'"},          'variants_exclude':['Alt1']},
-                       'FBP_SC_028_Stevens_Creek_LRT',
-                       {'name':'BP_Transbay_Crossing',                                                    'variants_exclude':['Alt2']}]
         })
     ])
 
