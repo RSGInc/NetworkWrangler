@@ -382,7 +382,7 @@ class TransitNetwork(Network):
         # print it all out
         for lineset in nodeInfo.keys():
 
-            stops = nodeInfo[lineset].keys()
+            stops = list(nodeInfo[lineset].keys())
             stops.sort()
               
             WranglerLogger.debug("--------------- Line set %s %s -- hasOffstreet? %s------------------" % 

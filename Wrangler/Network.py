@@ -53,22 +53,31 @@ class Network(object):
         if env:
             myenv = copy.deepcopy(os.environ)
             myenv.update(env)
-            # ranglerLogger.debug("Using environment {}".format(myenv))
+            # WranglerLogger.debug("Using environment {}".format(myenv))
 
-        proc = subprocess.Popen( cmd, cwd = run_dir, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True, env=myenv )
-        retStdout = []
-        for line in proc.stdout:
-            line = line.strip(b'\r\n')
-            if logStdoutAndStderr: WranglerLogger.debug("stdout: " + line)
-            retStdout.append(line)
+        try:
+            proc = subprocess.Popen( cmd, cwd = run_dir, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True, env=myenv )
+            retStdout = []
+            for line in proc.stdout:
+                if type(line)==bytes: line = line.decode()  # convert to string, not byetes
+                line = line.strip('\r\n')
+                if logStdoutAndStderr: WranglerLogger.debug("stdout: " + line)
+                retStdout.append(line)
 
-        retStderr = []
-        for line in proc.stderr:
-            line = line.strip(b'\r\n')
-            if logStdoutAndStderr: WranglerLogger.debug("stderr: " + line)
-            retStderr.append(line)
-        retcode  = proc.wait()
-        WranglerLogger.debug("Received %d from [%s] run in [%s]" % (retcode, cmd, run_dir))
+            retStderr = []
+            for line in proc.stderr:
+                if type(line)==bytes: line = line.decode() # convert to string, not byetes
+                line = line.strip('\r\n')
+                if logStdoutAndStderr: WranglerLogger.debug("stderr: " + line)
+                retStderr.append(line)
+            retcode  = proc.wait()
+            WranglerLogger.debug("Received {} from [{}] run in [{}] proc.returncode=[{}]".format(retcode, cmd, run_dir, proc.returncode))
+        
+        except Exception as inst:
+            WranglerLogger.error('Exception caught')
+            WranglerLogger.error(type(inst))    # the exception instance
+            WranglerLogger.error(inst.args)     # arguments stored in .args
+            WranglerLogger.error(inst)          # __str__ allows args to be printed directly,
         return (retcode, retStdout, retStderr)
 
     def getReqs(self, networkdir, projectsubdir=None, tag=None, projtype=None, tempdir=None):
@@ -419,12 +428,17 @@ class Network(object):
         Figures out the SHA1 hash commit string for the given gitdir (so gitdir is a git dir).
         (e.g. a 40-character hex string)
         """
+        # WranglerLogger.debug("getCommit({}) called".format(gitdir))
+        # SET_CAPCLASS is special and setup by NetworkWrangler
+        if gitdir.endswith("set_capclass"):
+            return "set_capclass_N/A"
+
         cmd = r"git log -1"
         (retcode, retstdout, retstderr) = self._runAndLog(cmd, gitdir)
         if len(retstdout)<3:
             raise NetworkException("Git log failed; see log file")
         
-        m = re.match(git_commit_pattern, retstdout[0].decode("utf-8"))
+        m = re.match(git_commit_pattern, retstdout[0])
         if not m:
             raise NetworkException("Didn't understand git log output: [" + retstdout[0] + "]")
 

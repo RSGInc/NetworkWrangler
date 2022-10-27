@@ -7,10 +7,11 @@
   -Lisa 2012.03.12
 
 """
-import copy, os, time
+import copy, os, re, time
 from socket import gethostname, getfqdn
 
 CUBE_COMPUTER = "vanness"
+CUBE_SUCCESS = re.compile("\s*(VOYAGER)\s+(ReturnCode)\s*=\s*([01])\s+")
 
 def getCubeHostnames():
     """
@@ -79,41 +80,46 @@ def export_cubenet_to_csvs(file, extra_link_vars=[], extra_node_vars=[],
     NUM_RETRIES = 5
     for attempt in range(1,NUM_RETRIES+1):
 
+        cube_stdout = []
         license_error = False
         if hostname not in getCubeHostnames():
             if links_csv == None or nodes_csv == None:
-                print "export_cubenet_to_csvs requires a links_csv and nodes_csv output file if dispatching to %s (temp won't work)" % CUBE_COMPUTER
+                print("export_cubenet_to_csvs requires a links_csv and nodes_csv output file if dispatching to {} (temp won't work)".format(CUBE_COMPUTER))
                 sys.exit(2)
              
             env["MACHINES"] = CUBE_COMPUTER
         
             cmd = r'y:\champ\util\bin\dispatch-one.bat "runtpp ' + script + '"'
-            print cmd
+            print(cmd)
             proc = subprocess.Popen( cmd, cwd = filedir, stdout=subprocess.PIPE, stderr=subprocess.PIPE, env=env)
             for line in proc.stdout:
+                if type(line)==bytes: line = line.decode()  # convert to string, not byetes
                 line = line.strip('\r\n')
-                print "stdout: " + line
+                print("stdout: {}".format(line))
+                cube_stdout.append(line)
                 if line=="RUNTPP: Licensing error": license_error = True
         else:
             cmd = 'runtpp.exe ' + script 
-            print cmd
-            print filedir
+            print(cmd)
+            print(filedir)
         
             proc = subprocess.Popen( cmd, cwd = filedir, stdout=subprocess.PIPE, stderr=subprocess.PIPE, env=env)
             for line in proc.stdout:
+                if type(line)==bytes: line = line.decode()  # convert to string, not byetes
                 line = line.strip('\r\n')
-                print "stdout: " + line
+                print("stdout: {}".format(line))
+                cube_stdout.append(line)
                 if line=="RUNTPP: Licensing error": license_error = True
 
-        print "EXPORTING CUBE NETWORK: ",env['CUBENET']
-        print "...adding variables %s, %s:" % (env['XTRALINKVAR'], env['XTRANODEVAR'])
-        print "...running script: \n      %s" % (script)
+        print("EXPORTING CUBE NETWORK: {}".format(env['CUBENET']))
+        print("...adding variables {}, {}:".format(env['XTRALINKVAR'], env['XTRANODEVAR']))
+        print("...running script: \n      {}".format(script))
 
         # retry on license error
         if license_error:
-            print "Received license error"
+            print("Received license error")
             if attempt == NUM_RETRIES:
-                print "Out of retry attempts"
+                print("Out of retry attempts")
                 sys.exit(2)
 
             # retry
@@ -123,9 +129,19 @@ def export_cubenet_to_csvs(file, extra_link_vars=[], extra_node_vars=[],
      
         retStderr = []
         for line in proc.stderr:
+            if type(line)==bytes: line = line.decode()  # convert to string, not byetes
             line = line.strip('\r\n')
-            print "stderr: " + line
+            print("stderr: {}".format(line))
         retcode  = proc.wait()
+
+        if (retcode != 0) and len(cube_stdout)>0:
+            # retcode may be wrong -- check last stdout
+            print("checking cube_stdout[-1]: {}".format(cube_stdout[-1]))
+            # print("match: {}".format(re.match(retcode,cube_stdout[-1])))
+            if re.match(CUBE_SUCCESS,cube_stdout[-1]):
+                print("Overriding cuberet {} with 0 due to last cubeStdout line".format(retcode))
+                retcode = 0
+
         # success -- stop looping
         if retcode == 0: break
 
@@ -133,8 +149,8 @@ def export_cubenet_to_csvs(file, extra_link_vars=[], extra_node_vars=[],
         if retcode != 0: raise
 
 
-    print "Received %d from [%s]" % (retcode, cmd)
-    print "Exported network to: %s, %s" % (env["CUBELINK_CSV"], env["CUBENODE_CSV"])
+    print("Received {} from [{}]".format(retcode, cmd))
+    print("Exported network to: {}, {}".format(env["CUBELINK_CSV"], env["CUBENODE_CSV"]))
 
     
 def import_cube_nodes_links_from_csvs(cubeNetFile,

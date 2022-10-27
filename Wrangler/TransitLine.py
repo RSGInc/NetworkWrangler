@@ -259,7 +259,7 @@ class TransitLine(object):
         (e.g. one of "Local", "BRT", "LRT", "Premium", "Ferry" or "BART")
         """
         modenum = int(self.attr['MODE'])
-        for modetype,modelist in TransitLine.MODETYPE_TO_MODES[modeltype].iteritems():
+        for modetype,modelist in TransitLine.MODETYPE_TO_MODES[modeltype].items():
             if modenum in modelist:
                 return modetype
         return None

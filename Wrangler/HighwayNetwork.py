@@ -158,6 +158,7 @@ class HighwayNetwork(Network):
 
             nodemerge = re.compile("NODEMERGE: \d+")
             linkmerge = re.compile("LINKMERGE: \d+-\d+")
+            cube_success = re.compile("\s*(VOYAGER)\s+(ReturnCode)\s*=\s*([01])\s+")
             license_error = False
             for line in cubeStdout:
                 line = line.rstrip()
@@ -178,9 +179,18 @@ class HighwayNetwork(Network):
                 time.sleep(1)
                 continue
 
+            if cuberet != 0 and cuberet != 1 and len(cubeStdout) > 1:
+
+                # cuberet may be wrong -- check last stdout
+                WranglerLogger.debug("checking cubeStdout[-1]: {}".format(cubeStdout[-1]))
+                # WranglerLogger.debug("match: {}".format(re.match(cube_success,cubeStdout[-1])))
+                if re.match(cube_success,cubeStdout[-1]):
+                    WranglerLogger.debug("Overriding cuberet {} with 0 due to last cubeStdout line".format(cuberet))
+                    cuberet = 0
 
             if cuberet != 0 and cuberet != 1:
-                WranglerLogger.fatal("FAIL! Project: "+applyScript)
+                WranglerLogger.debug("cubeStdout: {}".format(cubeStdout))
+                WranglerLogger.fatal("FAIL! Project: {}  cuberet={}".format(applyScript, cuberet))
                 raise NetworkException("HighwayNetwork applyProject failed; see log file")
 
             else:
@@ -225,7 +235,7 @@ class HighwayNetwork(Network):
         """
         Merge the given tolls file with the existing.
         """
-        WranglerLogger.debug("TODO: merging tolls")     
+        WranglerLogger.debug("mergeTolls({},{}) called".format(tollsfile, newtollsfile))     
 
         # read the original file -- fac_index is the key
         tolls_config = collections.OrderedDict()
@@ -235,6 +245,7 @@ class HighwayNetwork(Network):
         # not using csv.DictReader because in python2, it doesn't read an ordered dict :(
         for row in tolls_reader:
             row_dict = collections.OrderedDict(zip(fieldnames, row))
+            WranglerLogger.debug("row_dict: {}".format(row_dict))
             tolls_config[row_dict["fac_index"]] = row_dict
         tolls.close()
 
@@ -258,7 +269,7 @@ class HighwayNetwork(Network):
         newtolls.close()
 
         # write it out
-        tolls = open(tollsfile, mode='wb')
+        tolls = open(tollsfile, mode='w', newline='')  # newline arg passed because of https://docs.python.org/3/library/csv.html#id3
         tolls_writer = csv.writer(tolls)
         tolls_writer.writerow(fieldnames)
         for fac_index, row in tolls_config.items():
