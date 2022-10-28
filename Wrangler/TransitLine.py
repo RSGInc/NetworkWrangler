@@ -453,11 +453,14 @@ class TransitLine(object):
 
         If beginning, does this at the beginning; otherwise at the end.
         """
-        try:
-            ind = self.n.index(oldnode)
-        except:
-            ind = self.n.index(-oldnode)
-                    
+        oldnode_found = False
+        for ind in range(len(self.n)):
+            if self.n[ind].getNum()==oldnode: 
+                oldnode_found = True
+                break
+        if oldnode_found == False:
+            raise NetworkException("extendLine() called but oldnode {} not found in line nodes {}".format(oldnode, self.listNodeIds(ignoreStops=False)))
+
         # make the new nodes
         for i in range(len(newsection)):
             if isinstance(newsection[i],int): newsection[i] = Node(newsection[i])
