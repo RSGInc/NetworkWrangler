@@ -1,4 +1,5 @@
 import os,sys
+from .Logger import WranglerLogger
 
 __all__ = ['Node']
 
@@ -45,6 +46,19 @@ class Node(object):
         Return the numeric version of the node, as a positive integer
         """
         return abs(int(self.num))
+
+    def __eq__(self, other):
+        """
+        For finding nodes in a list of Node objects
+        """
+        if isinstance(other, int):
+            return int(self.num) == other
+        elif isinstance(other, Node):
+            return int(self.num) == int(other.num)
+        elif isinstance(other, str):
+            return int(self.num) == int(other)
+        else:
+            WranglerLogger.error("Node.__eq__ called with other type {}".format(type(other)))
 
     def replaceNum(self, num):
         """

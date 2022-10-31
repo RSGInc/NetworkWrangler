@@ -71,7 +71,7 @@ class Network(object):
                 if logStdoutAndStderr: WranglerLogger.debug("stderr: " + line)
                 retStderr.append(line)
             retcode  = proc.wait()
-            WranglerLogger.debug("Received {} from [{}] run in [{}] proc.returncode=[{}]".format(retcode, cmd, run_dir, proc.returncode))
+            WranglerLogger.debug("Received {} from [{}] run in [{}]".format(retcode, cmd, run_dir))
         
         except Exception as inst:
             WranglerLogger.error('Exception caught')

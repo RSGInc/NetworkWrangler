@@ -122,6 +122,18 @@ class TransitLine(object):
         self.currentStopIdx = 0
         return self
 
+    def __eq__(self, other):
+        """
+        Required to make list of TransitLines work e.g. lines_list.index("line_name")
+        """
+        if isinstance(other, str):
+            return self.name == other
+        elif isinstance(other, TransitLine):
+            return self.name == other.name
+        else:
+            WranglerLogger.error("TransitLine.__eq__ called with other type {}".format(type(other)))
+            return False
+
     def __next__(self):
         """
         Method for iterator.  Iterator usage::
@@ -181,7 +193,7 @@ class TransitLine(object):
             if(allowDowngrades):
                 self.attr[attr_set] = float(freqs[i])
             else:
-                self.attr[attr_set] = min(float(freqs[i]),self.attr[attr_set])
+                self.attr[attr_set] = min(float(freqs[i]),float(self.attr[attr_set]))
 
         
     def getFreqs(self):
@@ -481,7 +493,8 @@ class TransitLine(object):
         for i in range(len(new_section_ints)):
             if isinstance(new_section_ints[i],Node): new_section_ints[i] = new_section_ints[i].num
 
-        WranglerLogger.debug("replacing segment " + str(node1) + " "+str(node2)+" with "+str(new_section_ints)+" for "+self.name)
+        WranglerLogger.debug("replacing segment in {} {}-{} with {}".format(
+            self.name, node1, node2 ,new_section_ints))
         try:
             ind1 = self.n.index(node1)
             stop1 = True
