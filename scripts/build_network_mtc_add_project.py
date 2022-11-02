@@ -12,8 +12,8 @@ USAGE = """
   the network project.  Default use case is PPA.
 
 """
-PPA_DIR    = "L:\RTP2021_PPA\Projects"
-NODE_NAMES = "M:\Application\Model One\Networks\TM1_2015_Base_Network\Node Description.xls"
+PPA_DIR    = "L:\\RTP2021_PPA\\Projects"
+NODE_NAMES = "M:\\Application\\Model One\\Networks\\TM1_2015_Base_Network\\Node Description.xls"
 THIS_FILE  = os.path.realpath(__file__)
 
 # for transit network validation output
@@ -67,7 +67,7 @@ def findBaseDirectory(future):
 def determineProjectDirectory(OUTPUT_DIR, BASE_DIR, project_short_id):
 
     dir_list          = sorted(os.listdir(OUTPUT_DIR))
-    dir_re_str        = "^{}_{}_(\d\d)$".format(BASE_DIR, project_short_id)
+    dir_re_str        = r"^{}_{}_(\d\d)$".format(re.escape(BASE_DIR), re.escape(project_short_id))
     dir_re            = re.compile(dir_re_str)
     existing_suffixes = []
 
@@ -84,7 +84,7 @@ def determineProjectDirectory(OUTPUT_DIR, BASE_DIR, project_short_id):
     proposed_suffix = 0
     if len(existing_suffixes) > 0: proposed_suffix = existing_suffixes[-1] + 1
     print("Which suffix number do you want to use? (No response means {}) ".format(proposed_suffix))
-    response = raw_input("")
+    response = input("")
     print("  response = [%s]" % response)
 
     response_suffix = proposed_suffix
@@ -101,11 +101,11 @@ def determineProjectDirectory(OUTPUT_DIR, BASE_DIR, project_short_id):
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=USAGE, formatter_class=argparse.RawDescriptionHelpFormatter)
-    parser.add_argument("future", choices=["CleanAndGreen", "RisingTides", "BackToTheFuture", "FinalBlueprint", "all","None"], help="Specify which Future Scenario for which to create networks")
+    parser.add_argument("future", choices=["CleanAndGreen", "RisingTides", "BackToTheFuture", "all","None","FinalBlueprint","TransitRecovery"], help="Specify which Future Scenario for which to create networks")
     parser.add_argument("--hwy", dest='hwy', action='store_true', help="Pass if project is a roadway project")
     parser.add_argument("--trn", dest='trn', action='store_true', help="Pass if project is a transit project")
     parser.add_argument("--input_network",  dest='input_network',  help="Pass input network path if desired; otherwise, PPA path is assumed")
-    parser.add_argument("--output_network", dest='output_network', help="Pass output network path if desired; otherwise, PPA path is assumed")
+    parser.add_argument("--output_network", dest='output_network', help="Pass output network path if desired; otPherwise, PPA path is assumed")
     parser.add_argument("--input_projects", dest='input_projects', help="Pass directory for network projects; if none passed, M:\\Application\\Model One\\NetworkProjects is assumed")
     parser.add_argument("--kwarg",  dest='kwarg', help="To pass keyword args to project apply(), pass keyword and value", nargs=2)
     parser.add_argument("--kwarg2", dest='kwarg2', help="To pass keyword args to project apply(), pass keyword and value", nargs=2)
@@ -122,6 +122,8 @@ if __name__ == '__main__':
     PROJECT          = "PPA"
     if args.future == "FinalBlueprint":
       PROJECT        = "FBP"
+    elif args.future == "TransitRecovery":
+      PROJECT        = "TRR"
 
     if args.input_projects:
         NETWORK_BASE_DIR = args.input_projects
