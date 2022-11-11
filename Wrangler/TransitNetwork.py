@@ -1414,6 +1414,9 @@ class TransitNetwork(Network):
         WranglerLogger.debug("\n{}".format(hov_unmatched_df.head()))
         hov_unmatched_df = hov_unmatched_df.loc[ pandas.isnull(hov_unmatched_df.a_GP) ].drop(columns=["a_GP","b_GP"])
         WranglerLogger.debug("hov links without match ({}):\n{}".format(len(hov_unmatched_df), hov_unmatched_df))
+        hov_unmatched_df_QAQC_FILE = 'hov_unmatched.csv'
+        WranglerLogger.info("Export these links to {} for debugging".format(hov_unmatched_df_QAQC_FILE))
+        hov_unmatched_df.to_csv(hov_unmatched_df_QAQC_FILE, index=False)
 
         # replace all instances of a_GP, b_GP with a_GP,a,hov,b_hov,b_gp
         # keep hov_nodes and gp_nodes
