@@ -475,12 +475,14 @@ class DbfDictWriter(object):
             size = fieldType.length
             deci = fieldType.numDecimals
 
-            name = name.ljust(11, '\x00')
+            if type(name)==str: name = name.encode('utf-8')
+
+            name = name.ljust(11, b'\x00')
             fld = pack('<11sc4xBB14x', name, typ, size, deci)
             self._bfstream.write(fld)
 
         # terminator
-        self._bfstream.write('\r')
+        self._bfstream.write(b'\r')
                 
     def writeRecord(self, record):
         """Write a record that can be accessed as a dictionary to the 
@@ -488,7 +490,7 @@ class DbfDictWriter(object):
         if self._currentRecord > self._numRecords:
             raise DbfWriteError("The number of records that can be writen to the file "
                                 "%s cannot exceed %d" % (self._fileName, self._numRecords))
-        self._bfstream.write(" ")
+        self._bfstream.write(b" ")
         for fType in self.header:
             name = fType.name
             typ = fType.type
@@ -509,15 +511,17 @@ class DbfDictWriter(object):
             elif fType.type == 'L':
                 value = str(value)[0].upper()
             else:
-                value = str(value)[:size].ljust(size, ' ')
+                value = value[:size].ljust(size, b' ')
+
             if len(value) != size: print("Mismatch for {}; {} != {}; val={}".format(name, len(value), size, str(value)))
             assert len(value) == size
 
+            if type(value)==str: value=value.encode('utf-8')
             self._bfstream.write(value)
 
         self._currentRecord += 1
         if self._currentRecord == self._numRecords:
-            self._bfstream.write('\x1A')
+            self._bfstream.write(b'\x1A')
             self._bfstream.close()
         
     def __del__(self):
