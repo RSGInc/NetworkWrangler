@@ -278,8 +278,12 @@ class FieldType(object):
 
         self.name = name
 
+        # convert string to byte
+        if type(_type) == str:
+            _type = _type.encode('utf-8')
+
         if _type not in FieldType.TYPES:
-            raise FieldTypeError('Unknown field type {}'.format(_type))
+            raise FieldTypeError('Unknown field type {} {}'.format(_type, type(_type)))
 
         self.type = _type
         self.length = length

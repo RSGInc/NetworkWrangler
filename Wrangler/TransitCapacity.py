@@ -154,7 +154,7 @@ class TransitCapacity:
         Convenience function.  Returns tuple: best guess of (system, vehicletype)
         """
         linenameU = linename.upper()
-        if self.linenameToAttributes.has_key(linenameU):
+        if linenameU in self.linenameToAttributes:
             return (self.linenameToAttributes[linenameU][TransitCapacity.ATTR_SYSTEM], 
                     self.linenameToAttributes[linenameU][TransitCapacity.TIMEPERIOD_TO_VEHTYPIDX[timeperiod]])
 
@@ -183,7 +183,7 @@ class TransitCapacity:
         Returns best guess of fullname, or empty string if unknown
         """
         linenameU = linename.upper()
-        if self.linenameToAttributes.has_key(linenameU):
+        if linenameU in self.linenameToAttributes:
             return self.linenameToAttributes[linenameU][TransitCapacity.ATTR_FULLNAME]
         else:
             return ""
