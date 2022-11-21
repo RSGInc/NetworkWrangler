@@ -20,6 +20,16 @@ Contributors include:
 * Drew Cooper, 2013-Present
 * Bhargava Sana, 2015-Present
 
+Install
+=======
+NetworkWrangler recently was updated to Python3. Recommand using conda to install and manage NetworkWrangler environment. For example, run the following commands in Anaconda Prompt:
+```
+conda env create -f M:\Software\Anaconda\NetworkWrangler_py3.yml
+conda activate NetworkWrangler-py3
+cd \NetworkWrangler
+pip install -e .
+```
+
 Usage
 =======
 
