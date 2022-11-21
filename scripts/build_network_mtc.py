@@ -371,7 +371,7 @@ if __name__ == '__main__':
 
     NOW         = time.strftime("%Y%b%d.%H%M%S")
     BUILD_MODE  = None # regular
-    if args.model_type == Wrangler.Network.MODEL_TYPE_TM1:
+    if (args.model_type == Wrangler.Network.MODEL_TYPE_TM1) & (args.project_name != 'NGF'):
         PIVOT_DIR        = r"M:\\Application\\Model One\\Networks\\TM1_2015_Base_Network"
         TRANSIT_CAPACITY_DIR = os.path.join(PIVOT_DIR, "trn")
         NETWORK_BASE_DIR = r"M:\\Application\\Model One\\NetworkProjects"

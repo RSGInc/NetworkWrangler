@@ -31,6 +31,10 @@ COMMITTED_PROJECTS = collections.OrderedDict([
     (2030, {
         'hwy':[],
         'trn':[]
+    }),
+    (2035, {
+        'hwy':[],
+        'trn':[]
     })
 ])
 
