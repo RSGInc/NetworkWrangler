@@ -380,7 +380,6 @@ if __name__ == '__main__':
         HWY_SUBDIR       = "hwy"
         HWY_NET_NAME     = "freeflow.net"
     elif (args.model_type == Wrangler.Network.MODEL_TYPE_TM1) & (args.project_name == 'NGF'):
-        PROJECT          = "NGF"
         PIVOT_DIR        = r"L:\Application\Model_One\NextGenFwys\INPUT_DEVELOPMENT\Networks\NGF_Networks_NoProject_03\net_2035_NextGenFwy_NoProject_03"
         PIVOT_YEAR       = 2035
         TRANSIT_CAPACITY_DIR = os.path.join(PIVOT_DIR, "trn")
@@ -399,13 +398,16 @@ if __name__ == '__main__':
         HWY_NET_NAME     = "mtc_final_network_base.net"
 
     # Read the configuration
-    NETWORK_CONFIG = args.net_spec
-    if  args.project_name == 'NGF':
-        NET_VARIANT    = args.NGF_netvariant
-    OUT_DIR        = "{}_network_".format(NET_VARIANT) + "{}"
+    NETWORK_CONFIG  = args.net_spec
+    PROJECT         = args.project_name
     if args.scenario: SCENARIO = args.scenario
+    if args.project_name == 'NGF':
+        SCENARIO    = args.NGF_netvariant
+        NET_VARIANT = args.NGF_netvariant
 
-    LOG_FILENAME = "build%snetwork_%s_%s_%s_%s.info.LOG" % ("TEST" if BUILD_MODE=="test" else "", PROJECT, SCENARIO, NET_VARIANT, NOW)
+    OUT_DIR        = "{}_network_".format(SCENARIO) + "{}"
+
+    LOG_FILENAME = "build%snetwork_%s_%s_%s.info.LOG" % ("TEST" if BUILD_MODE=="test" else "", PROJECT, SCENARIO, NOW)
     Wrangler.setupLogging(LOG_FILENAME,
                           LOG_FILENAME.replace("info", "debug"))
     

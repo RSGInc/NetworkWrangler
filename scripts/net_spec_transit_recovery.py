@@ -9,6 +9,10 @@ PROJECT  = "TransitRecov"
 #TAG = "PBA50_Blueprint"    # Use this tag if you want to replicate the network built for PBA50
 TAG = "HEAD"
 
+# MANDATORY. Set this to the directory in which to write your outputs. 
+# "hwy" and "trn" subdirectories will be created here.
+OUT_DIR = "{}_network_".format(SCENARIO) + "{}"
+
 # A Alamedaproject can either be a simple string, or it can be
 # a dictionary with with keys 'name', 'tag' (optional), and 'kwargs' (optional)
 # to specify a special tag or special keyword args for the projects apply() call.
@@ -307,7 +311,7 @@ BLUEPRINT_PROJECTS = collections.OrderedDict([
 NETWORK_PROJECTS   = collections.OrderedDict()
 
 for YEAR in COMMITTED_PROJECTS.keys():
-    if NET_VARIANT == "Baseline":
+    if SCENARIO == "Baseline":
         # baseline: just committed
         NETWORK_PROJECTS[YEAR] = {
             'hwy':COMMITTED_PROJECTS[YEAR]['hwy'],
@@ -332,14 +336,14 @@ for YEAR in COMMITTED_PROJECTS.keys():
                 if not isinstance(project, dict): continue
 
                 # variants_exclude: specifies list of network variants for which this project should be *excluded*
-                if 'variants_exclude' in project.keys() and NET_VARIANT in project['variants_exclude']:
+                if 'variants_exclude' in project.keys() and SCENARIO in project['variants_exclude']:
                     Wrangler.WranglerLogger.info("Removing {} {} {}".format(YEAR, netmode, project))
                     del NETWORK_PROJECTS[YEAR][netmode][project_idx]
                     continue
 
                 # variants_include: specifies list of network variants for which this project should be *included*
                 # if this keyword is present, then this project is included *only* for variants in this list
-                if 'variants_include' in project.keys() and NET_VARIANT not in project['variants_include']:
+                if 'variants_include' in project.keys() and SCENARIO not in project['variants_include']:
                     Wrangler.WranglerLogger.info("Removing {} {} {}".format(YEAR, netmode, project))
                     del NETWORK_PROJECTS[YEAR][netmode][project_idx]
                     continue
