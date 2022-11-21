@@ -32,11 +32,18 @@ pip install -e .
 
 Usage
 =======
+If needed, set the PATHs before calling the build_network.py script, for example:
+```
+set PATH=%PATH%;C:\Users\mtcpb\.conda\envs\NetworkWrangler-py3;C:\Users\mtcpb\.conda\envs\NetworkWrangler-py3\Scripts
+set PATH=%PATH%;C:\Program Files\Citilabs\CubeVoyager;
+set PYTHONPATH=%PYTHONPATH%;C:\Users\mtcpb\Documents\GitHub\NetworkWrangler
+set PYTHONPATH=%PYTHONPATH%;C:\Users\mtcpb\Documents\GitHub\NetworkWrangler\_static
+```
 
-Build a network by running the `build_network.py` script  in the `/scripts` folder.
-
-   python build_network.py [-c configword] [-m test] network_specification.py
-
+With PATHs set, build a network by running the `build_network.py` script  in the `/scripts` folder.
+```
+python build_network.py [-c configword] [-m test] network_specification.py
+```
 
 This will build a network using the specifications in `network_specification.py`, which should define the variables listed below (in this script)
   
