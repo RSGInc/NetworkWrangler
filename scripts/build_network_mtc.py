@@ -1,4 +1,4 @@
-import argparse,collections,datetime,os,pandas,shutil,sys,time
+import argparse,collections,copy,datetime,os,pandas,shutil,sys,time
 import Wrangler
 
 # Based on NetworkWrangler\scripts\build_network.py
@@ -132,7 +132,7 @@ def checkRequirements(REQUIREMENTS, PROJECTS, req_type='prereq'):
     for netmode in REQUIREMENTS.keys():
         for project in REQUIREMENTS[netmode].keys():
             project_year = getProjectYear(PROJECTS, project, netmode)
-            if project_year == -1:
+            if (type(project_year) == int) and (project_year == -1):
                 Wrangler.WranglerLogger.warn('Cannot find the {} project {} to check its requirements'.format(netmode, project))
                 continue  # raise?
 
@@ -144,10 +144,11 @@ def checkRequirements(REQUIREMENTS, PROJECTS, req_type='prereq'):
                 req_proj_years = {}
                 for req_proj in req_proj_list:
                     req_project_year = getProjectYear(PROJECTS, req_proj, req_netmode)
+                    Wrangler.WranglerLogger.debug('req_project_year=[{}]'.format(req_project_year))
 
                     # prereq
                     if req_type=="prereq":
-                        if req_project_year < 0:
+                        if (type(req_project_year) == int) and (req_project_year < 0):
                             is_ok = False  # required project must be found
                             Wrangler.WranglerLogger.warn("required project not found")
                         if req_project_year > project_year:
@@ -277,7 +278,7 @@ def preCheckRequirementsForAllProjects(networks):
                     # non-test mode => get explicit approval
                     if BUILD_MODE !="test":
                         Wrangler.WranglerLogger.warn("  Is this ok? (y/n) ")
-                        response = raw_input("")
+                        response = input("")
                         Wrangler.WranglerLogger.debug("  response = [%s]" % response)
                         if response.strip().lower()[0] != "y":
                             sys.exit(2)
@@ -297,7 +298,7 @@ def preCheckRequirementsForAllProjects(networks):
                                                       STALE_YEARS, applied_commit_date.strftime("%x")))
                         if BUILD_MODE !="test":
                             Wrangler.WranglerLogger.warn("  Is this ok? (y/n) ")
-                            response = raw_input("")
+                            response = input("")
                             Wrangler.WranglerLogger.debug("  response = [%s]" % response)
                             if response.strip().lower() not in ["y", "yes"]:
                                 sys.exit(2)
@@ -322,7 +323,7 @@ def preCheckRequirementsForAllProjects(networks):
             Wrangler.WranglerLogger.debug('All PRE-REQUISITES were found. Are the PRE-REQUISITES matches correct? (y/n)')
         else:
             Wrangler.WranglerLogger.debug('!!!WARNING!!! Some PRE-REQUISITES were not found or ordered correctly.  Continue anyway? (y/n)')
-        response = raw_input("")
+        response = input("")
         Wrangler.WranglerLogger.debug("  response = [%s]" % response)
         if response.strip().lower() not in ["y", "yes"]:
             sys.exit(2)
@@ -335,7 +336,7 @@ def preCheckRequirementsForAllProjects(networks):
             Wrangler.WranglerLogger.debug('All CO-REQUISITES were found. Are the CO-REQUISITE matches correct? (y/n)')
         else:
             Wrangler.WranglerLogger.debug('!!!WARNING!!! Some CO-REQUISITES were not found.  Continue anyway? (y/n)')
-        response = raw_input("")
+        response = input("")
         Wrangler.WranglerLogger.debug("  response = [%s]" % response)
         if response.strip().lower() not in ["y", "yes"]:
             sys.exit(2)
@@ -348,7 +349,7 @@ def preCheckRequirementsForAllProjects(networks):
             Wrangler.WranglerLogger.debug('!!!WARNING!!! Conflicting projects were found.  Continue anyway? (y/n)')
         else:
             Wrangler.WranglerLogger.debug('No conflicting projects were found. Enter \'y\' to continue.')
-        response = raw_input("")
+        response = input("")
         Wrangler.WranglerLogger.debug("  response = [%s]" % response)
         if response.strip().lower() not in ["y", "yes"]:
             sys.exit(2)
@@ -362,8 +363,10 @@ if __name__ == '__main__':
     parser.add_argument("--configword", help="optional word for network specification script")
     parser.add_argument("--model_type", choices=[Wrangler.Network.MODEL_TYPE_TM1, Wrangler.Network.MODEL_TYPE_TM2],
                         default=Wrangler.Network.MODEL_TYPE_TM1)
+    parser.add_argument("project_name", help="required project name, for example NGF")
     parser.add_argument("--scenario", help="optional SCENARIO name")
     parser.add_argument("net_spec", metavar="network_specification.py", help="Script which defines required variables indicating how to build the network")
+    parser.add_argument("--NGF_netvariant", choices=["BlueprintSegmented", "Mock", "Pathway1", "Pathway2"], help="Specify which network variant network to create.")
     args = parser.parse_args()
 
     NOW         = time.strftime("%Y%b%d.%H%M%S")
@@ -374,6 +377,16 @@ if __name__ == '__main__':
         NETWORK_BASE_DIR = r"M:\\Application\\Model One\\NetworkProjects"
         TRN_SUBDIR       = "trn"
         TRN_NET_NAME     = "Transit_Lines"
+        HWY_SUBDIR       = "hwy"
+        HWY_NET_NAME     = "freeflow.net"
+    elif (args.model_type == Wrangler.Network.MODEL_TYPE_TM1) & (args.project_name == 'NGF'):
+        PROJECT          = "NGF"
+        PIVOT_DIR        = r"L:\Application\Model_One\NextGenFwys\INPUT_DEVELOPMENT\Networks\NGF_Networks_NoProject_03\net_2035_NextGenFwy_NoProject_03"
+        PIVOT_YEAR       = 2035
+        TRANSIT_CAPACITY_DIR = os.path.join(PIVOT_DIR, "trn")
+        NETWORK_BASE_DIR = r"M:\Application\Model One\NetworkProjects"
+        TRN_SUBDIR       = "trn"
+        TRN_NET_NAME     = "transitLines"
         HWY_SUBDIR       = "hwy"
         HWY_NET_NAME     = "freeflow.net"
     elif args.model_type == Wrangler.Network.MODEL_TYPE_TM2:
@@ -387,7 +400,15 @@ if __name__ == '__main__':
 
     # Read the configuration
     NETWORK_CONFIG = args.net_spec
+    if  args.project_name == 'NGF':
+        NET_VARIANT    = args.NGF_netvariant
+    OUT_DIR        = "{}_network_".format(NET_VARIANT) + "{}"
     if args.scenario: SCENARIO = args.scenario
+
+    LOG_FILENAME = "build%snetwork_%s_%s_%s_%s.info.LOG" % ("TEST" if BUILD_MODE=="test" else "", PROJECT, SCENARIO, NET_VARIANT, NOW)
+    Wrangler.setupLogging(LOG_FILENAME,
+                          LOG_FILENAME.replace("info", "debug"))
+    
     exec(open(NETWORK_CONFIG).read())
 
     # Verify mandatory fields are set
@@ -396,7 +417,7 @@ if __name__ == '__main__':
         sys.exit(2)
     if SCENARIO==None:
         print("SCENARIO not set in %s" % NETWORK_CONFIG)
-        sys.exit(2)
+        # sys.exit(2)
     if TAG==None:
         print("TAG not set in %s" % NETWORK_CONFIG)
         sys.exit(2)
@@ -407,8 +428,6 @@ if __name__ == '__main__':
         print("NETWORK_PROJECTS not set in %s" % NETWORK_CONFIG)
         sys.exit(2)
 
-    LOG_FILENAME = "build%snetwork_%s_%s_%s.info.LOG" % ("TEST" if BUILD_MODE=="test" else "", PROJECT, SCENARIO, NOW)
-    Wrangler.setupLogging(LOG_FILENAME, LOG_FILENAME.replace("info", "debug"))
     if TRANSIT_CAPACITY_DIR:
         Wrangler.TransitNetwork.capacity = Wrangler.TransitCapacity(directory=TRANSIT_CAPACITY_DIR)
 
@@ -417,6 +436,12 @@ if __name__ == '__main__':
     TEMP_SUBDIR    = "Wrangler_tmp_" + NOW    
     if not os.path.exists(SCRATCH_SUBDIR): os.mkdir(SCRATCH_SUBDIR)
     os.chdir(SCRATCH_SUBDIR)
+
+    if args.project_name == 'NGF':
+        os.environ["CHAMP_node_names"] = "M:\\Application\\Model One\\Networks\\TM1_2015_Base_Network\\Node Description.xls"
+        print()
+    else:
+        os.environ["CHAMP_node_names"] = os.path.join(PIVOT_DIR,"Node Description.xls")
 
     networks = {
         'hwy' :Wrangler.HighwayNetwork(modelType=args.model_type, modelVersion=1.0,
@@ -463,11 +488,12 @@ if __name__ == '__main__':
         appliedcount = 0
         for netmode in NET_MODES:
             Wrangler.WranglerLogger.info("Building {} {} networks".format(YEAR, netmode))
+
             for project in projects_for_year[netmode]:
                 (project_name, projType, tag, kwargs) = getProjectAttributes(project)
                 if tag == None: tag = TAG
 
-                Wrangler.WranglerLogger.info("Applying project [%s] of type [%s] with tag [%s]" % (project_name, projType, tag))
+                Wrangler.WranglerLogger.info("Applying project [{}] of type [{}] with tag [{}] and kwargs[{}]".format(project_name, projType, tag, kwargs))
                 if projType=='plan':
                     continue
 
@@ -499,7 +525,7 @@ if __name__ == '__main__':
         networks['hwy'].write(path=hwypath,name=HWY_NET_NAME,suppressQuery=True,
                               suppressValidation=True) # MTC TM1 doesn't have turn penalties
 
-        os.environ["CHAMP_node_names"] = os.path.join(PIVOT_DIR,"Node Description.xls")
+        # os.environ["CHAMP_node_names"] = os.path.join(PIVOT_DIR,"Node Description.xls")
         hwy_abs_path = os.path.abspath( os.path.join(hwypath, HWY_NET_NAME) )
         networks['trn'].write(path=trnpath,
                               name="transitLines",
