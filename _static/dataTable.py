@@ -139,6 +139,8 @@ class DataTable(object):
         """Define a fieldName the values of which will serve as the index 
         of the table. Alternativly, you can define a fucntion that takes a
         row as an input and returns a value serving as the index"""
+        # print("dataTable.setIndex(fieldName={}, indexFunction={})".format(fieldName, indexFunction))
+        # print("self.fields.dtype.names={} type={}".format(self.fields.dtype.names, type(self.fields.dtype.names)))
         if fieldName:
             if fieldName not in self.fields.dtype.names:
                 raise DataTableError("The field: %d does not exist" % str(fieldName))
@@ -160,6 +162,7 @@ class DataTable(object):
             self._hasIndex = False
             self._indexFunction = None
             self._indexField = None
+        # print("self._index = {}".format(self._index))
 
     def _createIndex(self, fieldName=None, indexFunction=None):
         """Create a dictionary the keys of which will serve as the new

@@ -173,10 +173,9 @@ class TransitAssignmentData:
                                 "OWNER",
                                 "AB_VOL","AB_BRDA","AB_XITA","AB_BRDB","AB_XITB",
                                 "BA_VOL","BA_BRDA","BA_XITA","BA_BRDB","BA_XITB"]
-        # print("csvColnames = {}".format(self.csvColnames))
-            
-        self.colnameToCsvIndex = dict((self.csvColnames[idx],idx) for idx in range(len(self.csvColnames)))
         
+        self.colnameToCsvIndex = dict((self.csvColnames[idx],idx) for idx in range(len(self.csvColnames)))
+
         # copy these directly
         self.trnAsgnFields = {"A":      'u4',
                               "B":      'u4',
@@ -189,7 +188,7 @@ class TransitAssignmentData:
                               "NAME":   'a13',
                               "OWNER":  'a10',
                               }
-        self.trnAsgnCopyFields = self.trnAsgnFields.keys()
+        self.trnAsgnCopyFields = list(self.trnAsgnFields.keys())
         # these are in the dbf not the csv (grrrr)
         self.trnAsgnFields["FREQ"]      = 'f4'
         self.trnAsgnFields["SEQ"]       = 'u1'
@@ -233,7 +232,6 @@ class TransitAssignmentData:
         for field in self.trnAsgnAdditiveFields:
             self.aggregateFields[field]='f4'
 
-
     def readTransitAssignmentCsvs(self):
         """
         Read the transit assignment dbfs, the direct output of Cube's transit assignment.
@@ -264,7 +262,7 @@ class TransitAssignmentData:
                 numrecs = 0
                 totalrows = 0
                                 
-                filereader = csv.reader(open(filename, 'rb'), delimiter=',', quoting=csv.QUOTE_NONE)
+                filereader = csv.reader(open(filename, 'r'), delimiter=',', quoting=csv.QUOTE_NONE)
                 for row in filereader:
                     
                     # header row?
@@ -294,7 +292,7 @@ class TransitAssignmentData:
                 
                 self.trnAsgnTable = DataTable(numRecords=numrecs,
                                               fieldNames=self.trnAsgnFields.keys(),
-                                              numpyFieldTypes=self.trnAsgnFields.values())
+                                              numpyFieldTypes=list(self.trnAsgnFields.values()))
                 ABNameSeqSet = set()
                 WranglerLogger.debug("Created dataTable")
             
@@ -302,8 +300,7 @@ class TransitAssignmentData:
             newrownum = 0  # row number in the trnAsgnTable,ABNameSeq_List -- rows we're keeping
             oldrownum = 0  # row number in the csv,dbf -- all input rows
             
-            filereader = csv.reader(open(filename, 'rb'), delimiter=',', quoting=csv.QUOTE_NONE)
-            
+            filereader = csv.reader(open(filename, 'r'), delimiter=',', quoting=csv.QUOTE_NONE)
             # for the first csv only, also read the dbf for the freq and seq fields
             if mode == self.MODES[0]:
                 if self.modelType == Network.MODEL_TYPE_CHAMP:
@@ -343,7 +340,6 @@ class TransitAssignmentData:
                     for field in self.trnAsgnCopyFields:
                         
                         try:
-                            
                             # integer fields
                             if self.trnAsgnFields[field][0] in ['u','b']:
                                 if row[self.colnameToCsvIndex[field]]=="":
@@ -403,6 +399,7 @@ class TransitAssignmentData:
                         ABNameSeq = tryABNameSeq
                     self.trnAsgnTable[newrownum]["ABNAMESEQ"] = ABNameSeq
                     ABNameSeqSet.add(ABNameSeq)
+                    # WranglerLogger.debug("AABNAMESEQ={} type={}".format(ABNameSeq, type(ABNameSeq)))
                     
                     ABNameSeq_List.append((int(row[self.colnameToCsvIndex["A"]]),
                                            int(row[self.colnameToCsvIndex["B"]]),
@@ -425,12 +422,12 @@ class TransitAssignmentData:
                        self.trnAsgnTable[newrownum]["PERIODCAP"] = 0
 
                     # if we still don't have a system, warn
-                    if self.trnAsgnTable[newrownum]["SYSTEM"] == "" and not warnline.has_key(linename):
+                    if self.trnAsgnTable[newrownum]["SYSTEM"] == "" and linename not in warnline:
                         WranglerLogger.warning("No default system: " + linename)
                         warnline[linename] =1
                     
                     #---------add in any grouping that may want to use
-                    if self.lineToGroup.has_key(linename):
+                    if linename in self.lineToGroup:
                         self.trnAsgnTable[newrownum]["GROUP"] = self.lineToGroup[linename]
                     else:
                         self.trnAsgnTable[newrownum]["GROUP"] = ""
@@ -446,7 +443,7 @@ class TransitAssignmentData:
                 
                 # Add in the subsequent assignment files
                 else:
-                     
+                    
                     # print oldrownum, newrownum, ABNameSeq_List[newrownum]
                     # print row[self.colnameToCsvIndex["NAME"]], ABNameSeq_List[oldrownum][2]
                     if ((int(row[self.colnameToCsvIndex["A"]]) != ABNameSeq_List[newrownum][0]) or
@@ -462,7 +459,9 @@ class TransitAssignmentData:
                                 row[self.colnameToCsvIndex["B"]] + " " + \
                                 row[self.colnameToCsvIndex["NAME"]].rstrip()
                     if ABNameSeq_List[newrownum][3]>0:
-                        ABNameSeq += " " + str(ABNameSeq_List[newrownum][3])                    
+                        ABNameSeq += " " + str(ABNameSeq_List[newrownum][3])
+                    # convert to bytes - the index in the dataTable is a byte string
+                    ABNameSeq = ABNameSeq.encode('utf-8')
                     for field in self.trnAsgnAdditiveFields:
                         if row[self.colnameToCsvIndex[field]] !="":
                             self.trnAsgnTable[ABNameSeq][field] += float(row[self.colnameToCsvIndex[field]])
@@ -512,8 +511,8 @@ class TransitAssignmentData:
             ABSet.add(row["AB"])
         
         self.aggregateTable = DataTable(numRecords=len(ABSet),
-                                        fieldNames=self.aggregateFields.keys(),
-                                        numpyFieldTypes=self.aggregateFields.values())
+                                        fieldNames=list(self.aggregateFields.keys()),
+                                        numpyFieldTypes=list(self.aggregateFields.values()))
         ABtoRowIndex = {}
         rowsUsed = 0
         for row in self.trnAsgnTable:
