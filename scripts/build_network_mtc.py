@@ -133,7 +133,7 @@ def checkRequirements(REQUIREMENTS, PROJECTS, req_type='prereq'):
         for project in REQUIREMENTS[netmode].keys():
             project_year = getProjectYear(PROJECTS, project, netmode)
             if (type(project_year) == int) and (project_year == -1):
-                Wrangler.WranglerLogger.warn('Cannot find the {} project {} to check its requirements'.format(netmode, project))
+                Wrangler.WranglerLogger.warning('Cannot find the {} project {} to check its requirements'.format(netmode, project))
                 continue  # raise?
 
             Wrangler.WranglerLogger.info('Checking {} project {} ({}) for {}'.format(netmode, project, project_year, req_type))
@@ -150,10 +150,10 @@ def checkRequirements(REQUIREMENTS, PROJECTS, req_type='prereq'):
                     if req_type=="prereq":
                         if (type(req_project_year) == int) and (req_project_year < 0):
                             is_ok = False  # required project must be found
-                            Wrangler.WranglerLogger.warn("required project not found")
+                            Wrangler.WranglerLogger.warning("required project not found")
                         if req_project_year > project_year:
                             is_ok = False  # and implemented before or at the same time as the project
-                            Wrangler.WranglerLogger.warn("required project year {} > project year {}".format(req_project_year, project_year))
+                            Wrangler.WranglerLogger.warning("required project year {} > project year {}".format(req_project_year, project_year))
 
                     # save into proj_years
                     req_proj_years[req_proj] = req_project_year
@@ -207,7 +207,7 @@ def getProjectAttributes(project):
 
     return (project_name, project_type, tag, kwargs)
 
-def preCheckRequirementsForAllProjects(networks):
+def preCheckRequirementsForAllProjects(networks, continue_on_warning):
     PRE_REQS  = {'hwy':{},'trn':{}}
     CO_REQS   = {'hwy':{},'trn':{}}
     CONFLICTS = {'hwy':{},'trn':{}}
@@ -265,19 +265,21 @@ def preCheckRequirementsForAllProjects(networks):
     
                 # if they're different, log more information and get approval (if not in test mode)
                 if cloned_SHA1 != head_SHA1:
-                    Wrangler.WranglerLogger.warn("Using non-head version of project of %s" % project_name)
-                    Wrangler.WranglerLogger.warn("  Applying version [%s], Head is [%s]" % (cloned_SHA1, head_SHA1))
+                    Wrangler.WranglerLogger.warning("Using non-head version of project of %s" % project_name)
+                    Wrangler.WranglerLogger.warning("  Applying version [%s], Head is [%s]" % (cloned_SHA1, head_SHA1))
     
                     cmd = "git log %s..%s" % (cloned_SHA1, head_SHA1)
                     (retcode, retStdout, retStderr) = networks[netmode]._runAndLog(cmd, run_dir = cmd_dir)
-                    Wrangler.WranglerLogger.warn("  The following commits are not included:") 
+                    Wrangler.WranglerLogger.warning("  The following commits are not included:") 
                     for line in retStdout:
-                        Wrangler.WranglerLogger.warn("    %s" % line)
+                        Wrangler.WranglerLogger.warning("    %s" % line)
     
                     # test mode => warn is sufficient
                     # non-test mode => get explicit approval
-                    if BUILD_MODE !="test":
-                        Wrangler.WranglerLogger.warn("  Is this ok? (y/n) ")
+                    if continue_on_warning:
+                        Wrangler.WranglerLogger.warninging("Continuing (continue_on_warning)")
+                    elif BUILD_MODE !="test":
+                        Wrangler.WranglerLogger.warning("  Is this ok? (y/n) ")
                         response = input("")
                         Wrangler.WranglerLogger.debug("  response = [%s]" % response)
                         if response.strip().lower()[0] != "y":
@@ -290,14 +292,16 @@ def preCheckRequirementsForAllProjects(networks):
                     applied_commit_date = datetime.datetime.fromtimestamp(int(retStdout[0]))
                     applied_commit_age = datetime.datetime.now() - applied_commit_date
     
-                    # if older than one year, holler
-                    STALE_YEARS = 3
+                    # if older than x years, holler
+                    STALE_YEARS = 5
                     if applied_commit_age > datetime.timedelta(days=365*STALE_YEARS):
-                        Wrangler.WranglerLogger.warn("  This project was last updated %.1f years ago (over %d), on %s" % \
+                        Wrangler.WranglerLogger.warning("  This project was last updated %.1f years ago (over %d), on %s" % \
                                                      (applied_commit_age.days/365.0,
                                                       STALE_YEARS, applied_commit_date.strftime("%x")))
-                        if BUILD_MODE !="test":
-                            Wrangler.WranglerLogger.warn("  Is this ok? (y/n) ")
+                        if continue_on_warning:
+                            Wrangler.WranglerLogger.warninging("Continuing (continue_on_warning)")
+                        elif BUILD_MODE !="test":
+                            Wrangler.WranglerLogger.warning("  Is this ok? (y/n) ")
                             response = input("")
                             Wrangler.WranglerLogger.debug("  response = [%s]" % response)
                             if response.strip().lower() not in ["y", "yes"]:
@@ -363,6 +367,7 @@ if __name__ == '__main__':
     parser.add_argument("--configword", help="optional word for network specification script")
     parser.add_argument("--model_type", choices=[Wrangler.Network.MODEL_TYPE_TM1, Wrangler.Network.MODEL_TYPE_TM2],
                         default=Wrangler.Network.MODEL_TYPE_TM1)
+    parser.add_argument("--continue_on_warning", help="Don't prompt the user to continue if there are warnings; just warn and continue", action="store_true")
     parser.add_argument("project_name", help="required project name, for example NGF")
     parser.add_argument("--scenario", help="optional SCENARIO name")
     parser.add_argument("net_spec", metavar="network_specification.py", help="Script which defines required variables indicating how to build the network")
@@ -474,7 +479,10 @@ if __name__ == '__main__':
 
 
     # Wrangler.WranglerLogger.debug("NETWORK_PROJECTS=%s NET_MODES=%s" % (str(NETWORK_PROJECTS), str(NET_MODES)))
-    preCheckRequirementsForAllProjects(networks)
+    if args.skip_precheck_requirements:
+        Wrangler.WranglerLogger.info("skip_precheck_requirements passed so skipping preCheckRequirementsForAllProjects()")
+    else:
+        preCheckRequirementsForAllProjects(networks, args.continue_on_warning)
 
     # create the subdir for SET_CAPCLASS with set_capclass.job as apply.s
     SET_CAPCLASS     = "set_capclass"
