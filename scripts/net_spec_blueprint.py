@@ -163,7 +163,7 @@ BLUEPRINT_PROJECTS = collections.OrderedDict([
                        'MAJ_MTC050027_Berkeley_Ferry',
                        'MAJ_WETA_Service_Frequency_Increase',                       
                        {'name':'Transform_SR37_Widening_Interim',                                           'variants_exclude':['Alt1']},
-                       'MAJ_SF_Congestion_Pricing',
+                       {'name':'MAJ_SF_Congestion_Pricing',                                  'variants_exclude':['NextGenFwy']},
                        'MAJ_Geary_BRT_Phase2',
                        'FBP_MU_041_Hovercraft_Pilot',
                        'BP_Vision_Zero',
