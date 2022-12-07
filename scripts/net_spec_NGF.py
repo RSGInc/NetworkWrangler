@@ -33,8 +33,8 @@ COMMITTED_PROJECTS = collections.OrderedDict([
         'trn':[]
     }),
     (2035, {
-        'hwy':[],
-        'trn':[]
+        'hwy':['ReX_link'],
+        'trn':[{'name':'ReX_link', 'kwargs':{'FUTURE':'NA', 'filter_to_top_n':'15'}}]
     })
 ])
 
