@@ -33,8 +33,8 @@ COMMITTED_PROJECTS = collections.OrderedDict([
         'trn':[]
     }),
     (2035, {
-        'hwy':['ReX_link'],
-        'trn':[{'name':'ReX_link', 'kwargs':{'FUTURE':'NA', 'filter_to_top_n':'15'}}]
+        'hwy':[],
+        'trn':[]
     })
 ])
 
@@ -75,9 +75,10 @@ NGF_PROJECTS = collections.OrderedDict([
                 'trn':[]
         }),
         (2035, {'hwy':[{'name':'NGF_NoProject_farefiles',                                           'variants_include':['BlueprintSegmented']},
-                       {'name':'NGF_BlueprintSegmented',                                            'variants_include':['BlueprintSegmented']}
-        ],
-                'trn':[]
+                       {'name':'NGF_BlueprintSegmented',                                            'variants_include':['BlueprintSegmented']},
+                        'ReX_link'
+                      ],
+                'trn':[{'name':'ReX_link', 'kwargs':{'FUTURE':'NA', 'filter_to_top_n':'15'}}]
         })
     ])
 
