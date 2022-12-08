@@ -368,6 +368,7 @@ if __name__ == '__main__':
     parser.add_argument("--model_type", choices=[Wrangler.Network.MODEL_TYPE_TM1, Wrangler.Network.MODEL_TYPE_TM2],
                         default=Wrangler.Network.MODEL_TYPE_TM1)
     parser.add_argument("--continue_on_warning", help="Don't prompt the user to continue if there are warnings; just warn and continue", action="store_true")
+    parser.add_argument("--skip_precheck_requirements", help="Don't precheck network requirements, stale projects, non-HEAD projects, etc", action="store_true")
     parser.add_argument("project_name", help="required project name, for example NGF")
     parser.add_argument("--scenario", help="optional SCENARIO name")
     parser.add_argument("net_spec", metavar="network_specification.py", help="Script which defines required variables indicating how to build the network")
