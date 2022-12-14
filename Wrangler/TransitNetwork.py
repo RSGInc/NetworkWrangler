@@ -1518,6 +1518,8 @@ class TransitNetwork(Network):
                                         links_csv=os.path.join(os.getcwd(),"cubenet_validate_links.csv"),
                                         nodes_csv=os.path.join(os.getcwd(),"cubenet_validate_nodes.csv"),
                                         exportIfExists=True)
+
+        WranglerLogger.debug("checkValidityOfLinks(): using links from {} to check lines".format(cubeNetFile))
         for line in self:
             
             # todo fix this
