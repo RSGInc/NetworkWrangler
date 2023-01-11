@@ -372,7 +372,7 @@ if __name__ == '__main__':
     parser.add_argument("project_name", help="required project name, for example NGF")
     parser.add_argument("--scenario", help="optional SCENARIO name")
     parser.add_argument("net_spec", metavar="network_specification.py", help="Script which defines required variables indicating how to build the network")
-    parser.add_argument("--NGF_netvariant", choices=["BlueprintSegmented", "Mock", "Pathway1", "Pathway2"], help="Specify which network variant network to create.")
+    parser.add_argument("--NGF_netvariant", choices=["BlueprintSegmented", "Mock", "Pathway1", "Pathway2", "P1_SFcordonNoArterialTolls", "P3_3cordons"], help="Specify which network variant network to create.")
     args = parser.parse_args()
 
     NOW         = time.strftime("%Y%b%d.%H%M%S")

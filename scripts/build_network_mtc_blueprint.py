@@ -368,7 +368,7 @@ if __name__ == '__main__':
     parser.add_argument("--continue_on_warning", help="Don't prompt the user to continue if there are warnings; just warn and continue", action="store_true")
     parser.add_argument("--skip_precheck_requirements", help="Don't precheck network requirements, stale projects, non-HEAD projects, etc", action="store_true")
     parser.add_argument("net_spec", metavar="network_specification.py", help="Script which defines required variables indicating how to build the network")
-    parser.add_argument("netvariant", choices=["Baseline", "Blueprint", "Alt1", "Alt2", "NextGenFwy","TIP2023"], help="Specify which network variant network to create.")
+    parser.add_argument("netvariant", choices=["Baseline", "Blueprint", "Alt1", "Alt2", "NextGenFwy","TIP2023", "NGFNoProject", "NGFNoProjectNoSFCordon"], help="Specify which network variant network to create.")
     args = parser.parse_args()
 
     NOW         = time.strftime("%Y%b%d.%H%M%S")
@@ -395,6 +395,9 @@ if __name__ == '__main__':
     # Read the configuration
     NETWORK_CONFIG = args.net_spec
     NET_VARIANT    = args.netvariant
+    # Use the NGF_NoProject git tag when building a Next Gen Freeways No Project variant
+    if NET_VARIANT=="NGFNoProject" or NET_VARIANT=="NGFNoProjectNoSFCordon":
+       TAG = "NGF_NoProject"
 
     # networks and log file will be in BlueprintNetworks
     if not os.path.exists("BlueprintNetworks"):
