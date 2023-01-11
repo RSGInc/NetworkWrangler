@@ -386,7 +386,7 @@ if __name__ == '__main__':
         HWY_SUBDIR       = "hwy"
         HWY_NET_NAME     = "freeflow.net"
     elif (args.model_type == Wrangler.Network.MODEL_TYPE_TM1) & (args.project_name == 'NGF'):
-        PIVOT_DIR        = r"L:\Application\Model_One\NextGenFwys\INPUT_DEVELOPMENT\Networks\NGF_Networks_NoProject_05\net_2035_NextGenFwy"
+        PIVOT_DIR        = r"L:\Application\Model_One\NextGenFwys\INPUT_DEVELOPMENT\Networks\NGF_Networks_NoProjectNoSFCordon_06\net_2035_NGFNoProjectNoSFCordon"
         PIVOT_YEAR       = 2035
         TRANSIT_CAPACITY_DIR = os.path.join(PIVOT_DIR, "trn")
         NETWORK_BASE_DIR = r"M:\Application\Model One\NetworkProjects"
