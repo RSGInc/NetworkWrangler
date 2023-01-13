@@ -76,15 +76,15 @@ NGF_PROJECTS = collections.OrderedDict([
         (2030, {'hwy':[],
                 'trn':[]
         }),
-        (2035, {'hwy':[{'name':'NGF_NoProject_farefiles',                                           'variants_include':['BlueprintSegmented']},
-                       {'name':'NGF_BlueprintSegmented',                                            'variants_include':['BlueprintSegmented']},
+        (2035, {'hwy':[{'name':'NGF_BlueprintSegmented',                                               'variants_include':['BlueprintSegmented']},
                        {'name':'MAJ_SF_Congestion_Pricing',                                            'variants_include':['P3_3cordons']},
                        {'name':'NGF_AL_Cordon',                                                        'variants_include':['P3_3cordons']},
                        {'name':'NGF_SC_Cordon',                                                        'variants_include':['P3_3cordons']},
                        # 'ReX_link',
                        # 'Futures_C4_ReX_Express'
                       ],
-                'trn':[#{'name':'ReX_link',                                                      'kwargs':{'FUTURE':"'NA'", 'filter_to_top_n':'15'}},
+                'trn':['NGF_NoProject_farefiles',
+                       #{'name':'ReX_link',                                                      'kwargs':{'FUTURE':"'NA'", 'filter_to_top_n':'15'}},
                        #{'name':'Futures_C4_ReX_Express',                                        'kwargs':{'FUTURE':"'NA'", 'filter_to_top_n':'15'}},
                        #{'name':'NGF_IncreaseTrnFreqXferRoutes2BartCaltrainFerry',               'kwargs':{'FUTURE':"'NA'", 'filter_to_top_n':'2', 'min_headway':'10'}},
                       ]
