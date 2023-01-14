@@ -151,7 +151,7 @@ class TransitLine(object):
     # python 2 backwards compat
     next = __next__
 
-    def setFreqs(self, freqs, timepers=None, allowDowngrades=True):
+    def setFreqs(self, freqs, timepers=None, allowDowngrades=True, modeltype=Network.MODEL_TYPE_TM1):
         '''Set some or all five headways (AM,MD,PM,EV,EA)
            - freqs is a list of numbers (or can be one number if only setting one headway)
              also accepts list of strings of numbers e.g. ["8","0","8","0","0"]
@@ -161,7 +161,11 @@ class TransitLine(object):
            - allowDowngrades (optional, pass either True or False) specifies whether headways
              may be increased (i.e., whether service may be reduced) with the current action. 
         '''
-        all_timepers = ['AM','MD','PM','EV','EA']
+        if modeltype==Network.MODEL_TYPE_CHAMP:
+            all_timepers = ['AM','MD','PM','EV','EA']
+        elif modeltype==Network.MODEL_TYPE_TM1:
+            all_timepers = ['EA','AM','MD','PM','EV']
+
         if timepers in (None, True, 'All', 'all', 'ALL'):
             if not len(freqs)==5: raise NetworkException('Must specify all 5 frequencies or specify time periods to set')
             num_freqs = 5
