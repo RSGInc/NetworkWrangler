@@ -9,96 +9,65 @@ PROJECT  = "NGF"
 #TAG = "PBA50_Blueprint"    # Use this tag if you want to replicate the network built for PBA50
 TAG = "HEAD"
 
-# A Alamedaproject can either be a simple string, or it can be
+# A project can either be a simple string, or it can be
 # a dictionary with with keys 'name', 'tag' (optional), and 'kwargs' (optional)
 # to specify a special tag or special keyword args for the projects apply() call.
 # For example:
 #     {'name':"Muni_TEP", 'kwargs':{'servicePlan':"'2012oct'"}}
-###########################################################
-COMMITTED_PROJECTS = collections.OrderedDict([
-    (2015, {
-        'hwy':[],
-        'trn':[]
-    }),
-    (2020, {
-        'hwy':[],
-        'trn':[],
-    }),
-    (2025, {
-        'hwy':[],
-        'trn':[]
-    }),
-    (2030, {
-        'hwy':[],
-        'trn':[]
-    }),
-    (2035, {
-        'hwy':[],
-        'trn':[]
-    })
-])
-
-###########################################################
-# Blueprint projects
-BLUEPRINT_PROJECTS = collections.OrderedDict([
-        (2015, {'hwy':[],
-                'trn':[]
-        }),
-        (2020, {'hwy':[],
-                'trn':[]
-        }),
-        (2025, {'hwy':['BP_Vision_Zero'
-        ],
-                'trn':[]
-        }),
-        (2030, {'hwy':[],
-                'trn':[]
-        }),
-        (2035, {'hwy':[],
-                'trn':[
-                   # {'name':'EIR1_Freq_Boosts',          'kwargs':{'MODELYEAR':'2035'},          'variants_include':['Mock']}
-                    ]
-        })
-    ])
 
 ###########################################################
 # NextGenFwy projects
-NGF_PROJECTS = collections.OrderedDict([
-        (2015, {'hwy':[],
-                'trn':[]
-        }),
-        (2020, {'hwy':[],
-                'trn':[]
-        }),
-        (2025, {'hwy':[],
-                'trn':[]
-        }),
-        (2030, {'hwy':[],
-                'trn':[]
-        }),
-        (2035, {'hwy':[{'name':'NGF_BlueprintSegmented',                                               'variants_include':['BlueprintSegmented']},
-                       {'name':'MAJ_SF_Congestion_Pricing',                                            'variants_include':['P3_3cordons']},
-                       {'name':'NGF_AL_Cordon',                                                        'variants_include':['P3_3cordons']},
-                       {'name':'NGF_SC_Cordon',                                                        'variants_include':['P3_3cordons']},
-                       # 'ReX_link',
-                       # 'Futures_C4_ReX_Express'
-                      ],
-                'trn':['NGF_NoProject_farefiles',
-                       #{'name':'ReX_link',                                                      'kwargs':{'FUTURE':"'NA'", 'filter_to_top_n':'15'}},
-                       #{'name':'Futures_C4_ReX_Express',                                        'kwargs':{'FUTURE':"'NA'", 'filter_to_top_n':'15'}},
-                       #{'name':'NGF_IncreaseTrnFreqXferRoutes2BartCaltrainFerry',               'kwargs':{'FUTURE':"'NA'", 'filter_to_top_n':'2', 'min_headway':'10'}},
-                      ]
-        })
-    ])
+
+
+# Pathways - note these are 2035 projects
+NGF_PROJECTS = {
+    'BlueprintSegmented':{
+        'hwy':[
+            'NGF_BlueprintSegmented',      # All lane tolling on freeways
+        ],   
+        'trn':[]
+    },
+    'P1_AllLaneTolling':{
+        'hwy':[
+            'NGF_BlueprintSegmented',       # All lane tolling on freeways
+            #{'name':'ReX_link',                                         'kwargs':{'FUTURE':"'NA'", 'filter_to_top_n':'15'}},
+            #{'name':'NGF_IncreaseTrnFreqXferRoutes2BartCaltrainFerry',  'kwargs':{'filter_to_top_n':'2', 'min_headway':'10'}},
+         ],
+        'trn':[
+            'NGF_NoProject_farefiles',     # ensures these files get included; note this is not a real project
+            #{'name':'ReX_link',                                         'kwargs':{'FUTURE':"'NA'", 'filter_to_top_n':'15'}},
+            #{'name':'NGF_IncreaseTrnFreqXferRoutes2BartCaltrainFerry',  'kwargs':{'filter_to_top_n':'2', 'min_headway':'10'}},
+        ]
+    },
+    'P2_AllLaneTollingPlusArterials':{
+        'hwy':[
+            'NGF_BlueprintSegmented',       # All lane tolling on freeways
+        ],
+        'trn':[
+            'NGF_NoProject_farefiles',      # ensures these files get included; note this is not a real project
+        ]
+    },
+    'P3_3Cordons':{
+        'hwy':[
+            'MAJ_SF_Congestion_Pricing',    # San Francisco Cordon Pricing
+            'NGF_AL_Cordon',                # Oakland Cordon Pricing
+            'NGF_SC_Cordon'                 # San Jose Cordon Pricing
+        ],
+        'trn':[
+            'NGF_NoProject_farefiles',      # ensures these files get included; note this is not a real project
+        ]
+    },
+}
 
 # Put them together for NETWORK_PROJECTS
 NETWORK_PROJECTS   = collections.OrderedDict()
 
-for YEAR in COMMITTED_PROJECTS.keys():
+# we're only building 2035
+for YEAR in [2035]:
 
     NETWORK_PROJECTS[YEAR] = {
-        'hwy':COMMITTED_PROJECTS[YEAR]['hwy'] + BLUEPRINT_PROJECTS[YEAR]['hwy'] + NGF_PROJECTS[YEAR]['hwy'],
-        'trn':COMMITTED_PROJECTS[YEAR]['trn'] + BLUEPRINT_PROJECTS[YEAR]['trn'] + NGF_PROJECTS[YEAR]['trn']
+        'hwy':NGF_PROJECTS[SCENARIO]['hwy'],
+        'trn':NGF_PROJECTS[SCENARIO]['trn']
     }
     # handle net_remove, nets keywords
     for netmode in ['hwy','trn']:

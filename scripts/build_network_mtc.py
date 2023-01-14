@@ -372,7 +372,9 @@ if __name__ == '__main__':
     parser.add_argument("project_name", help="required project name, for example NGF")
     parser.add_argument("--scenario", help="optional SCENARIO name")
     parser.add_argument("net_spec", metavar="network_specification.py", help="Script which defines required variables indicating how to build the network")
-    parser.add_argument("--NGF_netvariant", choices=["BlueprintSegmented", "Mock", "P1_SFcordonNoArterialTolls", "P2_SFcordonPlusArterialTolls", "P3_3cordons"], help="Specify which network variant network to create.")
+    parser.add_argument("--NGF_netvariant", 
+        choices=["BlueprintSegmented", "P1_AllLaneTolling", "P2_AllLaneTollingPlusArterials", "P3_3Cordons"], 
+        help="Specify which network variant network to create.")
     args = parser.parse_args()
 
     NOW         = time.strftime("%Y%b%d.%H%M%S")
@@ -386,7 +388,10 @@ if __name__ == '__main__':
         HWY_SUBDIR       = "hwy"
         HWY_NET_NAME     = "freeflow.net"
     elif (args.model_type == Wrangler.Network.MODEL_TYPE_TM1) & (args.project_name == 'NGF'):
-        PIVOT_DIR        = r"L:\Application\Model_One\NextGenFwys\INPUT_DEVELOPMENT\Networks\NGF_Networks_NoProject_05\net_2035_NextGenFwy"
+        PIVOT_DIR        = r"L:\Application\Model_One\NextGenFwys\INPUT_DEVELOPMENT\Networks\NGF_Networks_NoProject_06\net_2035_NGFNoProject"
+        # for 3 cordons, the no project without the SF cordon is required
+        if (args.NGF_netvariant == "P3_3Cordons"):
+            PIVOT_DIR        = r"L:\Application\Model_One\NextGenFwys\INPUT_DEVELOPMENT\Networks\NGF_Networks_NoProjectNoSFCordon_06\net_2035_NGFNoProjectNoSFCordon"
         PIVOT_YEAR       = 2035
         TRANSIT_CAPACITY_DIR = os.path.join(PIVOT_DIR, "trn")
         NETWORK_BASE_DIR = r"M:\Application\Model One\NetworkProjects"
@@ -411,7 +416,9 @@ if __name__ == '__main__':
         SCENARIO    = args.NGF_netvariant
         NET_VARIANT = args.NGF_netvariant
 
-    OUT_DIR        = "{}_network_".format(SCENARIO) + "{}"
+    OUT_DIR         = "{}_network_".format(PROJECT) + "{}"
+    if SCENARIO:
+        OUT_DIR     = "{}_{}_network_".format(PROJECT, SCENARIO) + "{}"
 
     LOG_FILENAME = "build%snetwork_%s_%s_%s.info.LOG" % ("TEST" if BUILD_MODE=="test" else "", PROJECT, SCENARIO, NOW)
     Wrangler.setupLogging(LOG_FILENAME,
