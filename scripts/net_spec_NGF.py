@@ -31,12 +31,11 @@ NGF_PROJECTS = {
         'hwy':[
             'NGF_BlueprintSegmented',       # All lane tolling on freeways
             #{'name':'ReX_link',                                         'kwargs':{'FUTURE':"'NA'", 'filter_to_top_n':'15'}},
-            #{'name':'NGF_IncreaseTrnFreqXferRoutes2BartCaltrainFerry',  'kwargs':{'filter_to_top_n':'2', 'min_headway':'10'}},
          ],
         'trn':[
             'NGF_NoProject_farefiles',     # ensures these files get included; note this is not a real project
-            #{'name':'ReX_link',                                         'kwargs':{'FUTURE':"'NA'", 'filter_to_top_n':'15'}},
-            #{'name':'NGF_IncreaseTrnFreqXferRoutes2BartCaltrainFerry',  'kwargs':{'filter_to_top_n':'2', 'min_headway':'10'}},
+            #{'name':'ReX_link',                                        'kwargs':{'FUTURE':"'NA'", 'filter_to_top_n':'15'}},
+            {'name':'NGF_IncreaseTrnFreqXferRoutes2BartCaltrainFerry',  'kwargs':{'filter_to_top_n':'2', 'min_headway':'10'}},
         ]
     },
     'P2_AllLaneTollingPlusArterials':{
