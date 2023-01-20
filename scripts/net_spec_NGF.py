@@ -30,15 +30,18 @@ NGF_PROJECTS = {
     'P1_AllLaneTolling':{
         'hwy':[
             'NGF_BlueprintSegmented',       # All lane tolling on freeways
-            #'Futures_C4_ReX_Express'
-            #{'name':'ReX_link',                                         'kwargs':{'FUTURE':"'NA'", 'filter_to_top_n':'15'}},
+            #'Futures_C4_ReX_Express',
+            #'ReX_link'               
          ],
         'trn':[
             'NGF_NoProject_farefiles',     # ensures these files get included; note this is not a real project
-            #'Futures_C4_ReX_Express'
+            #'Futures_C4_ReX_Express',
+            #'ReX_link'
             # for NGF_IncreaseTrnFreqXferRoutes2BartCaltrainFerry, if 'include_connections_to_express_bus' is set to 80, express bus stops are included. If 'include_connections_to_express_bus' is set to 100, then express bus stops are excluded. 
             # See TransitModes: https://github.com/BayAreaMetro/modeling-website/wiki/TransitModes
-            {'name':'NGF_IncreaseTrnFreqXferRoutes2BartCaltrainFerry',  'kwargs':{'filter_to_top_n':'2', 'min_headway':'10', 'include_connections_to_express_bus':'100'}}, 
+            #{'name':'NGF_IncreaseTrnFreqXferRoutes2BartCaltrainFerry',  'kwargs':{'filter_to_top_n':'2', 'min_headway':'10', 'include_connections_to_express_bus':'100'}}, 
+            # for NGF_TrunklineTrnFreqBoosts, if 'include_rail' is set to 137, rails are included. If 'include_connections_to_express_bus' is set to 109, then rails are excluded. 
+            {'name':'NGF_TrunklineTrnFreqBoosts',  'kwargs':{'min_headway':'15', 'include_rail':'109'}}, 
         ]
     },
     'P2_AllLaneTollingPlusArterials':{
