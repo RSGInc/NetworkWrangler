@@ -38,10 +38,10 @@ NGF_PROJECTS = {
             #'Futures_C4_ReX_Express',
             #'ReX_link'
             # for NGF_IncreaseTrnFreqXferRoutes2BartCaltrainFerry, if 'include_connections_to_express_bus' is set to 80, express bus stops are included. If 'include_connections_to_express_bus' is set to 100, then express bus stops are excluded. 
-            # See TransitModes: https://github.com/BayAreaMetro/modeling-website/wiki/TransitModes
             # {'name':'NGF_IncreaseTrnFreqXferRoutes2BartCaltrainFerry',  'kwargs':{'filter_to_top_n':'2', 'min_headway':'10', 'include_connections_to_express_bus':'100'}}, 
-            # {'name':'NGF_TrunklineTrnFreqBoosts',  'kwargs':{'min_headway':'15', 'include_BART':'"NA"', 'include_Caltrain':'"NA"', 'include_ValleyLink':'"NA"', 'include_SMART':'"NA"'}},  # NGF_TrunklineTrnFreqBoosts Level 1 and Level 2
-            {'name':'NGF_TrunklineTrnFreqBoosts',  'kwargs':{'min_headway':'15', 'include_BART':'120', 'include_Caltrain':'130', 'include_ValleyLink':'136', 'include_SMART':'135'}}, # NGF_TrunklineTrnFreqBoosts Level 3
+            
+            # include_rail means BART, Caltrain, Valley Link and SMART
+            {'name':'NGF_TrunklineTrnFreqBoosts',                       'kwargs':{'min_headway':'15', 'include_rail':'True'}},
         ]
     },
     'P2_AllLaneTollingPlusArterials':{
