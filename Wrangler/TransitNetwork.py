@@ -426,6 +426,7 @@ class TransitNetwork(Network):
         if name=='all':
             allLines = []
             for i in range(len(self.lines)):
+                if isinstance(self.lines[i],str): continue
                 allLines.append(self.lines[i])
             return allLines
         raise NetworkException('Line name not found: %s' % (name,))
