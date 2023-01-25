@@ -30,18 +30,26 @@ NGF_PROJECTS = {
     'P1_AllLaneTolling':{
         'hwy':[
             'NGF_BlueprintSegmented',       # All lane tolling on freeways
-            #'Futures_C4_ReX_Express',
-            #'ReX_link'               
+            'Futures_C4_ReX_Express',       # ReX Express
+            'ReX_link'                      # ReX Link
          ],
         'trn':[
-            'NGF_NoProject_farefiles',     # ensures these files get included; note this is not a real project
-            #'Futures_C4_ReX_Express',
-            #'ReX_link'
-            # for NGF_IncreaseTrnFreqXferRoutes2BartCaltrainFerry, if 'include_connections_to_express_bus' is set to 80, express bus stops are included. If 'include_connections_to_express_bus' is set to 100, then express bus stops are excluded. 
-            # {'name':'NGF_IncreaseTrnFreqXferRoutes2BartCaltrainFerry',  'kwargs':{'filter_to_top_n':'2', 'min_headway':'10', 'include_connections_to_express_bus':'100'}}, 
-            
+            'NGF_NoProject_farefiles',      # ensures these files get included; note this is not a real project
+            'Futures_C4_ReX_Express',       # ReX Express
+            'ReX_link',                     # Rex Link
+            {'name':'NGF_IncreaseTrnFreqXferRoutes2BartCaltrainFerry',  'kwargs':{
+                'top_n_local':'10', 
+                'min_headway':'10', 
+                'include_connections_to_express_bus':'True',
+                # this directory is used to determine which routes have frequency increases.  So to include ReX Express bus routes,
+                # use a directory that includes ReX Express routes (e.g. an earlier iteration of this scenario)
+                'transit_assignment_dir':'r"L:\\Application\\Model_One\\NextGenFwys\\Scenarios\\2035_TM152_NGF_NP02\\OUTPUT\\trn"'
+            }},
             # include_rail means BART, Caltrain, Valley Link and SMART
-            {'name':'NGF_TrunklineTrnFreqBoosts',                       'kwargs':{'min_headway':'15', 'include_rail':'True'}},
+            {'name':'NGF_TrunklineTrnFreqBoosts', 'kwargs':{
+                'min_headway':'15',
+                'include_rail':'True'
+            }},
         ]
     },
     'P2_AllLaneTollingPlusArterials':{
