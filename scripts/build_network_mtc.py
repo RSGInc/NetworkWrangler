@@ -373,7 +373,11 @@ if __name__ == '__main__':
     parser.add_argument("--scenario", help="optional SCENARIO name")
     parser.add_argument("net_spec", metavar="network_specification.py", help="Script which defines required variables indicating how to build the network")
     parser.add_argument("--NGF_netvariant", 
-        choices=["BlueprintSegmented", "P1_AllLaneTolling", "P2_AllLaneTollingPlusArterials", "P3_3Cordons"], 
+        choices=[
+            "BlueprintSegmented", 
+            "P1a_AllLaneTolling_ImproveTransit",                "P1b_AllLaneTolling_Affordable", 
+            "P2a_AllLaneTollingPlusArterials_ImproveTransit",   "P2b_AllLaneTollingPlusArterials_Affordable",
+            "P3_3Cordons"], 
         help="Specify which network variant network to create.")
     args = parser.parse_args()
 

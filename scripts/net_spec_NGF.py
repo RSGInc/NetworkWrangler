@@ -27,16 +27,19 @@ NGF_PROJECTS = {
         ],   
         'trn':[]
     },
-    'P1_AllLaneTolling':{
+    # Pathway 1a: All-lane tolling + Improve Transit Experience
+    # https://app.asana.com/0/1203644633064654/1203644636776961/f
+    'P1a_AllLaneTolling_ImproveTransit':{
         'hwy':[
             'NGF_BlueprintSegmented',       # All lane tolling on freeways
-            'Futures_C4_ReX_Express',       # ReX Express
-            'ReX_link'                      # ReX Link
+            'Futures_C4_ReX_Express',       # New Transit Service Near Tolling: ReX Express
+            'ReX_link'                      # New Transit Service Near Tolling: ReX Link
          ],
         'trn':[
             'NGF_NoProject_farefiles',      # ensures these files get included; note this is not a real project
-            'Futures_C4_ReX_Express',       # ReX Express
-            'ReX_link',                     # Rex Link
+            'Futures_C4_ReX_Express',       # New Transit Service Near Tolling: ReX Express
+            'ReX_link',                     # New Transit Service Near Tolling: Rex Link
+            # Local Transit Frequency Boosts 2
             {'name':'NGF_IncreaseTrnFreqXferRoutes2BartCaltrainFerry',  'kwargs':{
                 'top_n_local':'10', 
                 'min_headway':'10', 
@@ -45,14 +48,41 @@ NGF_PROJECTS = {
                 # use a directory that includes ReX Express routes (e.g. an earlier iteration of this scenario)
                 'transit_assignment_dir':'r"L:\\Application\\Model_One\\NextGenFwys\\Scenarios\\2035_TM152_NGF_NP02\\OUTPUT\\trn"'
             }},
-            # include_rail means BART, Caltrain, Valley Link and SMART
+            # Trunkline Transit Frequency Bosts 2
             {'name':'NGF_TrunklineTrnFreqBoosts', 'kwargs':{
-                'min_headway':'15',
-                'include_rail':'True'
+                'min_headway':'10',
+                'include_rail':'False'
             }},
+            # Extended Transit Service Hours
+            {'name':'NGF_TrnExtendedServiceHours',  'kwargs':{ 'EV_headway':'15' }},
         ]
     },
-    'P2_AllLaneTollingPlusArterials':{
+    # Pathway 1b: All-lane tolling + Focus on Affordability
+    # https://app.asana.com/0/1203644633064654/1203644636776965/f
+    'P1b_AllLaneTolling_Affordable':{
+        'hwy':[
+            'NGF_BlueprintSegmented',       # All lane tolling on freeways
+        ],
+        'trn':[
+            'NGF_NoProject_farefiles',      # ensures these files get included; note this is not a real project
+            # Trunkline Transit Frequency Bosts 2
+            {'name':'NGF_TrunklineTrnFreqBoosts', 'kwargs':{
+                'min_headway':'10',
+                'include_rail':'False'
+            }},
+            # Extended Transit Service Hours
+            {'name':'NGF_TrnExtendedServiceHours',  'kwargs':{ 'EV_headway':'15' }},
+        ]
+    },
+    'P2a_AllLaneTollingPlusArterials_ImproveTransit':{
+        'hwy':[
+            'NGF_BlueprintSegmented',       # All lane tolling on freeways
+        ],
+        'trn':[
+            'NGF_NoProject_farefiles',      # ensures these files get included; note this is not a real project
+        ]
+    },
+    'P2b_AllLaneTollingPlusArterials_Affordable':{
         'hwy':[
             'NGF_BlueprintSegmented',       # All lane tolling on freeways
         ],
@@ -68,6 +98,11 @@ NGF_PROJECTS = {
         ],
         'trn':[
             'NGF_NoProject_farefiles',      # ensures these files get included; note this is not a real project
+            # Test: Trunkline Transit Frequency Boosts 3
+            {'name':'NGF_TrunklineTrnFreqBoosts', 'kwargs':{
+                'min_headway':'10', 
+                'include_rail':'True'
+            }},
         ]
     },
 }
