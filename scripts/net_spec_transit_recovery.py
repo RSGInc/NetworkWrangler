@@ -94,6 +94,10 @@ COMMITTED_PROJECTS = collections.OrderedDict([
                'ALA150004_EastBay_BRT',
                {'name':'FBP_SL_026_SolExpressBus', 'kwargs':{'MODELYEAR':'2020'}}],
     }),
+    (2025, {
+        'hwy':[],
+        'trn':['Xfare_FareCooordination']
+    })
 ])
 
 
