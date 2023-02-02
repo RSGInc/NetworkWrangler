@@ -46,7 +46,7 @@ NGF_PROJECTS = {
                 'include_connections_to_express_bus':'True',
                 # this directory is used to determine which routes have frequency increases.  So to include ReX Express bus routes,
                 # use a directory that includes ReX Express routes (e.g. an earlier iteration of this scenario)
-                'transit_assignment_dir':'r"L:\\Application\\Model_One\\NextGenFwys\\Scenarios\\2035_TM152_NGF_NP02\\OUTPUT\\trn"'
+                'transit_assignment_dir':'r"L:\\Application\\Model_One\\NextGenFwys\\Scenarios\\2035_TM152_NGF_ReXExpress_ReXLink_trnassignment\\OUTPUT\\trn"'
             }},
             # Trunkline Transit Frequency Bosts 2
             {'name':'NGF_TrunklineTrnFreqBoosts', 'kwargs':{
