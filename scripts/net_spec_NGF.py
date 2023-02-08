@@ -42,7 +42,8 @@ NGF_PROJECTS = {
             # Local Transit Frequency Boosts 2
             {'name':'NGF_IncreaseTrnFreqXferRoutes2BartCaltrainFerry',  'kwargs':{
                 'top_n_local':'10', 
-                'min_headway':'10', 
+                # configure by mode: https://github.com/BayAreaMetro/modeling-website/wiki/TransitModes
+                'min_headway':'{"local_default":30, 78:8, 111:10}', 
                 'include_connections_to_express_bus':'True',
                 # this directory is used to determine which routes have frequency increases.  So to include ReX Express bus routes,
                 # use a directory that includes ReX Express routes (e.g. an earlier iteration of this scenario)
