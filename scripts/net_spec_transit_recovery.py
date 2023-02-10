@@ -95,8 +95,45 @@ COMMITTED_PROJECTS = collections.OrderedDict([
                {'name':'FBP_SL_026_SolExpressBus', 'kwargs':{'MODELYEAR':'2020'}}],
     }),
     (2025, {
-        'hwy':[],
-        'trn':['Xfare_FareCooordination']
+        'hwy': [# from net_spec_blueprint.py COMMITTED[2025]['hwy']
+                {'name':'Bridge_Toll_Updates_2_2pct', 'kwargs':{'MODELYEAR':'2025'}},
+               'EXP_CC_050028_I680_SB_HOV_Completion',
+               'EXP_101B1',
+               'EXP_101B2',
+               'EXP_680C1',
+               'EXP_680F',
+               'EXP_85D',
+               'EXP_101C',
+               'ALA150001_I680_SR84_Int_Wid',
+               'ALA150043_Claremont_road_diet',
+               'CC_070009_Slatten_Ranch_Rd_Extension',
+               'SF_070004_Geary_BRT_Phase1',
+               'SON070004_101_MarinSonNarrows_Phase2',
+               'SOL110006_Jepson_1B_1C',
+               'SCL190008_US101_DLC_Int_Imp',
+               'CC_170061_Bus_On_Shoulder_680BRT',
+               'I880_US101_AdaptiveRampMetering',
+               # omit: 'MAJ_SCL050009_VTA_Eastridge_Extension',
+               'SOL070020_I80_I680_SR12_Int_1_2A',
+               'FBP_NP_036_SR29_Imola_PNR',
+               'ALA170052_Fruitvale_Ave_ped_improvements',
+               'EXP_Blueprint_NoProject',
+               # from net_spec_blueprint.py BLUEPRINT_PROJECTS[2025]['hwy']
+                'FBP_NP_044_Soscol_Junction',
+        ],
+        'trn':[# from net_spec_blueprint.py COMMITTED[2025]['trn']
+               'SF_010028_Caltrain_Modernization',
+               'SON090002_SMART_to_Windsor',
+               # omit: 'MAJ_SCL050009_VTA_Eastridge_Extension',
+               'REG090037_New_BART_Trains',
+               'FBP_NP_036_SR29_Imola_PNR',
+               'SOL070020_I80_I680_SR12_Int_1_2A',
+               # from net_spec_blueprint.py BLUEPRINT_PROJECTS[2025]['trn']
+               'FBP_NP_044_Soscol_Junction',
+               'SON090002_SMART_NorthPetaluma',
+               # added for transit_recovery
+               {'name':'Xfare_FareCooordination', 'variants_include':'TransitFavorable'}
+            ]
     })
 ])
 
