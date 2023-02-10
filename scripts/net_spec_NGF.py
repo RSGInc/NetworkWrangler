@@ -50,12 +50,12 @@ NGF_PROJECTS = {
                 'transit_assignment_dir':'r"L:\\Application\\Model_One\\NextGenFwys\\Scenarios\\2035_TM152_NGF_ReXExpress_ReXLink_trnassignment\\OUTPUT\\trn"'
             }},
             # Trunkline Transit Frequency Bosts 2
-            {'name':'NGF_TrunklineTrnFreqBoosts', 'kwargs':{
-                'min_headway':'10',
-                'include_rail':'False'
-            }},
+            #{'name':'NGF_TrunklineTrnFreqBoosts', 'kwargs':{
+            #    'min_headway':'10',
+            #    'include_rail':'False'
+            #}},
             # Extended Transit Service Hours
-            {'name':'NGF_TrnExtendedServiceHours',  'kwargs':{ 'EV_headway':'15' }},
+            #{'name':'NGF_TrnExtendedServiceHours',  'kwargs':{ 'EV_headway':'15' }},
         ]
     },
     # Pathway 1b: All-lane tolling + Focus on Affordability
