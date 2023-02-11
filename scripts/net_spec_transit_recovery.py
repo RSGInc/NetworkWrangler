@@ -148,6 +148,28 @@ for YEAR in COMMITTED_PROJECTS.keys():
         'trn':COMMITTED_PROJECTS[YEAR]['trn']
     }
 
+    # handle net_remove, nets keywords
+    for netmode in ['hwy','trn']:
+
+        # iterate backwards via index to delete cleanly
+        for project_idx in range(len(NETWORK_PROJECTS[YEAR][netmode])-1,-1,-1):
+            project = NETWORK_PROJECTS[YEAR][netmode][project_idx]
+            # special handling requires project to be specified as dictionary
+            if not isinstance(project, dict): continue
+
+            # variants_exclude: specifies list of network variants for which this project should be *excluded*
+            if 'variants_exclude' in project.keys() and SCENARIO in project['variants_exclude']:
+                Wrangler.WranglerLogger.info("Removing {} {} {}".format(YEAR, netmode, project))
+                del NETWORK_PROJECTS[YEAR][netmode][project_idx]
+                continue
+
+            # variants_include: specifies list of network variants for which this project should be *included*
+            # if this keyword is present, then this project is included *only* for variants in this list
+            if 'variants_include' in project.keys() and SCENARIO not in project['variants_include']:
+                Wrangler.WranglerLogger.info("Removing {} {} {}".format(YEAR, netmode, project))
+                del NETWORK_PROJECTS[YEAR][netmode][project_idx]
+                continue
+
 #
 # For every year where a project is applied do the following:
 # Convert all zero-length links to 0.01
