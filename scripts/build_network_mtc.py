@@ -394,8 +394,8 @@ if __name__ == '__main__':
     elif (args.model_type == Wrangler.Network.MODEL_TYPE_TM1) & (args.project_name == 'NGF'):
         PIVOT_DIR        = r"L:\Application\Model_One\NextGenFwys\INPUT_DEVELOPMENT\Networks\NGF_Networks_NoProjectNoSFCordon_07\net_2035_NGFNoProjectNoSFCordon"
         # for 3 cordons, the no project without the SF cordon is required
-        # if (args.NGF_netvariant == "P3_3Cordons"):
-        #     PIVOT_DIR        = r"L:\Application\Model_One\NextGenFwys\INPUT_DEVELOPMENT\Networks\NGF_Networks_NoProjectNoSFCordon_06\net_2035_NGFNoProjectNoSFCordon"
+        if (args.NGF_netvariant == "P3_3Cordons"):
+            PIVOT_DIR        = r"L:\Application\Model_One\NextGenFwys\INPUT_DEVELOPMENT\Networks\NGF_Networks_NoProjectNoSFCordon_07\net_2035_NGFNoProjectNoSFCordon"
         PIVOT_YEAR       = 2035
         TRANSIT_CAPACITY_DIR = os.path.join(PIVOT_DIR, "trn")
         NETWORK_BASE_DIR = r"M:\Application\Model One\NetworkProjects"
