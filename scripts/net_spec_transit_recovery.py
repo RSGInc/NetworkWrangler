@@ -7,7 +7,7 @@ PROJECT  = "TransitRecov"
 # MANDATORY. Set this to be the git tag for checking out network projects.
 #TAG = "HEAD"               # Use this tag if you want NetworkWrangler to use the latest version in the local repo to build the network
 #TAG = "PBA50_Blueprint"    # Use this tag if you want to replicate the network built for PBA50
-TAG = "HEAD"
+TAG = "PBA50_Blueprint"
 
 # A Alamedaproject can either be a simple string, or it can be
 # a dictionary with with keys 'name', 'tag' (optional), and 'kwargs' (optional)
@@ -95,8 +95,7 @@ COMMITTED_PROJECTS = collections.OrderedDict([
                {'name':'FBP_SL_026_SolExpressBus', 'kwargs':{'MODELYEAR':'2020'}}],
     }),
     (2025, {
-        'hwy': [# from net_spec_blueprint.py COMMITTED[2025]['hwy']
-                {'name':'Bridge_Toll_Updates_2_2pct', 'kwargs':{'MODELYEAR':'2025'}},
+        'hwy': [{'name':'Bridge_Toll_Updates_2_2pct', 'kwargs':{'MODELYEAR':'2025'}},
                'EXP_CC_050028_I680_SB_HOV_Completion',
                'EXP_101B1',
                'EXP_101B2',
@@ -117,37 +116,142 @@ COMMITTED_PROJECTS = collections.OrderedDict([
                'SOL070020_I80_I680_SR12_Int_1_2A',
                'FBP_NP_036_SR29_Imola_PNR',
                'ALA170052_Fruitvale_Ave_ped_improvements',
-               'EXP_Blueprint_NoProject',
-               # from net_spec_blueprint.py BLUEPRINT_PROJECTS[2025]['hwy']
-                'FBP_NP_044_Soscol_Junction',
-        ],
-        'trn':[# from net_spec_blueprint.py COMMITTED[2025]['trn']
-               'SF_010028_Caltrain_Modernization',
+               'EXP_Blueprint_NoProject'],
+        'trn':['SF_010028_Caltrain_Modernization',
                'SON090002_SMART_to_Windsor',
                # omit: 'MAJ_SCL050009_VTA_Eastridge_Extension',
                'REG090037_New_BART_Trains',
                'FBP_NP_036_SR29_Imola_PNR',
-               'SOL070020_I80_I680_SR12_Int_1_2A',
-               # from net_spec_blueprint.py BLUEPRINT_PROJECTS[2025]['trn']
-               'FBP_NP_044_Soscol_Junction',
-               'SON090002_SMART_NorthPetaluma',
-               # added for transit_recovery
-               {'name':'Xfare_FareCooordination', 'variants_include':'TransitFavorable'}
-            ]
+               'SOL070020_I80_I680_SR12_Int_1_2A']
     })
 ])
 
+###########################################################
+# Blueprint projects
+BLUEPRINT_PROJECTS = collections.OrderedDict([
+        (2015, {'hwy':[],
+                'trn':[]
+        }),
+        (2020, {'hwy':[],
+                'trn':[]
+        }),
+        (2025, {'hwy':['RRSP_Alameda_Point_Transit_Improvements',
+                       'MAJ_MTC050027_Berkeley_Ferry',
+                       'MAJ_WETA_Service_Frequency_Increase',                       
+                       {'name':'Transform_SR37_Widening_Interim',                                           'variants_exclude':['Alt1']},
+                       {'name':'MAJ_SF_Congestion_Pricing',                                                 'variants_exclude':['NGFNoProjectNoSFCordon']},
+                       'MAJ_Geary_BRT_Phase2',
+                       'FBP_MU_041_Hovercraft_Pilot',
+                       {'name':'BP_Vision_Zero', 'variants_exclude':['NGFNoProject', 'NGFNoProjectNoSFCordon']},
+                       'EXP_Blueprint',
+                       {'name':'MAJ_AC_Frequency_Improvement', 'variants_exclude':['NGFNoProject', 'NGFNoProjectNoSFCordon']},
+                       'MRN050034_101_MarinSonNarrows_Phase2',
+                       'FBP_MU_044_SouthSF_Ferry_Serv_Incr',
+                       'FBP_MU_029_ACRapid_2025',
+                       'RRSP_E14_Mission_Corridor',
+                       'FBP_MR_026_NovatoWide',
+                       'FBP_CC_054_CrowCanyonWide',
+                       'FBP_NP_038_TSP_On_SR29',
+                       {'name':'FBP_CC_050_SR4_Operation_Improvements_EB',                                  'variants_exclude':['Alt1']},
+                       'FBP_NP_044_Soscol_Junction',
+                       'FBP_SL_033_FairgroundsWide',
+                       {'name':'MAJ_SOL070020_I80_I680_SR12_Int_2B_7','kwargs':{'PHASE':"'2B'"}},
+                       {'name':'FBP_CC_040_041_042_I680_SR4_Int_Phases_1_2_4_5', 'kwargs':{'PHASE':"'1'"},  'variants_exclude':['Alt1']},
+                       {'name':'FBP_CC_040_041_042_I680_SR4_Int_Phases_1_2_4_5', 'kwargs':{'PHASE':"'2'"},  'variants_exclude':['Alt1']},
+                       {'name':'EXP_uncommitted_all',           'kwargs':{'MODELYEAR':'2025'},              'variants_exclude':['Alt1', 'NGFNoProject', 'NGFNoProjectNoSFCordon']},
+                       {'name':'EXP_uncommitted_noAllLaneTolling', 'kwargs':{'MODELYEAR':'2025'},           'variants_include':['NGFNoProject', 'NGFNoProjectNoSFCordon']},
+                       {'name':'EIR1_EXP_uncommitted_all',      'kwargs':{'MODELYEAR':'2025'},              'variants_include':['Alt1']},
+                       {'name':'FBP_SF_012_Geneva_Harney_BRT',  'kwargs':{'MODELYEAR':'2025'}},
+                       {'name':'FBP_CC_15_23rd_St_BRT',         'kwargs':{'MODELYEAR':'2025'}},
+                       'FBP_SC_103_MontagueWide', 
+                       {'name':'MAJ_Bay_Area_Forward_all',      'kwargs':{'MODELYEAR':'2025'}},
+                       'FBP_CC_057_LoneTreeWide',
+                       'FBP_CC_063_BrentwoodWide',
+                       'FBP_CC_067_WillowPassWide',
+                       'FBP_CC_065_LaurelWide',
+                       'FBP_AL_062_TassajaraWide',
+                       'FBP_SC_039_SR237WBWide',      
+                       'FBP_AL_051_7St_Grade_Sep_West',
+                       'FBP_AL_044_I880_Whipple_Imps',
+                       'FBP_AL_055_DubBlvd_NCanyons_Ext',
+                       'FBP_SN_017_Arata_Int',
+                       'FBP_CC_017_Brentwood_Intermodal',
+                       'FBP_SF_030_Balboa_Park_Area_2',
+                       'EXP_Blueprint',
+                       'FBP_AL_039_I580_Interchange_Imps',
+                       'FBP_CC_056_LaurelExtension',
+                       'FBP_SC_084_10th_BridgeWide',
+                       'FBP_SL_053_PeabodyWide',
+                       'FBP_SC_073_BlossomHill_101Wide',
+                       'FBP_SC_082_US101_25_Interchange',
+                       'FBP_SM_035_Peninsula_101_OnOffRamps',
+                       'FBP_CC_045_SanPabloDam_Interchange_Phase2',
+                       'FBP_CC_030_OakleyAmtrak',
+                       'STIP_ProduceAve',
+                       'FBP_SM_033_US101_Holly_Interchange',
+                       'FBP_SM_034_Route92_ElCamino_Interchange',
+                       'FBP_SL_019_BeniciaRoad_Diet',
+                       'FBP_SL_023_WestTexasRoad_Diet',
+                       'FBP_SN_012_PetalumaBlvd_Diet',
+                       'MAJ_MissionBay_SF_Ferry',
+                       {'name':'EIR2_Val_Link_ExpressBus',                                                'variants_include':['Alt2']},
+                       {'name':'EIR2_ReXBlue',                                                            'variants_include':['Alt2']},
+                       'FBP_SC_072_US101_Trimble_Interchange'],
+                'trn':['MAJ_Geary_BRT_Phase2',
+                       'FBP_AL_001_NewarkFremPDA',
+                       {'name':'FBP_MU_059_ACTransbay_Freq_Incr',                                         'variants_exclude':['Alt2']},
+                       {'name':'MAJ_AC_Frequency_Improvement',                                            'variants_exclude':['NGFNoProject', 'NGFNoProjectNoSFCordon']},
+                       'RRSP_Alameda_Point_Transit_Improvements',
+                       'MAJ_MTC050027_Berkeley_Ferry',
+                       'MAJ_WETA_Service_Frequency_Increase',
+                       {'name':'FBP_MU_046_ACE_Freq_Inc',       'kwargs':{'MODELYEAR':'2025'}},                       
+                       {'name':'Transform_SR37_Widening_Interim',                                         'variants_exclude':['Alt1']},
+                       {'name':'MAJ_SF_Congestion_Pricing',                                               'variants_include':['NGFNoProjectNoSFCordon']},
+                       'FBP_MU_041_Hovercraft_Pilot',
+                       'FBP_MU_049_Caltrain_6TPHPD',
+                       {'name':'FBP_MU_060_ReX_Blue',                                                     'variants_exclude':['NGFNoProject', 'NGFNoProjectNoSFCordon']},
+                       {'name':'EIR2_ReXBlue',                                                            'variants_include':['Alt2']},                       
+                       'FBP_MU_044_SouthSF_Ferry_Serv_Incr',
+                       'GGT_Service_Imp',
+                       'FBP_MU_029_ACRapid_2025',
+                       'RRSP_E14_Mission_Corridor',
+                       'FBP_NP_044_Soscol_Junction',
+                       'MAJ_RedwoodCity_SF_Ferry',
+                       'MAJ_Alameda_Point_SF_Ferry',
+                       {'name':'MAJ_SOL070020_I80_I680_SR12_Int_2B_7','kwargs':{'PHASE':"'2B'"}},
+                       {'name':'FBP_SF_012_Geneva_Harney_BRT',  'kwargs':{'MODELYEAR':'2025'}},
+                       {'name':'FBP_CC_15_23rd_St_BRT',         'kwargs':{'MODELYEAR':'2025'}},
+                       'FBP_CC_030_OakleyAmtrak',
+                       'FBP_SM_020_Regional_Express_Buses',
+                       'MAJ_MissionBay_SF_Ferry',              
+                       'MAJ_Sonoma_Frequency_Increase',
+                       {'name':'EIR1_Freq_Boosts',              'kwargs':{'MODELYEAR':'2025'},            'variants_include':['Alt1']},
+                       {'name':'EIR2_HRA_Freq_Incr',            'kwargs':{'MODELYEAR':'2025'},            'variants_include':['Alt2']},
+                       {'name':'EIR2_PDA_Freq_Incr',            'kwargs':{'MODELYEAR':'2025'},            'variants_include':['Alt2']},
+                       {'name':'EIR2_Val_Link_ExpressBus',                                                'variants_include':['Alt2']},
+                       {'name':'SON090002_SMART_NorthPetaluma',                                           'variants_exclude':['Baseline']},
+                       # added for transit_recovery
+                       {'name':'Xfare_FareCooordination', 'tag':'HEAD'}]
+        }),
+])
 
 
 # Put them together for NETWORK_PROJECTS
 NETWORK_PROJECTS   = collections.OrderedDict()
 
 for YEAR in COMMITTED_PROJECTS.keys():
-    NETWORK_PROJECTS[YEAR] = {
-        'hwy':COMMITTED_PROJECTS[YEAR]['hwy'],
-        'trn':COMMITTED_PROJECTS[YEAR]['trn']
-    }
-
+    if SCENARIO == "TransitUnfavorable":
+        NETWORK_PROJECTS[YEAR] = {
+            'hwy':COMMITTED_PROJECTS[YEAR]['hwy'],
+            'trn':COMMITTED_PROJECTS[YEAR]['trn']
+        }
+    elif SCENARIO == "TransitFavorable":
+        NETWORK_PROJECTS[YEAR] = {
+            'hwy':COMMITTED_PROJECTS[YEAR]['hwy'] + BLUEPRINT_PROJECTS[YEAR]['hwy'],
+            'trn':COMMITTED_PROJECTS[YEAR]['trn'] + BLUEPRINT_PROJECTS[YEAR]['trn']
+        }
+    else:
+        raise "Transit Recovery NET_VARIANT not recognized: {}".format(NET_VARIANT)
     # handle net_remove, nets keywords
     for netmode in ['hwy','trn']:
 
