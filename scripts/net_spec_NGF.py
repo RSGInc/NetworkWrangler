@@ -63,6 +63,7 @@ NGF_PROJECTS = {
     'P1b_AllLaneTolling_Affordable':{
         'hwy':[
             'NGF_BlueprintSegmented',       # All lane tolling on freeways
+            'NGF_CarpoolLanes',             # Carpool Lanes
         ],
         'trn':[
             'NGF_NoProject_farefiles',      # ensures these files get included; note this is not a real project
@@ -72,7 +73,7 @@ NGF_PROJECTS = {
                 'include_rail':'False'
             }},
             # Extended Transit Service Hours
-            {'name':'NGF_TrnExtendedServiceHours',  'kwargs':{ 'EV_headway':'15' }},
+            {'name':'NGF_TrnExtendedServiceHours',  'kwargs':{'EV_headway':'15'}},
         ]
     },
     'P2a_AllLaneTollingPlusArterials_ImproveTransit':{
