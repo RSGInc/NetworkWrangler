@@ -160,6 +160,7 @@ class TransitLine(object):
              If setting all headways, True or 'All' may be passed.
            - allowDowngrades (optional, pass either True or False) specifies whether headways
              may be increased (i.e., whether service may be reduced) with the current action. 
+           - Assumes max freq = length of time period -- otherwise, Cube will error
         '''
         if modeltype==Network.MODEL_TYPE_CHAMP:
             all_timepers = ['AM','MD','PM','EV','EA']
@@ -194,6 +195,13 @@ class TransitLine(object):
                 if timeper not in all_timepers: raise NetworkException('"' + timeper + '" is not a valid time period')
                 timeper_idx = 1 + all_timepers.index(timeper)
             attr_set = 'FREQ[' + str(timeper_idx) + ']'
+            # max = length of time period -- make sure frequency doesn't exceed this
+            MAX_FREQ = TransitLine.HOURS_PER_TIMEPERIOD[modeltype][timeper]*60.0
+            if float(freqs[i]) > MAX_FREQ:
+                WranglerLogger.debug("setFreqs(): line {} frequency {} for {} exceeds max {}; using max".format(
+                    self.name, float(freqs[i]), timeper, MAX_FREQ))
+                freqs[i] = MAX_FREQ
+    
             if(allowDowngrades):
                 self.attr[attr_set] = float(freqs[i])
             else:
