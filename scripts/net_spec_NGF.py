@@ -33,7 +33,8 @@ NGF_PROJECTS = {
         'hwy':[
             'NGF_BlueprintSegmented',       # All lane tolling on freeways
             'Futures_C4_ReX_Express',       # New Transit Service Near Tolling: ReX Express
-            'ReX_link'                      # New Transit Service Near Tolling: ReX Link
+            'ReX_link',                     # New Transit Service Near Tolling: ReX Link
+            'NGF_CarpoolLanes',             # Carpool Lanes
          ],
         'trn':[
             'NGF_NoProject_farefiles',      # ensures these files get included; note this is not a real project
@@ -42,7 +43,7 @@ NGF_PROJECTS = {
             # Local Transit Frequency Boosts 2
             # Parameters defined here: https://app.asana.com/0/0/1203931443540514/f
             {'name':'NGF_IncreaseTrnFreqXferRoutes2BartCaltrainFerry',  'kwargs':{
-                'top_n_local':'2', 
+                'top_n_local':'10', 
                 # configure by mode: https://github.com/BayAreaMetro/modeling-website/wiki/TransitModes
                 'min_headway':'{"local_default":15, 21:10, 24:10, 27:10, 28:10, 30:10, 111:10}', 
                 'include_connections_to_express_bus':'True',
@@ -51,12 +52,12 @@ NGF_PROJECTS = {
                 'transit_assignment_dir':'r"L:\\Application\\Model_One\\NextGenFwys\\Scenarios\\2035_TM152_NGF_ReXExpress_ReXLink_trnassignment\\OUTPUT\\trn"'
             }},
             # Trunkline Transit Frequency Boosts 2
-            #{'name':'NGF_TrunklineTrnFreqBoosts', 'kwargs':{
-            #    'min_headway':'10',
-            #    'include_rail':'False'
-            #}},
+            {'name':'NGF_TrunklineTrnFreqBoosts', 'kwargs':{
+                'min_headway':'10',
+                'include_rail':'False'
+            }},
             # Extended Transit Service Hours
-            #{'name':'NGF_TrnExtendedServiceHours',  'kwargs':{ 'EV_headway':'15' }},
+            {'name':'NGF_TrnExtendedServiceHours',  'kwargs':{'EV_headway':'15'}},
         ]
     },
     # Pathway 1b: All-lane tolling + Focus on Affordability
