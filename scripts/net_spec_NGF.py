@@ -40,16 +40,17 @@ NGF_PROJECTS = {
             'Futures_C4_ReX_Express',       # New Transit Service Near Tolling: ReX Express
             'ReX_link',                     # New Transit Service Near Tolling: Rex Link
             # Local Transit Frequency Boosts 2
+            # Parameters defined here: https://app.asana.com/0/0/1203931443540514/f
             {'name':'NGF_IncreaseTrnFreqXferRoutes2BartCaltrainFerry',  'kwargs':{
-                'top_n_local':'10', 
+                'top_n_local':'2', 
                 # configure by mode: https://github.com/BayAreaMetro/modeling-website/wiki/TransitModes
-                'min_headway':'{"local_default":30, 78:8, 111:10}', 
+                'min_headway':'{"local_default":15, 21:10, 24:10, 27:10, 28:10, 30:10, 111:10}', 
                 'include_connections_to_express_bus':'True',
                 # this directory is used to determine which routes have frequency increases.  So to include ReX Express bus routes,
                 # use a directory that includes ReX Express routes (e.g. an earlier iteration of this scenario)
                 'transit_assignment_dir':'r"L:\\Application\\Model_One\\NextGenFwys\\Scenarios\\2035_TM152_NGF_ReXExpress_ReXLink_trnassignment\\OUTPUT\\trn"'
             }},
-            # Trunkline Transit Frequency Bosts 2
+            # Trunkline Transit Frequency Boosts 2
             #{'name':'NGF_TrunklineTrnFreqBoosts', 'kwargs':{
             #    'min_headway':'10',
             #    'include_rail':'False'
