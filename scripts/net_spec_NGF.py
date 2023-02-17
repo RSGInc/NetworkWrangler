@@ -31,16 +31,29 @@ NGF_PROJECTS = {
     # https://app.asana.com/0/1203644633064654/1203644636776961/f
     'P1a_AllLaneTolling_ImproveTransit':{
         'hwy':[
-            'NGF_BlueprintSegmented',       # All lane tolling on freeways
-            'Futures_C4_ReX_Express',       # New Transit Service Near Tolling: ReX Express
-            'ReX_link',                     # New Transit Service Near Tolling: ReX Link
-            'NGF_CarpoolLanes',             # Carpool Lanes
-            'NGF_TransitPriorityOnArterials'# Transit Priority - All Lane Tolling
+            'NGF_BlueprintSegmented',         # All lane tolling on freeways
+            'Futures_C4_ReX_Express',         # New Transit Service Near Tolling: ReX Express
+            'ReX_link',                       # New Transit Service Near Tolling: ReX Link
+            'NGF_CarpoolLanes',               # Carpool Lanes
+            'NGF_TransitPriorityOnArterials', # Transit Priority - All Lane Tolling
+            'Transform_I680_Multimodal_Imp',
+            'FBP_CC_036_I80_ExpBus_Impr',
+            'FBP_NP_040_VINE_Exp_Bus_Enhancements',
+            'FBP_MR_018_US101_BOS',
+            'MAJ_MuniForward_Uncommitted',
+            'MAJ_AC_Frequency_Improvement'
          ],
         'trn':[
             'NGF_NoProject_farefiles',      # ensures these files get included; note this is not a real project
             'Futures_C4_ReX_Express',       # New Transit Service Near Tolling: ReX Express
             'ReX_link',                     # New Transit Service Near Tolling: Rex Link
+            'Transform_I680_Multimodal_Imp',
+            'FBP_CC_036_I80_ExpBus_Impr',
+            'FBP_SL_026_SolExpressBus',
+            'MAJ_MuniForward_Uncommitted',
+            'VTA_Next',
+            'MAJ_AC_Frequency_Improvement',
+            'FBP_MuniForward_Uncommitted_Rail'
             # Local Transit Frequency Boosts 2
             # Parameters defined here: https://app.asana.com/0/0/1203931443540514/f
             {'name':'NGF_IncreaseTrnFreqXferRoutes2BartCaltrainFerry',  'kwargs':{
