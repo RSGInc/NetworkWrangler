@@ -53,7 +53,7 @@ NGF_PROJECTS = {
             'MAJ_MuniForward_Uncommitted',
             'VTA_Next',
             'MAJ_AC_Frequency_Improvement',
-            'FBP_MuniForward_Uncommitted_Rail'
+            'FBP_MuniForward_Uncommitted_Rail',
             # Local Transit Frequency Boosts 2
             # Parameters defined here: https://app.asana.com/0/0/1203931443540514/f
             {'name':'NGF_IncreaseTrnFreqXferRoutes2BartCaltrainFerry',  'kwargs':{
