@@ -158,8 +158,8 @@ BLUEPRINT_PROJECTS = collections.OrderedDict([
                        {'name':'MAJ_SOL070020_I80_I680_SR12_Int_2B_7','kwargs':{'PHASE':"'2B'"}},
                        {'name':'FBP_CC_040_041_042_I680_SR4_Int_Phases_1_2_4_5', 'kwargs':{'PHASE':"'1'"},  'variants_exclude':['Alt1']},
                        {'name':'FBP_CC_040_041_042_I680_SR4_Int_Phases_1_2_4_5', 'kwargs':{'PHASE':"'2'"},  'variants_exclude':['Alt1']},
-                       {'name':'EXP_uncommitted_all',           'kwargs':{'MODELYEAR':'2025'},              'variants_exclude':['Alt1', 'NGFNoProject', 'NGFNoProjectNoSFCordon']},
-                       {'name':'EXP_uncommitted_noAllLaneTolling', 'kwargs':{'MODELYEAR':'2025'},           'variants_include':['NGFNoProject', 'NGFNoProjectNoSFCordon']},
+                       {'name':'EXP_uncommitted_all',           'kwargs':{'MODELYEAR':'2025'},              'variants_exclude':['Alt1', 'NGFNoProject', 'NGFNoProjectNoSFCordon', 'TransitFavorable']},
+                       {'name':'EXP_uncommitted_noAllLaneTolling', 'kwargs':{'MODELYEAR':'2025'},           'variants_include':['NGFNoProject', 'NGFNoProjectNoSFCordon', 'TransitFavorable'], 'tag':'NGF_NoProject'},
                        {'name':'EIR1_EXP_uncommitted_all',      'kwargs':{'MODELYEAR':'2025'},              'variants_include':['Alt1']},
                        {'name':'FBP_SF_012_Geneva_Harney_BRT',  'kwargs':{'MODELYEAR':'2025'}},
                        {'name':'FBP_CC_15_23rd_St_BRT',         'kwargs':{'MODELYEAR':'2025'}},
@@ -231,7 +231,8 @@ BLUEPRINT_PROJECTS = collections.OrderedDict([
                        {'name':'EIR2_Val_Link_ExpressBus',                                                'variants_include':['Alt2']},
                        {'name':'SON090002_SMART_NorthPetaluma',                                           'variants_exclude':['Baseline']},
                        # added for transit_recovery
-                       {'name':'Xfare_FareCooordination', 'tag':'HEAD'}]
+                       {'name':'Xfare_FareCooordination', 'tag':'HEAD'},
+                       'NGF_NoProject_farefiles']
         }),
 ])
 
