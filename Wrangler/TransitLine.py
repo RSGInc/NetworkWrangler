@@ -188,7 +188,8 @@ class TransitLine(object):
             timeper = timepers[i]
             try:
                 timeper_int = int(timeper)  # time period may be number (1) or string ("1")
-                timepers[i] = all_timepers[timeper_int - 1]
+                timeper = all_timepers[timeper_int - 1] # "AM", etc
+                timepers[i] = timeper
                 timeper_idx = timeper_int
             except ValueError:  # time period may be descriptive ("AM")
                 timeper = timeper.upper()
