@@ -107,8 +107,9 @@ def getProjectMatchLevel(left, right):
 def getProjectYear(PROJECTS, my_proj, netmode):
     """
     PROJECTS is an OrderedDict, year -> netmode -> [ project list ]
-    Returns first year in which my_proj shows up in the netmode's project list, plus number in list
-    e.g. 2020.02 for second project in 2020
+    Returns first year in which my_proj shows up in the netmode's project list, plus netmode, plus number in list
+    e.g. 2020.hwy.02 for second hwy project in 2020
+    Returns -1 if the project is not found
     """
     for year in PROJECTS.keys():
         for proj_idx in range(len(PROJECTS[year][netmode])):
@@ -131,7 +132,7 @@ def checkRequirements(REQUIREMENTS, PROJECTS, req_type='prereq'):
     for netmode in REQUIREMENTS.keys():
         for project in REQUIREMENTS[netmode].keys():
             project_year = getProjectYear(PROJECTS, project, netmode)
-            if project_year == -1:
+            if (type(project_year) == int) and (project_year == -1):
                 Wrangler.WranglerLogger.warning('Cannot find the {} project {} to check its requirements'.format(netmode, project))
                 continue  # raise?
 
@@ -143,13 +144,13 @@ def checkRequirements(REQUIREMENTS, PROJECTS, req_type='prereq'):
                 req_proj_years = {}
                 for req_proj in req_proj_list:
                     req_project_year = getProjectYear(PROJECTS, req_proj, req_netmode)
-
+                    # req_project_year is a string, YYYY.[trn|hwy].[number]
                     # prereq
                     if req_type=="prereq":
                         if (type(req_project_year) == int) and (req_project_year < 0):
                             is_ok = False  # required project must be found
                             Wrangler.WranglerLogger.warning("required project not found")
-                        if req_project_year > project_year:
+                        elif req_project_year > project_year:
                             is_ok = False  # and implemented before or at the same time as the project
                             Wrangler.WranglerLogger.warning("required project year {} > project year {}".format(req_project_year, project_year))
 
@@ -395,9 +396,6 @@ if __name__ == '__main__':
     # Read the configuration
     NETWORK_CONFIG = args.net_spec
     NET_VARIANT    = args.netvariant
-    # Use the NGF_NoProject git tag when building a Next Gen Freeways No Project variant
-    if NET_VARIANT=="NGFNoProject" or NET_VARIANT=="NGFNoProjectNoSFCordon":
-       TAG = "NGF_NoProject"
 
     # networks and log file will be in BlueprintNetworks
     if not os.path.exists("BlueprintNetworks"):
@@ -408,6 +406,10 @@ if __name__ == '__main__':
                           os.path.join("BlueprintNetworks",LOG_FILENAME.replace("info", "debug")))
 
     exec(open(NETWORK_CONFIG).read())
+
+    # Use the NGF_NoProject git tag when building a Next Gen Freeways No Project variant
+    if NET_VARIANT=="NGFNoProject" or NET_VARIANT=="NGFNoProjectNoSFCordon":
+       TAG = "NGF_NoProject"
 
     # Verify mandatory fields are set
     if PROJECT==None:

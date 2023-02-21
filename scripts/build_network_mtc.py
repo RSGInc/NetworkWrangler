@@ -108,15 +108,16 @@ def getProjectMatchLevel(left, right):
 def getProjectYear(PROJECTS, my_proj, netmode):
     """
     PROJECTS is an OrderedDict, year -> netmode -> [ project list ]
-    Returns first year in which my_proj shows up in the netmode's project list, plus number in list
-    e.g. 2020.02 for second project in 2020
+    Returns first year in which my_proj shows up in the netmode's project list, plus netmode, plus number in list
+    e.g. 2020.hwy.02 for second hwy project in 2020
+    Returns -1 if the project is not found
     """
     for year in PROJECTS.keys():
         for proj_idx in range(len(PROJECTS[year][netmode])):
             proj = PROJECTS[year][netmode][proj_idx]
             if type(proj) is dict and my_proj == proj['name']:
                 return "{}.{}.{:0>2d}".format(year,netmode,proj_idx+1)
-            elif proj == my_proj:             
+            elif proj == my_proj:
                 return "{}.{}.{:0>2d}".format(year,netmode,proj_idx+1)
     return -1
 
@@ -144,14 +145,13 @@ def checkRequirements(REQUIREMENTS, PROJECTS, req_type='prereq'):
                 req_proj_years = {}
                 for req_proj in req_proj_list:
                     req_project_year = getProjectYear(PROJECTS, req_proj, req_netmode)
-                    Wrangler.WranglerLogger.debug('req_project_year=[{}]'.format(req_project_year))
-
+                    # req_project_year is a string, YYYY.[trn|hwy].[number]
                     # prereq
                     if req_type=="prereq":
                         if (type(req_project_year) == int) and (req_project_year < 0):
                             is_ok = False  # required project must be found
                             Wrangler.WranglerLogger.warning("required project not found")
-                        if req_project_year > project_year:
+                        elif req_project_year > project_year:
                             is_ok = False  # and implemented before or at the same time as the project
                             Wrangler.WranglerLogger.warning("required project year {} > project year {}".format(req_project_year, project_year))
 
