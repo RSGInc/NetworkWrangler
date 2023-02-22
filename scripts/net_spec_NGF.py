@@ -117,10 +117,10 @@ NGF_PROJECTS = {
         'trn':[
             'NGF_NoProject_farefiles',      # ensures these files get included; note this is not a real project
             # Test: Trunkline Transit Frequency Boosts 3
-            {'name':'NGF_TrunklineTrnFreqBoosts', 'kwargs':{
-                'min_headway':'10', 
-                'include_rail':'True'
-            }},
+            # {'name':'NGF_TrunklineTrnFreqBoosts', 'kwargs':{
+            #     'min_headway':'10', 
+            #     'include_rail':'True'
+            # }},
         ]
     },
 }
