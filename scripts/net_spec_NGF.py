@@ -79,7 +79,7 @@ NGF_PROJECTS = {
     'P1b_AllLaneTolling_Affordable':{
         'hwy':[
             'NGF_BlueprintSegmented',       # All lane tolling on freeways
-            'NGF_CarpoolLanes',             # Carpool Lanes
+            'NGF_CarpoolLanes'              # Carpool Lanes
         ],
         'trn':[
             'NGF_NoProject_farefiles',      # ensures these files get included; note this is not a real project
@@ -94,18 +94,65 @@ NGF_PROJECTS = {
     },
     'P2a_AllLaneTollingPlusArterials_ImproveTransit':{
         'hwy':[
-            'NGF_BlueprintSegmented',       # All lane tolling on freeways
-        ],
+            'NGF_BlueprintSegmented',         # All lane tolling on freeways
+            'Futures_C4_ReX_Express',         # New Transit Service Near Tolling: ReX Express
+            'ReX_link',                       # New Transit Service Near Tolling: ReX Link
+            'NGF_CarpoolLanes',               # Carpool Lanes
+            'NGF_TransitPriorityOnArterials', # Transit Priority - All Lane Tolling
+            'Transform_I680_Multimodal_Imp',
+            'FBP_CC_036_I80_ExpBus_Impr',
+            'FBP_NP_040_VINE_Exp_Bus_Enhancements',
+            'FBP_MR_018_US101_BOS',
+            'MAJ_MuniForward_Uncommitted',
+            'MAJ_AC_Frequency_Improvement',
+            'NGF_Arterials'                   # Code arterials for tolling in Pathway 2
+         ],
         'trn':[
             'NGF_NoProject_farefiles',      # ensures these files get included; note this is not a real project
+            'Futures_C4_ReX_Express',       # New Transit Service Near Tolling: ReX Express
+            'ReX_link',                     # New Transit Service Near Tolling: Rex Link
+            'Transform_I680_Multimodal_Imp',
+            'FBP_CC_036_I80_ExpBus_Impr',
+            'FBP_SL_026_SolExpressBus',
+            'MAJ_MuniForward_Uncommitted',
+            'VTA_Next',
+            'MAJ_AC_Frequency_Improvement',
+            'FBP_MuniForward_Uncommitted_Rail',
+            # Local Transit Frequency Boosts 2
+            # Parameters defined here: https://app.asana.com/0/0/1203931443540514/f
+            {'name':'NGF_IncreaseTrnFreqXferRoutes2BartCaltrainFerry',  'kwargs':{
+                'top_n_local':'10', 
+                # configure by mode: https://github.com/BayAreaMetro/modeling-website/wiki/TransitModes
+                'min_headway':'{"local_default":15, 21:10, 24:10, 27:10, 28:10, 30:10, 111:10}', 
+                'include_connections_to_express_bus':'True',
+                # this directory is used to determine which routes have frequency increases.  So to include ReX Express bus routes,
+                # use a directory that includes ReX Express routes (e.g. an earlier iteration of this scenario)
+                'transit_assignment_dir':'r"L:\\Application\\Model_One\\NextGenFwys\\Scenarios\\2035_TM152_NGF_ReXExpress_ReXLink_trnassignment\\OUTPUT\\trn"'
+            }},
+            # Trunkline Transit Frequency Boosts 2
+            {'name':'NGF_TrunklineTrnFreqBoosts', 'kwargs':{
+                'min_headway':'10',
+                'include_rail':'False'
+            }},
+            # Extended Transit Service Hours
+            {'name':'NGF_TrnExtendedServiceHours',  'kwargs':{'EV_headway':'15'}},
         ]
     },
     'P2b_AllLaneTollingPlusArterials_Affordable':{
         'hwy':[
             'NGF_BlueprintSegmented',       # All lane tolling on freeways
+            'NGF_CarpoolLanes',             # Carpool Lanes
+            'NGF_Arterials'                   # Code arterials for tolling in Pathway 2
         ],
         'trn':[
             'NGF_NoProject_farefiles',      # ensures these files get included; note this is not a real project
+            # Trunkline Transit Frequency Bosts 2
+            {'name':'NGF_TrunklineTrnFreqBoosts', 'kwargs':{
+                'min_headway':'10',
+                'include_rail':'False'
+            }},
+            # Extended Transit Service Hours
+            {'name':'NGF_TrnExtendedServiceHours',  'kwargs':{'EV_headway':'15'}},
         ]
     },
     'P3_3Cordons':{
