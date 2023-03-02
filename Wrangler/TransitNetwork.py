@@ -800,14 +800,20 @@ class TransitNetwork(Network):
             f.close()
 
         if len(self.pnrs)>0 or writeEmptyFiles:
+            # first remove existing files
+            for pnr_file in self.pnrs.keys():
+                # prepend name if it's not there already
+                pnr_out_file = "{}.pnr".format(pnr_file) if pnr_file.startswith(name) else "{}_{}.pnr".format(name,pnr_file)
+                if os.path.exists(os.path.join(path,pnr_out_file)):
+                    WranglerLogger.debug("Removing existing file {}".format(os.path.join(path,pnr_out_file)))
+                    os.remove(os.path.join(path,pnr_out_file))
+
+            # now write
             for pnr_file in self.pnrs.keys():
                 logstr += " {}_pnr".format(pnr_file)
 
-                # don't prepend name unless it's not there already
-                if pnr_file.startswith(name):
-                    pnr_out_file = "{}.pnr".format(pnr_file)
-                else:
-                    pnr_out_file = "{}_{}.pnr".format(name,pnr_file)
+                # prepend name if it's not there already
+                pnr_out_file = "{}.pnr".format(pnr_file) if pnr_file.startswith(name) else "{}_{}.pnr".format(name,pnr_file)
 
                 f = open(os.path.join(path,pnr_out_file),'a')
                 for pnr in self.pnrs[pnr_file]:
