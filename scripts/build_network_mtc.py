@@ -377,7 +377,7 @@ if __name__ == '__main__':
             "BlueprintSegmented", 
             "P1a_AllLaneTolling_ImproveTransit",                "P1b_AllLaneTolling_Affordable", 
             "P2a_AllLaneTollingPlusArterials_ImproveTransit",   "P2b_AllLaneTollingPlusArterials_Affordable",
-            "P3_3Cordons"], 
+            "P3b_3Cordons_Affordable"], 
         help="Specify which network variant network to create.")
     args = parser.parse_args()
 
