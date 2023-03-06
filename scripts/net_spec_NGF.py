@@ -142,7 +142,7 @@ NGF_PROJECTS = {
         'hwy':[
             'NGF_BlueprintSegmented',       # All lane tolling on freeways
             'NGF_CarpoolLanes',             # Carpool Lanes
-            'NGF_Arterials'                   # Code arterials for tolling in Pathway 2
+            'NGF_Arterials'                 # Code arterials for tolling in Pathway 2
         ],
         'trn':[
             'NGF_NoProject_farefiles',      # ensures these files get included; note this is not a real project
@@ -153,6 +153,45 @@ NGF_PROJECTS = {
             }},
             # Extended Transit Service Hours
             {'name':'NGF_TrnExtendedServiceHours',  'kwargs':{'EV_headway':'15'}},
+        ]
+    },
+    'P3a_3Cordons_ImproveTransit':{
+        'hwy':[
+            'MAJ_SF_Congestion_Pricing',     # San Francisco Cordon Pricing
+            'NGF_AL_Cordon',                 # Oakland Cordon Pricing
+            'NGF_SC_Cordon',                 # San Jose Cordon Pricing
+            'MAJ_MuniForward_Uncommitted',
+            'MAJ_AC_Frequency_Improvement',
+            'Futures_C4_ReX_Express',         # New Transit Service Near Tolling: ReX Express
+            'ReX_link',                       # New Transit Service Near Tolling: ReX Link
+        ],
+        'trn':[
+            'NGF_NoProject_farefiles',       # ensures these files get included; note this is not a real project
+            'MAJ_SF_Congestion_Pricing',
+            'MAJ_MuniForward_Uncommitted',
+            'VTA_Next',
+            'MAJ_AC_Frequency_Improvement',
+            'FBP_MuniForward_Uncommitted_Rail',
+            'Futures_C4_ReX_Express',         # New Transit Service Near Tolling: ReX Express
+            'ReX_link',                       # New Transit Service Near Tolling: ReX Link
+            # Trunkline Transit Frequency Bosts 1
+            {'name':'NGF_TrunklineTrnFreqBoosts', 'kwargs':{
+                'min_headway':'15',
+                'include_rail':'False'
+            }},
+            # Local Transit Frequency Boosts Cordons
+            {'name':'NGF_TrnFreqBoostsCordons', 'kwargs':{
+                'top_n_local':'15',
+                'min_headway':'7',
+                'min_headway_LRT':'10',
+                'transit_assignment_dir':'r"L:\\Application\\Model_One\\NextGenFwys\\Scenarios\\2035_TM152_NGF_ReXExpress_ReXLink_trnassignment\\OUTPUT\\trn"'
+            }},
+            # Extended Transit Service Hours - Cordons          
+            {'name':'NGF_TrnExtendedServiceHours_Cordons', 'kwargs':{
+                'top_n_local':'15',
+                'EV_headway':'10',
+                'transit_assignment_dir':'r"L:\\Application\\Model_One\\NextGenFwys\\Scenarios\\2035_TM152_NGF_ReXExpress_ReXLink_trnassignment\\OUTPUT\\trn"'
+            }},
         ]
     },
     'P3b_3Cordons_Affordable':{
