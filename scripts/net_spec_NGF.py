@@ -234,6 +234,19 @@ NGF_PROJECTS = {
                 'transit_assignment_dir':'r"L:\\Application\\Model_One\\NextGenFwys\\Scenarios\\2035_TM152_NGF_ReXExpress_ReXLink_trnassignment\\OUTPUT\\trn"'
             }},
         ]
+    },
+    'P4_NoNewPricing':{
+        'hwy':[
+            'BP_Vision_Zero',                # Local Street Safety Improvements and Speed Reductions
+        ],
+        'trn':[
+            'NGF_NoProject_farefiles',       # ensures these files get included; note this is not a real project
+            # Trunkline Transit Frequency Bosts 1
+            {'name':'NGF_TrunklineTrnFreqBoosts', 'kwargs':{
+                'min_headway':'15', 
+                'include_rail':'False'
+            }}
+        ]
     }
 }
 
