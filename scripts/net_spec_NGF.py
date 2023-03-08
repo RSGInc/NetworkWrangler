@@ -41,7 +41,8 @@ NGF_PROJECTS = {
             'FBP_NP_040_VINE_Exp_Bus_Enhancements',
             'FBP_MR_018_US101_BOS',
             'MAJ_MuniForward_Uncommitted',
-            'MAJ_AC_Frequency_Improvement'
+            'MAJ_AC_Frequency_Improvement',
+            'BP_Vision_Zero',               # Local Street Safety Improvements and Speed Reductions
          ],
         'trn':[
             'NGF_NoProject_farefiles',      # ensures these files get included; note this is not a real project
@@ -79,7 +80,8 @@ NGF_PROJECTS = {
     'P1b_AllLaneTolling_Affordable':{
         'hwy':[
             'NGF_BlueprintSegmented',       # All lane tolling on freeways
-            'NGF_CarpoolLanes'              # Carpool Lanes
+            'NGF_CarpoolLanes',             # Carpool Lanes
+            'BP_Vision_Zero',               # Local Street Safety Improvements and Speed Reductions
         ],
         'trn':[
             'NGF_NoProject_farefiles',      # ensures these files get included; note this is not a real project
@@ -105,7 +107,8 @@ NGF_PROJECTS = {
             'FBP_MR_018_US101_BOS',
             'MAJ_MuniForward_Uncommitted',
             'MAJ_AC_Frequency_Improvement',
-            'NGF_Arterials'                   # Code arterials for tolling in Pathway 2
+            'NGF_Arterials',                 # Code arterials for tolling in Pathway 2
+            'BP_Vision_Zero',                # Local Street Safety Improvements and Speed Reductions
          ],
         'trn':[
             'NGF_NoProject_farefiles',      # ensures these files get included; note this is not a real project
@@ -142,7 +145,8 @@ NGF_PROJECTS = {
         'hwy':[
             'NGF_BlueprintSegmented',       # All lane tolling on freeways
             'NGF_CarpoolLanes',             # Carpool Lanes
-            'NGF_Arterials'                 # Code arterials for tolling in Pathway 2
+            'NGF_Arterials',                # Code arterials for tolling in Pathway 2
+            'BP_Vision_Zero',               # Local Street Safety Improvements and Speed Reductions
         ],
         'trn':[
             'NGF_NoProject_farefiles',      # ensures these files get included; note this is not a real project
@@ -164,7 +168,8 @@ NGF_PROJECTS = {
             'MAJ_AC_Frequency_Improvement',
             'Futures_C4_ReX_Express',         # New Transit Service Near Tolling: ReX Express
             'ReX_link',                       # New Transit Service Near Tolling: ReX Link
-        ],
+            'BP_Vision_Zero',                 # Local Street Safety Improvements and Speed Reductions
+       ],
         'trn':[
             'NGF_NoProject_farefiles',       # ensures these files get included; note this is not a real project
             'MAJ_SF_Congestion_Pricing',
@@ -201,6 +206,7 @@ NGF_PROJECTS = {
             'NGF_SC_Cordon',                 # San Jose Cordon Pricing
             'MAJ_MuniForward_Uncommitted',
             'MAJ_AC_Frequency_Improvement',
+            'BP_Vision_Zero',                # Local Street Safety Improvements and Speed Reductions
         ],
         'trn':[
             'NGF_NoProject_farefiles',       # ensures these files get included; note this is not a real project
@@ -228,7 +234,7 @@ NGF_PROJECTS = {
                 'transit_assignment_dir':'r"L:\\Application\\Model_One\\NextGenFwys\\Scenarios\\2035_TM152_NGF_ReXExpress_ReXLink_trnassignment\\OUTPUT\\trn"'
             }},
         ]
-    },
+    }
 }
 
 # Put them together for NETWORK_PROJECTS

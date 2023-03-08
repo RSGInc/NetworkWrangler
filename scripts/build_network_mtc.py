@@ -541,6 +541,11 @@ if __name__ == '__main__':
         trnpath = os.path.join("..", OUT_DIR.format(YEAR),TRN_SUBDIR)
         if not os.path.exists(trnpath): os.makedirs(trnpath)
 
+        # apply set_capclass before writing any hwy network
+        kwargs = {'MODELYEAR':'{}'.format(YEAR)}
+        applied_SHA1 = networks['hwy'].applyProject(parentdir=TEMP_SUBDIR, networkdir=SET_CAPCLASS,
+                                                    gitdir=os.path.join(TEMP_SUBDIR, SET_CAPCLASS), **kwargs)
+        
         networks['hwy'].write(path=hwypath,name=HWY_NET_NAME,suppressQuery=True,
                               suppressValidation=True) # MTC TM1 doesn't have turn penalties
 
