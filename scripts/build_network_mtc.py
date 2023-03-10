@@ -401,6 +401,9 @@ if __name__ == '__main__':
         TRN_NET_NAME     = "transitLines"
         HWY_SUBDIR       = "hwy"
         HWY_NET_NAME     = "freeflow.net"
+        # some of the NGF NetworkProjects use geopandas (namely NGF_TrnFreqBoostsCordons and NGF_TrnExtendedServiceHours_Cordons)
+        # doing this import here in order to catch installation issues early
+        import geopandas
     elif args.model_type == Wrangler.Network.MODEL_TYPE_TM2:
         PIVOT_DIR        = os.path.join(os.environ["USERPROFILE"], "Box","Modeling and Surveys","Development","Travel Model Two Development","Model Inputs","2015_revised_mazs")
         TRANSIT_CAPACITY_DIR = None
