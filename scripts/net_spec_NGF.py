@@ -169,6 +169,7 @@ NGF_PROJECTS = {
             'Futures_C4_ReX_Express',         # New Transit Service Near Tolling: ReX Express
             'ReX_link',                       # New Transit Service Near Tolling: ReX Link
             'BP_Vision_Zero',                 # Local Street Safety Improvements and Speed Reductions
+            'NGF_TransitPriorityCordons'      # Transit Priority - Cordons
        ],
         'trn':[
             'NGF_NoProject_farefiles',       # ensures these files get included; note this is not a real project
