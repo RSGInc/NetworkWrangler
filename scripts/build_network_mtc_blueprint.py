@@ -512,10 +512,6 @@ if __name__ == '__main__':
             Wrangler.WranglerLogger.info("No applied projects for this year -- skipping output")
             continue
 
-        if NET_VARIANT!="Baseline" and YEAR==2015:
-            Wrangler.WranglerLogger.info("Blueprint 2015 == Baseline 2015 -- skipping output")
-            continue
-
         # Baseline AND YEAR >= 2035 get SLR, covered in next clause
         if NET_VARIANT!="Baseline" or YEAR<2035:
 
