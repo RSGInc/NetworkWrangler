@@ -58,7 +58,7 @@ NGF_PROJECTS = {
             # Local Transit Frequency Boosts 2
             # Parameters defined here: https://app.asana.com/0/0/1203931443540514/f
             {'name':'NGF_IncreaseTrnFreqXferRoutes2BartCaltrainFerry',  'kwargs':{
-                'top_n_local':'10', 
+                'top_n_local':'2', 
                 # configure by mode: https://github.com/BayAreaMetro/modeling-website/wiki/TransitModes
                 'min_headway':'{"local_default":15, 21:10, 24:10, 27:10, 28:10, 30:10, 111:10}', 
                 'include_connections_to_express_bus':'True',
@@ -89,9 +89,7 @@ NGF_PROJECTS = {
             {'name':'NGF_TrunklineTrnFreqBoosts', 'kwargs':{
                 'min_headway':'10',
                 'include_rail':'False'
-            }},
-            # Extended Transit Service Hours
-            {'name':'NGF_TrnExtendedServiceHours',  'kwargs':{'EV_headway':'15'}},
+            }}
         ]
     },
     'P2a_AllLaneTollingPlusArterials_ImproveTransit':{
@@ -124,7 +122,7 @@ NGF_PROJECTS = {
             # Local Transit Frequency Boosts 2
             # Parameters defined here: https://app.asana.com/0/0/1203931443540514/f
             {'name':'NGF_IncreaseTrnFreqXferRoutes2BartCaltrainFerry',  'kwargs':{
-                'top_n_local':'10', 
+                'top_n_local':'2', 
                 # configure by mode: https://github.com/BayAreaMetro/modeling-website/wiki/TransitModes
                 'min_headway':'{"local_default":15, 21:10, 24:10, 27:10, 28:10, 30:10, 111:10}', 
                 'include_connections_to_express_bus':'True',
@@ -154,9 +152,7 @@ NGF_PROJECTS = {
             {'name':'NGF_TrunklineTrnFreqBoosts', 'kwargs':{
                 'min_headway':'10',
                 'include_rail':'False'
-            }},
-            # Extended Transit Service Hours
-            {'name':'NGF_TrnExtendedServiceHours',  'kwargs':{'EV_headway':'15'}},
+            }}
         ]
     },
     'P3a_3Cordons_ImproveTransit':{
@@ -242,9 +238,9 @@ NGF_PROJECTS = {
         ],
         'trn':[
             'NGF_NoProject_farefiles',       # ensures these files get included; note this is not a real project
-            # Trunkline Transit Frequency Bosts 1
+            # Trunkline Transit Frequency Bosts 2
             {'name':'NGF_TrunklineTrnFreqBoosts', 'kwargs':{
-                'min_headway':'15', 
+                'min_headway':'10',
                 'include_rail':'False'
             }}
         ]
