@@ -223,13 +223,7 @@ NGF_PROJECTS = {
                 'min_headway':'7',
                 'min_headway_LRT':'10',
                 'transit_assignment_dir':'r"L:\\Application\\Model_One\\NextGenFwys\\Scenarios\\2035_TM152_NGF_ReXExpress_ReXLink_trnassignment\\OUTPUT\\trn"'
-            }},
-            # Extended Transit Service Hours - Cordons          
-            {'name':'NGF_TrnExtendedServiceHours_Cordons', 'kwargs':{
-                'top_n_local':'15',
-                'EV_headway':'10',
-                'transit_assignment_dir':'r"L:\\Application\\Model_One\\NextGenFwys\\Scenarios\\2035_TM152_NGF_ReXExpress_ReXLink_trnassignment\\OUTPUT\\trn"'
-            }},
+            }}
         ]
     },
     'P4_NoNewPricing':{
