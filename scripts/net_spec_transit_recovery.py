@@ -7,7 +7,7 @@ PROJECT  = "TransitRecov"
 # MANDATORY. Set this to be the git tag for checking out network projects.
 #TAG = "HEAD"               # Use this tag if you want NetworkWrangler to use the latest version in the local repo to build the network
 #TAG = "PBA50_Blueprint"    # Use this tag if you want to replicate the network built for PBA50
-TAG = "PBA50_Blueprint"
+TAG = "HEAD"
 
 # A Alamedaproject can either be a simple string, or it can be
 # a dictionary with with keys 'name', 'tag' (optional), and 'kwargs' (optional)
@@ -67,7 +67,9 @@ COMMITTED_PROJECTS = collections.OrderedDict([
                'EXP_Blueprint_NoProject',
                'FBP_AL_067_Rte84Wide',
                'FBP_AL_065_Bancroft_Bus_Only',
-               'FBP_SM_032_US101_Willow_Interchange'],
+               'FBP_SM_032_US101_Willow_Interchange',
+               {'name': 'RRSP_Alameda_Point_Transit_Improvements', 'kwargs':{'BUILT':"'built'"}} # unbuilt portion is in BLUEPRINT_PROJECTS 2025
+               ],
         'trn':['ALA050015_BART_to_WarmSprings',
                'ACGo',
                'CC_050025_EBart_to_Antioch',
@@ -92,7 +94,9 @@ COMMITTED_PROJECTS = collections.OrderedDict([
                'FBP_Beale_Transit_Only_Lane',
                'SamTrans_ECR_Rapid',
                'ALA150004_EastBay_BRT',
-               {'name':'FBP_SL_026_SolExpressBus', 'kwargs':{'MODELYEAR':'2020'}}],
+               {'name':'FBP_SL_026_SolExpressBus', 'kwargs':{'MODELYEAR':'2020'}, 'variants_exclude':['NGFNoProject', 'NGFNoProjectNoSFCordon']},
+               {'name': 'RRSP_Alameda_Point_Transit_Improvements', 'kwargs':{'BUILT':"'built'"}} # unbuilt portion is in BLUEPRINT_PROJECTS 2025
+                ],
     }),
     (2025, {
         'hwy': [{'name':'Bridge_Toll_Updates_2_2pct', 'kwargs':{'MODELYEAR':'2025'}},
@@ -135,7 +139,7 @@ BLUEPRINT_PROJECTS = collections.OrderedDict([
         (2020, {'hwy':[],
                 'trn':[]
         }),
-        (2025, {'hwy':['RRSP_Alameda_Point_Transit_Improvements',
+        (2025, {'hwy':[{'name': 'RRSP_Alameda_Point_Transit_Improvements', 'kwargs':{'BUILT':"'unbuilt'"}},
                        'MAJ_MTC050027_Berkeley_Ferry',
                        'MAJ_WETA_Service_Frequency_Increase',                       
                        {'name':'Transform_SR37_Widening_Interim',                                           'variants_exclude':['Alt1']},
@@ -201,7 +205,7 @@ BLUEPRINT_PROJECTS = collections.OrderedDict([
                        'FBP_AL_001_NewarkFremPDA',
                        {'name':'FBP_MU_059_ACTransbay_Freq_Incr',                                         'variants_exclude':['Alt2']},
                        {'name':'MAJ_AC_Frequency_Improvement',                                            'variants_exclude':['NGFNoProject', 'NGFNoProjectNoSFCordon']},
-                       'RRSP_Alameda_Point_Transit_Improvements',
+                       {'name': 'RRSP_Alameda_Point_Transit_Improvements',  'kwargs':{'BUILT':"'unbuilt'"}},
                        'MAJ_MTC050027_Berkeley_Ferry',
                        'MAJ_WETA_Service_Frequency_Increase',
                        {'name':'FBP_MU_046_ACE_Freq_Inc',       'kwargs':{'MODELYEAR':'2025'}},                       
