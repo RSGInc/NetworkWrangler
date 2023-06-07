@@ -126,7 +126,9 @@ COMMITTED_PROJECTS = collections.OrderedDict([
                # omit: 'MAJ_SCL050009_VTA_Eastridge_Extension',
                'REG090037_New_BART_Trains',
                'FBP_NP_036_SR29_Imola_PNR',
-               'SOL070020_I80_I680_SR12_Int_1_2A']
+               'SOL070020_I80_I680_SR12_Int_1_2A',
+               # added in June 2023 tranche of work
+               'BART_fiscal_cliff_service_cuts']
     })
 ])
 
