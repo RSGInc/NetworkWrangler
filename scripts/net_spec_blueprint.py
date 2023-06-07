@@ -4,8 +4,8 @@ import os
 PROJECT  = "Blueprint"
 
 # MANDATORY. Set this to be the git tag for checking out network projects.
-#TAG = "HEAD"               # Use this tag if you want NetworkWrangler to use the latest version in the local repo to build the network
-TAG = "PBA50_Blueprint"    # This is the default tag since this is the netspec for the Blueprint 
+TAG = "HEAD"              # Use this tag if you want NetworkWrangler to use the latest version in the local repo to build the network
+# TAG = "PBA50_Blueprint"    # This is the default tag since this is the netspec for the Blueprint 
 # For NGF variants, the default TAG will be replaced by the alternative TAG "NGF_NoProject"  (this is handled with code in build_network_mtc_blueprint.py) 
 
 # A Alamedaproject can either be a simple string, or it can be
@@ -66,7 +66,9 @@ COMMITTED_PROJECTS = collections.OrderedDict([
                'EXP_Blueprint_NoProject',
                'FBP_AL_067_Rte84Wide',
                'FBP_AL_065_Bancroft_Bus_Only',
-               'FBP_SM_032_US101_Willow_Interchange'],
+               'FBP_SM_032_US101_Willow_Interchange',
+               {'name': 'RRSP_Alameda_Point_Transit_Improvements', 'kwargs':{'BUILT':"'built'"}} # unbuilt portion is in BLUEPRINT_PROJECTS 2025
+               ],
         'trn':['ALA050015_BART_to_WarmSprings',
                'ACGo',
                'CC_050025_EBart_to_Antioch',
@@ -80,7 +82,7 @@ COMMITTED_PROJECTS = collections.OrderedDict([
                'SON090002_SMART_to_Larkspur',
                'CC_070062_Richmond_Ferry',
                'SF_MuniForward_Committed',
-               {'name':'VTA_Next',                  'kwargs':{'MODELYEAR':'2020'}, 'variants_exclude':['NGFNoProject', 'NGFNoProjectNoSFCordon']},
+               {'name':'VTA_Next',                 'variants_exclude':['NGFNoProject', 'NGFNoProjectNoSFCordon']},
                'SCL130001_237_101_MAT_Int_Mod',
                'SonomaCounty_Transit_NoBuild2050',
                'SMART_Novato',
@@ -91,7 +93,9 @@ COMMITTED_PROJECTS = collections.OrderedDict([
                'FBP_Beale_Transit_Only_Lane',
                'SamTrans_ECR_Rapid',
                'ALA150004_EastBay_BRT',
-               {'name':'FBP_SL_026_SolExpressBus', 'kwargs':{'MODELYEAR':'2020'}, 'variants_exclude':['NGFNoProject', 'NGFNoProjectNoSFCordon']}],
+               {'name':'FBP_SL_026_SolExpressBus', 'kwargs':{'MODELYEAR':'2020'}, 'variants_exclude':['NGFNoProject', 'NGFNoProjectNoSFCordon']},
+               {'name': 'RRSP_Alameda_Point_Transit_Improvements', 'kwargs':{'BUILT':"'built'"}} # unbuilt portion is in BLUEPRINT_PROJECTS 2025
+                ],
     }),
     (2025, {
         'hwy':[{'name':'Bridge_Toll_Updates_2_2pct', 'kwargs':{'MODELYEAR':'2025'}},
@@ -159,7 +163,7 @@ BLUEPRINT_PROJECTS = collections.OrderedDict([
         (2020, {'hwy':[],
                 'trn':[]
         }),
-        (2025, {'hwy':['RRSP_Alameda_Point_Transit_Improvements',
+        (2025, {'hwy':[{'name': 'RRSP_Alameda_Point_Transit_Improvements', 'kwargs':{'BUILT':"'unbuilt'"}},
                        'MAJ_MTC050027_Berkeley_Ferry',
                        'MAJ_WETA_Service_Frequency_Increase',                       
                        {'name':'Transform_SR37_Widening_Interim',                                           'variants_exclude':['Alt1']},
@@ -225,7 +229,7 @@ BLUEPRINT_PROJECTS = collections.OrderedDict([
                        'FBP_AL_001_NewarkFremPDA',
                        {'name':'FBP_MU_059_ACTransbay_Freq_Incr',                                         'variants_exclude':['Alt2']},
                        {'name':'MAJ_AC_Frequency_Improvement',                                            'variants_exclude':['NGFNoProject', 'NGFNoProjectNoSFCordon']},
-                       'RRSP_Alameda_Point_Transit_Improvements',
+                       {'name': 'RRSP_Alameda_Point_Transit_Improvements',  'kwargs':{'BUILT':"'unbuilt'"}},
                        'MAJ_MTC050027_Berkeley_Ferry',
                        'MAJ_WETA_Service_Frequency_Increase',
                        {'name':'FBP_MU_046_ACE_Freq_Inc',       'kwargs':{'MODELYEAR':'2025'}},                       
@@ -246,7 +250,6 @@ BLUEPRINT_PROJECTS = collections.OrderedDict([
                        {'name':'FBP_SF_012_Geneva_Harney_BRT',  'kwargs':{'MODELYEAR':'2025'}},
                        {'name':'FBP_CC_15_23rd_St_BRT',         'kwargs':{'MODELYEAR':'2025'}},
                        'FBP_CC_030_OakleyAmtrak',
-                       'FBP_SM_020_Regional_Express_Buses',
                        'MAJ_MissionBay_SF_Ferry',              
                        'MAJ_Sonoma_Frequency_Increase',
                        {'name':'EIR1_Freq_Boosts',              'kwargs':{'MODELYEAR':'2025'},            'variants_include':['Alt1']},
@@ -293,6 +296,7 @@ BLUEPRINT_PROJECTS = collections.OrderedDict([
                        'FBP_SM_027_US101_92',
                        'FBP_SM_007_ElCamino_CompleteStreets'],
                 'trn':['BP_PDA_Transit_Enhancements',
+                       {'name':'FBP_SM_020_Regional_Express_Buses', 'kwargs':{'PHASE':"'Phase1_4Routes'"}},
                        {'name':'FBP_MU_046_ACE_Freq_Inc',       'kwargs':{'MODELYEAR':'2030'}},
                        'MAJ_BRT030001_BART_to_SanJose',
                        'BART_Irvington_Infill',
@@ -341,6 +345,7 @@ BLUEPRINT_PROJECTS = collections.OrderedDict([
                        {'name':'EIR1_No_SR37',                                                            'variants_include':['Alt1']},
                        {'name':'NGF_NoProject_tollscsv',                                                  'variants_include':['NGFNoProject', 'NGFNoProjectNoSFCordon']}],
                 'trn':[{'name':'MAJ_MuniForward_Uncommitted',                                             'variants_exclude':['NGFNoProject', 'NGFNoProjectNoSFCordon']},
+                       {'name':'FBP_SM_020_Regional_Express_Buses',    'kwargs':{'PHASE':"'Phase2_2Routes'"}},
                        'RRSP_South_East_Waterfront_Transit_Imp',
                        {'name':'FBP_MU_062_ReX_Red',                                                      'variants_exclude':['NGFNoProject', 'NGFNoProjectNoSFCordon']},
                        {'name':'Transform_I680_Multimodal_Imp',                                           'variants_exclude':['NGFNoProject', 'NGFNoProjectNoSFCordon']},
