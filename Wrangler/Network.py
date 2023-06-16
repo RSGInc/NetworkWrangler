@@ -485,3 +485,11 @@ class Network(object):
         Implemented by subclass
         """
         pass
+
+    def reportDiff(self, other_network, directory, roadwayNetworkFile=None):
+        """
+        Implemented by subclass
+        """
+        WranglerLogger.debug("Network.reportDiff() passed with other_network={} directory={} roadwayNetworkFile={}".format(
+            other_network, directory, roadwayNetworkFile))
+        

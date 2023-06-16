@@ -430,6 +430,16 @@ class TransitNetwork(Network):
                 allLines.append(self.lines[i])
             return allLines
         raise NetworkException('Line name not found: %s' % (name,))
+    
+    def lineNames(self):
+        """
+        Returns a list of the line names in this transit network.
+        """
+        line_names = []
+        for line_idx in range(len(self.lines)):
+            if isinstance(self.lines[line_idx],str): continue
+            line_names.append(self.lines[line_idx].name)
+        return line_names
 
     def deleteLine(self, name):
         """
@@ -1630,3 +1640,110 @@ class TransitNetwork(Network):
         return self.logProject(gitdir=gitdir,
                                projectname=(networkdir + "\\" + projectsubdir if projectsubdir else networkdir),
                                year=pyear, projectdesc=pdesc)
+
+    def reportDiff(self, other_network, directory, roadwayNetworkFile=None):
+        """
+        Reports the difference ebetween this network and the other_network into the given directory.
+
+        NOTE: this imports pandas, geopandas and shapely
+        """
+        # first check if changes happened
+        WranglerLogger.debug("TransitNetwork.reportDiff() passed with other_network={} directory={} roadwayNetworkFile={}".format(
+            other_network, directory, roadwayNetworkFile))
+        filename = "difference_log.txt"
+        report_file = open(os.path.join(directory, filename), "w")
+    
+        # transit lines -- compare line names
+        my_line_names = set(self.lineNames())
+        other_line_names = set(other_network.lineNames())
+
+        added_lines    = sorted(list(my_line_names - other_line_names))
+        deleted_lines  = sorted(list(other_line_names - my_line_names))
+        lines_in_both  = sorted(list(my_line_names & other_line_names))
+        modified_lines = []
+
+        for line_name in sorted(list(lines_in_both)):
+            my_line = self.line(line_name)
+            other_line = other_network.line(line_name)
+            if my_line != other_line: modified_lines.append(line_name)
+
+        report_file.write('Added {} lines: {}\n'.format(len(added_lines), added_lines))
+        report_file.write('Deleted {} lines: {}\n'.format(len(deleted_lines), deleted_lines))
+        report_file.write('Modified {} lines: {}\n'.format(len(modified_lines), modified_lines))
+
+        WranglerLogger.debug('reportDiff(): Added {} lines: {}'.format(len(added_lines), added_lines))
+        WranglerLogger.debug('reportDiff(): Deleted {} lines: {}'.format(len(deleted_lines), deleted_lines))
+        WranglerLogger.debug('reportDiff(): Modified {} lines: {}'.format(len(modified_lines), modified_lines))
+
+        if len(added_lines) + len(deleted_lines) + len(modified_lines) == 0:
+            report_file.close()
+            WranglerLogger.info("No project diffs reported")
+            WranglerLogger.debug("Wrote {}".format(os.path.join(directory, filename)))
+            return
+
+        import pandas
+        import geopandas
+
+        nodes_dict = Network.allNetworks['hwy'].writeShapefile(path=directory)
+
+        nodes_gdf = geopandas.GeoDataFrame()
+        links_gdf = geopandas.GeoDataFrame()
+        lines_gdf = geopandas.GeoDataFrame()
+
+        # create geodataframe rows
+        for line_name in sorted(list(added_lines)):
+            (added_nodes_gdf, added_links_gdf, added_lines_gdf) = self.line(line_name).createGeoDataFrames(nodes_dict)
+            added_nodes_gdf['change'] = 'added line'
+            added_links_gdf['change'] = 'added line'
+            added_lines_gdf['change'] = 'added line'
+
+            nodes_gdf = pandas.concat([nodes_gdf, added_nodes_gdf])
+            links_gdf = pandas.concat([links_gdf, added_links_gdf])
+            lines_gdf = pandas.concat([lines_gdf, added_lines_gdf])
+
+        for line_name in sorted(list(deleted_lines)):
+            (deleted_nodes_gdf, deleted_links_gdf, deleted_lines_gdf) = other_network.line(line_name).createGeoDataFrames(nodes_dict)
+            deleted_nodes_gdf['change'] = 'deleted line'
+            deleted_links_gdf['change'] = 'deleted line'
+            deleted_lines_gdf['change'] = 'deleted line'
+
+            nodes_gdf = pandas.concat([nodes_gdf, deleted_nodes_gdf])
+            links_gdf = pandas.concat([links_gdf, deleted_links_gdf])
+            lines_gdf = pandas.concat([lines_gdf, deleted_lines_gdf])
+
+        for line_name in sorted(list(lines_in_both)):
+            my_line = self.line(line_name)
+            other_line = other_network.line(line_name)
+            # don't log linse that haven't changed
+            if my_line == other_line: continue
+
+            # the line changed
+            report_file.write("Modified line: {}\n".format(line_name))
+
+            # did the frequencies change
+            if my_line.getFreqs() != other_line.getFreqs():
+                report_file.write("Frequency changed from {} to {}\n".format(other_line.getFreqs(), my_line.getFreqs()))
+            
+            my_node_ids = my_line.listNodeIds(ignoreStops=False)
+            other_node_ids = other_line.listNodeIds(ignoreStops=False)
+            if my_node_ids != other_node_ids:
+                report_file.write("Node list changed from {} to {}\n".format(other_node_ids, my_node_ids))
+
+                (prev_nodes_gdf, prev_links_gdf, prev_lines_gdf) = other_network.line(line_name).createGeoDataFrames(nodes_dict)
+                prev_nodes_gdf['change'] = 'previous line {}'.format(line_name)
+                prev_links_gdf['change'] = 'previous line {}'.format(line_name)
+                prev_lines_gdf['change'] = 'previous line {}'.format(line_name)   
+                (new_nodes_gdf,  new_links_gdf,  new_lines_gdf)  = self.line(line_name).createGeoDataFrames(nodes_dict)
+                new_nodes_gdf['change'] = 'modified line {}'.format(line_name)
+                new_links_gdf['change'] = 'modified line {}'.format(line_name)
+                new_lines_gdf['change'] = 'modified line {}'.format(line_name)   
+
+                nodes_gdf = pandas.concat([nodes_gdf, prev_nodes_gdf, new_nodes_gdf])
+                links_gdf = pandas.concat([links_gdf, prev_links_gdf, new_links_gdf])
+                lines_gdf = pandas.concat([lines_gdf, prev_lines_gdf, new_lines_gdf])
+        if len(nodes_gdf)>0: nodes_gdf.to_file(filename=os.path.join(directory, "trn_nodes.shp"))
+        if len(links_gdf)>0: links_gdf.to_file(filename=os.path.join(directory, "trn_links.shp"))
+        if len(lines_gdf)>0: lines_gdf.to_file(filename=os.path.join(directory, "trn_lines.shp"))
+
+        report_file.close()
+        WranglerLogger.debug("Wrote {}".format(os.path.join(directory, filename)))
