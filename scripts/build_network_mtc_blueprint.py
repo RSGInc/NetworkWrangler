@@ -514,7 +514,7 @@ if __name__ == '__main__':
 
         appliedcount = 0
         for netmode in NET_MODES:
-            if args.restart_mode == "trn" and netmode == "hwy":
+            if args.restart_mode == "trn" and netmode == "hwy" and YEAR == int(args.restart_year):
                 Wrangler.WranglerLogger.info("Restart mode {} specified; skipping {}".format(args.restart_mode, netmode))
                 continue
 
