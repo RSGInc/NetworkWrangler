@@ -129,7 +129,15 @@ class TransitLine(object):
         if isinstance(other, str):
             return self.name == other
         elif isinstance(other, TransitLine):
-            return self.name == other.name
+            if self.name != other.name:
+                # name differs
+                return False
+            if self.listNodeIds(ignoreStops=False) != other.listNodeIds(ignoreStops=False):
+                # node list differs
+                return False
+            if self.getFreqs() != other.getFreqs():
+                return False
+            return True
         else:
             WranglerLogger.error("TransitLine.__eq__ called with other type {}".format(type(other)))
             return False
@@ -685,3 +693,100 @@ class TransitLine(object):
     def __str__(self):
         s = 'Line name \"%s\" freqs=%s' % (self.name, str(self.getFreqs()))
         return s
+
+    def createGeoDataFrames(self, nodes_dict: dict, modeltype=Network.MODEL_TYPE_TM1):
+        """
+        Create and return shapefile rows similar in format to those exported by 
+        https://github.com/BayAreaMetro/travel-model-one/blob/master/utilities/cube-to-shapefile/cube_to_shapefile.py
+
+        Args:
+            nodes_dict (dict): nodenum -> [X,Y]
+        
+        Returns:
+          (nodes_gdf, links_gdf,lines_gdf), a tuple of three geopandas GeoDataFrames
+          nodes_gdf 
+
+        NOTE: this imports pandas, geopandas and shapely
+        """
+        import pandas
+        import geopandas
+        import shapely
+        nodes = [] # LINE_NAME, N, SEQ, IS_STOP, ACCESS, geometry
+        links = [] # LINE_NAME, A, B, SEQ, MODE, geometry
+        line_points = []  # list of shapely.Point instances for the line
+
+        prev_node_num = None
+        access = 0 # 0:no restriction;  1:board only  2:exit only
+        access_c = False
+        for nodeIdx in range(len(self.n)):
+            node = self.n[nodeIdx]
+            node_num = node.getNum()
+
+            # handle node attributes
+            for node_attr, node_attr_value in node.attr.items():
+                if node_attr == 'ACCESS':
+                    access = int(node_attr_value)
+                    access_c = False
+                elif node_attr == 'ACCESS_C':
+                    access = int(node_attr_value)
+                    access_c = not access_c
+                else:
+                    WranglerLogger.warn('TransitLine.createGeoDataframes(): node attribute {}={} not handled'.format(node_attr, node_attr_value))
+
+            # store node
+            nodes.append([
+                self.name,      # LINE_NAME
+                node_num,       # N
+                nodeIdx+1,      # SEQ
+                node.isStop(),  # IS_STOP
+                access,         # ACCESS
+                shapely.Point(nodes_dict[node_num][0], nodes_dict[node_num][1]) # geometry
+            ])  
+            line_points.append(shapely.Point(nodes_dict[node_num][0], nodes_dict[node_num][1]))
+            # store link
+            if prev_node_num:
+                links.append([
+                    self.name,              # LINE_NAME
+                    prev_node_num,          # A
+                    node_num,               # B
+                    nodeIdx,                # SEQ
+                    int(self.attr['MODE']), # MODE
+                    shapely.LineString([
+                        shapely.Point(nodes_dict[prev_node_num][0], nodes_dict[prev_node_num][1]),
+                        shapely.Point(nodes_dict[node_num][0],      nodes_dict[node_num][1])
+                    ])
+                ])
+
+            prev_node_num = node_num
+    
+        lines = [{
+            'NAME':      self.name,
+            'LONG_NAME': self.attr['LONGNAME'] if 'LONGNAME' in self.attr.keys() else '',
+            'MODE':      int(self.attr['MODE']),
+            'FREQ_EA':   self.getFreq('EA', modeltype),
+            'FREQ_AM':   self.getFreq('AM', modeltype),
+            'FREQ_MD':   self.getFreq('MD', modeltype),
+            'FREQ_PM':   self.getFreq('PM', modeltype),
+            'FREQ_EV':   self.getFreq('EV', modeltype),
+            'ONEWAY':    self.isOneWay(),
+            'geometry':  shapely.LineString(line_points)
+            }]
+
+        # if not oneway, then add reverse line
+        if self.isOneWay() == False:
+            lines.append({
+                'NAME':      self.name + "-",
+                'LONG_NAME': self.attr['LONGNAME'] if 'LONGNAME' in self.attr.keys() else '',
+                'MODE':      int(self.attr['MODE']),
+                'FREQ_EA':   self.getFreq('EA', modeltype),
+                'FREQ_AM':   self.getFreq('AM', modeltype),
+                'FREQ_MD':   self.getFreq('MD', modeltype),
+                'FREQ_PM':   self.getFreq('PM', modeltype),
+                'FREQ_EV':   self.getFreq('EV', modeltype),
+                'ONEWAY':    self.isOneWay(),
+                'geometry':  shapely.LineString(line_points[::-1])
+            })
+        nodes_gdf = geopandas.GeoDataFrame(data=nodes, columns=['LINE_NAME','N','SEQ','IS_STOP','ACCESS','geometry'], crs='EPSG:26910')
+        links_gdf = geopandas.GeoDataFrame(data=links, columns=['LINE_NAME','A','B','SEQ','MODE','geometry'], crs='EPSG:26910')
+        line_gdf  = geopandas.GeoDataFrame(data=lines, crs='EPSG:26910')
+        return(nodes_gdf, links_gdf, line_gdf)
