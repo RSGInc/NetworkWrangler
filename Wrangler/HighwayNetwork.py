@@ -407,3 +407,66 @@ class HighwayNetwork(Network):
             shutil.copyfile(filename, os.path.join(path, filename))
             
         if not suppressValidation: self.validateTurnPens(netfile,'turnPenValidations.csv')
+
+    def writeShapefile(self, path: str, links_file='roadway_links.shp', nodes_file='roadway_nodes.shp'):
+        """ Writes the roadway network as shape files for links and nodes.
+
+        Args:
+            path (str): The directory in which to write the shapefile.
+            links_file (str, optional): Name of the roadway links shapefile. Defaults to 'roadway_links.shp'.
+            nodes_file (str, optional): Name of the roadway nodes shapefile. Defaults to 'roadway_nodes.shp'.
+
+        Returns:
+            nodes_dict: nodenum -> [X,Y]
+
+        NOTE: this imports pandas, geopandas and shapely
+
+        """
+        # Export as csvs
+        import tempfile
+        tempdir = tempfile.mkdtemp()
+        WranglerLogger.debug("Writing roadway network to tempdir {}".format(tempdir))
+
+        Network.allNetworks['hwy'].write(path=tempdir, name="freeflow.net", writeEmptyFiles=False, suppressQuery=True, suppressValidation=True)
+        tempnet = os.path.join(tempdir, "freeflow.net")
+
+        # read the roadway network csvs
+        import Cube
+        link_vars = ['LANES','USE','FT','TOLLCLASS','ROUTENUM','ROUTEDIR','PROJ']
+        (nodes_dict, links_dict) = Cube.import_cube_nodes_links_from_csvs(tempnet, extra_link_vars=link_vars,
+                                        links_csv=os.path.join(tempdir,"cubenet_links.csv"),
+                                        nodes_csv=os.path.join(tempdir,"cubenet_nodes.csv"),
+                                        exportIfExists=True)
+        WranglerLogger.debug("Have {} nodes and {} links".format(len(nodes_dict), len(links_dict)))
+
+        ## create node GeoDataFrame and write shapefile
+        import pandas
+        import geopandas
+        import shapely
+        node_data = []
+        for node_num in sorted(nodes_dict.keys()):
+            node_data.append([node_num, nodes_dict[node_num][0], nodes_dict[node_num][1]])
+        nodes_df = pandas.DataFrame(data=node_data, columns=["N","X","Y"])
+        nodes_gdf = geopandas.GeoDataFrame(nodes_df, geometry=geopandas.points_from_xy(nodes_df.X, nodes_df.Y),
+                                           crs="EPSG:26910") # https://epsg.io/26910
+        nodes_gdf.to_file(filename=os.path.join(path, nodes_file))
+        WranglerLogger.debug("Wrote {} nodes to {}".format(len(nodes_gdf), os.path.join(path, nodes_file)))
+
+        ## create link GeoDataFrame and write shapefile
+        link_data = []
+        link_geometry = []
+        for link_a_b in links_dict.keys():
+            link_data.append([link_a_b[0], link_a_b[1]] + links_dict[link_a_b])
+            link_geometry.append(shapely.LineString([
+                shapely.Point(nodes_dict[link_a_b[0]][0],
+                              nodes_dict[link_a_b[0]][1]),
+                shapely.Point(nodes_dict[link_a_b[1]][0],
+                              nodes_dict[link_a_b[1]][1])
+            ]))
+        links_df = pandas.DataFrame(data=link_data, columns=["A","B","DISTANCE"] + link_vars)
+        links_df = links_df.astype({'LANES':'int8', 'USE':'int8', 'FT':'int8', 'TOLLCLASS':int, 'ROUTENUM':'int8'})
+        links_gdf = geopandas.GeoDataFrame(links_df, geometry=link_geometry, crs="EPSG:26910")
+        links_gdf.to_file(filename=os.path.join(path, links_file))
+        WranglerLogger.debug("Wrote {} links to {}".format(len(links_gdf), os.path.join(path, links_file)))
+
+        return nodes_dict
