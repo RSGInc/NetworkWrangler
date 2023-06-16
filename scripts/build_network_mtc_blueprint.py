@@ -371,6 +371,7 @@ if __name__ == '__main__':
     parser.add_argument("--skip_precheck_requirements", help="Don't precheck network requirements, stale projects, non-HEAD projects, etc", action="store_true")
     parser.add_argument("--restart_year", help="Pass year to 'restart' building network starting from this rather than from the beginning. e.g., 2025")
     parser.add_argument("--restart_mode", choices=['hwy','trn'], help="If restart_year is passed, this is also required.")
+    parser.add_argument("--create_project_diffs", help="Pass this to create proejct diffs information for each project. NOTE: THIS WILL BE SLOW", action="store_true")
     parser.add_argument("net_spec", metavar="network_specification.py", help="Script which defines required variables indicating how to build the network")
     parser.add_argument("netvariant", choices=["Baseline", "Blueprint", "Alt1", "Alt2", "NextGenFwy","TIP2023", "NGFNoProject", "NGFNoProjectNoSFCordon"], help="Specify which network variant network to create.")
     args = parser.parse_args()
@@ -409,6 +410,7 @@ if __name__ == '__main__':
     LOG_FILENAME = "build%snetwork_%s_%s_%s.info.LOG" % ("TEST" if BUILD_MODE=="test" else "", PROJECT, NET_VARIANT, NOW)
     Wrangler.setupLogging(os.path.join("BlueprintNetworks",LOG_FILENAME),
                           os.path.join("BlueprintNetworks",LOG_FILENAME.replace("info", "debug")))
+    Wrangler.WranglerLogger.debug("Args: {}".format(args))
 
     exec(open(NETWORK_CONFIG).read())
 
@@ -528,6 +530,10 @@ if __name__ == '__main__':
                 if projType=='plan':
                     continue
 
+                # save a copy of this network instance for comparison
+                if args.create_project_diffs:
+                    network_without_project = copy.deepcopy(networks[netmode])
+
                 applied_SHA1 = None
                 cloned_SHA1 = networks[netmode].cloneProject(networkdir=project_name, tag=tag,
                                                              projtype=projType, tempdir=TEMP_SUBDIR, **kwargs)
@@ -535,6 +541,31 @@ if __name__ == '__main__':
 
                 applied_SHA1 = networks[netmode].applyProject(parentdir, networkdir, gitdir, projectsubdir, **kwargs)
                 appliedcount += 1
+
+                # Create difference report for this project
+                if args.create_project_diffs:
+                    # difference information to be store in network_dir netmode_projectname
+                    # e.g. BlueprintNetworks\net_2050_Blueprint\trn_BP_Transbay_Crossing
+                    project_diff_folder = os.path.join("..", "BlueprintNetworks", 
+                                                       "net_{}_{}".format(YEAR, NET_VARIANT), 
+                                                       "{}_{}".format(HWY_SUBDIR if netmode == "hwy" else TRN_SUBDIR, project_name))
+                    hwypath=os.path.join("..", "BlueprintNetworks", "net_{}_{}".format(YEAR, NET_VARIANT), HWY_SUBDIR)
+
+                    # the project may get applied multiple times -- e.g., for different phases
+                    suffix_num = 1
+                    project_diff_folder_with_suffix = project_diff_folder
+                    while os.path.exists(project_diff_folder_with_suffix):
+                        suffix_num += 1
+                        project_diff_folder_with_suffix = "{}_{}".format(project_diff_folder, suffix_num)
+
+                    Wrangler.WranglerLogger.debug("Creating project_diff_folder: {}".format(project_diff_folder_with_suffix))
+
+                    # create this directory
+                    os.makedirs(project_diff_folder_with_suffix)
+                    
+                    # new!
+                    networks[netmode].reportDiff(network_without_project, project_diff_folder_with_suffix,
+                                                 roadwayNetworkFile=os.path.join(os.path.abspath(hwypath), HWY_NET_NAME))
 
                 # if hwy project has set_capclass override, copy it to set_capclass/apply.s
                 set_capclass_override = os.path.join(TEMP_SUBDIR, project_name, "set_capclass.job")
