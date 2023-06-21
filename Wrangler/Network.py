@@ -486,7 +486,7 @@ class Network(object):
         """
         pass
 
-    def reportDiff(self, other_network, directory, roadwayNetworkFile=None):
+    def reportDiff(self, other_network, directory, report_description, roadwayNetworkFile=None):
         """
         Implemented by subclass
         """

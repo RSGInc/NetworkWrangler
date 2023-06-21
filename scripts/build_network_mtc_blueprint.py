@@ -543,7 +543,8 @@ if __name__ == '__main__':
                 appliedcount += 1
 
                 # Create difference report for this project
-                if args.create_project_diffs:
+                # TODO: roadway not supported yet
+                if args.create_project_diffs and netmode!="hwy":
                     # difference information to be store in network_dir netmode_projectname
                     # e.g. BlueprintNetworks\net_2050_Blueprint\trn_BP_Transbay_Crossing
                     project_diff_folder = os.path.join("..", "BlueprintNetworks", 
@@ -564,7 +565,7 @@ if __name__ == '__main__':
                     os.makedirs(project_diff_folder_with_suffix)
                     
                     # new!
-                    networks[netmode].reportDiff(network_without_project, project_diff_folder_with_suffix,
+                    networks[netmode].reportDiff(network_without_project, project_diff_folder_with_suffix, project_name,
                                                  roadwayNetworkFile=os.path.join(os.path.abspath(hwypath), HWY_NET_NAME))
 
                 # if hwy project has set_capclass override, copy it to set_capclass/apply.s
