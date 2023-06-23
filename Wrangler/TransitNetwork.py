@@ -1650,10 +1650,11 @@ class TransitNetwork(Network):
         # first check if changes happened
         WranglerLogger.debug("TransitNetwork.reportDiff() passed with other_network={} directory={} roadwayNetworkFile={}".format(
             other_network, directory, roadwayNetworkFile))
-        filename = "difference_log.txt"
-        report_filename = os.path.join(directory, filename)
-        report_file = open(report_filename, "w")
-    
+        
+        added_lines_text = ""
+        deleted_lines_text = ""
+        modified_lines_text = ""
+
         # transit lines -- compare line names
         my_line_names = set(self.lineNames())
         other_line_names = set(other_network.lineNames())
@@ -1662,26 +1663,24 @@ class TransitNetwork(Network):
         deleted_lines  = sorted(list(other_line_names - my_line_names))
         lines_in_both  = sorted(list(my_line_names & other_line_names))
         modified_lines = []
+        rerouted_lines = [] # subset of modified lines
 
         for line_name in sorted(list(lines_in_both)):
             my_line = self.line(line_name)
             other_line = other_network.line(line_name)
             if my_line != other_line: modified_lines.append(line_name)
 
-        report_file.write("Added {} lines: {}\n".format(len(added_lines), added_lines))
-        report_file.write("Deleted {} lines: {}\n".format(len(deleted_lines), deleted_lines))
-        report_file.write("Modified {} lines: {}\n".format(len(modified_lines), modified_lines))
-
         WranglerLogger.debug("reportDiff(): Added {} lines: {}".format(len(added_lines), added_lines))
         WranglerLogger.debug("reportDiff(): Deleted {} lines: {}".format(len(deleted_lines), deleted_lines))
         WranglerLogger.debug("reportDiff(): Modified {} lines: {}".format(len(modified_lines), modified_lines))
 
         if len(added_lines) + len(deleted_lines) + len(modified_lines) == 0:
-            report_file.close()
             WranglerLogger.info("No project diffs reported")
-            WranglerLogger.debug("Wrote {}".format(os.path.join(directory, filename)))
             return
 
+        # create the report directory
+        os.makedirs(directory)
+            
         import pandas
         import geopandas
 
@@ -1691,26 +1690,49 @@ class TransitNetwork(Network):
         links_gdf = geopandas.GeoDataFrame()
         lines_gdf = geopandas.GeoDataFrame()
 
+        if len(added_lines) == 0:
+            added_lines_text += "<ACP><BOL>No Added Transit Lines</BOL></ACP>\n"
+        else:
+            added_lines_text += "<ACP><BOL>Added {} Transit Lines</BOL></ACP>\n".format(len(added_lines))
+
         # create geodataframe rows
-        for line_name in sorted(list(added_lines)):
+        for line_name in added_lines:
             (added_nodes_gdf, added_links_gdf, added_lines_gdf) = self.line(line_name).createGeoDataFrames(nodes_dict)
             added_nodes_gdf["change"] = "added line"
             added_links_gdf["change"] = "added line"
             added_lines_gdf["change"] = "added line"
 
+            added_lines_text += '&#8226; <CLR green="100">{}</CLR> - oneway:{} freq:{}\n'.format(
+                line_name, self.line(line_name).isOneWay(),
+                self.line(line_name).getFreqs())
+
             nodes_gdf = pandas.concat([nodes_gdf, added_nodes_gdf])
             links_gdf = pandas.concat([links_gdf, added_links_gdf])
             lines_gdf = pandas.concat([lines_gdf, added_lines_gdf])
 
-        for line_name in sorted(list(deleted_lines)):
+        if len(deleted_lines) == 0:
+            deleted_lines_text += "<ACP><BOL>No Deleted Transit Lines</BOL></ACP>\n"
+        else:
+            deleted_lines_text += "<ACP><BOL>Deleted {} Transit Lines</BOL></ACP>\n".format(len(deleted_lines))
+
+        for line_name in deleted_lines:
             (deleted_nodes_gdf, deleted_links_gdf, deleted_lines_gdf) = other_network.line(line_name).createGeoDataFrames(nodes_dict)
             deleted_nodes_gdf["change"] = "deleted line"
             deleted_links_gdf["change"] = "deleted line"
             deleted_lines_gdf["change"] = "deleted line"
 
+            deleted_lines_text += '&#8226; <CLR red="100">{}</CLR> - oneway:{} freq:{}\n'.format(
+                line_name, other_network.line(line_name).isOneWay(), 
+                other_network.line(line_name).getFreqs())
+
             nodes_gdf = pandas.concat([nodes_gdf, deleted_nodes_gdf])
             links_gdf = pandas.concat([links_gdf, deleted_links_gdf])
             lines_gdf = pandas.concat([lines_gdf, deleted_lines_gdf])
+
+        if len(modified_lines) == 0:
+            modified_lines_text += "<ACP><BOL>No Modified Transit Lines</BOL></ACP>\n"
+        else:
+            modified_lines_text += "<ACP><BOL>Modified {} Transit Lines</BOL></ACP>\n".format(len(modified_lines))
 
         for line_name in sorted(list(lines_in_both)):
             my_line = self.line(line_name)
@@ -1718,36 +1740,37 @@ class TransitNetwork(Network):
             # don"t log linse that haven"t changed
             if my_line == other_line: continue
 
-            # the line changed
-            report_file.write("Modified line: {}\n".format(line_name))
+            modified_lines_text += '&#8226; <CLR green="130" blue="130">{}</CLR> - oneway:{} freq:{}\n'.format(
+                line_name, self.line(line_name).isOneWay(), my_line.getFreqs())
 
             # did the frequencies change
             if my_line.getFreqs() != other_line.getFreqs():
-                report_file.write("Frequency changed from {} to {}\n".format(other_line.getFreqs(), my_line.getFreqs()))
+                modified_lines_text += '  &#8226; freq changed from {}\n'.format(
+                    other_line.getFreqs())
             
             my_node_ids = my_line.listNodeIds(ignoreStops=False)
             other_node_ids = other_line.listNodeIds(ignoreStops=False)
             if my_node_ids != other_node_ids:
-                report_file.write("Node list changed from {} to {}\n".format(other_node_ids, my_node_ids))
-
-                (prev_nodes_gdf, prev_links_gdf, prev_lines_gdf) = other_network.line(line_name).createGeoDataFrames(nodes_dict)
-                prev_nodes_gdf["change"] = "previous line {}".format(line_name)
-                prev_links_gdf["change"] = "previous line {}".format(line_name)
-                prev_lines_gdf["change"] = "previous line {}".format(line_name)   
+                modified_lines_text += '  &#8226; route changed\n'
+                
+                (prev_nodes_gdf, prev_links_gdf, prev_lines_gdf) = other_network.line(line_name).createGeoDataFrames(nodes_dict, line_name_suffix="_prev")
+                prev_nodes_gdf["change"] = "previous line"
+                prev_links_gdf["change"] = "previous line"
+                prev_lines_gdf["change"] = "previous line"   
                 (new_nodes_gdf,  new_links_gdf,  new_lines_gdf)  = self.line(line_name).createGeoDataFrames(nodes_dict)
-                new_nodes_gdf["change"] = "modified line {}".format(line_name)
-                new_links_gdf["change"] = "modified line {}".format(line_name)
-                new_lines_gdf["change"] = "modified line {}".format(line_name)   
+                new_nodes_gdf["change"] = "modified line"
+                new_links_gdf["change"] = "modified line"
+                new_lines_gdf["change"] = "modified line"   
 
                 nodes_gdf = pandas.concat([nodes_gdf, prev_nodes_gdf, new_nodes_gdf])
                 links_gdf = pandas.concat([links_gdf, prev_links_gdf, new_links_gdf])
                 lines_gdf = pandas.concat([lines_gdf, prev_lines_gdf, new_lines_gdf])
+
+                rerouted_lines.append(line_name)
         if len(nodes_gdf)>0: nodes_gdf.to_file(filename=os.path.join(directory, "trn_nodes.shp"))
         if len(links_gdf)>0: links_gdf.to_file(filename=os.path.join(directory, "trn_links.shp"))
         if len(lines_gdf)>0: lines_gdf.to_file(filename=os.path.join(directory, "trn_lines.shp"))
 
-        report_file.close()
-        WranglerLogger.debug("Wrote {}".format(os.path.join(directory, filename)))
 
         # OK now we make the PDF with arcpy (!!)
         import arcpy
@@ -1763,66 +1786,109 @@ class TransitNetwork(Network):
             ignore_case=True)
         WranglerLogger.debug("previous path={}".format(previous_path))
  
-        # PLACEHOLDER LINES in the project
-        PLACEHOLDER_LINES = {
-            "Modified Transit Lines":   ["120_YELLOW5", "120_YELLOW6", "120_YELLOW7"],
-            "Added Transit Lines":      ["120_GREENA", "120_GREENB", "120_ORANGEA"],
-            "Deleted Transit Lines":    ["120_YELLOW11", "120_YELLOW13", "120_YELLOW14"]
-        }
-
-        # check data sources and update symbology
+        # Create line layers
         transit_map = aprx.listMaps("Transit Project Map")[0]
-        layers = transit_map.listLayers("*")
-        for layer in layers:
-            WranglerLogger.debug("layer name={} dataSource={}".format(layer.name, layer.dataSource))
-            # https://pro.arcgis.com/en/pro-app/latest/arcpy/mapping/symbology-class.htm
-            if layer.name in ["Modified Transit Lines", "Added Transit Lines", "Deleted Transit Lines"]:
-                WranglerLogger.debug("Updating layer {}".format(layer.name))
-                sym = layer.symbology
-                WranglerLogger.debug(" renderer.type = {} defaultSymbol={}".format(sym.renderer.type, sym.renderer.defaultSymbol))
-                for item_group in sym.renderer.groups:
-                    # expect only heading="NAME"
-                    WranglerLogger.debug("  item_group {}".format(item_group))
-                    WranglerLogger.debug("  heading={}".format(item_group.heading))
-                    if item_group.heading != "NAME": continue
+        line_template_layer = transit_map.listLayers("line_template")[0]
+        stop_template_layer = transit_map.listLayers("stop_template")[0]
 
-                    for item in item_group.items:
-                        WranglerLogger.debug("   item description={} label={} symbol={} values={}".format(
-                            item.description, item.label, item.symbol, item.values))
+        WranglerLogger.debug("line_template_layer: {} {}".format(line_template_layer, type(line_template_layer)))
+        WranglerLogger.debug("  dataSource: {}".format(line_template_layer.dataSource))
+        WranglerLogger.debug("  definitionQuery: {}".format(line_template_layer.definitionQuery))
+        WranglerLogger.debug("  isFeatureLayer: {}".format(line_template_layer.isFeatureLayer))
 
-                    # remove existing
-                    sym.renderer.removeValues({"NAME" : PLACEHOLDER_LINES[layer.name]})
-                    # add new
-                    if layer.name == "Modified Transit Lines":
-                        sym.renderer.addValues({"NAME":modified_lines})
-                        sym.renderer.colorRamp = aprx.listColorRamps("Cyans")[0]
-                    elif layer.name == "Added Transit Lines":
-                        sym.renderer.addValues({"NAME":added_lines})
-                        sym.renderer.colorRamp = aprx.listColorRamps("Greens")[0]
-                    elif layer.name == "Deleted Transit Lines":
-                        sym.renderer.addValues({"NAME":deleted_lines})
-                        sym.renderer.colorRamp = aprx.listColorRamps("Reds")[0]
+        WranglerLogger.debug("stop_template_layer: {} {}".format(stop_template_layer, type(stop_template_layer)))
+        WranglerLogger.debug("  dataSource: {}".format(stop_template_layer.dataSource))
+        WranglerLogger.debug("  definitionQuery: {}".format(stop_template_layer.definitionQuery))
+        WranglerLogger.debug("  isFeatureLayer: {}".format(stop_template_layer.isFeatureLayer))
+
+        line_lists = {
+            "added": added_lines,
+            "deleted": deleted_lines,
+            "modified": modified_lines
+        }
+        group_layers = {
+            "added": transit_map.listLayers("Added Transit Lines")[0],
+            "deleted": transit_map.listLayers("Deleted Transit Lines")[0],
+            "modified": transit_map.listLayers("Modified Transit Lines")[0]
+        }
+        colors = {
+            "added": "Greens",
+            "deleted": "Reds",
+            "modified": "Cyans",
+            "modified_prev": "Purples"
+        }
+        for change_type in ["added","deleted","modified"]:
+            line_index = 1
+
+            for line_name in line_lists[change_type]:
+
+                for modified_suffix in ["","_prev"]:
+                    # this only applies for modified lines 
+                    if modified_suffix == "_prev" and change_type != "modified":
+                        continue
+                    # with reroutes
+                    if modified_suffix == "_prev" and line_name not in rerouted_lines:
+                        continue
+
+                    # use the template to create a new line layer
+                    result = arcpy.management.MakeFeatureLayer(line_template_layer, 
+                                                               "{}{}".format(line_name, modified_suffix),
+                                                               "NAME = '{}{}'".format(line_name, modified_suffix))
+                    WranglerLogger.debug("Created line layer; result.status={} message={}".format(result.status, result.getMessages()))
+                    line_layer = result.getOutput(0)
+                    WranglerLogger.debug("line_layer: {} {}".format(line_layer, type(line_layer)))
+                    WranglerLogger.debug("  dataSource: {}".format(line_layer.dataSource))
+                    WranglerLogger.debug("  definitionQuery: {}".format(line_layer.definitionQuery))
+
+                    # symbology
+                    line_symbology = line_template_layer.symbology
+                    WranglerLogger.debug("symbology: {} {}".format(line_symbology, type(line_symbology)))
+
+                    line_symbology.renderer.addValues({"NAME":["{}{}".format(line_name, modified_suffix)]})  # add new value for this line
+                    line_symbology.renderer.removeValues({"NAME":['test_line_1']}) # remove existing
+                    line_symbology.renderer.colorRamp = aprx.listColorRamps(colors[change_type + modified_suffix])[0] # set color ramp
                     # per example: https://pro.arcgis.com/en/pro-app/latest/arcpy/mapping/uniquevaluerenderer-class.htm
-                    layer.symbology = sym
+                    line_layer.symbology = line_symbology
 
-                    WranglerLogger.debug("After update:")
-                    for item in item_group.items:
-                        WranglerLogger.debug("   item description={} label={} symbol={} values={}".format(
-                            item.description, item.label, item.symbol, item.values))
+                    transit_map.addLayerToGroup(group_layers[change_type], line_layer, 'BOTTOM')
 
+                    # use the template to create a new stops layer
+                    result = arcpy.management.MakeFeatureLayer(stop_template_layer, 
+                                                               "{}_stops{}".format(line_name, modified_suffix),
+                                                               "LINE_NAME = '{}{}'".format(line_name, modified_suffix))
+                    WranglerLogger.debug("Created stops layer; result.status={} message={}".format(result.status, result.getMessages()))
+                    stop_layer = result.getOutput(0)
+                    WranglerLogger.debug("stop_layer: {} {}".format(stop_layer, type(line_layer)))
+                    WranglerLogger.debug("  dataSource: {}".format(stop_layer.dataSource))
+                    WranglerLogger.debug("  definitionQuery: {}".format(stop_layer.definitionQuery))   
 
-        # update text elements
+                    stop_symbology = stop_template_layer.symbology
+                    stop_symbology.renderer.colorRamp = aprx.listColorRamps(colors[change_type + modified_suffix])[0]
+                    stop_layer.symbology = stop_symbology  # set color ramp
+                    transit_map.addLayerToGroup(group_layers[change_type], stop_layer, 'BOTTOM')
+
+                line_index += 1
+
+        # hide the template layers
+        line_template_layer.visible = False
+        stop_template_layer.visible = False
+        WranglerLogger.debug("line_template_layer.visible: {}".format(line_template_layer.visible))
+        WranglerLogger.debug("stop_template_layer.visible: {}".format(stop_template_layer.visible))
+
         layout = aprx.listLayouts("Transit Project Layout")[0]
         WranglerLogger.debug("layout.name = {}".format(layout.name))
+
+        # Note: I tried to include the legend on the map but arcpy does not have functionality to hide
+        # the legend item's Layer Name or Headings, so the legend is too cluttered
+        # Relying on the text element below instead
+
+        # update text elements
         text_elements = layout.listElements(element_type="TEXT_ELEMENT")
         for text_element in text_elements:
             if text_element.name == "Project Name Text":
                 text_element.text = "Transit Project: {}".format(report_description)
             if text_element.name == "Project Details Text":
-                report_file = open(report_filename, "r")
-                report_text = report_file.read()
-                report_file.close()
-                text_element.text = report_text
+                text_element.text = added_lines_text + "\n" + deleted_lines_text + "\n" + modified_lines_text
 
         # update zoom to symbolized extent
         # https://pro.arcgis.com/en/pro-app/latest/arcpy/mapping/mapframe-class.htm
@@ -1837,4 +1903,3 @@ class TransitNetwork(Network):
         # save a copy
         aprx.saveACopy(os.path.join(directory, "ProjectMapping.aprx"))
 
-        # exit

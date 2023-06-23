@@ -560,9 +560,6 @@ if __name__ == '__main__':
                         project_diff_folder_with_suffix = "{}_{}".format(project_diff_folder, suffix_num)
 
                     Wrangler.WranglerLogger.debug("Creating project_diff_folder: {}".format(project_diff_folder_with_suffix))
-
-                    # create this directory
-                    os.makedirs(project_diff_folder_with_suffix)
                     
                     # new!
                     networks[netmode].reportDiff(network_without_project, project_diff_folder_with_suffix, project_name,

@@ -219,22 +219,22 @@ class TransitLine(object):
         
     def getFreqs(self):
         """
-        Return the frequencies for this line as a list of 5 strings
+        Return the frequencies for this line as a list of 5 strings (formated with one decimal)
         (representing AM,MD,PM,EV,EA for CHAMP, or EA,AM,MD,PM,EV for TM1)
         """
         try:
             if 'HEADWAY[1]' in self.attr:
-                return [self.attr['HEADWAY[1]'],
-                        self.attr['HEADWAY[2]'],
-                        self.attr['HEADWAY[3]'],
-                        self.attr['HEADWAY[4]'],
-                        self.attr['HEADWAY[5]']]
+                return ["{0:.1f}".format(float(self.attr['HEADWAY[1]'])),
+                        "{0:.1f}".format(float(self.attr['HEADWAY[2]'])),
+                        "{0:.1f}".format(float(self.attr['HEADWAY[3]'])),
+                        "{0:.1f}".format(float(self.attr['HEADWAY[4]'])),
+                        "{0:.1f}".format(float(self.attr['HEADWAY[5]']))]
 
-            return [self.attr['FREQ[1]'],
-                    self.attr['FREQ[2]'],
-                    self.attr['FREQ[3]'],
-                    self.attr['FREQ[4]'],
-                    self.attr['FREQ[5]']]
+            return ["{0:.1f}".format(float(self.attr['FREQ[1]'])),
+                    "{0:.1f}".format(float(self.attr['FREQ[2]'])),
+                    "{0:.1f}".format(float(self.attr['FREQ[3]'])),
+                    "{0:.1f}".format(float(self.attr['FREQ[4]'])),
+                    "{0:.1f}".format(float(self.attr['FREQ[5]']))]
         except:
             WranglerLogger.fatal("problem with getFreqs() for {}  self.attr={}".format(self.name, self.attr))
 
@@ -694,7 +694,7 @@ class TransitLine(object):
         s = 'Line name \"%s\" freqs=%s' % (self.name, str(self.getFreqs()))
         return s
 
-    def createGeoDataFrames(self, nodes_dict: dict, modeltype=Network.MODEL_TYPE_TM1):
+    def createGeoDataFrames(self, nodes_dict: dict, modeltype=Network.MODEL_TYPE_TM1, line_name_suffix=""):
         """
         Create and return shapefile rows similar in format to those exported by 
         https://github.com/BayAreaMetro/travel-model-one/blob/master/utilities/cube-to-shapefile/cube_to_shapefile.py
@@ -735,22 +735,22 @@ class TransitLine(object):
 
             # store node
             nodes.append([
-                self.name,      # LINE_NAME
-                node_num,       # N
-                nodeIdx+1,      # SEQ
-                node.isStop(),  # IS_STOP
-                access,         # ACCESS
+                "{}{}".format(self.name, line_name_suffix),   # LINE_NAME
+                node_num,                                     # N
+                nodeIdx+1,                                    # SEQ
+                node.isStop(),                                # IS_STOP
+                access,                                       # ACCESS
                 shapely.Point(nodes_dict[node_num][0], nodes_dict[node_num][1]) # geometry
             ])  
             line_points.append(shapely.Point(nodes_dict[node_num][0], nodes_dict[node_num][1]))
             # store link
             if prev_node_num:
                 links.append([
-                    self.name,              # LINE_NAME
-                    prev_node_num,          # A
-                    node_num,               # B
-                    nodeIdx,                # SEQ
-                    int(self.attr['MODE']), # MODE
+                    "{}{}".format(self.name, line_name_suffix),   # LINE_NAME
+                    prev_node_num,                                # A
+                    node_num,                                     # B
+                    nodeIdx,                                      # SEQ
+                    int(self.attr['MODE']),                       # MODE
                     shapely.LineString([
                         shapely.Point(nodes_dict[prev_node_num][0], nodes_dict[prev_node_num][1]),
                         shapely.Point(nodes_dict[node_num][0],      nodes_dict[node_num][1])
@@ -760,7 +760,7 @@ class TransitLine(object):
             prev_node_num = node_num
     
         lines = [{
-            'NAME':      self.name,
+            'NAME':      "{}{}".format(self.name, line_name_suffix),
             'LONG_NAME': self.attr['LONGNAME'] if 'LONGNAME' in self.attr.keys() else '',
             'MODE':      int(self.attr['MODE']),
             'FREQ_EA':   self.getFreq('EA', modeltype),
@@ -775,7 +775,7 @@ class TransitLine(object):
         # if not oneway, then add reverse line
         if self.isOneWay() == False:
             lines.append({
-                'NAME':      self.name + "-",
+                'NAME':      "{}{}".format(self.name + "-",line_name_suffix),
                 'LONG_NAME': self.attr['LONGNAME'] if 'LONGNAME' in self.attr.keys() else '',
                 'MODE':      int(self.attr['MODE']),
                 'FREQ_EA':   self.getFreq('EA', modeltype),
