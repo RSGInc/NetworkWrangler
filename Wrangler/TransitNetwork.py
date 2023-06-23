@@ -1,4 +1,4 @@
-import copy, glob, inspect, math, os, re, shutil, sys, xlrd
+import copy, glob, inspect, math, os, re, shutil, sys, traceback, xlrd
 from collections import defaultdict
 from .Factor import Factor
 from .Faresystem import Faresystem
@@ -1750,6 +1750,17 @@ class TransitNetwork(Network):
             
             my_node_ids = my_line.listNodeIds(ignoreStops=False)
             other_node_ids = other_line.listNodeIds(ignoreStops=False)
+            # create modified route shapes
+            (new_nodes_gdf,  new_links_gdf,  new_lines_gdf)  = self.line(line_name).createGeoDataFrames(nodes_dict)
+            new_nodes_gdf["change"] = "modified line"
+            new_links_gdf["change"] = "modified line"
+            new_lines_gdf["change"] = "modified line"
+
+            nodes_gdf = pandas.concat([nodes_gdf, new_nodes_gdf])
+            links_gdf = pandas.concat([links_gdf, new_links_gdf])
+            lines_gdf = pandas.concat([lines_gdf, new_lines_gdf])
+        
+            # if rerouted, create previous route shapes
             if my_node_ids != other_node_ids:
                 modified_lines_text += '  &#8226; route changed\n'
                 
@@ -1757,14 +1768,10 @@ class TransitNetwork(Network):
                 prev_nodes_gdf["change"] = "previous line"
                 prev_links_gdf["change"] = "previous line"
                 prev_lines_gdf["change"] = "previous line"   
-                (new_nodes_gdf,  new_links_gdf,  new_lines_gdf)  = self.line(line_name).createGeoDataFrames(nodes_dict)
-                new_nodes_gdf["change"] = "modified line"
-                new_links_gdf["change"] = "modified line"
-                new_lines_gdf["change"] = "modified line"   
 
-                nodes_gdf = pandas.concat([nodes_gdf, prev_nodes_gdf, new_nodes_gdf])
-                links_gdf = pandas.concat([links_gdf, prev_links_gdf, new_links_gdf])
-                lines_gdf = pandas.concat([lines_gdf, prev_lines_gdf, new_lines_gdf])
+                nodes_gdf = pandas.concat([nodes_gdf, prev_nodes_gdf])
+                links_gdf = pandas.concat([links_gdf, prev_links_gdf])
+                lines_gdf = pandas.concat([lines_gdf, prev_lines_gdf])
 
                 rerouted_lines.append(line_name)
         if len(nodes_gdf)>0: nodes_gdf.to_file(filename=os.path.join(directory, "trn_nodes.shp"))
@@ -1774,6 +1781,10 @@ class TransitNetwork(Network):
 
         # OK now we make the PDF with arcpy (!!)
         import arcpy
+        arcpy.env.workspace = directory
+        arcpy.env.overwriteOutput = True
+        WranglerLogger.debug("imported arcpy; workspace={}".format(arcpy.env.workspace))
+
         APRX_FILE = os.path.join(os.path.dirname(__file__), "..", "ProjectMapping", "ProjectMapping.aprx")
         WranglerLogger.debug("Opening project {}".format(APRX_FILE))
         aprx = arcpy.mp.ArcGISProject(APRX_FILE)
@@ -1817,11 +1828,14 @@ class TransitNetwork(Network):
             "modified": "Cyans",
             "modified_prev": "Purples"
         }
+        layers = [] # keep track of the layers we create
         for change_type in ["added","deleted","modified"]:
             line_index = 1
 
             for line_name in line_lists[change_type]:
+                WranglerLogger.debug("Processing {} line {}".format(change_type, line_name))
 
+                # to create modified line pair: previous and updated
                 for modified_suffix in ["","_prev"]:
                     # this only applies for modified lines 
                     if modified_suffix == "_prev" and change_type != "modified":
@@ -1831,14 +1845,24 @@ class TransitNetwork(Network):
                         continue
 
                     # use the template to create a new line layer
-                    result = arcpy.management.MakeFeatureLayer(line_template_layer, 
-                                                               "{}{}".format(line_name, modified_suffix),
-                                                               "NAME = '{}{}'".format(line_name, modified_suffix))
-                    WranglerLogger.debug("Created line layer; result.status={} message={}".format(result.status, result.getMessages()))
-                    line_layer = result.getOutput(0)
-                    WranglerLogger.debug("line_layer: {} {}".format(line_layer, type(line_layer)))
-                    WranglerLogger.debug("  dataSource: {}".format(line_layer.dataSource))
-                    WranglerLogger.debug("  definitionQuery: {}".format(line_layer.definitionQuery))
+                    try:
+                        result = arcpy.management.MakeFeatureLayer(line_template_layer, 
+                                                                   "line_{}{}".format(line_name, modified_suffix),
+                                                                   "NAME = '{}{}'".format(line_name, modified_suffix))
+                        WranglerLogger.debug("Created line layer; result.status={} message={}".format(result.status, result.getMessages()))
+                        line_layer = result.getOutput(0)
+                        layers.append(line_layer)
+                        WranglerLogger.debug("line_layer: {} {}".format(line_layer, type(line_layer)))
+                        WranglerLogger.debug("  dataSource: {}".format(line_layer.dataSource))
+                        WranglerLogger.debug("  definitionQuery: {}".format(line_layer.definitionQuery))
+                    except Exception as e:
+                        WranglerLogger.fatal("Exception occurred: {}".format(e))
+                        WranglerLogger.fatal(traceback.format_exc())
+                        # print layers
+                        layers = transit_map.listLayers("*")
+                        for layer in layers:
+                            WranglerLogger.debug("  layer {}".format(layer))
+                        sys.exit(2)
 
                     # symbology
                     line_symbology = line_template_layer.symbology
@@ -1854,10 +1878,11 @@ class TransitNetwork(Network):
 
                     # use the template to create a new stops layer
                     result = arcpy.management.MakeFeatureLayer(stop_template_layer, 
-                                                               "{}_stops{}".format(line_name, modified_suffix),
+                                                               "stops_{}{}".format(line_name, modified_suffix),
                                                                "LINE_NAME = '{}{}'".format(line_name, modified_suffix))
                     WranglerLogger.debug("Created stops layer; result.status={} message={}".format(result.status, result.getMessages()))
                     stop_layer = result.getOutput(0)
+                    layers.append(stop_layer)
                     WranglerLogger.debug("stop_layer: {} {}".format(stop_layer, type(line_layer)))
                     WranglerLogger.debug("  dataSource: {}".format(stop_layer.dataSource))
                     WranglerLogger.debug("  definitionQuery: {}".format(stop_layer.definitionQuery))   
@@ -1869,11 +1894,13 @@ class TransitNetwork(Network):
 
                 line_index += 1
 
-        # hide the template layers
-        line_template_layer.visible = False
-        stop_template_layer.visible = False
-        WranglerLogger.debug("line_template_layer.visible: {}".format(line_template_layer.visible))
-        WranglerLogger.debug("stop_template_layer.visible: {}".format(stop_template_layer.visible))
+        # I tried setting visible to False but that seems to be buggy
+        line_template_layer = transit_map.listLayers("line_template")[0]
+        stop_template_layer = transit_map.listLayers("stop_template")[0]
+        WranglerLogger.debug("line_template_layer: {}".format(line_template_layer))
+        WranglerLogger.debug("stop_template_layer: {}".format(stop_template_layer))
+        transit_map.removeLayer(line_template_layer)
+        transit_map.removeLayer(stop_template_layer)
 
         layout = aprx.listLayouts("Transit Project Layout")[0]
         WranglerLogger.debug("layout.name = {}".format(layout.name))
@@ -1902,4 +1929,14 @@ class TransitNetwork(Network):
         WranglerLogger.debug("Wrote {}".format(out_pdf))
         # save a copy
         aprx.saveACopy(os.path.join(directory, "ProjectMapping.aprx"))
+
+        # delete all those layers because otherwise if we try to create on with the same name later on, we get an error
+        for layer in layers[::-1]:
+            try:
+                WranglerLogger.debug("Deleting {}".format(layer))
+                retcode = arcpy.management.Delete(layer)
+                if retcode == False: WranglerLogger.debug("FAILED")
+            except Exception as e:
+                WranglerLogger.fatal("Exception occurred: {}".format(e))
+                WranglerLogger.fatal(traceback.format_exc())
 
