@@ -593,6 +593,13 @@ class TransitNetwork(Network):
             raise NetworkException('Unknown Route!  %s' % (shortLine))       
 
         [tp1Long, tp2Long, tp3Long, tp4Long, tp5Long] = longLineInst.getFreqs()
+        # convert to float
+        tp1Long = float(tp1Long)
+        tp2Long = float(tp2Long)
+        tp3Long = float(tp3Long)
+        tp4Long = float(tp4Long)
+        tp5Long = float(tp5Long)
+
         [tp1Comb, tp2Comb, tp3Comb, tp4Comb, tp5Comb] = combFreqs
         [tp1Short,tp2Short,tp3Short,tp4Short,tp5Short] = [0,0,0,0,0]
         if (tp1Long-tp1Comb)>0: tp1Short=tp1Comb*tp1Long/(tp1Long-tp1Comb)
