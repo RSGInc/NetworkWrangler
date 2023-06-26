@@ -1658,9 +1658,9 @@ class TransitNetwork(Network):
         WranglerLogger.debug("TransitNetwork.reportDiff() passed with other_network={} directory={} roadwayNetworkFile={}".format(
             other_network, directory, roadwayNetworkFile))
         
-        added_lines_text = ""
-        deleted_lines_text = ""
-        modified_lines_text = ""
+        added_lines_text = []
+        deleted_lines_text = []
+        modified_lines_text = []
 
         # transit lines -- compare line names
         my_line_names = set(self.lineNames())
@@ -1698,9 +1698,9 @@ class TransitNetwork(Network):
         lines_gdf = geopandas.GeoDataFrame()
 
         if len(added_lines) == 0:
-            added_lines_text += "<ACP><BOL>No Added Transit Lines</BOL></ACP>\n"
+            added_lines_text.append("<ACP><BOL>No Added Transit Lines</BOL></ACP>")
         else:
-            added_lines_text += "<ACP><BOL>Added {} Transit Lines</BOL></ACP>\n".format(len(added_lines))
+            added_lines_text.append("<ACP><BOL>Added {} Transit Lines</BOL></ACP>".format(len(added_lines)))
 
         # create geodataframe rows
         for line_name in added_lines:
@@ -1709,18 +1709,18 @@ class TransitNetwork(Network):
             added_links_gdf["change"] = "added line"
             added_lines_gdf["change"] = "added line"
 
-            added_lines_text += '&#8226; <CLR green="100">{}</CLR> - oneway:{} freq:{}\n'.format(
+            added_lines_text.append('&#8226; <CLR green="100">{}</CLR> - oneway:{} freq:{}'.format(
                 line_name, self.line(line_name).isOneWay(),
-                self.line(line_name).getFreqs())
+                self.line(line_name).getFreqs()))
 
             nodes_gdf = pandas.concat([nodes_gdf, added_nodes_gdf])
             links_gdf = pandas.concat([links_gdf, added_links_gdf])
             lines_gdf = pandas.concat([lines_gdf, added_lines_gdf])
 
         if len(deleted_lines) == 0:
-            deleted_lines_text += "<ACP><BOL>No Deleted Transit Lines</BOL></ACP>\n"
+            deleted_lines_text.append("<ACP><BOL>No Deleted Transit Lines</BOL></ACP>")
         else:
-            deleted_lines_text += "<ACP><BOL>Deleted {} Transit Lines</BOL></ACP>\n".format(len(deleted_lines))
+            deleted_lines_text.append("<ACP><BOL>Deleted {} Transit Lines</BOL></ACP>".format(len(deleted_lines)))
 
         for line_name in deleted_lines:
             (deleted_nodes_gdf, deleted_links_gdf, deleted_lines_gdf) = other_network.line(line_name).createGeoDataFrames(nodes_dict)
@@ -1728,18 +1728,18 @@ class TransitNetwork(Network):
             deleted_links_gdf["change"] = "deleted line"
             deleted_lines_gdf["change"] = "deleted line"
 
-            deleted_lines_text += '&#8226; <CLR red="100">{}</CLR> - oneway:{} freq:{}\n'.format(
+            deleted_lines_text.append('&#8226; <CLR red="100">{}</CLR> - oneway:{} freq:{}'.format(
                 line_name, other_network.line(line_name).isOneWay(), 
-                other_network.line(line_name).getFreqs())
+                other_network.line(line_name).getFreqs()))
 
             nodes_gdf = pandas.concat([nodes_gdf, deleted_nodes_gdf])
             links_gdf = pandas.concat([links_gdf, deleted_links_gdf])
             lines_gdf = pandas.concat([lines_gdf, deleted_lines_gdf])
 
         if len(modified_lines) == 0:
-            modified_lines_text += "<ACP><BOL>No Modified Transit Lines</BOL></ACP>\n"
+            modified_lines_text.append("<ACP><BOL>No Modified Transit Lines</BOL></ACP>")
         else:
-            modified_lines_text += "<ACP><BOL>Modified {} Transit Lines</BOL></ACP>\n".format(len(modified_lines))
+            modified_lines_text.append("<ACP><BOL>Modified {} Transit Lines</BOL></ACP>".format(len(modified_lines)))
 
         for line_name in sorted(list(lines_in_both)):
             my_line = self.line(line_name)
@@ -1747,18 +1747,18 @@ class TransitNetwork(Network):
             # don"t log linse that haven"t changed
             if my_line == other_line: continue
 
-            modified_lines_text += '&#8226; <CLR green="130" blue="130">{}</CLR> - oneway:{} freq:{}\n'.format(
-                line_name, self.line(line_name).isOneWay(), my_line.getFreqs())
+            modified_lines_text.append('&#8226; <CLR green="130" blue="130">{}</CLR> - oneway:{} freq:{}'.format(
+                line_name, self.line(line_name).isOneWay(), my_line.getFreqs()))
 
             # did the frequencies change
             if my_line.getFreqs() != other_line.getFreqs():
-                modified_lines_text += '  &#8226; freq changed from {}\n'.format(
-                    other_line.getFreqs())
+                modified_lines_text.append('  &#8226; freq changed from {}'.format(
+                    other_line.getFreqs()))
             
             my_node_ids = my_line.listNodeIds(ignoreStops=False)
             other_node_ids = other_line.listNodeIds(ignoreStops=False)
             # create modified route shapes
-            (new_nodes_gdf,  new_links_gdf,  new_lines_gdf)  = self.line(line_name).createGeoDataFrames(nodes_dict)
+            (new_nodes_gdf, new_links_gdf, new_lines_gdf) = self.line(line_name).createGeoDataFrames(nodes_dict)
             new_nodes_gdf["change"] = "modified line"
             new_links_gdf["change"] = "modified line"
             new_lines_gdf["change"] = "modified line"
@@ -1769,7 +1769,7 @@ class TransitNetwork(Network):
         
             # if rerouted, create previous route shapes
             if my_node_ids != other_node_ids:
-                modified_lines_text += '  &#8226; route changed\n'
+                modified_lines_text.append('  &#8226; route changed')
                 
                 (prev_nodes_gdf, prev_links_gdf, prev_lines_gdf) = other_network.line(line_name).createGeoDataFrames(nodes_dict, line_name_suffix="_prev")
                 prev_nodes_gdf["change"] = "previous line"
@@ -1910,19 +1910,28 @@ class TransitNetwork(Network):
         transit_map.removeLayer(stop_template_layer)
 
         layout = aprx.listLayouts("Transit Project Layout")[0]
-        WranglerLogger.debug("layout.name = {}".format(layout.name))
+        # WranglerLogger.debug("layout.name = {}".format(layout.name))
 
         # Note: I tried to include the legend on the map but arcpy does not have functionality to hide
         # the legend item's Layer Name or Headings, so the legend is too cluttered
         # Relying on the text element below instead
 
+        details_lines = added_lines_text + [""] + deleted_lines_text + [""] + modified_lines_text
+        if len(details_lines) > 32:
+            details_lines_1 = details_lines[:32]
+            details_lines_2 = details_lines[32:]
+            pdf_suffix = "_page1"
+        else:
+            details_lines_1 = details_lines
+            details_lines_2 = []
+            pdf_suffix = ""
         # update text elements
         text_elements = layout.listElements(element_type="TEXT_ELEMENT")
         for text_element in text_elements:
             if text_element.name == "Project Name Text":
                 text_element.text = "Transit Project: {}".format(report_description)
             if text_element.name == "Project Details Text":
-                text_element.text = added_lines_text + "\n" + deleted_lines_text + "\n" + modified_lines_text
+                text_element.text = str("\n").join(details_lines_1)
 
         # update zoom to symbolized extent
         # https://pro.arcgis.com/en/pro-app/latest/arcpy/mapping/mapframe-class.htm
@@ -1931,18 +1940,40 @@ class TransitNetwork(Network):
         extent = map_frame.getLayerExtent(trn_links_layer, False, False)
         map_frame.panToExtent(extent)
 
-        out_pdf = os.path.join(directory, "project_map_{}.pdf".format(report_description))
+        out_pdf = os.path.join(directory, "project_map_{}{}.pdf".format(report_description, pdf_suffix))
         layout.exportToPDF(out_pdf)
         WranglerLogger.debug("Wrote {}".format(out_pdf))
+
+        if len(details_lines_2) > 0:
+            text_layout = aprx.listLayouts("Text Layout")[0]
+            # update text elements
+            text_elements = text_layout.listElements(element_type="TEXT_ELEMENT")
+            for text_element in text_elements:
+                if text_element.name == "Project Name Text":
+                    text_element.text = "Transit Project (page 2): {}".format(report_description)
+                if text_element.name == "Project Details Continued":
+                    text_element.text = str("\n").join(details_lines_2)            
+            out_pdf = os.path.join(directory, "project_map_{}_page2.pdf".format(report_description))
+            text_layout.exportToPDF(out_pdf)
+            WranglerLogger.debug("Wrote {}".format(out_pdf))
+
+            # merge the pdfs
+            import pypdf 
+            merger = pypdf.PdfWriter()
+            merger.append(os.path.join(directory, "project_map_{}_page1.pdf".format(report_description)))
+            merger.append(os.path.join(directory, "project_map_{}_page2.pdf".format(report_description)))
+            merger.write(os.path.join(directory, "project_map_{}.pdf".format(report_description)))
+            merger.close()            
+
         # save a copy
         aprx.saveACopy(os.path.join(directory, "ProjectMapping.aprx"))
 
         # delete all those layers because otherwise if we try to create on with the same name later on, we get an error
         for layer in layers[::-1]:
             try:
-                WranglerLogger.debug("Deleting {}".format(layer))
+                # WranglerLogger.debug("Deleting {}".format(layer))
                 retcode = arcpy.management.Delete(layer)
-                if retcode == False: WranglerLogger.debug("FAILED")
+                if retcode == False: WranglerLogger.debug("Delete layer {} FAILED".format(layer))
             except Exception as e:
                 WranglerLogger.fatal("Exception occurred: {}".format(e))
                 WranglerLogger.fatal(traceback.format_exc())
