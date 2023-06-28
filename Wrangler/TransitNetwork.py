@@ -1957,13 +1957,14 @@ class TransitNetwork(Network):
             text_layout.exportToPDF(out_pdf)
             WranglerLogger.debug("Wrote {}".format(out_pdf))
 
-            # merge the pdfs
-            import pypdf 
-            merger = pypdf.PdfWriter()
-            merger.append(os.path.join(directory, "project_map_{}_page1.pdf".format(report_description)))
-            merger.append(os.path.join(directory, "project_map_{}_page2.pdf".format(report_description)))
-            merger.write(os.path.join(directory, "project_map_{}.pdf".format(report_description)))
-            merger.close()            
+            # merge the pdfs with arcpy (pypdf drops the layers)
+            import shutil
+            shutil.copyfile(os.path.join(directory, "project_map_{}_page1.pdf".format(report_description)),
+                            os.path.join(directory, "project_map_{}.pdf".format(report_description)))
+            pdf_doc = arcpy.mp.PDFDocumentOpen(os.path.join(directory, "project_map_{}.pdf".format(report_description)))
+            pdf_doc.appendPages(os.path.join(directory, "project_map_{}_page2.pdf".format(report_description)))
+            pdf_doc.updateDocProperties(pdf_open_view= "LAYERS")
+            pdf_doc.saveAndClose()
 
         # save a copy
         aprx.saveACopy(os.path.join(directory, "ProjectMapping.aprx"))
