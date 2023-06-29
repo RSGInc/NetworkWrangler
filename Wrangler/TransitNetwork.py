@@ -1957,7 +1957,9 @@ class TransitNetwork(Network):
             text_layout.exportToPDF(out_pdf)
             WranglerLogger.debug("Wrote {}".format(out_pdf))
 
-            # merge the pdfs with arcpy (pypdf drops the layers)
+            # merge the pdfs with arcpy
+            # Note that this drops the layers, as does pypdf; the only way I've found to preserve them is to
+            # merge the pdfs using the Acrobat GUI
             import shutil
             shutil.copyfile(os.path.join(directory, "project_map_{}_page1.pdf".format(report_description)),
                             os.path.join(directory, "project_map_{}.pdf".format(report_description)))
