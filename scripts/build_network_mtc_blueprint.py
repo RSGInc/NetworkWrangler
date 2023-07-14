@@ -379,7 +379,7 @@ if __name__ == '__main__':
     NOW         = time.strftime("%Y%b%d.%H%M%S")
     BUILD_MODE  = None # regular
     if args.model_type == Wrangler.Network.MODEL_TYPE_TM1:
-        PIVOT_DIR        = r"M:\\Application\\Model One\\Networks\\TM1_2015_Base_Network"
+        PIVOT_DIR        = r"M:\\Application\\Model One\\Networks\\TM1_2015_Base_Network-fix_expbus_pnr"
         if args.base_network:
             PIVOT_DIR    = os.path.join(r"M:\\Application\\Model One\\Networks\\", args.base_network)
         TRANSIT_CAPACITY_DIR = os.path.join(PIVOT_DIR, "trn")
