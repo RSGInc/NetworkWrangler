@@ -97,6 +97,13 @@ COMMITTED_PROJECTS = collections.OrderedDict([
                {'name': 'RRSP_Alameda_Point_Transit_Improvements', 'kwargs':{'BUILT':"'built'"}} # unbuilt portion is in BLUEPRINT_PROJECTS 2025
                 ],
     }),
+    (2023, {
+        'hwy':['FBP_NP_036_SR29_Imola_PNR',
+               ],
+        'trn':['FBP_NP_036_SR29_Imola_PNR',
+               'REG090037_New_BART_Trains',
+               ]
+    }),
     (2025, {
         'hwy':[{'name':'Bridge_Toll_Updates_2_2pct', 'kwargs':{'MODELYEAR':'2025'}},
                'EXP_CC_050028_I680_SB_HOV_Completion',
@@ -117,14 +124,11 @@ COMMITTED_PROJECTS = collections.OrderedDict([
                'I880_US101_AdaptiveRampMetering',
                'MAJ_SCL050009_VTA_Eastridge_Extension',
                'SOL070020_I80_I680_SR12_Int_1_2A',
-               'FBP_NP_036_SR29_Imola_PNR',
                'ALA170052_Fruitvale_Ave_ped_improvements',
                'EXP_Blueprint_NoProject'],
         'trn':['SF_010028_Caltrain_Modernization',
                'SON090002_SMART_to_Windsor',
                'MAJ_SCL050009_VTA_Eastridge_Extension',
-               'REG090037_New_BART_Trains',
-               'FBP_NP_036_SR29_Imola_PNR',
                'SOL070020_I80_I680_SR12_Int_1_2A']
     }),
     (2030, {
@@ -161,6 +165,9 @@ BLUEPRINT_PROJECTS = collections.OrderedDict([
                 'trn':[]
         }),
         (2020, {'hwy':[],
+                'trn':[]
+        }),
+        (2023, {'hwy':[],
                 'trn':[]
         }),
         (2025, {'hwy':[{'name': 'RRSP_Alameda_Point_Transit_Improvements', 'kwargs':{'BUILT':"'unbuilt'"}},
@@ -475,7 +482,8 @@ for YEAR in COMMITTED_PROJECTS.keys():
 
     else:
         # blueprint, alt1, alt2
-
+        if YEAR not in BLUEPRINT_PROJECTS: continue
+        
         NETWORK_PROJECTS[YEAR] = {
             'hwy':COMMITTED_PROJECTS[YEAR]['hwy'] + BLUEPRINT_PROJECTS[YEAR]['hwy'],
             'trn':COMMITTED_PROJECTS[YEAR]['trn'] + BLUEPRINT_PROJECTS[YEAR]['trn']
