@@ -450,7 +450,7 @@ if __name__ == '__main__':
         Wrangler.WranglerLogger.info("Using PIVOT_DIR_TRN: {}".format(PIVOT_DIR_TRN))
 
     networks = {
-        'hwy' :Wrangler.HighwayNetwork(modelType=args.model_type, modelVersion=1.0,
+        'hwy' :Wrangler.HighwayNetwork(modelType=Wrangler.Network.MODEL_TYPE_TM1, modelVersion=1.0,
                                        basenetworkpath=os.path.join(PIVOT_DIR_HWY,"hwy"),
                                        networkBaseDir=NETWORK_BASE_DIR,
                                        networkProjectSubdir=NETWORK_PROJECT_SUBDIR,
@@ -461,7 +461,7 @@ if __name__ == '__main__':
                                        tempdir=TEMP_SUBDIR,
                                        networkName="hwy",
                                        tierNetworkName=HWY_NET_NAME),
-        'trn':Wrangler.TransitNetwork( modelType=args.model_type, modelVersion=1.0,
+        'trn':Wrangler.TransitNetwork( modelType=Wrangler.Network.MODEL_TYPE_TM1, modelVersion=1.0,
                                        basenetworkpath=os.path.join(PIVOT_DIR_TRN,"trn"),
                                        networkBaseDir=NETWORK_BASE_DIR,
                                        networkProjectSubdir=NETWORK_PROJECT_SUBDIR,
