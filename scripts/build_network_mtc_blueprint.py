@@ -33,10 +33,9 @@ SCENARIO = None
 # MANDATORY. Set this to be the git tag for checking out network projects.
 TAG = None
 
-# OPTIONAL. If you are building on top of a previously built network, this
-# should be set to the location of those networks.  This should be a directory
-# which has "hwy" and "trn" subdirectories.
-PIVOT_DIR = None
+# MANDATORY. The network you are buliding on top of.
+# This should be a clone of https://github.com/BayAreaMetro/TM1_2015_Base_Network
+PIVOT_DIR = os.environ['TM1_2015_Base_Network']
 
 # OPTIONAL. If PIVOT_DIR is specified, MANDATORY.  Specifies year for PIVOT_DIR.
 PIVOT_YEAR = 2015
@@ -49,10 +48,12 @@ PIVOT_YEAR = 2015
 #     {'name':"Muni_TEP", 'kwargs':{'servicePlan':"'2012oct'"}}
 NETWORK_PROJECTS = None
 
-# OPTIONAL. The default route network project directory is Y:\networks.  If
-# projects are stored in another directory, then use this variable to specify it.
-# For example: Y:\networks\projects
-NETWORK_BASE_DIR       = None
+# MANDATORY. This is the folder where the NetworkProjects (each of which is a
+# local git repo) are stored.
+# As of 2023 July, this is now on Box: https://mtcdrive.box.com/s/cs0dmr987kaasmi83a6irru6ts6g4y1x
+NETWORK_BASE_DIR       =  os.environ['TM1_NetworkProjects']
+
+# unused & vestigial (I think)
 NETWORK_PROJECT_SUBDIR = None
 NETWORK_SEED_SUBDIR    = None
 NETWORK_PLAN_SUBDIR    = None
@@ -364,9 +365,6 @@ def preCheckRequirementsForAllProjects(networks, continue_on_warning):
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=USAGE, formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.add_argument("--configword", help="optional word for network specification script")
-    parser.add_argument("--model_type", choices=[Wrangler.Network.MODEL_TYPE_TM1, Wrangler.Network.MODEL_TYPE_TM2],
-                        default=Wrangler.Network.MODEL_TYPE_TM1)
-    parser.add_argument("--base_network", help="Alternative to TM1_2015_Base_Network directory used by default")
     parser.add_argument("--continue_on_warning", help="Don't prompt the user to continue if there are warnings; just warn and continue", action="store_true")
     parser.add_argument("--skip_precheck_requirements", help="Don't precheck network requirements, stale projects, non-HEAD projects, etc", action="store_true")
     parser.add_argument("--restart_year", help="Pass year to 'restart' building network starting from this rather than from the beginning. e.g., 2025")
@@ -378,24 +376,12 @@ if __name__ == '__main__':
 
     NOW         = time.strftime("%Y%b%d.%H%M%S")
     BUILD_MODE  = None # regular
-    if args.model_type == Wrangler.Network.MODEL_TYPE_TM1:
-        PIVOT_DIR        = r"M:\\Application\\Model One\\Networks\\TM1_2015_Base_Network-fix_expbus_pnr"
-        if args.base_network:
-            PIVOT_DIR    = os.path.join(r"M:\\Application\\Model One\\Networks\\", args.base_network)
-        TRANSIT_CAPACITY_DIR = os.path.join(PIVOT_DIR, "trn")
-        NETWORK_BASE_DIR = r"M:\\Application\\Model One\\NetworkProjects"
-        TRN_SUBDIR       = "trn"
-        TRN_NET_NAME     = "Transit_Lines"
-        HWY_SUBDIR       = "hwy"
-        HWY_NET_NAME     = "freeflow.net"
-    elif args.model_type == Wrangler.Network.MODEL_TYPE_TM2:
-        PIVOT_DIR        = os.path.join(os.environ["USERPROFILE"], "Box","Modeling and Surveys","Development","Travel Model Two Development","Model Inputs","2015_revised_mazs")
-        TRANSIT_CAPACITY_DIR = None
-        NETWORK_BASE_DIR = r"M:\\Application\\Model Two\\NetworkProjects"
-        TRN_SUBDIR       = "trn"
-        TRN_NET_NAME     = "transitLines"
-        HWY_SUBDIR       = "hwy"
-        HWY_NET_NAME     = "mtc_final_network_base.net"
+    TRANSIT_CAPACITY_DIR = os.path.join(PIVOT_DIR, "trn")
+    TRN_SUBDIR       = "trn"
+    TRN_NET_NAME     = "Transit_Lines"
+    HWY_SUBDIR       = "hwy"
+    HWY_NET_NAME     = "freeflow.net"
+
 
     PROJECT = "Blueprint"
 
