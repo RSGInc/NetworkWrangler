@@ -30,10 +30,9 @@ SCENARIO = None
 # MANDATORY. Set this to be the git tag for checking out network projects.
 TAG = None
 
-# OPTIONAL. If you are building on top of a previously built network, this
-# should be set to the location of those networks.  This should be a directory
-# which has "hwy" and "trn" subdirectories.
-PIVOT_DIR = None
+# MANDATORY. The network you are buliding on top of.
+# This should be a clone of https://github.com/BayAreaMetro/TM1_2015_Base_Network
+PIVOT_DIR = os.environ['TM1_2015_Base_Network']
 
 # OPTIONAL. If PIVOT_DIR is specified, MANDATORY.  Specifies year for PIVOT_DIR.
 PIVOT_YEAR = 2015
@@ -50,10 +49,12 @@ OUT_DIR = None
 #     {'name':"Muni_TEP", 'kwargs':{'servicePlan':"'2012oct'"}}
 NETWORK_PROJECTS = None
 
-# OPTIONAL. The default route network project directory is Y:\networks.  If
-# projects are stored in another directory, then use this variable to specify it.
-# For example: Y:\networks\projects
-NETWORK_BASE_DIR       = None
+# MANDATORY. This is the folder where the NetworkProjects (each of which is a
+# local git repo) are stored.
+# As of 2023 July, this is now on Box: https://mtcdrive.box.com/s/cs0dmr987kaasmi83a6irru6ts6g4y1x
+NETWORK_BASE_DIR       =  os.environ['TM1_NetworkProjects']
+
+# unused & vestigial (I think)
 NETWORK_PROJECT_SUBDIR = None
 NETWORK_SEED_SUBDIR    = None
 NETWORK_PLAN_SUBDIR    = None
@@ -277,8 +278,8 @@ def preCheckRequirementsForAllProjects(networks, continue_on_warning):
                     # test mode => warn is sufficient
                     # non-test mode => get explicit approval
                     if continue_on_warning:
-                        Wrangler.WranglerLogger.warninging("Continuing (continue_on_warning)")
-                    elif BUILD_MODE !="test":
+                            Wrangler.WranglerLogger.warning("Continuing (continue_on_warning)")
+                    elif BUILD_MODE !="test" and not continue_on_warning:
                         Wrangler.WranglerLogger.warning("  Is this ok? (y/n) ")
                         response = input("")
                         Wrangler.WranglerLogger.debug("  response = [%s]" % response)
@@ -292,14 +293,14 @@ def preCheckRequirementsForAllProjects(networks, continue_on_warning):
                     applied_commit_date = datetime.datetime.fromtimestamp(int(retStdout[0]))
                     applied_commit_age = datetime.datetime.now() - applied_commit_date
     
-                    # if older than x years, holler
+                    # if older than STALE_YEARS year, holler
                     STALE_YEARS = 5
                     if applied_commit_age > datetime.timedelta(days=365*STALE_YEARS):
                         Wrangler.WranglerLogger.warning("  This project was last updated %.1f years ago (over %d), on %s" % \
                                                      (applied_commit_age.days/365.0,
                                                       STALE_YEARS, applied_commit_date.strftime("%x")))
                         if continue_on_warning:
-                            Wrangler.WranglerLogger.warninging("Continuing (continue_on_warning)")
+                            Wrangler.WranglerLogger.warning("Continuing (continue_on_warning)")
                         elif BUILD_MODE !="test":
                             Wrangler.WranglerLogger.warning("  Is this ok? (y/n) ")
                             response = input("")
@@ -365,8 +366,6 @@ def preCheckRequirementsForAllProjects(networks, continue_on_warning):
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=USAGE, formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.add_argument("--configword", help="optional word for network specification script")
-    parser.add_argument("--model_type", choices=[Wrangler.Network.MODEL_TYPE_TM1, Wrangler.Network.MODEL_TYPE_TM2],
-                        default=Wrangler.Network.MODEL_TYPE_TM1)
     parser.add_argument("--continue_on_warning", help="Don't prompt the user to continue if there are warnings; just warn and continue", action="store_true")
     parser.add_argument("--skip_precheck_requirements", help="Don't precheck network requirements, stale projects, non-HEAD projects, etc", action="store_true")
     parser.add_argument("project_name", help="required project name, for example NGF")
@@ -384,34 +383,20 @@ if __name__ == '__main__':
 
     NOW         = time.strftime("%Y%b%d.%H%M%S")
     BUILD_MODE  = None # regular
-    if (args.model_type == Wrangler.Network.MODEL_TYPE_TM1) & (args.project_name != 'NGF'):
-        PIVOT_DIR        = r"M:\\Application\\Model One\\Networks\\TM1_2015_Base_Network"
-        TRANSIT_CAPACITY_DIR = os.path.join(PIVOT_DIR, "trn")
-        NETWORK_BASE_DIR = r"M:\\Application\\Model One\\NetworkProjects"
-        TRN_SUBDIR       = "trn"
-        TRN_NET_NAME     = "Transit_Lines"
-        HWY_SUBDIR       = "hwy"
-        HWY_NET_NAME     = "freeflow.net"
-    elif (args.model_type == Wrangler.Network.MODEL_TYPE_TM1) & (args.project_name == 'NGF'):
+
+    if (args.project_name == 'NGF'):
         PIVOT_DIR        = r"L:\Application\Model_One\NextGenFwys\INPUT_DEVELOPMENT\Networks\NGF_Networks_NoProjectNoSFCordon_08\net_2035_NGFNoProjectNoSFCordon"
         PIVOT_YEAR       = 2035
-        TRANSIT_CAPACITY_DIR = os.path.join(PIVOT_DIR, "trn")
-        NETWORK_BASE_DIR = r"M:\Application\Model One\NetworkProjects"
-        TRN_SUBDIR       = "trn"
         TRN_NET_NAME     = "transitLines"
-        HWY_SUBDIR       = "hwy"
-        HWY_NET_NAME     = "freeflow.net"
         # some of the NGF NetworkProjects use geopandas (namely NGF_TrnFreqBoostsCordons and NGF_TrnExtendedServiceHours_Cordons)
         # doing this import here in order to catch installation issues early
         import geopandas
-    elif args.model_type == Wrangler.Network.MODEL_TYPE_TM2:
-        PIVOT_DIR        = os.path.join(os.environ["USERPROFILE"], "Box","Modeling and Surveys","Development","Travel Model Two Development","Model Inputs","2015_revised_mazs")
-        TRANSIT_CAPACITY_DIR = None
-        NETWORK_BASE_DIR = r"M:\\Application\\Model Two\\NetworkProjects"
-        TRN_SUBDIR       = "trn"
-        TRN_NET_NAME     = "transitLines"
-        HWY_SUBDIR       = "hwy"
-        HWY_NET_NAME     = "mtc_final_network_base.net"
+
+    TRANSIT_CAPACITY_DIR = os.path.join(PIVOT_DIR, "trn")
+    TRN_SUBDIR       = "trn"
+    TRN_NET_NAME     = "transitLines"
+    HWY_SUBDIR       = "hwy"
+    HWY_NET_NAME     = "freeflow.net"
 
     # Read the configuration
     NETWORK_CONFIG  = args.net_spec
@@ -464,7 +449,7 @@ if __name__ == '__main__':
         os.environ["CHAMP_node_names"] = os.path.join(PIVOT_DIR,"Node Description.xls")
 
     networks = {
-        'hwy' :Wrangler.HighwayNetwork(modelType=args.model_type, modelVersion=1.0,
+        'hwy' :Wrangler.HighwayNetwork(modelType=Wrangler.Network.MODEL_TYPE_TM1, modelVersion=1.0,
                                        basenetworkpath=os.path.join(PIVOT_DIR,"hwy"),
                                        networkBaseDir=NETWORK_BASE_DIR,
                                        networkProjectSubdir=NETWORK_PROJECT_SUBDIR,
@@ -475,7 +460,7 @@ if __name__ == '__main__':
                                        tempdir=TEMP_SUBDIR,
                                        networkName="hwy",
                                        tierNetworkName=HWY_NET_NAME),
-        'trn':Wrangler.TransitNetwork( modelType=args.model_type, modelVersion=1.0,
+        'trn':Wrangler.TransitNetwork( modelType=Wrangler.Network.MODEL_TYPE_TM1, modelVersion=1.0,
                                        basenetworkpath=os.path.join(PIVOT_DIR,"trn"),
                                        networkBaseDir=NETWORK_BASE_DIR,
                                        networkProjectSubdir=NETWORK_PROJECT_SUBDIR,
