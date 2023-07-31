@@ -86,9 +86,11 @@ if __name__ == '__main__':
         if not args.restart_year or not args.restart_mode:
             Wrangler.WranglerLogger.fatal("Both args.restart_year and args.restart_mode are required if one is supplied; args={}".format(args))
             sys.exit(-1)
-        
-        trn_network_year = int(args.restart_year) - 5
-        hwy_network_year = int(args.restart_year) if args.restart_mode == "trn" else int(args.restart_year) - 5
+
+        ALL_NETWORK_YEARS = list(NETWORK_PROJECTS.keys())
+        restart_year_index = ALL_NETWORK_YEARS.index(int(args.restart_year))
+        trn_network_year = ALL_NETWORK_YEARS[restart_year_index-1]
+        hwy_network_year = ALL_NETWORK_YEARS[restart_year_index] if args.restart_mode == "trn" else ALL_NETWORK_YEARS[restart_year_index-1]
 
         PIVOT_DIR_HWY = os.path.join("..", "BlueprintNetworks", "net_{}_{}".format(hwy_network_year, NET_VARIANT))
         PIVOT_DIR_TRN = os.path.join("..", "BlueprintNetworks", "net_{}_{}".format(trn_network_year, NET_VARIANT))
