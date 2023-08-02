@@ -118,7 +118,10 @@ COMMITTED_PROJECTS = collections.OrderedDict([
                ],
         'trn':['FBP_NP_036_SR29_Imola_PNR',
                'REG090037_New_BART_Trains',
-               'SOL070020_I80_I680_SR12_Int_1_2A'
+               'SOL070020_I80_I680_SR12_Int_1_2A',
+               {'name':'Transit_Frequency_Updates_Using_511', 
+                'kwargs':{'regional_gtfs_zip':'r"M:\\Data\\Transit\\511\\2023-05.zip"', 
+                          'operator':'"Bay Area Rapid Transit"'}},
                ]
     }),
     (2025, {
