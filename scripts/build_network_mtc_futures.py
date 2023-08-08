@@ -12,7 +12,7 @@ import build_network_mtc
 ###############################################################################
 
 if __name__ == '__main__':
-    parser = argparse.ArgumentParser(description=USAGE, formatter_class=argparse.RawDescriptionHelpFormatter)
+    parser = argparse.ArgumentParser(description=build_network_mtc.USAGE, formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.add_argument("--configword", help="optional word for network specification script")
     parser.add_argument("--analysis", choices=["Round1","Round2","PPA","PPA_NoSLR"], help="Specify which set of analysis are relevant for these networks.", default="Round1")
     parser.add_argument("--continue_on_warning", help="Don't prompt the user to continue if there are warnings; just warn and continue", action="store_true")
