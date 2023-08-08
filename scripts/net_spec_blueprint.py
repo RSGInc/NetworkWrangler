@@ -128,6 +128,9 @@ COMMITTED_PROJECTS = collections.OrderedDict([
                {'name':'Transit_Frequency_Updates_Using_511', 
                 'kwargs':{'regional_gtfs_zip':'r"M:\\Data\\Transit\\511\\2023-05.zip"', 
                           'operator':'"Capitol Corridor Joint Powers Authority"'}},
+               {'name':'Transit_Frequency_Updates_Using_511', 
+                'kwargs':{'regional_gtfs_zip':'r"M:\\Data\\Transit\\511\\2023-05.zip"', 
+                          'operator':'"San Francisco Municipal Transportation Agency"'}},                          
                ]
     }),
     (2025, {
