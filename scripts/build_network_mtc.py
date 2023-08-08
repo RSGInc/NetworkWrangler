@@ -368,6 +368,7 @@ if __name__ == '__main__':
     parser.add_argument("--configword", help="optional word for network specification script")
     parser.add_argument("--continue_on_warning", help="Don't prompt the user to continue if there are warnings; just warn and continue", action="store_true")
     parser.add_argument("--skip_precheck_requirements", help="Don't precheck network requirements, stale projects, non-HEAD projects, etc", action="store_true")
+    parser.add_argument("--create_project_diffs", help="Pass this to create proejct diffs information for each project. NOTE: THIS WILL BE SLOW", action="store_true")
     parser.add_argument("project_name", help="required project name, for example NGF")
     parser.add_argument("--scenario", help="optional SCENARIO name")
     parser.add_argument("net_spec", metavar="network_specification.py", help="Script which defines required variables indicating how to build the network")
@@ -505,6 +506,10 @@ if __name__ == '__main__':
                 if projType=='plan':
                     continue
 
+                # save a copy of this network instance for comparison
+                if args.create_project_diffs:
+                    network_without_project = copy.deepcopy(networks[netmode])
+
                 applied_SHA1 = None
                 cloned_SHA1 = networks[netmode].cloneProject(networkdir=project_name, tag=tag,
                                                              projtype=projType, tempdir=TEMP_SUBDIR, **kwargs)
@@ -513,6 +518,29 @@ if __name__ == '__main__':
                 applied_SHA1 = networks[netmode].applyProject(parentdir, networkdir, gitdir, projectsubdir, **kwargs)
                 appliedcount += 1
 
+                # Create difference report for this project
+                # TODO: roadway not supported yet
+                if args.create_project_diffs and netmode!="hwy":
+                    # difference information to be store in network_dir netmode_projectname
+                    # e.g. BlueprintNetworks\net_2050_Blueprint\trn_BP_Transbay_Crossing
+                    project_diff_folder = os.path.join("..", OUT_DIR.format(YEAR),
+                                                       "{}_{}".format(HWY_SUBDIR if netmode == "hwy" else TRN_SUBDIR, project_name))
+                    hwypath=os.path.join("..",  OUT_DIR.format(YEAR), HWY_SUBDIR)
+
+                    # the project may get applied multiple times -- e.g., for different phases
+                    suffix_num = 1
+                    project_diff_folder_with_suffix = project_diff_folder
+                    while os.path.exists(project_diff_folder_with_suffix):
+                        suffix_num += 1
+                        project_diff_folder_with_suffix = "{}_{}".format(project_diff_folder, suffix_num)
+
+                    Wrangler.WranglerLogger.debug("Creating project_diff_folder: {}".format(project_diff_folder_with_suffix))
+                    
+                    # new!
+                    networks[netmode].reportDiff(network_without_project, project_diff_folder_with_suffix, project_name,
+                                                 roadwayNetworkFile=os.path.join(os.path.abspath(hwypath), HWY_NET_NAME))
+                    del network_without_project
+                    
                 # if hwy project has set_capclass override, copy it to set_capclass/apply.s
                 set_capclass_override = os.path.join(TEMP_SUBDIR, project_name, "set_capclass.job")
                 if os.path.exists(set_capclass_override):
