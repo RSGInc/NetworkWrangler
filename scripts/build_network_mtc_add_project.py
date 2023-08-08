@@ -19,6 +19,10 @@ THIS_FILE  = os.path.realpath(__file__)
 # for transit network validation output
 os.environ["CHAMP_node_names"] = NODE_NAMES
 
+# MANDATORY. This is the folder where the NetworkProjects (each of which is a
+# local git repo) are stored.
+# As of 2023 July, this is now on Box: https://mtcdrive.box.com/s/cs0dmr987kaasmi83a6irru6ts6g4y1x
+NETWORK_BASE_DIR       =  os.environ['TM1_NetworkProjects']
 
 def findBaseDirectory(future):
     """
@@ -106,7 +110,6 @@ if __name__ == '__main__':
     parser.add_argument("--trn", dest='trn', action='store_true', help="Pass if project is a transit project")
     parser.add_argument("--input_network",  dest='input_network',  help="Pass input network path if desired; otherwise, PPA path is assumed")
     parser.add_argument("--output_network", dest='output_network', help="Pass output network path if desired; otPherwise, PPA path is assumed")
-    parser.add_argument("--input_projects", dest='input_projects', help="Pass directory for network projects; if none passed, M:\\Application\\Model One\\NetworkProjects is assumed")
     parser.add_argument("--kwarg",  dest='kwarg', help="To pass keyword args to project apply(), pass keyword and value", nargs=2)
     parser.add_argument("--kwarg2", dest='kwarg2', help="To pass keyword args to project apply(), pass keyword and value", nargs=2)
     parser.add_argument("--tag",   dest='tag',   help="tags for project")
@@ -124,11 +127,6 @@ if __name__ == '__main__':
       PROJECT        = "FBP"
     elif args.future == "TransitRecovery":
       PROJECT        = "TRR"
-
-    if args.input_projects:
-        NETWORK_BASE_DIR = args.input_projects
-    else:
-        NETWORK_BASE_DIR = r"M:\\Application\\Model One\\NetworkProjects"
 
     HWY_NET_NAME     = "freeflow.net"
     TRN_NET_NAME     = "transitLines"
