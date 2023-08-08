@@ -31,6 +31,7 @@ if __name__ == '__main__':
     TRN_NET_NAME     = "Transit_Lines"
     HWY_SUBDIR       = "hwy"
     HWY_NET_NAME     = "freeflow.net"
+    OUT_DIR          = "network_{}"  # YEAR
 
     TAG = 'PPA'
 

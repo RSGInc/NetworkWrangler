@@ -1,18 +1,4 @@
-import os
-# MANDATORY. Set this to be the Project Name.
-# e.g. "RTP2021", "TIP2021", etc
-# PROJECT = "FU1" or "PPA", set by build_network_mtc_futures.py based on argument
-# MANDATORY. Set this to be the git tag for checking out network projects.
-TAG = "HEAD"
-# MANDATORY. Set this to the directory in which to write your outputs.
-# "hwy" and "trn" subdirectories will be created here.
-OUT_DIR = "network_{}"  # YEAR
-# MANDATORY.  Should be a dictionary with keys "hwy", "trn"
-# to a list of projects.  A project can either be a simple string, or it can be
-# a dictionary with with keys 'name', 'tag' (optional), and 'kwargs' (optional)
-# to specify a special tag or special keyword args for the projects apply() call.
-# For example:
-#     {'name':"Muni_TEP", 'kwargs':{'servicePlan':"'2012oct'"}}
+import collections,os
 
 ###########################################################
 # For Round 1 and Project Performance Assessment Base both
