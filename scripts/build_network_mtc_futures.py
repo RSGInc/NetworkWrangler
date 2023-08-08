@@ -33,7 +33,7 @@ if __name__ == '__main__':
     HWY_NET_NAME     = "freeflow.net"
     OUT_DIR          = "network_{}"  # YEAR
 
-    TAG = 'PPA'
+    TAG = 'HEAD'  # 'PPA' tag isn't propogated yet
 
     if args.analysis == "Round1":
         PROJECT = "FU1"
