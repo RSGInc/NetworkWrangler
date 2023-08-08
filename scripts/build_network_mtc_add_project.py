@@ -1,6 +1,8 @@
 import argparse,collections,copy,datetime,os,pandas,re,shutil,sys,time
 import Wrangler
 
+import build_network_mtc
+
 USAGE = """
 
   Builds a network plus project, given a base network and a project and project_short_id.
@@ -110,6 +112,7 @@ if __name__ == '__main__':
     parser.add_argument("--trn", dest='trn', action='store_true', help="Pass if project is a transit project")
     parser.add_argument("--input_network",  dest='input_network',  help="Pass input network path if desired; otherwise, PPA path is assumed")
     parser.add_argument("--output_network", dest='output_network', help="Pass output network path if desired; otPherwise, PPA path is assumed")
+    parser.add_argument("--create_project_diffs", help="Pass this to create proejct diffs information for each project. NOTE: THIS WILL BE SLOW", action="store_true")
     parser.add_argument("--kwarg",  dest='kwarg', help="To pass keyword args to project apply(), pass keyword and value", nargs=2)
     parser.add_argument("--kwarg2", dest='kwarg2', help="To pass keyword args to project apply(), pass keyword and value", nargs=2)
     parser.add_argument("--tag",   dest='tag',   help="tags for project")
@@ -216,8 +219,11 @@ if __name__ == '__main__':
         if TRANSIT_CAPACITY_DIR:
             Wrangler.TransitNetwork.capacity = Wrangler.TransitCapacity(directory=TRANSIT_CAPACITY_DIR)
 
-
         for netmode in ["hwy","trn"]:
+
+            if args.create_project_diffs:
+                network_without_project = copy.deepcopy(networks[netmode])
+
             # if applying project
             if (netmode == "hwy" and args.hwy) or (netmode == "trn" and args.trn):
 
@@ -234,6 +240,29 @@ if __name__ == '__main__':
             # write networks
             final_path = os.path.join(OUTPUT_FUTURE_DIR,netmode)
             if not os.path.exists(final_path): os.makedirs(final_path)
+
+            # Create difference report for this project
+            # TODO: roadway not supported yet
+            if args.create_project_diffs and netmode!="hwy":
+                # difference information to be store in network_dir netmode_projectname
+                # e.g. BlueprintNetworks\net_2050_Blueprint\trn_BP_Transbay_Crossing
+                project_diff_folder = os.path.join(
+                   "..", final_path,
+                    "{}_{}".format(build_network_mtc.HWY_SUBDIR if netmode == "hwy" else build_network_mtc.TRN_SUBDIR, my_project))
+                hwypath=os.path.join("..", final_path, build_network_mtc.HWY_SUBDIR)
+
+                # the project may get applied multiple times -- e.g., for different phases
+                suffix_num = 1
+                project_diff_folder_with_suffix = project_diff_folder
+                while os.path.exists(project_diff_folder_with_suffix):
+                    suffix_num += 1
+                    project_diff_folder_with_suffix = "{}_{}".format(project_diff_folder, suffix_num)
+
+                Wrangler.WranglerLogger.debug("Creating project_diff_folder: {}".format(project_diff_folder_with_suffix))
+                    
+                # new!
+                networks[netmode].reportDiff(network_without_project, project_diff_folder_with_suffix, my_project,
+                                            roadwayNetworkFile=os.path.join(os.path.abspath(hwypath), HWY_NET_NAME))
 
             if netmode=="hwy":
 
