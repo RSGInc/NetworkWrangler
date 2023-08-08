@@ -27,9 +27,7 @@ if __name__ == '__main__':
     PIVOT_DIR        = build_network_mtc.PIVOT_DIR
     NETWORK_PROJECTS = build_network_mtc.NETWORK_PROJECTS
     TRANSIT_CAPACITY_DIR = os.path.join(PIVOT_DIR, "trn")
-    TRN_SUBDIR       = "trn"
     TRN_NET_NAME     = "Transit_Lines"
-    HWY_SUBDIR       = "hwy"
     HWY_NET_NAME     = "freeflow.net"
     OUT_DIR          = "network_{}"  # YEAR
 
@@ -169,8 +167,8 @@ if __name__ == '__main__':
                     # e.g. BlueprintNetworks\net_2050_Blueprint\trn_BP_Transbay_Crossing
                     project_diff_folder = os.path.join("..", "BlueprintNetworks", 
                                                        "net_{}_{}".format(YEAR, NET_VARIANT), 
-                                                       "{}_{}".format(HWY_SUBDIR if netmode == "hwy" else TRN_SUBDIR, project_name))
-                    hwypath=os.path.join("..", "BlueprintNetworks", "net_{}_{}".format(YEAR, NET_VARIANT), HWY_SUBDIR)
+                                                       "{}_{}".format(build_network_mtc.HWY_SUBDIR if netmode == "hwy" else build_network_mtc.TRN_SUBDIR, project_name))
+                    hwypath=os.path.join("..", "BlueprintNetworks", "net_{}_{}".format(YEAR, NET_VARIANT), build_network_mtc.HWY_SUBDIR)
 
                     # the project may get applied multiple times -- e.g., for different phases
                     suffix_num = 1

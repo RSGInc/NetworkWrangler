@@ -28,9 +28,7 @@ if __name__ == '__main__':
     PIVOT_DIR        = build_network_mtc.PIVOT_DIR
     NETWORK_PROJECTS = build_network_mtc.NETWORK_PROJECTS
     TRANSIT_CAPACITY_DIR = os.path.join(PIVOT_DIR, "trn")
-    TRN_SUBDIR       = "trn"
     TRN_NET_NAME     = "Transit_Lines"
-    HWY_SUBDIR       = "hwy"
     HWY_NET_NAME     = "freeflow.net"
 
     PROJECT = "Blueprint"
@@ -185,8 +183,8 @@ if __name__ == '__main__':
                     # e.g. BlueprintNetworks\net_2050_Blueprint\trn_BP_Transbay_Crossing
                     project_diff_folder = os.path.join("..", "BlueprintNetworks", 
                                                        "net_{}_{}".format(YEAR, NET_VARIANT), 
-                                                       "{}_{}".format(HWY_SUBDIR if netmode == "hwy" else TRN_SUBDIR, project_name))
-                    hwypath=os.path.join("..", "BlueprintNetworks", "net_{}_{}".format(YEAR, NET_VARIANT), HWY_SUBDIR)
+                                                       "{}_{}".format(build_network_mtc.HWY_SUBDIR if netmode == "hwy" else build_network_mtc.TRN_SUBDIR, project_name))
+                    hwypath=os.path.join("..", "BlueprintNetworks", "net_{}_{}".format(YEAR, NET_VARIANT), build_network_mtc.HWY_SUBDIR)
 
                     # the project may get applied multiple times -- e.g., for different phases
                     suffix_num = 1
@@ -216,9 +214,9 @@ if __name__ == '__main__':
         # Baseline AND YEAR >= 2035 get SLR, covered in next clause
         if NET_VARIANT!="Baseline" or YEAR<2035:
 
-            hwypath=os.path.join("..", "BlueprintNetworks", "net_{}_{}".format(YEAR, NET_VARIANT), HWY_SUBDIR)
+            hwypath=os.path.join("..", "BlueprintNetworks", "net_{}_{}".format(YEAR, NET_VARIANT), build_network_mtc.HWY_SUBDIR)
             if not os.path.exists(hwypath): os.makedirs(hwypath)
-            trnpath = os.path.join("..", "BlueprintNetworks", "net_{}_{}".format(YEAR, NET_VARIANT), TRN_SUBDIR)
+            trnpath = os.path.join("..", "BlueprintNetworks", "net_{}_{}".format(YEAR, NET_VARIANT), build_network_mtc.TRN_SUBDIR)
             if not os.path.exists(trnpath): os.makedirs(trnpath)
 
             # apply set_capclass before writing any hwy network
@@ -270,9 +268,9 @@ if __name__ == '__main__':
                 (parentdir, networkdir, gitdir, projectsubdir) = networks_bp_baseline[netmode].getClonedProjectArgs(project_name, None, projType, TEMP_SUBDIR)
                 applied_SHA1 = networks_bp_baseline[netmode].applyProject(parentdir, networkdir, gitdir, projectsubdir, **kwargs)
 
-                hwypath=os.path.join("..", "BlueprintNetworks", "net_{}_{}".format(YEAR, NET_VARIANT), HWY_SUBDIR)
+                hwypath=os.path.join("..", "BlueprintNetworks", "net_{}_{}".format(YEAR, NET_VARIANT), build_network_mtc.HWY_SUBDIR)
                 if not os.path.exists(hwypath): os.makedirs(hwypath)
-                trnpath = os.path.join("..", "BlueprintNetworks", "net_{}_{}".format(YEAR, NET_VARIANT), TRN_SUBDIR)
+                trnpath = os.path.join("..", "BlueprintNetworks", "net_{}_{}".format(YEAR, NET_VARIANT), build_network_mtc.TRN_SUBDIR)
                 if not os.path.exists(trnpath): os.makedirs(trnpath)
 
             applied_SHA1 = networks_bp_baseline['hwy'].applyProject(parentdir=TEMP_SUBDIR, networkdir=SET_CAPCLASS,

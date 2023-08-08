@@ -73,6 +73,10 @@ TRN_MODES = ['trn']
 NET_MODES = ['hwy'] + TRN_MODES
 THIS_FILE = os.path.realpath(__file__)
 
+# standard subdirs for transit and roadway
+TRN_SUBDIR       = "trn"
+HWY_SUBDIR       = "hwy"
+
 ###############################################################################
 
 ###############################################################################
@@ -394,9 +398,7 @@ if __name__ == '__main__':
         import geopandas
 
     TRANSIT_CAPACITY_DIR = os.path.join(PIVOT_DIR, "trn")
-    TRN_SUBDIR       = "trn"
     TRN_NET_NAME     = "transitLines"
-    HWY_SUBDIR       = "hwy"
     HWY_NET_NAME     = "freeflow.net"
 
     # Read the configuration
