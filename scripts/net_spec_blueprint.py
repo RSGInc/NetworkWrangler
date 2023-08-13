@@ -119,6 +119,7 @@ COMMITTED_PROJECTS = collections.OrderedDict([
         'trn':['FBP_NP_036_SR29_Imola_PNR',
                'REG090037_New_BART_Trains',
                'SOL070020_I80_I680_SR12_Int_1_2A',
+               'REG_Caltrain_2023',
                {'name':'Transit_Frequency_Updates_Using_511', 
                 'kwargs':{'regional_gtfs_zip':'r"M:\\Data\\Transit\\511\\2023-05.zip"', 
                           'operator':'"Bay Area Rapid Transit"'}},
@@ -131,10 +132,14 @@ COMMITTED_PROJECTS = collections.OrderedDict([
                {'name':'Transit_Frequency_Updates_Using_511', 
                 'kwargs':{'regional_gtfs_zip':'r"M:\\Data\\Transit\\511\\2023-05.zip"', 
                           'operator':'"San Francisco Municipal Transportation Agency"'}},                          
-               {'name':'Transit_Frequency_Updates_Using_511', 
+               # {'name':'Transit_Frequency_Updates_Using_511', 
+               # 'kwargs':{'regional_gtfs_zip':'r"M:\\Data\\Transit\\511\\2023-05.zip"', 
+               #           'operator':'"VTA"'}},                                                    
+               # TODO: MERGE Transit_Frequency_Updates_Using_511_lmz into Transit_Frequency_Updates_Using_511
+               {'name':'Transit_Frequency_Updates_Using_511_lmz', 
                 'kwargs':{'regional_gtfs_zip':'r"M:\\Data\\Transit\\511\\2023-05.zip"', 
-                          'operator':'"VTA"'}},                                                    
-               ]
+                          'operator':'"Caltrain"'}},
+        ]
     }),
     (2025, {
         'hwy':[{'name':'Bridge_Toll_Updates_2_2pct', 'kwargs':{'MODELYEAR':'2025'}},             
@@ -152,7 +157,8 @@ COMMITTED_PROJECTS = collections.OrderedDict([
     (2030, {
         'hwy':[{'name':'Bridge_Toll_Updates_2_2pct', 'kwargs':{'MODELYEAR':'2030'}},
                'EXP_Blueprint_NoProject'],
-        'trn':['BART_NoProject']
+        'trn':[#'BART_NoProject'
+            ]
     }),
     (2035, {
         'hwy':[{'name':'Bridge_Toll_Updates_2_2pct', 'kwargs':{'MODELYEAR':'2035'}},
