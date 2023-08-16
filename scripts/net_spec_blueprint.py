@@ -137,10 +137,13 @@ COMMITTED_PROJECTS = collections.OrderedDict([
                           'operator':'"Caltrain"'}},
                {'name':'Transit_Frequency_Updates_Using_511', 
                 'kwargs':{'regional_gtfs_zip':'r"M:\\Data\\Transit\\511\\2023-05.zip"', 
-                          'operator':'"VTA"'}},    
-               {'name':'Transit_Frequency_Updates_Using_511', 
+                          'operator':'"VTA"'}},
+               {'name':'Transit_Frequency_Updates_Using_511_lmz', 
                 'kwargs':{'regional_gtfs_zip':'r"M:\\Data\\Transit\\511\\2023-05.zip"', 
-                          'operator':'"AC TRANSIT"'}},                              
+                          'operator':'"Golden Gate Ferry"'}},
+               #{'name':'Transit_Frequency_Updates_Using_511', 
+               # 'kwargs':{'regional_gtfs_zip':'r"M:\\Data\\Transit\\511\\2023-05.zip"', 
+               #           'operator':'"AC TRANSIT"'}},
         ]
     }),
     (2025, {
