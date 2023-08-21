@@ -382,7 +382,7 @@ if __name__ == '__main__':
             "P1a_AllLaneTolling_ImproveTransit",                "P1b_AllLaneTolling_Affordable", 
             "P2a_AllLaneTollingPlusArterials_ImproveTransit",   "P2b_AllLaneTollingPlusArterials_Affordable",
             "P3b_3Cordons_Affordable",                          "P3a_3Cordons_ImproveTransit",
-            "P4_NoNewPricing"], 
+            "P4_NoNewPricing",                                  "P1x_AllLaneTolling_PricingOnly"], 
         help="Specify which network variant network to create.")
     args = parser.parse_args()
 
