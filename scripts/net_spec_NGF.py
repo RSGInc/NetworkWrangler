@@ -238,6 +238,22 @@ NGF_PROJECTS = {
                 'include_rail':'False'
             }}
         ]
+    },
+
+    # For additional Asana Task: https://app.asana.com/0/1201809392759895/1205309291141002/f
+    'P1x_AllLaneTolling_PricingOnly':{
+        'hwy':[
+            'NGF_BlueprintSegmented',        # All lane tolling on freeways
+            'BP_Vision_Zero',                # Local Street Safety Improvements and Speed Reductions
+        ],
+        'trn':[
+            'NGF_NoProject_farefiles',       # ensures these files get included; note this is not a real project
+            # Trunkline Transit Frequency Bosts 2
+            {'name':'NGF_TrunklineTrnFreqBoosts', 'kwargs':{
+                'min_headway':'10',
+                'include_rail':'False'
+            }}
+        ]
     }
 }
 
