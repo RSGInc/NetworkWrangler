@@ -27,7 +27,7 @@ NGF_PROJECTS = {
         ],   
         'trn':[]
     },
-    # Pathway 1a: All-lane tolling + Improve Transit Experience
+    # Pathway 1a: All-lane tolling + Improve Transit Experience (new numbering in AG10: P1a_AllLaneTolling_ImproveTransit --> 3A)
     # https://app.asana.com/0/1203644633064654/1203644636776961/f
     'P1a_AllLaneTolling_ImproveTransit':{
         'hwy':[
@@ -75,7 +75,7 @@ NGF_PROJECTS = {
             {'name':'NGF_TrnExtendedServiceHours',  'kwargs':{'EV_headway':'15'}},
         ]
     },
-    # Pathway 1b: All-lane tolling + Focus on Affordability
+    # Pathway 1b: All-lane tolling + Focus on Affordability (new numbering in AG10: P1b_AllLaneTolling_Affordable --> 3B)
     # https://app.asana.com/0/1203644633064654/1203644636776965/f
     'P1b_AllLaneTolling_Affordable':{
         'hwy':[
@@ -92,6 +92,7 @@ NGF_PROJECTS = {
             }}
         ]
     },
+    # new numbering in AG10: P2a_AllLaneTollingPlusArterials_ImproveTransit --> 4A)
     'P2a_AllLaneTollingPlusArterials_ImproveTransit':{
         'hwy':[
             'NGF_BlueprintSegmented',         # All lane tolling on freeways
@@ -139,6 +140,7 @@ NGF_PROJECTS = {
             {'name':'NGF_TrnExtendedServiceHours',  'kwargs':{'EV_headway':'15'}},
         ]
     },
+    # new numbering in AG10: P2b_AllLaneTollingPlusArterials_Affordable --> 4B)
     'P2b_AllLaneTollingPlusArterials_Affordable':{
         'hwy':[
             'NGF_BlueprintSegmented',       # All lane tolling on freeways
@@ -155,6 +157,7 @@ NGF_PROJECTS = {
             }}
         ]
     },
+    # new numbering in AG10: P3a_3Cordons_ImproveTransit --> 2A
     'P3a_3Cordons_ImproveTransit':{
         'hwy':[
             'MAJ_SF_Congestion_Pricing',     # San Francisco Cordon Pricing
@@ -196,6 +199,7 @@ NGF_PROJECTS = {
             }},
         ]
     },
+    # new numbering in AG10: P3b_3Cordons_Affordable --> 2B
     'P3b_3Cordons_Affordable':{
         'hwy':[
             'MAJ_SF_Congestion_Pricing',     # San Francisco Cordon Pricing
@@ -226,6 +230,7 @@ NGF_PROJECTS = {
             }}
         ]
     },
+    # new numbering in AG10: P4_NoNewPricing --> P1
     'P4_NoNewPricing':{
         'hwy':[
             'BP_Vision_Zero',                # Local Street Safety Improvements and Speed Reductions
@@ -240,7 +245,7 @@ NGF_PROJECTS = {
         ]
     },
 
-    # For additional Asana Task: https://app.asana.com/0/1201809392759895/1205309291141002/f
+    # All-lane tolling pricing strategy only: https://app.asana.com/0/1201809392759895/1205309291141002/f
     'P1x_AllLaneTolling_PricingOnly':{
         'hwy':[
             'NGF_BlueprintSegmented',        # All lane tolling on freeways
