@@ -52,6 +52,7 @@ coverage.xml
 # Sphinx documentation
 docs/_build/
 
+*.Rhistory
 *.bak
 scripts/BP Draft 2/Blueprint Basic/Blueprint Basic network_2020/trn/ACE.far
 scripts/BP Draft 2/Blueprint Basic/Blueprint Basic network_2020/hwy/turnspm.pen
