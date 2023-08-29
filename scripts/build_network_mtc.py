@@ -212,7 +212,7 @@ def getProjectAttributes(project):
 
     return (project_name, project_type, tag, kwargs)
 
-def preCheckRequirementsForAllProjects(networks, continue_on_warning):
+def preCheckRequirementsForAllProjects(NETWORK_PROJECTS, TEMP_SUBDIR, networks, continue_on_warning, BUILD_MODE=None, TEST_PROJECTS=None):
     PRE_REQS  = {'hwy':{},'trn':{}}
     CO_REQS   = {'hwy':{},'trn':{}}
     CONFLICTS = {'hwy':{},'trn':{}}
@@ -483,7 +483,7 @@ if __name__ == '__main__':
     if args.skip_precheck_requirements:
         Wrangler.WranglerLogger.info("skip_precheck_requirements passed so skipping preCheckRequirementsForAllProjects()")
     else:
-        preCheckRequirementsForAllProjects(networks, args.continue_on_warning)
+        preCheckRequirementsForAllProjects(NETWORK_PROJECTS, TEMP_SUBDIR, networks, args.continue_on_warning, BUILD_MODE, TEST_PROJECTS)
 
     # create the subdir for SET_CAPCLASS with set_capclass.job as apply.s
     SET_CAPCLASS     = "set_capclass"

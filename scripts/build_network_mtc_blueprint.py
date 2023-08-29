@@ -129,7 +129,7 @@ if __name__ == '__main__':
     if args.skip_precheck_requirements:
         Wrangler.WranglerLogger.info("skip_precheck_requirements passed so skipping preCheckRequirementsForAllProjects()")
     else:
-        build_network_mtc.preCheckRequirementsForAllProjects(networks, args.continue_on_warning)
+        build_network_mtc.preCheckRequirementsForAllProjects(NETWORK_PROJECTS, TEMP_SUBDIR, networks, args.continue_on_warning)
 
     # create the subdir for SET_CAPCLASS with set_capclass.job as apply.s
     SET_CAPCLASS     = "set_capclass"
