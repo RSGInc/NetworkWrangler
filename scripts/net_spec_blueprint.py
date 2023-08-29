@@ -120,6 +120,8 @@ COMMITTED_PROJECTS = collections.OrderedDict([
                'REG090037_New_BART_Trains',
                'SOL070020_I80_I680_SR12_Int_1_2A',
                'REG_Caltrain_2023',
+               'SF_Muni_new_routes_2023',
+               'SC_VTA_2023_new_routes',
                {'name':'Transit_Frequency_Updates_Using_511', 
                 'kwargs':{'regional_gtfs_zip':'r"M:\\Data\\Transit\\511\\2023-05.zip"', 
                           'operator':'"Bay Area Rapid Transit"'}},
