@@ -159,7 +159,10 @@ COMMITTED_PROJECTS = collections.OrderedDict([
                           'operator':'"Union City Transit"'}}, 
                 {'name':'Transit_Frequency_Updates_Using_511', 
                 'kwargs':{'regional_gtfs_zip':'r"M:\\Data\\Transit\\511\\2023-05.zip"', 
-                          'operator':'"Marin Transit"'}},
+                          'operator':'"Marin Transit"'}}, 
+                {'name':'Transit_Frequency_Updates_Using_511', 
+                'kwargs':{'regional_gtfs_zip':'r"M:\\Data\\Transit\\511\\2023-05.zip"', 
+                          'operator':'"Tri Delta Transit"'}},  
         ]
     }),
     (2025, {
