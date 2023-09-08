@@ -174,7 +174,10 @@ COMMITTED_PROJECTS = collections.OrderedDict([
                           'operator':'"County Connection"'}}, 
                 {'name':'Transit_Frequency_Updates_Using_511', 
                 'kwargs':{'regional_gtfs_zip':'r"M:\\Data\\Transit\\511\\2023-05.zip"', 
-                          'operator':'"FAST"'}}, 
+                          'operator':'"FAST"'}},
+                {'name':'Transit_Frequency_Updates_Using_511', 
+                'kwargs':{'regional_gtfs_zip':'r"M:\\Data\\Transit\\511\\2023-05.zip"', 
+                          'operator':'"Golden Gate Transit"'}},  
         ]
     }),
     (2025, {
