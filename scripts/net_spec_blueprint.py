@@ -192,7 +192,10 @@ COMMITTED_PROJECTS = collections.OrderedDict([
                           'operator':'"Santa Rosa CityBus"'}},
                 {'name':'Transit_Frequency_Updates_Using_511', 
                 'kwargs':{'regional_gtfs_zip':'r"M:\\Data\\Transit\\511\\2023-05.zip"', 
-                          'operator':'"WestCat (Western Contra Costa)"'}},
+                          'operator':'"WestCat (Western Contra Costa)"'}}, 
+                {'name':'Transit_Frequency_Updates_Using_511', 
+                'kwargs':{'regional_gtfs_zip':'r"M:\\Data\\Transit\\511\\2023-05.zip"', 
+                          'operator':'"Rio Vista Delta Breeze"'}}, 
         ]
     }),
     (2025, {
