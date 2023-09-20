@@ -124,6 +124,8 @@ COMMITTED_PROJECTS = collections.OrderedDict([
                'SC_VTA_new_routes_2023',
                'AC_ACTransit_new_routes_2023',
                'SM_SamTrans_new_routes_2023',
+               'GGT_new_routes_2023',
+               'Others_new_routes_2023',
                {'name':'Transit_Frequency_Updates_Using_511', 
                 'kwargs':{'regional_gtfs_zip':'r"M:\\Data\\Transit\\511\\2023-05.zip"', 
                           'operator':'"Bay Area Rapid Transit"'}},
