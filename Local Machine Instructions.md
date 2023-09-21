@@ -8,7 +8,7 @@ Questions can be directed to Andrew Rohne at RSG (andrew.rohne (at) rsginc.com).
 
 The computer's path needs to include the path to Cube Voyager to use an executable there. Follow [these instructions](https://www.computerhope.com/issues/ch000549.htm) for your OS version, add C:\Program Files\Citilabs\CubeVoyager to the path.
 
-To test this, open any command prompt () and type `runtpp`. There should be an error that says "Error in Arg 1: (null)".
+To test this, open Anaconda Prompt or Anaconda Powershell and type `runtpp`. There should be an error that says "Error in Arg 1: (null)".
 
 # Setting Up Network Wrangler
 1. Download the [Anaconda environment](https://github.com/RSGInc/travel-model-one/blob/transit_2050/tm15-python310.yml) to a location on your hard drive.
