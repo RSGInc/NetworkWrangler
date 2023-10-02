@@ -11,12 +11,12 @@ The computer's path needs to include the path to Cube Voyager to use an executab
 To test this, open Anaconda Prompt or Anaconda Powershell and type `runtpp`. There should be an error that says "Error in Arg 1: (null)".
 
 # Setting Up Network Wrangler
-1. Download the [Anaconda environment](https://github.com/RSGInc/travel-model-one/blob/transit_2050/tm15-python310.yml) to a location on your hard drive.
+1. Download the [Anaconda environment](https://github.com/RSGInc/NetworkWrangler/blob/transit_2050/environment_nw.yml) to a location on your hard drive.
 2. Created the local Anaconda environment. Open Anaconda Prompt or Anaconda Powershell (either will work, hereinafter referred to as Anaconda Prompt) and type:
     `cd path\you\downloaded\the\above\file\to`
-    `conda create -f tm15-python310.yml`
+    `conda create -f environment_nw.yml`
 3. Switched to it. Use the following command in the Anaconda prompt
-    `conda activate tm15-python310`
+    `conda activate NetworkWrangler`
 4. Change directories to an appropriate location on your hard drive.
 5. Clone the network Wrangler Repo
     `git clone https://github.com/RSGInc/NetworkWrangler.git`
@@ -42,10 +42,10 @@ To test this, open Anaconda Prompt or Anaconda Powershell and type `runtpp`. The
     
     Note: you can test these using `conda env config vars list`
 
-13. If you wish to use the 'reportDiff' function, you will need to install ArcGIS Pro on your machine and, while having NetworkWrangler activated, use `conda install arcpy=3.1 -c esri` in Anaconda prompt.
+13. If you wish to use the 'reportDiff' function, you will need to install and activate ArcGIS Pro on your machine. The NetworkWrangler environment already has `arcpy` environment installed with it.
 # Running Network Wrangler for the Base Year
 1. Be in the correct Anaconda Environment (if not already)
-    `conda activate tm15-python310`
+    `conda activate NetworkWrangler`
 2. Build the test network
     `python .\build_network_mtc.py Test .\net_spec_test.py`\
    (If 'reportDiff' is desired, add `--create_project_diffs` to the end of the command above.)
