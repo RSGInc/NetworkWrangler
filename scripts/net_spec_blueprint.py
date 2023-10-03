@@ -126,8 +126,13 @@ COMMITTED_PROJECTS = collections.OrderedDict([
                'SM_SamTrans_new_routes_2023',
                'GGT_new_routes_2023',
                'Others_new_routes_2023',
+               # Transit_Frequency_Updates_Using_511
+               # Update transit frequency for BART and Caltrain using 511 2023-09 data due to big service update in Sept 2023
+               # Asana task: https://app.asana.com/0/1204085012544660/1205493838123328/f  
+               # Update transit frequency for other operators using 511 2023-05 data 
+               # Asana task: https://app.asana.com/0/1204085012544660/1205328142972885/f
                {'name':'Transit_Frequency_Updates_Using_511', 
-                'kwargs':{'regional_gtfs_zip':'r"M:\\Data\\Transit\\511\\2023-05.zip"', 
+                'kwargs':{'regional_gtfs_zip':'r"M:\\Data\\Transit\\511\\2023-09.zip"', 
                           'operator':'"Bay Area Rapid Transit"'}},
                {'name':'Transit_Frequency_Updates_Using_511', 
                 'kwargs':{'regional_gtfs_zip':'r"M:\\Data\\Transit\\511\\2023-05.zip"', 
@@ -139,7 +144,7 @@ COMMITTED_PROJECTS = collections.OrderedDict([
                 'kwargs':{'regional_gtfs_zip':'r"M:\\Data\\Transit\\511\\2023-05.zip"', 
                           'operator':'"San Francisco Municipal Transportation Agency"'}},                   
                {'name':'Transit_Frequency_Updates_Using_511', 
-                'kwargs':{'regional_gtfs_zip':'r"M:\\Data\\Transit\\511\\2023-05.zip"', 
+                'kwargs':{'regional_gtfs_zip':'r"M:\\Data\\Transit\\511\\2023-09.zip"', 
                           'operator':'"Caltrain"'}},
                {'name':'Transit_Frequency_Updates_Using_511', 
                 'kwargs':{'regional_gtfs_zip':'r"M:\\Data\\Transit\\511\\2023-05.zip"', 
@@ -207,7 +212,7 @@ COMMITTED_PROJECTS = collections.OrderedDict([
                           'operator':'"Emery Go-Round"'}},
                 {'name':'Transit_Frequency_Updates_Using_511', 
                 'kwargs':{'regional_gtfs_zip':'r"M:\\Data\\Transit\\511\\2023-05.zip"', 
-                          'operator':'"Vacaville City Coach"'}},
+                          'operator':'"Vacaville City Coach"'}},      
         ]
     }),
     (2025, {
