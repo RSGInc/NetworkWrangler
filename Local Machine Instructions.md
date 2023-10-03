@@ -4,6 +4,10 @@ This code has been updated to run on a laptop that has Cube Voyager 6.5.0 instal
 
 Questions can be directed to Andrew Rohne at RSG (andrew.rohne (at) rsginc.com). 9/20/2023.
 
+---
+Note: This is still being written! 
+---
+
 # Setting Up Cube
 
 The computer's path needs to include the path to Cube Voyager to use an executable there. Follow [these instructions](https://www.computerhope.com/issues/ch000549.htm) for your OS version, add C:\Program Files\Citilabs\CubeVoyager to the path.
@@ -11,6 +15,9 @@ The computer's path needs to include the path to Cube Voyager to use an executab
 To test this, open Anaconda Prompt or Anaconda Powershell and type `runtpp`. There should be an error that says "Error in Arg 1: (null)".
 
 # Setting Up Network Wrangler
+
+This largely follows [the Network Wrangler Documentation](https://github.com/BayAreaMetro/modeling-website/wiki/Network-Building-with-NetworkWrangler#step-4-build-a-network-with-your-project) but is distilled down to something a little more concise.
+
 1. Download the [Anaconda environment](https://github.com/RSGInc/NetworkWrangler/blob/transit_2050/environment_nw.yml) to a location on your hard drive.
 2. Created the local Anaconda environment. Open Anaconda Prompt or Anaconda Powershell (either will work, hereinafter referred to as Anaconda Prompt) and type:
     `cd path\you\downloaded\the\above\file\to`
@@ -50,21 +57,29 @@ To test this, open Anaconda Prompt or Anaconda Powershell and type `runtpp`. The
     `python .\build_network_mtc.py Test .\net_spec_test.py`\
    (If 'reportDiff' is desired, add `--create_project_diffs` to the end of the command above.)
     
-# Adding Project Cards
-
----
-Note: This is still being written! 
----
-
-This largely follows [the Network Wrangler Documentation](https://github.com/BayAreaMetro/modeling-website/wiki/Network-Building-with-NetworkWrangler#step-4-build-a-network-with-your-project) but is distilled down to something a little more concise.
+# Test Project Coding 
 
 The basic version is to add the cards to the TM1_NetworkProjects folder, and then copy the net_spec_test.py script to something a little more descriptive (for the BART San Jose example, I used `net_spec_MAJ_BRT030001_BART_to_SanJose.py`). The script needs to have a project code, scenario (for the purposes of this project, I use `build`)
 
 Run with `python build_network_mtc.py build net_spec_MAJ_BRT030001_BART_to_SanJose.py`
 
+# Adding a Project Card for PPA
+
+Use [build_network_mtc_add_project.py](https://github.com/BayAreaMetro/NetworkWrangler/blob/master/scripts/build_network_mtc_add_project.py) for PPA since only a small number of projects are added (mostly just 1). The base network should be the latest 2050 network in [Sample of L drive Projects Folder](https://mtcdrive.box.com/s/vbpsrs7tpvj1qfxmasink52wls8pexrj), one for each future. The script will automatically use `XXX_17` (latest). In [build_network_mtc_add_project.py](https://github.com/BayAreaMetro/NetworkWrangler/blob/master/scripts/build_network_mtc_add_project.py), point `PPA_DIR` to [Sample of L drive Projects Folder](https://mtcdrive.box.com/s/vbpsrs7tpvj1qfxmasink52wls8pexrj) and `NODE_NAMES` to `TM1_2015_Base_Network\Node Description.xls`.
+
+Required arguments to use the script:
+
+1. Future scenario: one of these three - `CleanAndGreen`, `RisingTides`, and `BackToTheFuture`. `CleanAndGreen` is taken as an example to demonstrate.
+2. Input network: `..\Sample of L drive Projects Folder\2050_TM151_PPA_CG_17\INPUT`.
+3. Project to be added: one of the projects in `TM1_NetworkProjects`. Take `MAJ_BRT030001_BART_to_SanJose` as an example.
+4. Nature of project: `--hwy`, `--trn`, or both.
+5. Output: create a separate folder - `..\MTC_Outputs\MAJ_BRT030001_BART_to_SanJose_CG`.
+6. `project_short_id`: in this case it's `MAJ_BRT030001_BART_to_SanJose_CG`.
+
+Full example: `python build_network_mtc_add_project.py --trn --input_network "..\Box\Performance and Equity\Project Performance\Sample of L drive Projects Folder\2050_TM151_PPA_CG_17\INPUT" --output_network "..\MTC_Outputs\MAJ_BRT030001_BART_to_SanJose_CG" --create_project_diffs CleanAndGreen MAJ_BRT030001_BART_to_SanJose_CG MAJ_BRT030001_BART_to_SanJose`
+
+
 ## Determine Pre-requisite Projects
-
-
 
 # Notes and Errors
 
