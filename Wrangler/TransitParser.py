@@ -133,7 +133,6 @@ class TransitFileProcessor(DispatchProcessor):
         self.accesslis = []
         self.xferlis   = []
         self.nodes     = []
-        self.liType    = ''
         self.supplinks = []
         self.factors   = []
         self.faresystems  = []
@@ -144,7 +143,7 @@ class TransitFileProcessor(DispatchProcessor):
         self.modes        = []
         self.vehicletypes = []
 
-        self.linecomments = []
+        self.linecomments = []        
 
     def crackTags(self, leaf, buffer):
         tag = leaf[0]
