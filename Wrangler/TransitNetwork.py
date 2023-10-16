@@ -919,6 +919,7 @@ class TransitNetwork(Network):
         Verbosity=2: 1 line per node
         """
         self.parser.setVerbosity(verbosity)
+        self.parser.resetForParsing()
         success, children, nextcharacter = self.parser.parse(trntxt, production="transit_file")
         if not nextcharacter==len(trntxt):
             errorstr  = "\n   Did not successfully read the whole file; got to nextcharacter=%d out of %d total" % (nextcharacter, len(trntxt))

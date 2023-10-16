@@ -119,6 +119,13 @@ class TransitFileProcessor(DispatchProcessor):
     """
     def __init__(self, verbosity=1):
         self.verbosity=verbosity
+        self.liType    = ''
+
+    def reset(self):
+        """ Reset internal variables
+        """
+        # WranglerLogger.debug("TransitFileProcessor.reset()")
+        # WranglerLogger.debug(repr(traceback.format_stack()))
         self.lines = []
         self.links = []
         self.pnrs   = []
@@ -312,7 +319,7 @@ class TransitFileProcessor(DispatchProcessor):
             elif self.liType=="node":
                 self.nodes.append(xxx)
             else:
-                raise NetworkException("Found access or xfer link without classification. {}".format(self.liType))
+                raise NetworkException("Found access or xfer link without classification: [{}] tup=[{}] leaf=[{}] xxx=[{}]".format(self.liType, tup, leaf, xxx))
 
 class TransitParser(Parser):
 
@@ -332,6 +339,9 @@ class TransitParser(Parser):
 
     def buildProcessor(self):
         return self.tfp
+    
+    def resetForParsing(self):
+        self.tfp.reset()
 
     def convertLineData(self):
         """ Convert the parsed tree of data into a usable python list of transit lines
