@@ -48,7 +48,7 @@ This largely follows [the Network Wrangler Documentation](https://github.com/Bay
     `conda activate NetworkWrangler`
     
     Note: you can test these using `conda env config vars list`
-
+    Note2: Don't forget to reset if you start editing project cards straight from Box.
 13. If you wish to use the 'reportDiff' function, you will need to install and activate ArcGIS Pro on your machine. The NetworkWrangler environment already has `arcpy` environment installed with it.
 # Running Network Wrangler for the Base Year
 1. Be in the correct Anaconda Environment (if not already)
