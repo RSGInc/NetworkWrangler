@@ -116,7 +116,8 @@ COMMITTED_PROJECTS = collections.OrderedDict([
                'ALA170052_Fruitvale_Ave_ped_improvements',
                'EXP_Blueprint_NoProject'
                ],
-        'trn':['FBP_NP_036_SR29_Imola_PNR',
+        'trn':['MAJ_Alameda_Point_SF_Ferry',
+               'FBP_NP_036_SR29_Imola_PNR',
                'REG090037_New_BART_Trains',
                'SOL070020_I80_I680_SR12_Int_1_2A',
                'REG_Caltrain_2023',
@@ -350,7 +351,6 @@ BLUEPRINT_PROJECTS = collections.OrderedDict([
                        'RRSP_E14_Mission_Corridor',
                        'FBP_NP_044_Soscol_Junction',
                        'MAJ_RedwoodCity_SF_Ferry',
-                       'MAJ_Alameda_Point_SF_Ferry',
                        {'name':'MAJ_SOL070020_I80_I680_SR12_Int_2B_7','kwargs':{'PHASE':"'2B'"}},
                        {'name':'FBP_SF_012_Geneva_Harney_BRT',  'kwargs':{'MODELYEAR':'2025'}},
                        {'name':'FBP_CC_15_23rd_St_BRT',         'kwargs':{'MODELYEAR':'2025'}},
