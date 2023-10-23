@@ -8,7 +8,7 @@ TAG = "HEAD"              # Use this tag if you want NetworkWrangler to use the 
 # TAG = "PBA50_Blueprint"    # This is the default tag since this is the netspec for the Blueprint 
 # For NGF variants, the default TAG will be replaced by the alternative TAG "NGF_NoProject"  (this is handled with code in build_network_mtc_blueprint.py) 
 
-# A Alamedaproject can either be a simple string, or it can be
+# A project can either be a simple string, or it can be
 # a dictionary with with keys 'name', 'tag' (optional), and 'kwargs' (optional)
 # to specify a special tag or special keyword args for the projects apply() call.
 # For example:
