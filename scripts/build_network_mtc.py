@@ -193,7 +193,7 @@ def getProjectAttributes(project):
     # Start with TAG if not build mode, no kwargs
     project_type    = 'project'
     tag             = None
-    branch          = None
+    branch          = 'master'
     kwargs          = {}
 
     # Use project name, tags, kwargs from dictionary
