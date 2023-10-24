@@ -193,12 +193,14 @@ def getProjectAttributes(project):
     # Start with TAG if not build mode, no kwargs
     project_type    = 'project'
     tag             = None
+    branch          = None
     kwargs          = {}
 
     # Use project name, tags, kwargs from dictionary
     if type(project)==type({'this is':'a dictionary'}):
         project_name = project['name']
         if 'tag' in project:    tag = project['tag']
+        if 'branch' in project: branch = project['branch']
         if 'type' in project:   project_type = project['type']
         if 'kwargs' in project: kwargs = project['kwargs']
 
@@ -210,7 +212,7 @@ def getProjectAttributes(project):
     else:
          Wrangler.WranglerLogger.fatal("Don't understand project %s" % str(project))
 
-    return (project_name, project_type, tag, kwargs)
+    return (project_name, project_type, tag, branch, kwargs)
 
 def preCheckRequirementsForAllProjects(NETWORK_PROJECTS, TEMP_SUBDIR, networks, continue_on_warning, BUILD_MODE=None, TEST_PROJECTS=None):
     PRE_REQS  = {'hwy':{},'trn':{}}

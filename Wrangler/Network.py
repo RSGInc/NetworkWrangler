@@ -285,7 +285,7 @@ class Network(object):
         """
         pass
 
-    def cloneProject(self, networkdir, projectsubdir=None, tag=None, projtype=None, tempdir=None, **kwargs):
+    def cloneProject(self, networkdir, projectsubdir=None, tag=None, branch='master', projtype=None, tempdir=None, **kwargs):
         """
         * *networkdir* corresponds to the dir relative to ``Y:\\networks``
         * *projectsubdir* is a subdir within that, or None if there's no subdir
@@ -376,9 +376,16 @@ class Network(object):
             WranglerLogger.debug("Using base dir [%s]" % joinedBaseDir)
 
         if os.path.exists(os.path.join(joinedBaseDir,networkdir,'.git')):
-            cmd = r'git clone -b master --quiet "%s" "%s"' % (os.path.join(joinedBaseDir, networkdir), networkdir)
+            if branch == 'master':
+                cmd = r'git clone -b master --quiet "%s" "%s"' % (os.path.join(joinedBaseDir, networkdir), networkdir)
+            else:
+                cmd = r'git clone -b "%s" --quiet "%s" "%s"' % (branch, os.path.join(joinedBaseDir, networkdir), networkdir)
         else:
-            cmd = r'git clone -b master --quiet "%s"' % os.path.join(joinedBaseDir, networkdir)
+            if branch == 'master':
+                cmd = r'git clone -b master --quiet "%s"' % os.path.join(joinedBaseDir, networkdir)
+            else:
+                cmd = r'git clone -b "%s" --quiet "%s"' % (branch,os.path.join(joinedBaseDir, networkdir))
+        
         (retcode, retstdout, retstderr) = self._runAndLog(cmd, joinedTempDir)
 
         if retcode != 0:
@@ -388,10 +395,13 @@ class Network(object):
             # if there was a subdir involved, try checking if the subdir is the git dir
             gitdir = os.path.join(gitdir, projectsubdir)
             newtempdir = os.path.join(joinedTempDir,networkdir)
+
             if not os.path.exists(newtempdir):
                 os.makedirs(newtempdir)
-
-            cmd = r'git clone  -b master --quiet "%s"' % os.path.join(joinedBaseDir, networkdir, projectsubdir)
+            if branch == 'master':
+                cmd = r'git clone  -b master --quiet "%s"' % os.path.join(joinedBaseDir, networkdir, projectsubdir)
+            else:
+                cmd = r'git clone  -b "%s" --quiet "%s"' % (branch, os.path.join(joinedBaseDir, networkdir, projectsubdir))
             (retcode, retstdout, retstderr) = self._runAndLog(cmd, newtempdir)
 
         if tag != None:
