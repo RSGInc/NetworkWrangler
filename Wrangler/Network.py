@@ -376,15 +376,9 @@ class Network(object):
             WranglerLogger.debug("Using base dir [%s]" % joinedBaseDir)
 
         if os.path.exists(os.path.join(joinedBaseDir,networkdir,'.git')):
-            if branch == 'master':
-                cmd = r'git clone -b master --quiet "%s" "%s"' % (os.path.join(joinedBaseDir, networkdir), networkdir)
-            else:
-                cmd = r'git clone -b "%s" --quiet "%s" "%s"' % (branch, os.path.join(joinedBaseDir, networkdir), networkdir)
+            cmd = r'git clone -b "%s" --quiet "%s" "%s"' % (branch, os.path.join(joinedBaseDir, networkdir), networkdir)
         else:
-            if branch == 'master':
-                cmd = r'git clone -b master --quiet "%s"' % os.path.join(joinedBaseDir, networkdir)
-            else:
-                cmd = r'git clone -b "%s" --quiet "%s"' % (branch,os.path.join(joinedBaseDir, networkdir))
+            cmd = r'git clone -b "%s" --quiet "%s"' % (branch,os.path.join(joinedBaseDir, networkdir))
         
         (retcode, retstdout, retstderr) = self._runAndLog(cmd, joinedTempDir)
 
@@ -398,10 +392,7 @@ class Network(object):
 
             if not os.path.exists(newtempdir):
                 os.makedirs(newtempdir)
-            if branch == 'master':
-                cmd = r'git clone  -b master --quiet "%s"' % os.path.join(joinedBaseDir, networkdir, projectsubdir)
-            else:
-                cmd = r'git clone  -b "%s" --quiet "%s"' % (branch, os.path.join(joinedBaseDir, networkdir, projectsubdir))
+            cmd = r'git clone  -b "%s" --quiet "%s"' % (branch, os.path.join(joinedBaseDir, networkdir, projectsubdir))
             (retcode, retstdout, retstderr) = self._runAndLog(cmd, newtempdir)
 
         if tag != None:
