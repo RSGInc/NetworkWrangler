@@ -160,7 +160,7 @@ if __name__ == '__main__':
                 (project_name, projType, tag, branch, kwargs) = build_network_mtc.getProjectAttributes(project)
                 if tag == None: tag = TAG
 
-                Wrangler.WranglerLogger.info("Applying project [{}] of type [{}] under branch [{}] with tag [{}] and kwargs[{}]".format(project_name, projType, branch, tag, kwargs))
+                Wrangler.WranglerLogger.info("Applying project [{}] of type [{}] on branch [{}] with tag [{}] and kwargs[{}]".format(project_name, projType, branch, tag, kwargs))
                 if projType=='plan':
                     continue
 
