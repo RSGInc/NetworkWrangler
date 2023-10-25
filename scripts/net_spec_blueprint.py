@@ -346,7 +346,7 @@ BLUEPRINT_PROJECTS = collections.OrderedDict([
                        {'name':'FBP_MU_060_ReX_Blue',                                                     'variants_exclude':['NGFNoProject', 'NGFNoProjectNoSFCordon']},
                        {'name':'EIR2_ReXBlue',                                                            'variants_include':['Alt2']},                       
                        'FBP_MU_044_SouthSF_Ferry_Serv_Incr',
-                       'GGT_Service_Imp',
+                       {'name':'GGT_Service_Imp',                                                         'branch':'PBA50plus_DBP'},
                        'FBP_MU_029_ACRapid_2025',
                        'RRSP_E14_Mission_Corridor',
                        'FBP_NP_044_Soscol_Junction',
