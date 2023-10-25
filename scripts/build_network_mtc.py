@@ -190,6 +190,19 @@ def writeRequirements(REQUIREMENTS, PROJECTS, req_type='prereq'):
                                                  req_netmode, req_project, REQUIREMENTS[netmode][project][req_netmode][req_project]))
 
 def getProjectAttributes(project):
+    """
+
+    Args:
+        project (string or dict): project information
+
+    Returns:
+    5-tuple with:
+        project_name (string): git repo for project
+        project_type (string): 'project' -- is this used?
+        tag (string): the tag to check out
+        branch (string): the branch to check out
+        kwargs (dict): the kwargs to pass to the project
+    """
     # Start with TAG if not build mode, no kwargs
     project_type    = 'project'
     tag             = None
@@ -227,7 +240,7 @@ def preCheckRequirementsForAllProjects(NETWORK_PROJECTS, TEMP_SUBDIR, networks, 
         clonedcount = 0
         for model_year in NETWORK_PROJECTS.keys():
             for project in NETWORK_PROJECTS[model_year][netmode]:
-                (project_name, projType, tag, kwargs) = getProjectAttributes(project)
+                (project_name, projType, tag, branch, kwargs) = getProjectAttributes(project)
                 if tag == None: tag = TAG
 
                 # test mode - don't use TAG for TEST_PROJECTS
@@ -243,7 +256,7 @@ def preCheckRequirementsForAllProjects(NETWORK_PROJECTS, TEMP_SUBDIR, networks, 
                 # if project = "dir1/dir2" assume dir1 is git, dir2 is the projectsubdir
                 (head,tail) = os.path.split(project_name)
                 if head:
-                    cloned_SHA1 = networks[netmode].cloneProject(networkdir=head, projectsubdir=tail, tag=tag,
+                    cloned_SHA1 = networks[netmode].cloneProject(networkdir=head, projectsubdir=tail, tag=tag, branch=branch,
                                                                  projtype=projType, tempdir=TEMP_SUBDIR, **kwargs)
                     (prereqs, coreqs, conflicts) = networks[netmode].getReqs(networkdir=head, projectsubdir=tail, tag=tag,
                                                                              projtype=projType, tempdir=TEMP_SUBDIR)
@@ -503,7 +516,7 @@ if __name__ == '__main__':
             Wrangler.WranglerLogger.info("Building {} {} networks".format(YEAR, netmode))
 
             for project in projects_for_year[netmode]:
-                (project_name, projType, tag, kwargs) = getProjectAttributes(project)
+                (project_name, projType, tag, branch, kwargs) = getProjectAttributes(project)
                 if tag == None: tag = TAG
 
                 Wrangler.WranglerLogger.info("Applying project [{}] of type [{}] with tag [{}] and kwargs[{}]".format(project_name, projType, tag, kwargs))
@@ -515,7 +528,7 @@ if __name__ == '__main__':
                     network_without_project = copy.deepcopy(networks[netmode])
 
                 applied_SHA1 = None
-                cloned_SHA1 = networks[netmode].cloneProject(networkdir=project_name, tag=tag,
+                cloned_SHA1 = networks[netmode].cloneProject(networkdir=project_name, tag=tag, branch=branch,
                                                              projtype=projType, tempdir=TEMP_SUBDIR, **kwargs)
                 (parentdir, networkdir, gitdir, projectsubdir) = networks[netmode].getClonedProjectArgs(project_name, None, projType, TEMP_SUBDIR)
 
