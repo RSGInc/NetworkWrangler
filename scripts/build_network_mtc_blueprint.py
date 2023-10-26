@@ -160,7 +160,7 @@ if __name__ == '__main__':
                 (project_name, projType, tag, branch, kwargs) = build_network_mtc.getProjectAttributes(project)
                 if tag == None: tag = TAG
 
-                Wrangler.WranglerLogger.info("Applying project [{}] of type [{}] under branch [{}] with tag [{}] and kwargs[{}]".format(project_name, projType, branch, tag, kwargs))
+                Wrangler.WranglerLogger.info("Applying project [{}] of type [{}] on branch [{}] with tag [{}] and kwargs[{}]".format(project_name, projType, branch, tag, kwargs))
                 if projType=='plan':
                     continue
 
@@ -259,11 +259,11 @@ if __name__ == '__main__':
             networks_bp_baseline['trn'] = copy.deepcopy(networks['trn'])
 
             for netmode in build_network_mtc.NET_MODES:
-                (project_name, projType, tag, kwargs) = build_network_mtc.getProjectAttributes(BP_SLR_PROJECT)
+                (project_name, projType, tag, branch, kwargs) = build_network_mtc.getProjectAttributes(BP_SLR_PROJECT)
                 # Wrangler.WranglerLogger.debug("BP SLR Project {} has project_name=[{}] projType=[{}] tag=[{}] kwargs=[{}]".format(BP_SLR_PROJECT,
                 #                                project_name, projType, tag, kwargs))
                 applied_SHA1 = None
-                copyloned_SHA1 = networks_bp_baseline[netmode].cloneProject(networkdir=project_name, tag=tag,
+                copyloned_SHA1 = networks_bp_baseline[netmode].cloneProject(networkdir=project_name, tag=tag, branch=branch,
                                                                          projtype=projType, tempdir=TEMP_SUBDIR, **kwargs)
                 (parentdir, networkdir, gitdir, projectsubdir) = networks_bp_baseline[netmode].getClonedProjectArgs(project_name, None, projType, TEMP_SUBDIR)
                 applied_SHA1 = networks_bp_baseline[netmode].applyProject(parentdir, networkdir, gitdir, projectsubdir, **kwargs)

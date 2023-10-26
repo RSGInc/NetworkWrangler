@@ -133,7 +133,7 @@ if __name__ == '__main__':
                                 os.path.join("FREEFLOW.BLD"))
 
             for project in projects_for_year[netmode]:
-                (project_name, projType, tag, kwargs) = build_network_mtc.getProjectAttributes(project)
+                (project_name, projType, tag, branch, kwargs) = build_network_mtc.getProjectAttributes(project)
                 if tag == None: tag = TAG
 
                 Wrangler.WranglerLogger.info("Applying project [{}] of type [{}] with tag [{}] and kwargs[{}]".format(project_name, projType, tag, kwargs))
@@ -145,7 +145,7 @@ if __name__ == '__main__':
                     network_without_project = copy.deepcopy(networks[netmode])
 
                 applied_SHA1 = None
-                cloned_SHA1 = networks[netmode].cloneProject(networkdir=project_name, tag=tag,
+                cloned_SHA1 = networks[netmode].cloneProject(networkdir=project_name, tag=tag, branch=branch,
                                                              projtype=projType, tempdir=TEMP_SUBDIR, **kwargs)
                 (parentdir, networkdir, gitdir, projectsubdir) = networks[netmode].getClonedProjectArgs(project_name, None, projType, TEMP_SUBDIR)
 
