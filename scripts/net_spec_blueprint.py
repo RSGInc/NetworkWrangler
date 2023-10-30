@@ -428,7 +428,7 @@ BLUEPRINT_PROJECTS = collections.OrderedDict([
                        {'name':'EIR2_PDA_Freq_Incr',            'kwargs':{'MODELYEAR':'2030'},            'variants_include':['Alt2']},
                        {'name':'EIR2_Fix_Alt2',                 'kwargs':{'MODELYEAR':'2030'},            'variants_include':['Alt2']}]
         }),
-        (2035, {'hwy':[{'name':'MAJ_MuniForward_Uncommitted',                                             'variants_exclude':['NGFNoProject', 'NGFNoProjectNoSFCordon']},
+        (2035, {'hwy':[{'name':'MAJ_MuniForward_Uncommitted',                                             'variants_exclude':['NGFNoProject', 'NGFNoProjectNoSFCordon'], 'branch':'PBA50plus_DBP'},
                        'MAJ_Treasure_Island_Congestion_Pricing',
                        {'name':'BP_Tolls_On_Congested_Freeways_2035',                                     'variants_exclude':['NGFNoProject', 'NGFNoProjectNoSFCordon']},
                        {'name':'BP_Vision_Zero',                                                          'variants_exclude':['NGFNoProject', 'NGFNoProjectNoSFCordon']},
@@ -449,7 +449,7 @@ BLUEPRINT_PROJECTS = collections.OrderedDict([
                        'EXP_Blueprint',
                        {'name':'EIR1_No_SR37',                                                            'variants_include':['Alt1']},
                        {'name':'NGF_NoProject_tollscsv',                                                  'variants_include':['NGFNoProject', 'NGFNoProjectNoSFCordon']}],
-                'trn':[{'name':'MAJ_MuniForward_Uncommitted',                                             'variants_exclude':['NGFNoProject', 'NGFNoProjectNoSFCordon']},
+                'trn':[{'name':'MAJ_MuniForward_Uncommitted',                                             'variants_exclude':['NGFNoProject', 'NGFNoProjectNoSFCordon'], 'branch':'PBA50plus_DBP'},
                        {'name':'FBP_SM_020_Regional_Express_Buses',    'kwargs':{'PHASE':"'Phase2_2Routes'"}},
                        'RRSP_South_East_Waterfront_Transit_Imp',
                        {'name':'FBP_MU_062_ReX_Red',                                                      'variants_exclude':['NGFNoProject', 'NGFNoProjectNoSFCordon']},
