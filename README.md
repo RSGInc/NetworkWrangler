@@ -1,3 +1,12 @@
+Current Branch Changes:
+=======================
+This branch's purpose is to be used for TM1.5.1.8 model runs.
+It was created from the Nov 2019 commit fb6238a.  
+Additional commits were made to support pip installing into a python 2 environment and to be able to run with TM1.5.1.8.
+
+please contact david.hensle@rsginc.com with questions
+
+
 NetworkWrangler
 ===============
 
