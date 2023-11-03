@@ -114,7 +114,8 @@ COMMITTED_PROJECTS = collections.OrderedDict([
                'SOL070020_I80_I680_SR12_Int_1_2A',
                'FBP_NP_036_SR29_Imola_PNR',
                'ALA170052_Fruitvale_Ave_ped_improvements',
-               'EXP_Blueprint_NoProject'
+               'EXP_Blueprint_NoProject',
+               'EXP_ObservedPrices_2023'
                ],
         'trn':['MAJ_Alameda_Point_SF_Ferry',
                'FBP_NP_036_SR29_Imola_PNR',
