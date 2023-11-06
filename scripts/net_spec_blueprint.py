@@ -67,7 +67,7 @@ COMMITTED_PROJECTS = collections.OrderedDict([
                'FBP_AL_067_Rte84Wide',
                'FBP_AL_065_Bancroft_Bus_Only',
                'FBP_SM_032_US101_Willow_Interchange',
-               {'name': 'RRSP_Alameda_Point_Transit_Improvements', 'kwargs':{'BUILT':"'built'"}} # unbuilt portion is in BLUEPRINT_PROJECTS 2025
+               {'name': 'RRSP_Alameda_Point_Transit_Improvements', 'kwargs':{'BUILT':"'built'"},'branch':'PBA50plus_DBP'} # unbuilt portion is in BLUEPRINT_PROJECTS 2025
                ],
         'trn':['ALA050015_BART_to_WarmSprings',
                'ACGo',
@@ -94,7 +94,7 @@ COMMITTED_PROJECTS = collections.OrderedDict([
                'SamTrans_ECR_Rapid',
                'ALA150004_EastBay_BRT',
                {'name':'FBP_SL_026_SolExpressBus', 'kwargs':{'MODELYEAR':'2020'}, 'variants_exclude':['NGFNoProject', 'NGFNoProjectNoSFCordon']},
-               {'name': 'RRSP_Alameda_Point_Transit_Improvements', 'kwargs':{'BUILT':"'built'"}} # unbuilt portion is in BLUEPRINT_PROJECTS 2025
+               {'name': 'RRSP_Alameda_Point_Transit_Improvements', 'kwargs':{'BUILT':"'built'"},'branch':'PBA50plus_DBP'} # unbuilt portion is in BLUEPRINT_PROJECTS 2025
                 ],
     }),
     (2023, {
