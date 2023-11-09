@@ -413,7 +413,7 @@ if __name__ == '__main__':
         import geopandas
 
     TRANSIT_CAPACITY_DIR = os.path.join(PIVOT_DIR, "trn")
-    TRN_NET_NAME     = "transitLines"
+    TRN_NET_NAME     = "transit_Lines" # refers to https://github.com/BayAreaMetro/TM1_2015_Base_Network/blob/master/trn/transit_lines/Transit_Lines.block
     HWY_NET_NAME     = "freeflow.net"
 
     # Read the configuration
