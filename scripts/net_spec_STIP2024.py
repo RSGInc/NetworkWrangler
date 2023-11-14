@@ -183,7 +183,8 @@ STIP_PROJECTS = collections.OrderedDict([
     }),
     (2035, {
         'hwy':['STIP2024_I680_Sunol_Interchange',
-               'STIP2024_I280_Wolfe_Interchange'],
+               'STIP2024_I280_Wolfe_Interchange',
+               'STIP2024_SCL090030_US101SM_EXP'],
         'trn':[]
     }),
     (2040, {
