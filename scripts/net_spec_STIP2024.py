@@ -182,7 +182,7 @@ STIP_PROJECTS = collections.OrderedDict([
                'FBP_AL_045_Oak_Ala_Access_Pr']
     }),
     (2035, {
-        'hwy':[],
+        'hwy':['STIP2024_I680_Sunol_Interchange'],
         'trn':[]
     }),
     (2040, {
