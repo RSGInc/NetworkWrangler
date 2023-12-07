@@ -122,12 +122,11 @@ COMMITTED_PROJECTS = collections.OrderedDict([
                'REG090037_New_BART_Trains',
                'SOL070020_I80_I680_SR12_Int_1_2A',
                'REG_Caltrain_2023',
-               'SF_Muni_new_routes_2023',
-               'SC_VTA_new_routes_2023',
-               'AC_ACTransit_new_routes_2023',
-               'SM_SamTrans_new_routes_2023',
-               'GGT_new_routes_2023',
-               'Others_new_routes_2023',
+               'GTFS2023_SF_Muni',
+               'GTFS2023_SC_VTA',
+               'GTFS2023_AC_ACTransit',
+               'GTFS2023_SM_SamTrans',
+               'GTFS2023_Other_Operators',
                # Transit_Frequency_Updates_Using_511
                # Update transit frequency for BART and Caltrain using 511 2023-09 data due to big service update in Sept 2023
                # Asana task: https://app.asana.com/0/1204085012544660/1205493838123328/f  
