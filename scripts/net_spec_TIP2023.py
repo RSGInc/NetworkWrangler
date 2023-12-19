@@ -300,6 +300,7 @@ TIP_PROJECTS = collections.OrderedDict([
                 'trn':['BP_PDA_Transit_Enhancements',
                        'SF_070027_Yerba_Buena_Ramp_Imp',
                        {'name':'FBP_MU_046_ACE_Freq_Inc',       'kwargs':{'MODELYEAR':'2030'}},
+                       'MAJ_BRT030001_BART_to_SanJose',
                        'BART_Irvington_Infill',
                        'MAJ_REG090037_BART_Core_Cap',
                        {'name':'FBP_AL_021_South_Bay_Connect',                                            'variants_exclude':['Alt2']},
