@@ -4,9 +4,9 @@ import os
 # e.g. "RTP2021", "TIP2021", etc
 PROJECT = "TIP2023"
 
-# MANDATORY. Set this to be the Scenario Name
-# Pass this as --scenario to build_network_mtc.py
-#assert(SCENARIO in ["NoProject","Project"])
+# MANDATORY. Set this to be the Scenario Name e.g. "NoProject","Project"
+# for TIP2023, we only have to build the Project network
+SCENARIO = Project
 
 # MANDATORY. Set this to be the git tag for checking out network projects.
 TAG = "TIP_2023"
