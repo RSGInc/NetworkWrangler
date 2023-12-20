@@ -403,7 +403,7 @@ BLUEPRINT_PROJECTS = collections.OrderedDict([
                        'FBP_SM_027_US101_92',
                        'FBP_SM_007_ElCamino_CompleteStreets',
                        {'name':'EXP_AL025_I680_SR84_to_Alcosta',                                          'variants_include':['NGFround2NoProject']}],
-                'trn':['BP_PDA_Transit_Enhancements',
+                'trn':[{'name':'BP_PDA_Transit_Enhancements',                                       'branch':'PBA50plus_DBP'},
                        {'name':'FBP_SM_020_Regional_Express_Buses', 'kwargs':{'PHASE':"'Phase1_4Routes'"}},
                        {'name':'FBP_MU_046_ACE_Freq_Inc',       'kwargs':{'MODELYEAR':'2030'}},
                        'MAJ_BRT030001_BART_to_SanJose',
