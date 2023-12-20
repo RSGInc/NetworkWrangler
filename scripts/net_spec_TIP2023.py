@@ -6,7 +6,7 @@ PROJECT = "TIP2023"
 
 # MANDATORY. Set this to be the Scenario Name e.g. "NoProject","Project"
 # for TIP2023, we only have to build the Project network
-SCENARIO = Project
+SCENARIO = "Project"
 
 # MANDATORY. Set this to be the git tag for checking out network projects.
 TAG = "TIP_2023"
