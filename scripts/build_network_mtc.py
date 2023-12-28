@@ -413,7 +413,7 @@ if __name__ == '__main__':
         # doing this import here in order to catch installation issues early
         import geopandas
 
-    if (args.project_name == 'NGF_Round2'):
+    if (args.project_name == 'NGF_R2'):
         PIVOT_DIR        = r"L:\Application\Model_One\NextGenFwys_Round2\INPUT_DEVELOPMENT\Networks\NGF_Networks_NGFround2NoProject_01\net_2035_NGFround2NoProject"
         PIVOT_YEAR       = 2035
         TRN_NET_NAME     = "transitLines"
