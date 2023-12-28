@@ -261,7 +261,7 @@ def preCheckRequirementsForAllProjects(NETWORK_PROJECTS, TEMP_SUBDIR, networks, 
                     (prereqs, coreqs, conflicts) = networks[netmode].getReqs(networkdir=head, projectsubdir=tail, tag=tag,
                                                                              projtype=projType, tempdir=TEMP_SUBDIR)
                 else:
-                    cloned_SHA1 = networks[netmode].cloneProject(networkdir=project_name, tag=tag,
+                    cloned_SHA1 = networks[netmode].cloneProject(networkdir=project_name, tag=tag, branch=branch,
                                                                  projtype=projType, tempdir=TEMP_SUBDIR, **kwargs)
                     (prereqs, coreqs, conflicts) = networks[netmode].getReqs(networkdir=project_name, projectsubdir=tail, tag=tag,
                                                                              projtype=projType, tempdir=TEMP_SUBDIR)
@@ -397,7 +397,8 @@ if __name__ == '__main__':
             "P1a_AllLaneTolling_ImproveTransit",                "P1b_AllLaneTolling_Affordable", 
             "P2a_AllLaneTollingPlusArterials_ImproveTransit",   "P2b_AllLaneTollingPlusArterials_Affordable",
             "P3b_3Cordons_Affordable",                          "P3a_3Cordons_ImproveTransit",
-            "P4_NoNewPricing",                                  "P1x_AllLaneTolling_PricingOnly"], 
+            "P4_NoNewPricing",                                  "P1x_AllLaneTolling_PricingOnly",
+            "R2P4_2035_Express_Lanes"], 
         help="Specify which network variant network to create.")
     args = parser.parse_args()
 
@@ -413,7 +414,9 @@ if __name__ == '__main__':
         import geopandas
 
     TRANSIT_CAPACITY_DIR = os.path.join(PIVOT_DIR, "trn")
-    TRN_NET_NAME     = "transit_Lines" # refers to https://github.com/BayAreaMetro/TM1_2015_Base_Network/blob/master/trn/transit_lines/Transit_Lines.block
+
+    if (args.project_name != 'NGF'):
+        TRN_NET_NAME     = "transit_Lines" # refers to https://github.com/BayAreaMetro/TM1_2015_Base_Network/blob/master/trn/transit_lines/Transit_Lines.block
     HWY_NET_NAME     = "freeflow.net"
 
     # Read the configuration
@@ -519,7 +522,7 @@ if __name__ == '__main__':
                 (project_name, projType, tag, branch, kwargs) = getProjectAttributes(project)
                 if tag == None: tag = TAG
 
-                Wrangler.WranglerLogger.info("Applying project [{}] of type [{}] with tag [{}] and kwargs[{}]".format(project_name, projType, tag, kwargs))
+                Wrangler.WranglerLogger.info("Applying project [{}] of type [{}] on branch [{}] with tag [{}] and kwargs[{}]".format(project_name, projType, branch, tag, kwargs))
                 if projType=='plan':
                     continue
 
