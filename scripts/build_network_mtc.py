@@ -413,9 +413,17 @@ if __name__ == '__main__':
         # doing this import here in order to catch installation issues early
         import geopandas
 
+    if (args.project_name == 'NGF_Round2'):
+        PIVOT_DIR        = r"L:\Application\Model_One\NextGenFwys_Round2\INPUT_DEVELOPMENT\Networks\NGF_Networks_NGFround2NoProject_01\net_2035_NGFround2NoProject"
+        PIVOT_YEAR       = 2035
+        TRN_NET_NAME     = "transitLines"
+        # some of the NGF NetworkProjects use geopandas (namely NGF_TrnFreqBoostsCordons and NGF_TrnExtendedServiceHours_Cordons)
+        # doing this import here in order to catch installation issues early
+        import geopandas
+
     TRANSIT_CAPACITY_DIR = os.path.join(PIVOT_DIR, "trn")
 
-    if (args.project_name != 'NGF'):
+    if 'NGF' not in args.project_name:
         TRN_NET_NAME     = "transit_Lines" # refers to https://github.com/BayAreaMetro/TM1_2015_Base_Network/blob/master/trn/transit_lines/Transit_Lines.block
     HWY_NET_NAME     = "freeflow.net"
 
@@ -423,7 +431,7 @@ if __name__ == '__main__':
     NETWORK_CONFIG  = args.net_spec
     PROJECT         = args.project_name
     if args.scenario: SCENARIO = args.scenario
-    if args.project_name == 'NGF':
+    if 'NGF' in args.project_name:
         SCENARIO    = args.NGF_netvariant
         NET_VARIANT = args.NGF_netvariant
 
@@ -463,7 +471,7 @@ if __name__ == '__main__':
     if not os.path.exists(SCRATCH_SUBDIR): os.mkdir(SCRATCH_SUBDIR)
     os.chdir(SCRATCH_SUBDIR)
 
-    if args.project_name == 'NGF':
+    if 'NGF' in args.project_name:
         os.environ["CHAMP_node_names"] = "M:\\Application\\Model One\\Networks\\TM1_2015_Base_Network\\Node Description.xls"
         print()
     else:
