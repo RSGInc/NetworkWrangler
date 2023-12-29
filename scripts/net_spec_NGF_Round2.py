@@ -80,19 +80,20 @@ NGF_PROJECTS = {
     },
     # Pathway 1b: All-lane tolling + Focus on Affordability (new numbering in AG10: P1b_AllLaneTolling_Affordable --> 3B)
     # https://app.asana.com/0/1203644633064654/1203644636776965/f
-    'P1b_AllLaneTolling_Affordable':{
+    'R2P5_Conversion_Only':{
         'hwy':[
             'NGF_BlueprintSegmented',       # All lane tolling on freeways
             'NGF_CarpoolLanes',             # Carpool Lanes
             'BP_Vision_Zero',               # Local Street Safety Improvements and Speed Reductions
+            {'name':'EXP_uncommitted_noAllLaneTolling',     'kwargs':{'MODELYEAR':'2035','PATHWAY':"'P5'"},     'branch':'NGF'},
         ],
         'trn':[
-            'NGF_NoProject_farefiles',      # ensures these files get included; note this is not a real project
+            #'NGF_NoProject_farefiles',      # ensures these files get included; note this is not a real project
             # Trunkline Transit Frequency Bosts 2
-            {'name':'NGF_TrunklineTrnFreqBoosts', 'kwargs':{
-                'min_headway':'10',
-                'include_rail':'False'
-            }}
+            #{'name':'NGF_TrunklineTrnFreqBoosts', 'kwargs':{
+            #    'min_headway':'10',
+            #    'include_rail':'False'
+            #}}
         ]
     },
     # new numbering in AG10: P2a_AllLaneTollingPlusArterials_ImproveTransit --> 4A)
