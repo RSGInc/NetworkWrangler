@@ -33,7 +33,6 @@ NGF_PROJECTS = {
     # https://app.asana.com/0/1203644633064654/1206115787970079/f
     'R2P4_2035_Express_Lanes':{
         'hwy':[
-            'NGF_BlueprintSegmented',         # All lane tolling on freeways
             {'name':'EXP_uncommitted_noAllLaneTolling',     'kwargs':{'MODELYEAR':'2035','PATHWAY':"'P4'"},     'branch':'NGF'},
             #'Futures_C4_ReX_Express',         # New Transit Service Near Tolling: ReX Express
             #'ReX_link',                       # New Transit Service Near Tolling: ReX Link
@@ -82,9 +81,6 @@ NGF_PROJECTS = {
     # https://app.asana.com/0/1203644633064654/1203644636776965/f
     'R2P5_Conversion_Only':{
         'hwy':[
-            'NGF_BlueprintSegmented',       # All lane tolling on freeways
-            'NGF_CarpoolLanes',             # Carpool Lanes
-            'BP_Vision_Zero',               # Local Street Safety Improvements and Speed Reductions
             {'name':'EXP_uncommitted_noAllLaneTolling',     'kwargs':{'MODELYEAR':'2035','PATHWAY':"'P5'"},     'branch':'NGF'},
         ],
         'trn':[
@@ -98,9 +94,6 @@ NGF_PROJECTS = {
     },
     'R2P6_Dual_Express_Lanes':{
         'hwy':[
-            'NGF_BlueprintSegmented',       # All lane tolling on freeways
-            'NGF_CarpoolLanes',             # Carpool Lanes
-            'BP_Vision_Zero',               # Local Street Safety Improvements and Speed Reductions
             {'name':'EXP_uncommitted_noAllLaneTolling',     'kwargs':{'MODELYEAR':'2035','PATHWAY':"'P6'"},     'branch':'NGF'},
         ],
         'trn':[
