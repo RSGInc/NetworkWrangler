@@ -375,7 +375,7 @@ BLUEPRINT_PROJECTS = collections.OrderedDict([
                        {'name':'FBP_NP_040_VINE_Exp_Bus_Enhancements',                                    'variants_exclude':['NGFNoProject', 'NGFNoProjectNoSFCordon','NGFround2NoProject']},
                        'FBP_AL_045_Oak_Ala_Access_Pr',
                        {'name':'FBP_MR_021_101_580_Direct_Connector',                                     'variants_exclude':['Alt1']},
-                       {'name':'FBP_MR_018_US101_BOS',                                                    'variants_exclude':['NGFNoProject', 'NGFNoProjectNoSFCordon','NGFround2NoProject']},
+                       {'name':'FBP_MR_018_US101_BOS',                                                    'variants_exclude':['NGFNoProject', 'NGFNoProjectNoSFCordon']},
                        {'name':'FBP_CC_036_I80_ExpBus_Impr',                                              'variants_exclude':['NGFNoProject', 'NGFNoProjectNoSFCordon']},
                        {'name':'FBP_CC_040_041_042_I680_SR4_Int_Phases_1_2_4_5','kwargs':{'PHASE':"'4'"}, 'variants_exclude':['Alt1']},
                        'FBP_CC_021_Ant_Mart_Herc_Ferry',
