@@ -342,7 +342,7 @@ BLUEPRINT_PROJECTS = collections.OrderedDict([
                        'MAJ_WETA_Service_Frequency_Increase',
                        {'name':'FBP_MU_046_ACE_Freq_Inc',       'kwargs':{'MODELYEAR':'2025'}},                       
                        {'name':'Transform_SR37_Widening_Interim',                                         'variants_exclude':['Alt1']},
-                       {'name':'MAJ_SF_Congestion_Pricing',                                               'variants_include':['NGFNoProjectNoSFCordon']},
+                       {'name':'MAJ_SF_Congestion_Pricing',                                               'variants_exclude':['NGFNoProjectNoSFCordon', 'NGFround2NoProject']},
                        'FBP_MU_041_Hovercraft_Pilot',
                        'FBP_MU_049_Caltrain_6TPHPD',
                        {'name':'FBP_MU_060_ReX_Blue',                                                     'variants_exclude':['NGFNoProject', 'NGFNoProjectNoSFCordon','NGFround2NoProject']},
