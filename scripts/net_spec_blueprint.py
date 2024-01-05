@@ -372,7 +372,7 @@ BLUEPRINT_PROJECTS = collections.OrderedDict([
                        'FBP_MU_044_Richmond_Ferry_Serv_Incr',
                        'MAJ_REG090037_BART_Core_Cap',
                        {'name':'Transform_Valley_Link',                                                   'variants_exclude':['Alt2']},
-                       {'name':'FBP_NP_040_VINE_Exp_Bus_Enhancements',                                    'variants_exclude':['NGFNoProject', 'NGFNoProjectNoSFCordon','NGFround2NoProject']},
+                       {'name':'FBP_NP_040_VINE_Exp_Bus_Enhancements',                                    'variants_exclude':['NGFNoProject', 'NGFNoProjectNoSFCordon']},
                        'FBP_AL_045_Oak_Ala_Access_Pr',
                        {'name':'FBP_MR_021_101_580_Direct_Connector',                                     'variants_exclude':['Alt1']},
                        {'name':'FBP_MR_018_US101_BOS',                                                    'variants_exclude':['NGFNoProject', 'NGFNoProjectNoSFCordon']},
