@@ -34,245 +34,28 @@ NGF_PROJECTS = {
     'R2P4_2035_Express_Lanes':{
         'hwy':[
             {'name':'EXP_uncommitted_noAllLaneTolling',     'kwargs':{'MODELYEAR':'2035','PATHWAY':"'P4'"},     'branch':'NGF'},
-            #'Futures_C4_ReX_Express',         # New Transit Service Near Tolling: ReX Express
-            #'ReX_link',                       # New Transit Service Near Tolling: ReX Link
-            #'NGF_CarpoolLanes',               # Carpool Lanes
-            #'NGF_TransitPriorityOnArterials', # Transit Priority - All Lane Tolling
-            #'Transform_I680_Multimodal_Imp',
-            #'FBP_CC_036_I80_ExpBus_Impr',
-            #'FBP_NP_040_VINE_Exp_Bus_Enhancements',
-            #'FBP_MR_018_US101_BOS',
-            #'MAJ_MuniForward_Uncommitted',
-            #'MAJ_AC_Frequency_Improvement',
-            #'BP_Vision_Zero',               # Local Street Safety Improvements and Speed Reductions
          ],
         'trn':[
-            #'NGF_NoProject_farefiles',      # ensures these files get included; note this is not a real project
-            #'Futures_C4_ReX_Express',       # New Transit Service Near Tolling: ReX Express
-            #'ReX_link',                     # New Transit Service Near Tolling: Rex Link
-            #'Transform_I680_Multimodal_Imp',
-            #'FBP_CC_036_I80_ExpBus_Impr',
-            #'FBP_SL_026_SolExpressBus',
-            #'MAJ_MuniForward_Uncommitted',
-            #'VTA_Next',
-            #'MAJ_AC_Frequency_Improvement',
-            #'FBP_MuniForward_Uncommitted_Rail',
-            # Local Transit Frequency Boosts 2
-            # Parameters defined here: https://app.asana.com/0/0/1203931443540514/f
-            #{'name':'NGF_IncreaseTrnFreqXferRoutes2BartCaltrainFerry',  'kwargs':{
-            #    'top_n_local':'2', 
-            #    # configure by mode: https://github.com/BayAreaMetro/modeling-website/wiki/TransitModes
-            #    'min_headway':'{"local_default":15, 21:10, 24:10, 27:10, 28:10, 30:10, 111:10}', 
-            #    'include_connections_to_express_bus':'True',
-            #    # this directory is used to determine which routes have frequency increases.  So to include ReX Express bus routes,
-            #    # use a directory that includes ReX Express routes (e.g. an earlier iteration of this scenario)
-            #    'transit_assignment_dir':'r"L:\\Application\\Model_One\\NextGenFwys\\Scenarios\\2035_TM152_NGF_ReXExpress_ReXLink_trnassignment\\OUTPUT\\trn"'
-            #}},
-            # Trunkline Transit Frequency Boosts 2
-            #{'name':'NGF_TrunklineTrnFreqBoosts', 'kwargs':{
-            #    'min_headway':'10',
-            #    'include_rail':'False'
-            #}},
-            # Extended Transit Service Hours
-            #{'name':'NGF_TrnExtendedServiceHours',  'kwargs':{'EV_headway':'15'}},
         ]
     },
-    # Pathway 1b: All-lane tolling + Focus on Affordability (new numbering in AG10: P1b_AllLaneTolling_Affordable --> 3B)
-    # https://app.asana.com/0/1203644633064654/1203644636776965/f
+    # Pathway 5: 2035 Express Lanes Conversion Only
+    # https://app.asana.com/0/1203644633064654/1206115787970085/f
     'R2P5_Conversion_Only':{
         'hwy':[
             {'name':'EXP_uncommitted_noAllLaneTolling',     'kwargs':{'MODELYEAR':'2035','PATHWAY':"'P5'"},     'branch':'NGF'},
         ],
         'trn':[
-            #'NGF_NoProject_farefiles',      # ensures these files get included; note this is not a real project
-            # Trunkline Transit Frequency Bosts 2
-            #{'name':'NGF_TrunklineTrnFreqBoosts', 'kwargs':{
-            #    'min_headway':'10',
-            #    'include_rail':'False'
-            #}}
         ]
     },
+    # Pathway 6: 2035 Dual Express Lanes (1 EL lanes if total number of lanes <= 3)
+    # https://app.asana.com/0/1203644633064654/1206115787970089/f
     'R2P6_Dual_Express_Lanes':{
         'hwy':[
             {'name':'EXP_uncommitted_noAllLaneTolling',     'kwargs':{'MODELYEAR':'2035','PATHWAY':"'P6'"},     'branch':'NGF'},
         ],
         'trn':[
-            #'NGF_NoProject_farefiles',      # ensures these files get included; note this is not a real project
-            # Trunkline Transit Frequency Bosts 2
-            #{'name':'NGF_TrunklineTrnFreqBoosts', 'kwargs':{
-            #    'min_headway':'10',
-            #    'include_rail':'False'
-            #}}
         ]
     },
-    # new numbering in AG10: P2a_AllLaneTollingPlusArterials_ImproveTransit --> 4A)
-    'P2a_AllLaneTollingPlusArterials_ImproveTransit':{
-        'hwy':[
-            'NGF_BlueprintSegmented',         # All lane tolling on freeways
-            'Futures_C4_ReX_Express',         # New Transit Service Near Tolling: ReX Express
-            'ReX_link',                       # New Transit Service Near Tolling: ReX Link
-            'NGF_CarpoolLanes',               # Carpool Lanes
-            'NGF_TransitPriorityOnArterials', # Transit Priority - All Lane Tolling
-            'Transform_I680_Multimodal_Imp',
-            'FBP_CC_036_I80_ExpBus_Impr',
-            'FBP_NP_040_VINE_Exp_Bus_Enhancements',
-            'FBP_MR_018_US101_BOS',
-            'MAJ_MuniForward_Uncommitted',
-            'MAJ_AC_Frequency_Improvement',
-            'NGF_Arterials',                 # Code arterials for tolling in Pathway 2
-            'BP_Vision_Zero',                # Local Street Safety Improvements and Speed Reductions
-         ],
-        'trn':[
-            'NGF_NoProject_farefiles',      # ensures these files get included; note this is not a real project
-            'Futures_C4_ReX_Express',       # New Transit Service Near Tolling: ReX Express
-            'ReX_link',                     # New Transit Service Near Tolling: Rex Link
-            'Transform_I680_Multimodal_Imp',
-            'FBP_CC_036_I80_ExpBus_Impr',
-            'FBP_SL_026_SolExpressBus',
-            'MAJ_MuniForward_Uncommitted',
-            'VTA_Next',
-            'MAJ_AC_Frequency_Improvement',
-            'FBP_MuniForward_Uncommitted_Rail',
-            # Local Transit Frequency Boosts 2
-            # Parameters defined here: https://app.asana.com/0/0/1203931443540514/f
-            {'name':'NGF_IncreaseTrnFreqXferRoutes2BartCaltrainFerry',  'kwargs':{
-                'top_n_local':'2', 
-                # configure by mode: https://github.com/BayAreaMetro/modeling-website/wiki/TransitModes
-                'min_headway':'{"local_default":15, 21:10, 24:10, 27:10, 28:10, 30:10, 111:10}', 
-                'include_connections_to_express_bus':'True',
-                # this directory is used to determine which routes have frequency increases.  So to include ReX Express bus routes,
-                # use a directory that includes ReX Express routes (e.g. an earlier iteration of this scenario)
-                'transit_assignment_dir':'r"L:\\Application\\Model_One\\NextGenFwys\\Scenarios\\2035_TM152_NGF_ReXExpress_ReXLink_trnassignment\\OUTPUT\\trn"'
-            }},
-            # Trunkline Transit Frequency Boosts 2
-            {'name':'NGF_TrunklineTrnFreqBoosts', 'kwargs':{
-                'min_headway':'10',
-                'include_rail':'False'
-            }},
-            # Extended Transit Service Hours
-            {'name':'NGF_TrnExtendedServiceHours',  'kwargs':{'EV_headway':'15'}},
-        ]
-    },
-    # new numbering in AG10: P2b_AllLaneTollingPlusArterials_Affordable --> 4B)
-    'P2b_AllLaneTollingPlusArterials_Affordable':{
-        'hwy':[
-            'NGF_BlueprintSegmented',       # All lane tolling on freeways
-            'NGF_CarpoolLanes',             # Carpool Lanes
-            'NGF_Arterials',                # Code arterials for tolling in Pathway 2
-            'BP_Vision_Zero',               # Local Street Safety Improvements and Speed Reductions
-        ],
-        'trn':[
-            'NGF_NoProject_farefiles',      # ensures these files get included; note this is not a real project
-            # Trunkline Transit Frequency Bosts 2
-            {'name':'NGF_TrunklineTrnFreqBoosts', 'kwargs':{
-                'min_headway':'10',
-                'include_rail':'False'
-            }}
-        ]
-    },
-    # new numbering in AG10: P3a_3Cordons_ImproveTransit --> 2A
-    'P3a_3Cordons_ImproveTransit':{
-        'hwy':[
-            'MAJ_SF_Congestion_Pricing',     # San Francisco Cordon Pricing
-            'NGF_AL_Cordon',                 # Oakland Cordon Pricing
-            'NGF_SC_Cordon',                 # San Jose Cordon Pricing
-            'MAJ_MuniForward_Uncommitted',
-            'MAJ_AC_Frequency_Improvement',
-            'Futures_C4_ReX_Express',         # New Transit Service Near Tolling: ReX Express
-            'ReX_link',                       # New Transit Service Near Tolling: ReX Link
-            'BP_Vision_Zero',                 # Local Street Safety Improvements and Speed Reductions
-            'NGF_TransitPriorityCordons'      # Transit Priority - Cordons
-       ],
-        'trn':[
-            'NGF_NoProject_farefiles',       # ensures these files get included; note this is not a real project
-            'MAJ_SF_Congestion_Pricing',
-            'MAJ_MuniForward_Uncommitted',
-            'VTA_Next',
-            'MAJ_AC_Frequency_Improvement',
-            'FBP_MuniForward_Uncommitted_Rail',
-            'Futures_C4_ReX_Express',         # New Transit Service Near Tolling: ReX Express
-            'ReX_link',                       # New Transit Service Near Tolling: ReX Link
-            # Trunkline Transit Frequency Bosts 1
-            {'name':'NGF_TrunklineTrnFreqBoosts', 'kwargs':{
-                'min_headway':'15',
-                'include_rail':'False'
-            }},
-            # Local Transit Frequency Boosts Cordons
-            {'name':'NGF_TrnFreqBoostsCordons', 'kwargs':{
-                'top_n_local':'15',
-                'min_headway':'7',
-                'min_headway_LRT':'10',
-                'transit_assignment_dir':'r"L:\\Application\\Model_One\\NextGenFwys\\Scenarios\\2035_TM152_NGF_ReXExpress_ReXLink_trnassignment\\OUTPUT\\trn"'
-            }},
-            # Extended Transit Service Hours - Cordons          
-            {'name':'NGF_TrnExtendedServiceHours_Cordons', 'kwargs':{
-                'top_n_local':'15',
-                'EV_headway':'10',
-                'transit_assignment_dir':'r"L:\\Application\\Model_One\\NextGenFwys\\Scenarios\\2035_TM152_NGF_ReXExpress_ReXLink_trnassignment\\OUTPUT\\trn"'
-            }},
-        ]
-    },
-    # new numbering in AG10: P3b_3Cordons_Affordable --> 2B
-    'P3b_3Cordons_Affordable':{
-        'hwy':[
-            'MAJ_SF_Congestion_Pricing',     # San Francisco Cordon Pricing
-            'NGF_AL_Cordon',                 # Oakland Cordon Pricing
-            'NGF_SC_Cordon',                 # San Jose Cordon Pricing
-            'MAJ_MuniForward_Uncommitted',
-            'MAJ_AC_Frequency_Improvement',
-            'BP_Vision_Zero',                # Local Street Safety Improvements and Speed Reductions
-        ],
-        'trn':[
-            'NGF_NoProject_farefiles',       # ensures these files get included; note this is not a real project
-            'MAJ_SF_Congestion_Pricing',
-            'MAJ_MuniForward_Uncommitted',
-            'VTA_Next',
-            'MAJ_AC_Frequency_Improvement',
-            'FBP_MuniForward_Uncommitted_Rail',
-            # Trunkline Transit Frequency Bosts 1
-            {'name':'NGF_TrunklineTrnFreqBoosts', 'kwargs':{
-                'min_headway':'15',
-                'include_rail':'False'
-            }},
-            # Local Transit Frequency Boosts Cordons
-            {'name':'NGF_TrnFreqBoostsCordons', 'kwargs':{
-                'top_n_local':'15',
-                'min_headway':'7',
-                'min_headway_LRT':'10',
-                'transit_assignment_dir':'r"L:\\Application\\Model_One\\NextGenFwys\\Scenarios\\2035_TM152_NGF_ReXExpress_ReXLink_trnassignment\\OUTPUT\\trn"'
-            }}
-        ]
-    },
-    # new numbering in AG10: P4_NoNewPricing --> P1
-    'P4_NoNewPricing':{
-        'hwy':[
-            'BP_Vision_Zero',                # Local Street Safety Improvements and Speed Reductions
-        ],
-        'trn':[
-            'NGF_NoProject_farefiles',       # ensures these files get included; note this is not a real project
-            # Trunkline Transit Frequency Bosts 2
-            {'name':'NGF_TrunklineTrnFreqBoosts', 'kwargs':{
-                'min_headway':'10',
-                'include_rail':'False'
-            }}
-        ]
-    },
-
-    # All-lane tolling pricing strategy only: https://app.asana.com/0/1201809392759895/1205309291141002/f
-    'P1x_AllLaneTolling_PricingOnly':{
-        'hwy':[
-            'NGF_BlueprintSegmented',        # All lane tolling on freeways
-            'BP_Vision_Zero',                # Local Street Safety Improvements and Speed Reductions
-        ],
-        'trn':[
-            'NGF_NoProject_farefiles',       # ensures these files get included; note this is not a real project
-            # Trunkline Transit Frequency Bosts 2
-            {'name':'NGF_TrunklineTrnFreqBoosts', 'kwargs':{
-                'min_headway':'10',
-                'include_rail':'False'
-            }}
-        ]
-    }
 }
 
 # Put them together for NETWORK_PROJECTS
