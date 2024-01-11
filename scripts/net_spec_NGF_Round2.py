@@ -33,6 +33,7 @@ NGF_PROJECTS = {
     # https://app.asana.com/0/1203644633064654/1206115787970079/f
     'R2P4_2035_Express_Lanes':{
         'hwy':[
+            {'PBA2050_RTP_ID_attributes'},
             {'name':'EXP_uncommitted_noAllLaneTolling',     'kwargs':{'MODELYEAR':'2035','PATHWAY':"'P4'"},     'branch':'NGF'},
          ],
         'trn':[
@@ -42,6 +43,7 @@ NGF_PROJECTS = {
     # https://app.asana.com/0/1203644633064654/1206115787970085/f
     'R2P5_Conversion_Only':{
         'hwy':[
+            {'PBA2050_RTP_ID_attributes'},
             {'name':'EXP_uncommitted_noAllLaneTolling',     'kwargs':{'MODELYEAR':'2035','PATHWAY':"'P5'"},     'branch':'NGF'},
         ],
         'trn':[
@@ -51,6 +53,7 @@ NGF_PROJECTS = {
     # https://app.asana.com/0/1203644633064654/1206115787970089/f
     'R2P6_Dual_Express_Lanes':{
         'hwy':[
+            {'PBA2050_RTP_ID_attributes'},
             {'name':'EXP_uncommitted_noAllLaneTolling',     'kwargs':{'MODELYEAR':'2035','PATHWAY':"'P6'"},     'branch':'NGF'},
         ],
         'trn':[
