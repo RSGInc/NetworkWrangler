@@ -363,7 +363,8 @@ BLUEPRINT_PROJECTS = collections.OrderedDict([
                        {'name':'EIR1_Freq_Boosts',              'kwargs':{'MODELYEAR':'2025'},            'variants_include':['Alt1']},
                        {'name':'EIR2_HRA_Freq_Incr',            'kwargs':{'MODELYEAR':'2025'},            'variants_include':['Alt2']},
                        {'name':'EIR2_PDA_Freq_Incr',            'kwargs':{'MODELYEAR':'2025'},            'variants_include':['Alt2']},
-                       {'name':'EIR2_Val_Link_ExpressBus',                                                'variants_include':['Alt2']},
+                       {'name':'EIR2_Val_Link_ExpressBus',                                                'variants_include':['Alt2']}
+                ]
         }),
         (2030, {'hwy':['MAJ_SanPablo_BRT',
                        {'name':'BP_Tolls_On_Congested_Freeways_2030',                                     'variants_exclude':['NGFNoProject', 'NGFNoProjectNoSFCordon','NGFround2NoProject']},
