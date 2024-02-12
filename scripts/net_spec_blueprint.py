@@ -573,15 +573,19 @@ BLUEPRINT_PROJECTS = collections.OrderedDict([
 # Put them together for NETWORK_PROJECTS
 NETWORK_PROJECTS   = collections.OrderedDict()
 
+# NOTE: SLR is invoked explicitly in build_network_blueprint.py because it requires special handling
+# re: backing up the network
+
 for YEAR in COMMITTED_PROJECTS.keys():
-    if NET_VARIANT == "Baseline":
+
+    # TODO: PBA50+ DRAFT BLUEPRINT NETWORKS WILL JUST INCLUDE COMMITTED
+    # TODO: When we get to the Final Blueprint stage, we'll bring back a subset of BLUEPRINT_PROJECTS
+    if (NET_VARIANT == "Baseline") or (NET_VARIANT == "Blueprint"):
         # baseline: just committed
         NETWORK_PROJECTS[YEAR] = {
             'hwy':COMMITTED_PROJECTS[YEAR]['hwy'],
             'trn':COMMITTED_PROJECTS[YEAR]['trn']
         }
-        # todo: add sea level rise since it's unprotected
-
     else:
         # blueprint, alt1, alt2
         if YEAR not in BLUEPRINT_PROJECTS: continue
