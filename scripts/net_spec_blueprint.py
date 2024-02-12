@@ -45,7 +45,6 @@ COMMITTED_PROJECTS = collections.OrderedDict([
                'CC_170001_SanRamonValleyBlvd_Lane_Addition',
                'MRN150009_San_Rafael_Bridge_Improvements',
                'SF_070027_Yerba_Buena_Ramp_Imp',
-               'SF_070005_VanNess_BRT',
                'SF_130011_2ndSt_Road_Diet',
                'SF_Market_Street_Closure',
                'SM_110047_SR92_ElCam_Ramp_Mod',
@@ -114,6 +113,7 @@ COMMITTED_PROJECTS = collections.OrderedDict([
                'SOL070020_I80_I680_SR12_Int_1_2A',
                'FBP_NP_036_SR29_Imola_PNR',
                'ALA170052_Fruitvale_Ave_ped_improvements',
+               'SF_070005_VanNess_BRT',
                'EXP_Blueprint_NoProject',
                'EXP_ObservedPrices_2023'
                ],
