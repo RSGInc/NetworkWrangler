@@ -222,11 +222,13 @@ COMMITTED_PROJECTS = collections.OrderedDict([
                'SOL110006_Jepson_1B_1C',
                'SCL190008_US101_DLC_Int_Imp',
                'CC_170061_Bus_On_Shoulder_680BRT',             
-               'MAJ_SCL050009_VTA_Eastridge_Extension',        
+               'MAJ_SCL050009_VTA_Eastridge_Extension',
+               'MAJ_Geary_BRT_Phase2',       
                'EXP_Blueprint_NoProject'],
         'trn':['SF_010028_Caltrain_Modernization',
                'SON090002_SMART_to_Windsor',
-               'MAJ_SCL050009_VTA_Eastridge_Extension'
+               'MAJ_SCL050009_VTA_Eastridge_Extension',
+               'MAJ_Geary_BRT_Phase2',
                ]
     }),
     (2030, {
@@ -274,7 +276,6 @@ BLUEPRINT_PROJECTS = collections.OrderedDict([
                        'MAJ_WETA_Service_Frequency_Increase',                       
                        {'name':'Transform_SR37_Widening_Interim',                                           'variants_exclude':['Alt1']},
                        {'name':'MAJ_SF_Congestion_Pricing',                                                 'variants_exclude':['NGFNoProjectNoSFCordon', 'NGFround2NoProject']},
-                       'MAJ_Geary_BRT_Phase2',
                        'FBP_MU_041_Hovercraft_Pilot',
                        {'name':'BP_Vision_Zero',               'variants_exclude':['NGFNoProject', 'NGFNoProjectNoSFCordon', 'NGFround2NoProject']},
                        'EXP_Blueprint',
@@ -333,8 +334,7 @@ BLUEPRINT_PROJECTS = collections.OrderedDict([
                        'FBP_SC_072_US101_Trimble_Interchange',
                        {'name':'EXP_SL030_I80_RedTopRd_to_I505',                                          'variants_include':['NGFround2NoProject']}
                        ],
-                'trn':['MAJ_Geary_BRT_Phase2',
-                       'FBP_AL_001_NewarkFremPDA',
+                'trn':['FBP_AL_001_NewarkFremPDA',
                        {'name':'FBP_MU_059_ACTransbay_Freq_Incr',                                         'variants_exclude':['Alt2']},
                        {'name':'MAJ_AC_Frequency_Improvement',                                            'variants_exclude':['NGFNoProject', 'NGFNoProjectNoSFCordon']},
                        {'name': 'RRSP_Alameda_Point_Transit_Improvements',  'kwargs':{'BUILT':"'unbuilt'"},'branch':'PBA50plus_DBP'},
