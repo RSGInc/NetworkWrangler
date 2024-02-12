@@ -227,6 +227,7 @@ COMMITTED_PROJECTS = collections.OrderedDict([
                'EXP_Blueprint_NoProject'],
         'trn':['SF_010028_Caltrain_Modernization',
                'SON090002_SMART_to_Windsor',
+               'SON090002_SMART_NorthPetaluma',
                'MAJ_SCL050009_VTA_Eastridge_Extension',
                'MAJ_Geary_BRT_Phase2',
                ]
@@ -363,7 +364,6 @@ BLUEPRINT_PROJECTS = collections.OrderedDict([
                        {'name':'EIR2_HRA_Freq_Incr',            'kwargs':{'MODELYEAR':'2025'},            'variants_include':['Alt2']},
                        {'name':'EIR2_PDA_Freq_Incr',            'kwargs':{'MODELYEAR':'2025'},            'variants_include':['Alt2']},
                        {'name':'EIR2_Val_Link_ExpressBus',                                                'variants_include':['Alt2']},
-                       {'name':'SON090002_SMART_NorthPetaluma',                                           'variants_exclude':['Baseline']}]
         }),
         (2030, {'hwy':['MAJ_SanPablo_BRT',
                        {'name':'BP_Tolls_On_Congested_Freeways_2030',                                     'variants_exclude':['NGFNoProject', 'NGFNoProjectNoSFCordon','NGFround2NoProject']},
