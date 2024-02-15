@@ -195,9 +195,11 @@ COMMITTED_PROJECTS = collections.OrderedDict([
                 {'name':'Transit_Frequency_Updates_Using_511', 
                 'kwargs':{'regional_gtfs_zip':'r"M:\\Data\\Transit\\511\\2023-09.zip"', 
                           'operator':'"Sonoma County Transit"'}},
-                {'name':'Transit_Frequency_Updates_Using_511', 
-                'kwargs':{'regional_gtfs_zip':'r"M:\\Data\\Transit\\511\\2023-09.zip"', 
-                          'operator':'"Santa Rosa CityBus"'}},
+#               https://app.asana.com/0/0/1206596966483061/f
+#               Santa Rosa CityBus implementation is not in use and why since their GTFS data is inaccurate
+#                {'name':'Transit_Frequency_Updates_Using_511', 
+#                'kwargs':{'regional_gtfs_zip':'r"M:\\Data\\Transit\\511\\2023-09.zip"', 
+#                          'operator':'"Santa Rosa CityBus"'}},
                 {'name':'Transit_Frequency_Updates_Using_511', 
                 'kwargs':{'regional_gtfs_zip':'r"M:\\Data\\Transit\\511\\2023-09.zip"', 
                           'operator':'"WestCat (Western Contra Costa)"'}}, 
