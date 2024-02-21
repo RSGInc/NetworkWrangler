@@ -227,7 +227,10 @@ COMMITTED_PROJECTS = collections.OrderedDict([
                'MAJ_SCL050009_VTA_Eastridge_Extension',
                'MAJ_Geary_BRT_Phase2',
                'MRN050034_101_MarinSonNarrows_Phase2',
-               'EXP_Blueprint_NoProject'],
+               'EXP_Blueprint_NoProject',
+               'EXP_SL030_I80_RedTopRd_to_I505',
+               'EXP_AL025_I680_SR84_to_Alcosta'
+               ],
         'trn':['SF_010028_Caltrain_Modernization',
                'SON090002_SMART_to_Windsor',
                'SON090002_SMART_NorthPetaluma',
