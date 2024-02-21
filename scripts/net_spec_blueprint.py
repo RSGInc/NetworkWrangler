@@ -338,7 +338,6 @@ BLUEPRINT_PROJECTS = collections.OrderedDict([
                        {'name':'EIR2_Val_Link_ExpressBus',                                                'variants_include':['Alt2']},
                        {'name':'EIR2_ReXBlue',                                                            'variants_include':['Alt2']},
                        'FBP_SC_072_US101_Trimble_Interchange',
-                       {'name':'EXP_SL030_I80_RedTopRd_to_I505',                                          'variants_include':['NGFround2NoProject']}
                        ],
                 'trn':['FBP_AL_001_NewarkFremPDA',
                        {'name':'FBP_MU_059_ACTransbay_Freq_Incr',                                         'variants_exclude':['Alt2']},
@@ -408,7 +407,6 @@ BLUEPRINT_PROJECTS = collections.OrderedDict([
                        'FBP_SL_022_SonomaBlvd_Diet',
                        'FBP_SM_027_US101_92',
                        'FBP_SM_007_ElCamino_CompleteStreets',
-                       {'name':'EXP_AL025_I680_SR84_to_Alcosta',                                          'variants_include':['NGFround2NoProject']}],
                 'trn':[{'name':'BP_PDA_Transit_Enhancements',                                       'branch':'PBA50plus_DBP'},
                        {'name':'FBP_SM_020_Regional_Express_Buses', 'kwargs':{'PHASE':"'Phase1_4Routes'"}},
                        {'name':'FBP_MU_046_ACE_Freq_Inc',       'kwargs':{'MODELYEAR':'2030'}},
