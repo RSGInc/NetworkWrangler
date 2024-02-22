@@ -407,6 +407,7 @@ BLUEPRINT_PROJECTS = collections.OrderedDict([
                        'FBP_SL_022_SonomaBlvd_Diet',
                        'FBP_SM_027_US101_92',
                        'FBP_SM_007_ElCamino_CompleteStreets',
+                    ],
                 'trn':[{'name':'BP_PDA_Transit_Enhancements',                                       'branch':'PBA50plus_DBP'},
                        {'name':'FBP_SM_020_Regional_Express_Buses', 'kwargs':{'PHASE':"'Phase1_4Routes'"}},
                        {'name':'FBP_MU_046_ACE_Freq_Inc',       'kwargs':{'MODELYEAR':'2030'}},
