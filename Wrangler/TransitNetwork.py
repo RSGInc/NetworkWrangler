@@ -689,6 +689,98 @@ class TransitNetwork(Network):
             return
 
         raise NetworkException("from_mode {} not found".format(from_mode))
+    
+    def getValueFromStopToStopFare(self, fare_filename, stopA, stopB):
+        """
+        Assuming that fare_filename contains stop-to-stop fare information (e.g. Ferry.far)
+        Returns the value set for stopA to stopB OR the reverse, as MTC fare files are bidirectional.
+        If none found, throws a NetworkException.
+
+        Args:
+            fare_filename (str): The fare filename to check. Case-sensitive.
+            stopA (int): origin or destination stop
+            stopB (int): origin or destination stop
+        Returns:
+            fare value, if found in fare_filename.  
+            If fare_filename not found, or stop-to-stop nodes aren't found in that farefile,
+            throws NetworkException.
+        """
+        # sort: stop1 < stop2
+        stop1 = stopA if stopA < stopB else stopB
+        stop2 = stopA if stopA > stopB else stopB
+        # WranglerLogger.debug("stop1: {}  stop2: {}".format(stop1, stop2))
+
+        fare_stops_re = re.compile(r"^\s*(\d+)\s+(\d+)\s+(\d+)\s([;].*)$", re.IGNORECASE)
+        if fare_filename not in self.farefiles.keys():
+            raise NetworkException("Fare file {} not found".format(fare_filename))
+
+        for line in self.farefiles[fare_filename]:
+            # WranglerLogger.debug("getValueFromStopToStopFare() line = {}".format(line.strip()))
+            result = fare_stops_re.match(line)
+            # WranglerLogger.debug("  result: {}".format("None" if result == None else result.groups()))
+            if result == None: continue
+
+            my_stop1 = int(result.group(1)) if int(result.group(1)) < int(result.group(2)) else int(result.group(2))
+            my_stop2 = int(result.group(1)) if int(result.group(1)) > int(result.group(2)) else int(result.group(2))
+
+            # WranglerLogger.debug("my_stop1: {}  my_stop2: {}".format(my_stop1,my_stop2))
+
+            if my_stop1 != stop1: continue
+            if my_stop2 != stop2: continue
+
+            return int(result.group(3))
+
+        raise NetworkException("stopA/stopB {}/{} not found".format(stopA, stopB))
+
+    def setValueToStopToStopFare(self, fare_filename, stopA, stopB, value):
+        """
+        Assuming that fare_filename contains stop-to-stop fare information (e.g. Ferry.far)
+        Sets the value for stopA to stopB OR the reverse, as MTC fare files are bidirectional.
+        If stop pair isn't found in this fare file, throws a NetworkException.
+
+        Args:
+            fare_filename (str): The fare filename to check. Case-sensitive.
+            stopA (int): origin or destination stop
+            stopB (int): origin or destination stop
+            value (int): value to set for fare
+
+        If fare_filename not found, or stop-to-stop nodes aren't found in that farefile,
+        throws NetworkException.
+        """
+        # sort: stop1 < stop2
+        stop1 = stopA if stopA < stopB else stopB
+        stop2 = stopA if stopA > stopB else stopB
+
+        # WranglerLogger.debug("stop1: {}  stop2: {}".format(stop1, stop2))
+        # keep spaces this time
+        #                               1    2    3    4    5    6    7   8
+        fare_stops_re = re.compile(r"(^\s*)(\d+)(\s+)(\d+)(\s+)(\d+)(\s)([;].*)$", re.IGNORECASE)
+        if fare_filename not in self.farefiles.keys():
+            raise NetworkException("Fare file {} not found".format(fare_filename))
+
+        for line_idx in range(len(self.farefiles[fare_filename])):
+            line = self.farefiles[fare_filename][line_idx]
+            # WranglerLogger.debug("getValueFromStopToStopFare() line = {}".format(line.strip()))
+            result = fare_stops_re.match(line)
+            # WranglerLogger.debug("  result: {}".format("None" if result == None else result.groups()))
+            if result == None: continue
+
+            my_stop1 = int(result.group(2)) if int(result.group(2)) < int(result.group(4)) else int(result.group(4))
+            my_stop2 = int(result.group(2)) if int(result.group(2)) > int(result.group(4)) else int(result.group(4))
+
+            # WranglerLogger.debug("my_stop1: {}  my_stop2: {}".format(my_stop1,my_stop2))
+
+            if my_stop1 != stop1: continue
+            if my_stop2 != stop2: continue
+
+            # found it!  replace
+            line = "{}{}{}{}{}{}{}{}".format(
+                result.group(1), result.group(2), result.group(3), result.group(4),
+                result.group(5), value, result.group(7), result.group(8))
+            self.farefiles[fare_filename][line_idx] = line
+            return
+
+        raise NetworkException("stopA/stopB {}/{} not found".format(stopA, stopB))
 
     def verifyTransitLineFrequencies(self, frequencies, coverage=None):
         """
