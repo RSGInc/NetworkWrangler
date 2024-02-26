@@ -20,7 +20,7 @@ if __name__ == '__main__':
     parser.add_argument("--restart_mode", choices=['hwy','trn'], help="If restart_year is passed, this is also required.")
     parser.add_argument("--create_project_diffs", help="Pass this to create proejct diffs information for each project. NOTE: THIS WILL BE SLOW", action="store_true")
     parser.add_argument("net_spec", metavar="network_specification.py", help="Script which defines required variables indicating how to build the network")
-    parser.add_argument("netvariant", choices=["Baseline", "Blueprint", "Alt1", "Alt2", "NextGenFwy","TIP2023", "NGFNoProject", "NGFNoProjectNoSFCordon"], help="Specify which network variant network to create.")
+    parser.add_argument("netvariant", choices=["Baseline", "Blueprint", "Alt1", "Alt2", "NextGenFwy","TIP2023", "NGFNoProject", "NGFNoProjectNoSFCordon", "NGFround2NoProject"], help="Specify which network variant network to create.")
     args = parser.parse_args()
 
     NOW              = time.strftime("%Y%b%d.%H%M%S")
@@ -157,10 +157,10 @@ if __name__ == '__main__':
             Wrangler.WranglerLogger.info("Building {} {} networks".format(YEAR, netmode))
 
             for project in projects_for_year[netmode]:
-                (project_name, projType, tag, kwargs) = build_network_mtc.getProjectAttributes(project)
+                (project_name, projType, tag, branch, kwargs) = build_network_mtc.getProjectAttributes(project)
                 if tag == None: tag = TAG
 
-                Wrangler.WranglerLogger.info("Applying project [{}] of type [{}] with tag [{}] and kwargs[{}]".format(project_name, projType, tag, kwargs))
+                Wrangler.WranglerLogger.info("Applying project [{}] of type [{}] on branch [{}] with tag [{}] and kwargs[{}]".format(project_name, projType, branch, tag, kwargs))
                 if projType=='plan':
                     continue
 
@@ -169,7 +169,7 @@ if __name__ == '__main__':
                     network_without_project = copy.deepcopy(networks[netmode])
 
                 applied_SHA1 = None
-                cloned_SHA1 = networks[netmode].cloneProject(networkdir=project_name, tag=tag,
+                cloned_SHA1 = networks[netmode].cloneProject(networkdir=project_name, tag=tag,branch=branch,
                                                              projtype=projType, tempdir=TEMP_SUBDIR, **kwargs)
                 (parentdir, networkdir, gitdir, projectsubdir) = networks[netmode].getClonedProjectArgs(project_name, None, projType, TEMP_SUBDIR)
 
@@ -259,11 +259,11 @@ if __name__ == '__main__':
             networks_bp_baseline['trn'] = copy.deepcopy(networks['trn'])
 
             for netmode in build_network_mtc.NET_MODES:
-                (project_name, projType, tag, kwargs) = build_network_mtc.getProjectAttributes(BP_SLR_PROJECT)
+                (project_name, projType, tag, branch, kwargs) = build_network_mtc.getProjectAttributes(BP_SLR_PROJECT)
                 # Wrangler.WranglerLogger.debug("BP SLR Project {} has project_name=[{}] projType=[{}] tag=[{}] kwargs=[{}]".format(BP_SLR_PROJECT,
                 #                                project_name, projType, tag, kwargs))
                 applied_SHA1 = None
-                copyloned_SHA1 = networks_bp_baseline[netmode].cloneProject(networkdir=project_name, tag=tag,
+                copyloned_SHA1 = networks_bp_baseline[netmode].cloneProject(networkdir=project_name, tag=tag, branch=branch,
                                                                          projtype=projType, tempdir=TEMP_SUBDIR, **kwargs)
                 (parentdir, networkdir, gitdir, projectsubdir) = networks_bp_baseline[netmode].getClonedProjectArgs(project_name, None, projType, TEMP_SUBDIR)
                 applied_SHA1 = networks_bp_baseline[netmode].applyProject(parentdir, networkdir, gitdir, projectsubdir, **kwargs)

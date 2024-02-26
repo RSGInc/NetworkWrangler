@@ -4,9 +4,9 @@ import os
 # e.g. "RTP2021", "TIP2021", etc
 PROJECT = "TIP2023"
 
-# MANDATORY. Set this to be the Scenario Name
-# Pass this as --scenario to build_network_mtc.py
-#assert(SCENARIO in ["NoProject","Project"])
+# MANDATORY. Set this to be the Scenario Name e.g. "NoProject","Project"
+# for TIP2023, we only have to build the Project network
+SCENARIO = "Project"
 
 # MANDATORY. Set this to be the git tag for checking out network projects.
 TAG = "TIP_2023"
@@ -300,7 +300,6 @@ TIP_PROJECTS = collections.OrderedDict([
                 'trn':['BP_PDA_Transit_Enhancements',
                        'SF_070027_Yerba_Buena_Ramp_Imp',
                        {'name':'FBP_MU_046_ACE_Freq_Inc',       'kwargs':{'MODELYEAR':'2030'}},
-                       'MAJ_BRT030001_BART_to_SanJose',
                        'BART_Irvington_Infill',
                        'MAJ_REG090037_BART_Core_Cap',
                        {'name':'FBP_AL_021_South_Bay_Connect',                                            'variants_exclude':['Alt2']},
@@ -418,6 +417,7 @@ TIP_PROJECTS = collections.OrderedDict([
                        'FBP_SC_042_I280_Downtown_Access_Improvements',
                        {'name':'EXP_uncommitted_noAllLaneTolling', 'kwargs':{'MODELYEAR':'2040'},         'variants_include':['NextGenFwy']}],
                 'trn':[{'name':'FBP_MU_046_ACE_Freq_Inc',       'kwargs':{'MODELYEAR':'2040'}},
+                       'MAJ_BRT030001_BART_to_SanJose',
                        'MAJ_Vasona_LRT_Extension',
                        'FBP_MU_029_ACRapid_2040',
                        'RRSP_EC_Cap_Imp_ECR_Bus',

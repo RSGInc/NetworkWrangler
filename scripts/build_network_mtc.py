@@ -190,15 +190,30 @@ def writeRequirements(REQUIREMENTS, PROJECTS, req_type='prereq'):
                                                  req_netmode, req_project, REQUIREMENTS[netmode][project][req_netmode][req_project]))
 
 def getProjectAttributes(project):
+    """
+
+    Args:
+        project (string or dict): project information
+
+    Returns:
+    5-tuple with:
+        project_name (string): git repo for project
+        project_type (string): 'project' -- is this used?
+        tag (string): the tag to check out
+        branch (string): the branch to check out
+        kwargs (dict): the kwargs to pass to the project
+    """
     # Start with TAG if not build mode, no kwargs
     project_type    = 'project'
     tag             = None
+    branch          = 'master'
     kwargs          = {}
 
     # Use project name, tags, kwargs from dictionary
     if type(project)==type({'this is':'a dictionary'}):
         project_name = project['name']
         if 'tag' in project:    tag = project['tag']
+        if 'branch' in project: branch = project['branch']
         if 'type' in project:   project_type = project['type']
         if 'kwargs' in project: kwargs = project['kwargs']
 
@@ -210,7 +225,7 @@ def getProjectAttributes(project):
     else:
          Wrangler.WranglerLogger.fatal("Don't understand project %s" % str(project))
 
-    return (project_name, project_type, tag, kwargs)
+    return (project_name, project_type, tag, branch, kwargs)
 
 def preCheckRequirementsForAllProjects(NETWORK_PROJECTS, TEMP_SUBDIR, networks, continue_on_warning, BUILD_MODE=None, TEST_PROJECTS=None):
     PRE_REQS  = {'hwy':{},'trn':{}}
@@ -225,7 +240,7 @@ def preCheckRequirementsForAllProjects(NETWORK_PROJECTS, TEMP_SUBDIR, networks, 
         clonedcount = 0
         for model_year in NETWORK_PROJECTS.keys():
             for project in NETWORK_PROJECTS[model_year][netmode]:
-                (project_name, projType, tag, kwargs) = getProjectAttributes(project)
+                (project_name, projType, tag, branch, kwargs) = getProjectAttributes(project)
                 if tag == None: tag = TAG
 
                 # test mode - don't use TAG for TEST_PROJECTS
@@ -241,12 +256,12 @@ def preCheckRequirementsForAllProjects(NETWORK_PROJECTS, TEMP_SUBDIR, networks, 
                 # if project = "dir1/dir2" assume dir1 is git, dir2 is the projectsubdir
                 (head,tail) = os.path.split(project_name)
                 if head:
-                    cloned_SHA1 = networks[netmode].cloneProject(networkdir=head, projectsubdir=tail, tag=tag,
+                    cloned_SHA1 = networks[netmode].cloneProject(networkdir=head, projectsubdir=tail, tag=tag, branch=branch,
                                                                  projtype=projType, tempdir=TEMP_SUBDIR, **kwargs)
                     (prereqs, coreqs, conflicts) = networks[netmode].getReqs(networkdir=head, projectsubdir=tail, tag=tag,
                                                                              projtype=projType, tempdir=TEMP_SUBDIR)
                 else:
-                    cloned_SHA1 = networks[netmode].cloneProject(networkdir=project_name, tag=tag,
+                    cloned_SHA1 = networks[netmode].cloneProject(networkdir=project_name, tag=tag, branch=branch,
                                                                  projtype=projType, tempdir=TEMP_SUBDIR, **kwargs)
                     (prereqs, coreqs, conflicts) = networks[netmode].getReqs(networkdir=project_name, projectsubdir=tail, tag=tag,
                                                                              projtype=projType, tempdir=TEMP_SUBDIR)
@@ -382,7 +397,9 @@ if __name__ == '__main__':
             "P1a_AllLaneTolling_ImproveTransit",                "P1b_AllLaneTolling_Affordable", 
             "P2a_AllLaneTollingPlusArterials_ImproveTransit",   "P2b_AllLaneTollingPlusArterials_Affordable",
             "P3b_3Cordons_Affordable",                          "P3a_3Cordons_ImproveTransit",
-            "P4_NoNewPricing",                                  "P1x_AllLaneTolling_PricingOnly"], 
+            "P4_NoNewPricing",                                  "P1x_AllLaneTolling_PricingOnly",
+            "R2P4_2035_Express_Lanes",                          "R2P5_Conversion_Only",
+            "R2P6_Dual_Express_Lanes"], 
         help="Specify which network variant network to create.")
     args = parser.parse_args()
 
@@ -397,15 +414,25 @@ if __name__ == '__main__':
         # doing this import here in order to catch installation issues early
         import geopandas
 
+    if (args.project_name == 'NGF_R2'):
+        PIVOT_DIR        = r"L:\Application\Model_One\NextGenFwys_Round2\INPUT_DEVELOPMENT\Networks\NGF_Networks_NGFround2NoProject_02\net_2035_NGFround2NoProject"
+        PIVOT_YEAR       = 2035
+        TRN_NET_NAME     = "transitLines"
+        # some of the NGF NetworkProjects use geopandas (namely NGF_TrnFreqBoostsCordons and NGF_TrnExtendedServiceHours_Cordons)
+        # doing this import here in order to catch installation issues early
+        import geopandas
+
     TRANSIT_CAPACITY_DIR = os.path.join(PIVOT_DIR, "trn")
-    TRN_NET_NAME     = "transitLines"
+
+    if 'NGF' not in args.project_name:
+        TRN_NET_NAME     = "transit_Lines" # refers to https://github.com/BayAreaMetro/TM1_2015_Base_Network/blob/master/trn/transit_lines/Transit_Lines.block
     HWY_NET_NAME     = "freeflow.net"
 
     # Read the configuration
     NETWORK_CONFIG  = args.net_spec
     PROJECT         = args.project_name
     if args.scenario: SCENARIO = args.scenario
-    if args.project_name == 'NGF':
+    if 'NGF' in args.project_name:
         SCENARIO    = args.NGF_netvariant
         NET_VARIANT = args.NGF_netvariant
 
@@ -445,7 +472,7 @@ if __name__ == '__main__':
     if not os.path.exists(SCRATCH_SUBDIR): os.mkdir(SCRATCH_SUBDIR)
     os.chdir(SCRATCH_SUBDIR)
 
-    if args.project_name == 'NGF':
+    if 'NGF' in args.project_name:
         os.environ["CHAMP_node_names"] = "M:\\Application\\Model One\\Networks\\TM1_2015_Base_Network\\Node Description.xls"
         print()
     else:
@@ -501,10 +528,10 @@ if __name__ == '__main__':
             Wrangler.WranglerLogger.info("Building {} {} networks".format(YEAR, netmode))
 
             for project in projects_for_year[netmode]:
-                (project_name, projType, tag, kwargs) = getProjectAttributes(project)
+                (project_name, projType, tag, branch, kwargs) = getProjectAttributes(project)
                 if tag == None: tag = TAG
 
-                Wrangler.WranglerLogger.info("Applying project [{}] of type [{}] with tag [{}] and kwargs[{}]".format(project_name, projType, tag, kwargs))
+                Wrangler.WranglerLogger.info("Applying project [{}] of type [{}] on branch [{}] with tag [{}] and kwargs[{}]".format(project_name, projType, branch, tag, kwargs))
                 if projType=='plan':
                     continue
 
@@ -513,7 +540,7 @@ if __name__ == '__main__':
                     network_without_project = copy.deepcopy(networks[netmode])
 
                 applied_SHA1 = None
-                cloned_SHA1 = networks[netmode].cloneProject(networkdir=project_name, tag=tag,
+                cloned_SHA1 = networks[netmode].cloneProject(networkdir=project_name, tag=tag, branch=branch,
                                                              projtype=projType, tempdir=TEMP_SUBDIR, **kwargs)
                 (parentdir, networkdir, gitdir, projectsubdir) = networks[netmode].getClonedProjectArgs(project_name, None, projType, TEMP_SUBDIR)
 

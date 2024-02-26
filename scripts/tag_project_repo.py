@@ -23,7 +23,12 @@ import os, argparse
 if __name__ == '__main__':
     
     # NetworkProjects directory, this is where the local repos are located
-    networkProjects_folder = 'M:\\Application\\Model One\\NetworkProjects'
+    username = os.environ['USERNAME']
+    networkProjects_folder = os.path.join('C:\\Users',
+                       username,
+                       'Box',
+                       'Modeling and Surveys',
+                       'TM1_NetworkProjects')
 
     # arguments
     parser = argparse.ArgumentParser(description=USAGE, formatter_class=argparse.RawDescriptionHelpFormatter,)
