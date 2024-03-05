@@ -284,7 +284,7 @@ BLUEPRINT_PROJECTS = collections.OrderedDict([
                        {'name':'Transform_SR37_Widening_Interim',                                           'variants_exclude':['Alt1']},
                        {'name':'MAJ_SF_Congestion_Pricing',                                                 'variants_exclude':['NGFNoProjectNoSFCordon', 'NGFround2NoProject']},
                        'FBP_MU_041_Hovercraft_Pilot',
-                       {'name':'BP_Vision_Zero',               'variants_exclude':['NGFNoProject', 'NGFNoProjectNoSFCordon', 'NGFround2NoProject']},
+                       {'name':'BP_Vision_Zero',               'variants_exclude':['NGFNoProject', 'NGFNoProjectNoSFCordon', 'NGFround2NoProject'], 'DraftBlueprint':True},
                        'EXP_Blueprint',
                        {'name':'MAJ_AC_Frequency_Improvement', 'variants_exclude':['NGFNoProject', 'NGFNoProjectNoSFCordon']},
                        'FBP_MU_044_SouthSF_Ferry_Serv_Incr',
@@ -371,8 +371,8 @@ BLUEPRINT_PROJECTS = collections.OrderedDict([
                 ]
         }),
         (2030, {'hwy':['MAJ_SanPablo_BRT',
-                       {'name':'BP_Tolls_On_Congested_Freeways_2030',                                     'variants_exclude':['NGFNoProject', 'NGFNoProjectNoSFCordon','NGFround2NoProject']},
-                       {'name':'BP_Vision_Zero',                                                          'variants_exclude':['NGFNoProject', 'NGFNoProjectNoSFCordon','NGFround2NoProject']},
+                       {'name':'BP_Tolls_On_Congested_Freeways_2030',                                     'variants_exclude':['NGFNoProject', 'NGFNoProjectNoSFCordon','NGFround2NoProject'], 'DraftBlueprint':True},
+                       {'name':'BP_Vision_Zero',                                                          'variants_exclude':['NGFNoProject', 'NGFNoProjectNoSFCordon','NGFround2NoProject'], 'DraftBlueprint':True},
                        {'name':'FBP_AL_021_South_Bay_Connect',                                            'variants_exclude':['Alt2']},
                        'FBP_MU_044_Richmond_Ferry_Serv_Incr',
                        'MAJ_REG090037_BART_Core_Cap',
@@ -408,7 +408,7 @@ BLUEPRINT_PROJECTS = collections.OrderedDict([
                        'FBP_SM_027_US101_92',
                        'FBP_SM_007_ElCamino_CompleteStreets',
                     ],
-                'trn':[{'name':'BP_PDA_Transit_Enhancements',                                       'branch':'PBA50plus_DBP'},
+                'trn':[{'name':'BP_PDA_Transit_Enhancements',                                       'branch':'PBA50plus_DBP', 'DraftBlueprint':True},
                        {'name':'FBP_SM_020_Regional_Express_Buses', 'kwargs':{'PHASE':"'Phase1_4Routes'"}},
                        {'name':'FBP_MU_046_ACE_Freq_Inc',       'kwargs':{'MODELYEAR':'2030'}},
                        'MAJ_BRT030001_BART_to_SanJose',
@@ -438,8 +438,8 @@ BLUEPRINT_PROJECTS = collections.OrderedDict([
         }),
         (2035, {'hwy':[{'name':'MAJ_MuniForward_Uncommitted',                                             'variants_exclude':['NGFNoProject', 'NGFNoProjectNoSFCordon'], 'branch':'PBA50plus_DBP'},
                        'MAJ_Treasure_Island_Congestion_Pricing',
-                       {'name':'BP_Tolls_On_Congested_Freeways_2035',                                     'variants_exclude':['NGFNoProject', 'NGFNoProjectNoSFCordon','NGFround2NoProject']},
-                       {'name':'BP_Vision_Zero',                                                          'variants_exclude':['NGFNoProject', 'NGFNoProjectNoSFCordon','NGFround2NoProject']},
+                       {'name':'BP_Tolls_On_Congested_Freeways_2035',                                     'variants_exclude':['NGFNoProject', 'NGFNoProjectNoSFCordon','NGFround2NoProject'], 'DraftBlueprint':True},
+                       {'name':'BP_Vision_Zero',                                                          'variants_exclude':['NGFNoProject', 'NGFNoProjectNoSFCordon','NGFround2NoProject'], 'DraftBlueprint':True},
                        'RRSP_East_West_Connector',
                        {'name':'Transform_I680_Multimodal_Imp',                                           'variants_exclude':['NGFNoProject', 'NGFNoProjectNoSFCordon']},
                        'FBP_SM_022_I380_Widening',
@@ -478,7 +478,7 @@ BLUEPRINT_PROJECTS = collections.OrderedDict([
                        {'name':'EIR2_Fix_Alt2',                        'kwargs':{'MODELYEAR':'2035'},     'variants_include':['Alt2']},
                        {'name':'EIR1_No_SR37',                                                            'variants_include':['Alt1']}]
         }),
-        (2040, {'hwy':[{'name':'BP_Vision_Zero',                                                          'variants_exclude':['NGFNoProject', 'NGFNoProjectNoSFCordon','NGFround2NoProject']},
+        (2040, {'hwy':[{'name':'BP_Vision_Zero',                                                          'variants_exclude':['NGFNoProject', 'NGFNoProjectNoSFCordon','NGFround2NoProject'], 'DraftBlueprint':True},
                        'FBP_SC_050_I680_Montague_Int_Imp', 
                        'FBP_MU_029_ACRapid_2040',
                        'FBP_NP_074_SoscolWide',
@@ -546,7 +546,7 @@ BLUEPRINT_PROJECTS = collections.OrderedDict([
                        {'name':'FBP_CC_019_CCCTA_Freq_Increase',                                          'branch':'PBA50plus_DBP'},
                        {'name':'EIR2_Fix_Alt2',                 'kwargs':{'MODELYEAR':'2040'},            'variants_include':['Alt2']}]
         }),
-        (2045, {'hwy':[{'name':'BP_Vision_Zero',                                                          'variants_exclude':['NGFNoProject', 'NGFNoProjectNoSFCordon','NGFround2NoProject']},
+        (2045, {'hwy':[{'name':'BP_Vision_Zero',                                                          'variants_exclude':['NGFNoProject', 'NGFNoProjectNoSFCordon','NGFround2NoProject'], 'DraftBlueprint':True},
                        {'name':'EXP_uncommitted_all',              'kwargs':{'MODELYEAR':'2045'},         'variants_exclude':['Alt1', 'NGFNoProject', 'NGFNoProjectNoSFCordon', 'NGFround2NoProject']},
                        {'name':'EXP_uncommitted_noAllLaneTolling', 'kwargs':{'MODELYEAR':'2045'},         'variants_include':['NGFNoProject', 'NGFNoProjectNoSFCordon']},
                        {'name':'EIR1_EXP_uncommitted_all',      'kwargs':{'MODELYEAR':'2045'},            'variants_include':['Alt1']},
@@ -557,7 +557,7 @@ BLUEPRINT_PROJECTS = collections.OrderedDict([
                 'trn':[{'name':'FBP_MU_046_ACE_Freq_Inc',       'kwargs':{'MODELYEAR':'2045'}},
                        'FBP_SC_106_VTA_LRT_Modernization']
         }),
-        (2050, {'hwy':[{'name':'BP_Vision_Zero',                                                          'variants_exclude':['NGFNoProject', 'NGFNoProjectNoSFCordon','NGFround2NoProject']},
+        (2050, {'hwy':[{'name':'BP_Vision_Zero',                                                          'variants_exclude':['NGFNoProject', 'NGFNoProjectNoSFCordon','NGFround2NoProject'], 'DraftBlueprint':True},
                        {'name':'MAJ_SOL070020_I80_I680_SR12_Int_2B_7', 'kwargs':{'PHASE':"'6'"},          'variants_exclude':['Alt1']},
                        {'name':'MAJ_SOL070020_I80_I680_SR12_Int_2B_7', 'kwargs':{'PHASE':"'7'"},          'variants_exclude':['Alt1']},
                        'FBP_SC_028_Stevens_Creek_LRT',
@@ -582,7 +582,7 @@ NETWORK_PROJECTS   = collections.OrderedDict()
 
 for YEAR in COMMITTED_PROJECTS.keys():
 
-    # TODO: PBA50+ DRAFT BLUEPRINT NETWORKS WILL JUST INCLUDE COMMITTED
+    # TODO: PBA50+ DRAFT BLUEPRINT NETWORKS WILL JUST INCLUDE COMMITTED and BLUEPRINT_PROJECTS with 'DraftBlueprint'==True 
     # TODO: When we get to the Final Blueprint stage, we'll bring back a subset of BLUEPRINT_PROJECTS
     if (NET_VARIANT == "Baseline") or (NET_VARIANT == "Blueprint"):
         # baseline: just committed
@@ -590,10 +590,16 @@ for YEAR in COMMITTED_PROJECTS.keys():
             'hwy':COMMITTED_PROJECTS[YEAR]['hwy'],
             'trn':COMMITTED_PROJECTS[YEAR]['trn']
         }
+        # add projects with 'DraftBlueprint'==True
+        if NET_VARIANT == "Blueprint":
+            for netmode in ['hwy','trn']:
+                for project in BLUEPRINT_PROJECTS[YEAR][netmode]:
+                    if not isinstance(project, dict): continue
+                    if 'DraftBlueprint' in project.keys() and project ['DraftBlueprint']: 
+                        NETWORK_PROJECTS[YEAR][netmode].append(project)
     else:
         # blueprint, alt1, alt2
         if YEAR not in BLUEPRINT_PROJECTS: continue
-        
         NETWORK_PROJECTS[YEAR] = {
             'hwy':COMMITTED_PROJECTS[YEAR]['hwy'] + BLUEPRINT_PROJECTS[YEAR]['hwy'],
             'trn':COMMITTED_PROJECTS[YEAR]['trn'] + BLUEPRINT_PROJECTS[YEAR]['trn']
