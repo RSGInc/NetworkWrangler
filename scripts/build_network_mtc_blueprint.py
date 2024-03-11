@@ -240,7 +240,8 @@ if __name__ == '__main__':
             Wrangler.TransitNetwork.capacity.writeTransitPrefixToVehicle(directory = trnpath)
 
         # build the Baseline, with Sea Level Rise effects
-        if NET_VARIANT=="Baseline" and YEAR>=2035:
+        # TODO: punting to Final Blueprint
+        if NET_VARIANT=="Baseline" and YEAR>=2035 and False:
 
             # Sea Level Rise effects
             # no inundation prior to 2035

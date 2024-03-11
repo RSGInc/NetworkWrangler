@@ -753,8 +753,8 @@ class TransitNetwork(Network):
 
         # WranglerLogger.debug("stop1: {}  stop2: {}".format(stop1, stop2))
         # keep spaces this time
-        #                               1    2    3    4    5    6    7   8
-        fare_stops_re = re.compile(r"(^\s*)(\d+)(\s+)(\d+)(\s+)(\d+)(\s)([;].*)$", re.IGNORECASE)
+        #                               1    2    3    4    5    6    7   8     
+        fare_stops_re = re.compile(r"(^\s*)(\d+)(\s+)(\d+)(\s+)(\d+)(\s*)([;].*)$", re.IGNORECASE | re.DOTALL)
         if fare_filename not in self.farefiles.keys():
             raise NetworkException("Fare file {} not found".format(fare_filename))
 
@@ -774,10 +774,12 @@ class TransitNetwork(Network):
             if my_stop2 != stop2: continue
 
             # found it!  replace
+            line_bak = line
             line = "{}{}{}{}{}{}{}{}".format(
                 result.group(1), result.group(2), result.group(3), result.group(4),
                 result.group(5), value, result.group(7), result.group(8))
             self.farefiles[fare_filename][line_idx] = line
+            # WranglerLogger.debug("Replaced [{}] with [{}]".format(line_bak, line))
             return
 
         raise NetworkException("stopA/stopB {}/{} not found".format(stopA, stopB))
