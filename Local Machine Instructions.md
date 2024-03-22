@@ -21,7 +21,7 @@ This largely follows [the Network Wrangler Documentation](https://github.com/Bay
 1. Download the [Anaconda environment](https://github.com/RSGInc/NetworkWrangler/blob/transit_2050/environment_nw.yml) to a location on your hard drive.
 2. Created the local Anaconda environment. Open Anaconda Prompt or Anaconda Powershell (either will work, hereinafter referred to as Anaconda Prompt) and type:
     `cd path\you\downloaded\the\above\file\to`
-    `conda create -f environment_nw.yml`
+    `conda env create -f environment_nw.yml`
 3. Switched to it. Use the following command in the Anaconda prompt
     `conda activate NetworkWrangler`
 4. Change directories to an appropriate location on your hard drive.
@@ -32,7 +32,7 @@ This largely follows [the Network Wrangler Documentation](https://github.com/Bay
 7. Install NetworkWrangler. 
     `cd NetworkWrangler`
     `pip install -e .`
-8. Open python, import NetworkWrangler, ensure no errors
+8. Open python, import Wrangler, ensure no errors
 9. Get the base network - clone https://github.com/BayAreaMetro/TM1_2015_Base_Network to a local folder (I used C:\Models). This probably should not be done inside the network wrangler folder.
 10. Get the projects from Box
     Not-RSG: From https://mtcdrive.box.com/s/unic7tf0sokleacg4fgu0dtu8ixkyfg6
